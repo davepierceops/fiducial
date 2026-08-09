@@ -235,3 +235,30 @@ schema/synthesis discipline applies later, when an entry is actually worked.
   are per-project and same-name re-upload does not propagate across projects
   (observed this session). Not scoped; candidate for the same tooling tranche as
   the drift-audit `bin/` check.
+
+### 2026-08-09
+
+- **Directives should pin in-scope documents by commit SHA, not blob SHA.** The
+  cycle-2 reversal directives pinned the three docs by `git rev-parse HEAD:<path>`
+  blob hashes (`435ebc4`, `cd7a7fd`, `fc9f49b`). The executor could confirm the
+  tree matched only via `git hash-object`; blob SHAs do not resolve as commits,
+  so `git show <sha>:<path>`, ancestry checks, and `git log`-based staleness
+  guards all fail on them — the very verification `skills/directive-dispatch.md`
+  assumes an executor can run. Later directives in the same sequence switched to
+  commit-SHA pins (`<path> @ <40-char commit SHA>`) and the friction vanished.
+  Proposed: `skills/directive-dispatch.md` state explicitly that in-scope-document
+  pins are commit SHAs. AC-CO-4 already requires the `bin/cycle-open` tool to emit
+  full commit SHAs; the hand-authored directive path lacked the equivalent rule.
+
+- **Pre-stage the dispatch line at PR-open time, not after merge.** Track A as
+  written has the author read the post-merge SHA back from git and hand the
+  dispatch line in a second turn — a round-trip after every directive merge.
+  Because merges are merge-commits, the directive's content-commit SHA stays in
+  main's history after merge, so the dispatch line can be emitted (pinned to that
+  content SHA) in the same reply that opens the PR: operator merges, then runs, no
+  return trip. Adopted mid-session at the operator's prompting. This is the
+  discipline the deferred `bin/dispatch` is meant to make unskippable (it stamps
+  the git-read SHA into the block); until it ships, the manual Track A flow should
+  pre-stage the line. Caveat: valid only under merge-commit merges — a
+  squash/rebase drops the content commit, and the pinned SHA then fails loudly on
+  sync (safe, not silently wrong).
