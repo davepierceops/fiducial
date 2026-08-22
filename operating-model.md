@@ -95,7 +95,8 @@ Must not:
 - equate passing tests with shippability
 - weaken verification to satisfy implementation
 - claim live behavior from mocked evidence
-- store durable policy only in vendor-specific tooling
+- store durable policy only in vendor-specific tooling — a statement belongs in
+  a governed document unless swapping the vendor would leave it false
 
 The same underlying model may fill multiple roles, but two separations are
 mandatory rather than optional:

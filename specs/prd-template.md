@@ -1,10 +1,13 @@
 ---
 status: draft
 last-reviewed: null
-audience: [all-roles, human]
+audience: [chief-of-staff, spec-reviewer-agent, human]
 ---
 
 # Product Requirements Document (PRD) — Template
+
+This template is read in a decision session drafting a PRD and in an execution
+session gating one.
 
 ## What this is
 
@@ -12,21 +15,13 @@ The PRD is the **standing product specification**: the authoritative description
 of *what* is being built and *why*. It is canonical and sits at the top of the
 spec spine, above the TRD.
 
-The PRD owns product intent. It is Dave's document.
-
-## Authorship
-
-- **Owned and agreed by:** Dave (PM/EM/Owner). Product intent, user value,
-  prioritization, and acceptance criteria are Dave's responsibilities.
-- **Drafted with:** agents may draft and propose, but the PRD is not in force
-  until Dave agrees. Claude drafts, Dave verifies.
+The PRD owns product intent. It is Dave's document, and it is not in force until
+Dave agrees it.
 
 ## Relationship to other artifacts
 
 The PRD is the parent of the TRD and the source from which acceptance criteria
-are derived. GitHub Issues are downstream tracking artifacts derived from these
-specs, never an independent source of truth. PRD/Issue conflicts are a hard stop
-(see `policies/source-of-truth-policy.md`).
+are derived.
 
 ---
 
@@ -40,23 +35,12 @@ Who uses this and the concrete situations in which they do.
 
 ### 3. User journeys
 
-Define the **Top K** journeys — the K most important journeys out of all possible
-journeys this product could support — where K is between 1 and 9. The total
-number of possible journeys may be much larger; that's fine. This section
-captures only the ones that matter most right now. These are the canonical
-journeys from which goals, acceptance criteria, and measurement all trace back.
-If more than 9 journeys feel equally critical, pick the 9 most critical, ship
-this PRD, and create a backlog item noting that additional journeys remain
-undefined. A large journey space signals a product still finding PMF —
-over-defining it up front creates churn, not clarity.
+Define the **Top K** journeys. For each journey:
 
-For each journey:
 - **Actor**: who is doing this.
 - **Trigger**: what causes them to start.
 - **Steps**: the sequence of actions and system responses.
 - **Expected outcome**: what success looks like for the user.
-
-These journeys are inherited by the TRD, which defines SLOs for each.
 
 ### 4. Goals and non-goals
 
@@ -105,30 +89,7 @@ Standing product unknowns, each naming what would resolve it.
 
 ---
 
-## Authoring checklist
-
-Before Dave agrees a PRD (or a PRD revision), the Spec Reviewer should confirm:
-
-- [ ] All required sections are present and substantively answered.
-- [ ] Top K user journeys are defined, each with actor, trigger, steps, and expected outcome.
-- [ ] K is between 1 and 9; if more journeys exist, a backlog item is noted.
-- [ ] Functional goals are concrete outcomes, not feature lists.
-- [ ] Every NFR dimension is addressed or explicitly marked N/A.
-- [ ] User outcomes and measurement names signals, baselines, and observation mechanisms.
-- [ ] Acceptance criteria are concrete enough to derive test cases from.
-- [ ] Risk tolerance is stated explicitly, not implied.
-- [ ] Open questions each name what would resolve them.
-- [ ] No section contradicts another within this document.
-- [ ] The document is consistent with any existing TRD (if one exists).
-
----
-
 ## Skeleton (copy this into a project PRD)
-
-Instantiated project PRDs carry YAML frontmatter per
-`policies/document-metadata-policy.md`. `status: agreed` requires a non-null
-`last-reviewed`; the document's version is its git SHA — no per-document
-version numbers.
 
 ```markdown
 ---

@@ -59,6 +59,27 @@ See **Continuity scan** section below.
 - confirm open questions name what would resolve them
 - flag any item that requires Dave's judgment before the document can be agreed
 
+### In a PRD
+
+Before Dave agrees a PRD or a PRD revision, the Spec Reviewer must confirm:
+
+- functional goals are concrete outcomes, not feature lists
+- every NFR dimension is addressed or explicitly marked N/A
+- user outcomes and measurement name the signal, the baseline where known, and
+  the mechanism by which it is observed
+- acceptance criteria are concrete enough to derive test cases from
+- risk tolerance is stated explicitly, not implied
+- the document is consistent with the TRD, where one exists
+
+### In a TRD
+
+Before Dave agrees a TRD or a TRD revision, the Spec Reviewer must confirm:
+
+- every component has a named responsibility and its interfaces are listed
+- every external dependency is captured as a boundary carrying an evidence class
+- failure modes and recovery are addressed at the system level
+- technical non-goals are explicit
+
 ## Continuity scan
 
 A continuity scan looks only for inconsistencies and contradictions. It does
