@@ -6,7 +6,7 @@ audience: [implementer, skeptic, assistant, human]
 
 # Skill: Engagement Change Package
 
-This skill runs in a decision session.
+This skill runs in an execution session.
 
 The lean change package for engagement work. One screen.
 
