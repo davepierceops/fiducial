@@ -44,6 +44,9 @@ This package is assembled from the change package where the change package
 states it, not written fresh. Two items are release-only and you supply them:
 user-visible behavior, and the rollback or mitigation path.
 
+Where a required item has no source at all, say so rather than filling the slot;
+a missing item is a known gap.
+
 ## Recommendation vocabulary
 
 Use one of:

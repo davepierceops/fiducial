@@ -6,6 +6,8 @@ audience: [reviewer-agent, skeptic-risk-agent, release-manager-agent, human]
 
 # Skill: Boundary Audit
 
+This procedure runs in an execution session.
+
 ## Purpose
 
 Identify where the system's tests, mocks, tools, or assumptions stop proving production behavior.
@@ -32,22 +34,13 @@ Identify where the system's tests, mocks, tools, or assumptions stop proving pro
 
 1. List all affected production behaviors.
 2. Identify which behaviors are tested locally.
-3. Identify which tests use mocks, fixtures, jsdom, fakes, or generated data.
+3. Identify which tests use mocks, fixtures, a headless DOM, fakes, or
+   generated data.
 4. For each boundary, state what is verified.
 5. For each boundary, state what is not verified.
 6. Assign a deferred verification path.
-7. Mark unresolved gaps as accepted risk, deferred, or blocking.
+7. Mark each unresolved gap with one of LEXICON's four release impact labels.
 
 ## Output
 
-Produce a boundary audit with:
-
-- boundary name
-- production surface
-- verification class
-- verified claims
-- unverified claims
-- deferred verification path
-- release impact
-- SLO status: whether each affected Top K journey has a production monitoring
-  mechanism in place and current error budget state, if known
+A review artifact, in the shape the review-artifact skill states.

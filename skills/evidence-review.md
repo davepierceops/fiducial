@@ -6,6 +6,8 @@ audience: [reviewer-agent, skeptic-risk-agent, release-manager-agent, human]
 
 # Skill: Evidence Review
 
+This procedure runs in an execution session.
+
 ## Purpose
 
 Evaluate whether the evidence supports the claims made by an agent or change package.
@@ -23,7 +25,7 @@ Evaluate whether the evidence supports the claims made by an agent or change pac
 - implementation summary
 - test evidence
 - review notes
-- boundary ledger entries
+- verification boundary declarations
 - known gaps
 
 ## Procedure
@@ -33,18 +35,15 @@ Evaluate whether the evidence supports the claims made by an agent or change pac
 3. Identify unsupported claims.
 4. Identify overbroad interpretations of test results.
 5. Identify missing evidence for material risks.
-6. Check whether SLO targets for affected Top K user journeys have production
-   monitoring evidence; flag as unsupported if no mechanism exists.
-7. Produce a recommendation.
+6. Produce a recommendation. It is a next step, never a ship call; the
+   recommendation slot is the Reviewer's, and the ship call is the Release
+   Manager's. A Skeptic running this procedure emits findings and their labels
+   and a next step, and signals that a change should not ship by marking the
+   gap `blocking`.
 
 ## Output
 
-Produce:
-
-- supported claims
-- unsupported or overbroad claims
-- missing evidence
-- SLO monitoring status for affected Top K user journeys
-- risk level
-- recommended next step
-- what Dave should inspect
+A review artifact, in the shape the review-artifact skill states. Its findings
+are the unsupported claims, the overbroad interpretations of results, and the
+material evidence that is missing; each carries one of LEXICON's four release
+impact labels.
