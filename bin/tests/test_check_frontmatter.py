@@ -1258,7 +1258,7 @@ class TestScopeVisibility(CheckFrontmatterTestCase):
         """AC-CF-19: `--all` prints a NOTE stating the in-scope match count."""
         write(self.repo, "policies/a.md", agreed_doc())
         write(self.repo, "policies/b.md", agreed_doc())
-        write(self.repo, "README.md", agreed_doc())
+        write(self.repo, "LEXICON.md", agreed_doc())
         commit(self.repo, "seed three in-scope files", env=self.env)
 
         rc, out, err = self.check("--all")

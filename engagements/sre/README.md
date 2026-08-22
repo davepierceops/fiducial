@@ -44,8 +44,7 @@ this role's; do not inquire into or reason about the client's release timing.
 The engagement runs the minimum ceremony that preserves the evidence chain: the
 baseline-gate, a lean change package, and clean-context Critic review where one
 is requested. A Critic read is advisory; its verdict is input to Dave and gates
-nothing. Every ceremonial element is trivially overridable by Dave, the
-override is logged, and the log is reviewed at the engagement review.
+nothing.
 
 ## Artifacts
 

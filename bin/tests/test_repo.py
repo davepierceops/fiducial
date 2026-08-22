@@ -283,6 +283,36 @@ class TestRoleSlugs(RepoTestCase):
         home = make_home(self)
         self.assertEqual(R.role_slugs(root, home), {"coder-agent"})
 
+    def test_rp6_engagements_role_documents_supply_slugs_non_role_ones_do_not(self):
+        """AC-RP-6: a `# Role:`-headed document under `engagements/**` is a slug.
+
+        Determined by the same discriminator `roles/*.md` already satisfies
+        (every file there opens with a `# Role:` heading): a document under
+        `engagements/` or `engagements/sre/` counts only when its own first
+        heading is `# Role:`. `engagements/working-with-dave.md` and
+        `engagements/sre/README.md` do not, and must not contribute slugs.
+        """
+        root = make_repo(self)
+        write(root, "roles/coder-agent.md", role_doc("coder-agent"))
+        write(root, "engagements/critic.md", role_doc("critic"))
+        write(root, "engagements/sre/implementer.md", role_doc("implementer"))
+        write(
+            root,
+            "engagements/working-with-dave.md",
+            agreed_doc(body="\n# Working With Dave\n\nNot a role.\n"),
+        )
+        write(
+            root,
+            "engagements/sre/README.md",
+            agreed_doc(body="\n# Engagement Pack\n\nNot a role.\n"),
+        )
+        commit(root, "init")
+        home = make_home(self, roles=("someone-else",))
+        self.assertEqual(
+            R.role_slugs(root, home),
+            {"coder-agent", "critic", "implementer"},
+        )
+
 
 class TestDispositionPaths(RepoTestCase):
     def test_rp7_parses_backticked_md_paths(self):
