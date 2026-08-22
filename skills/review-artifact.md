@@ -1,7 +1,7 @@
 ---
 status: draft
 last-reviewed: null
-audience: [spec-reviewer-agent, context-quality-reviewer, reviewer-agent, skeptic-risk-agent, chief-of-staff, human]
+audience: [spec-reviewer-agent, context-quality-reviewer, reviewer-agent, skeptic-risk-agent, release-manager-agent, chief-of-staff, human]
 ---
 
 # Skill: Review Artifact

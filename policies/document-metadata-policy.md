@@ -146,7 +146,6 @@ round-trip, the cycle directive, and the per-cycle review artifact.
    - `roles/release-manager-agent.md`
    - `roles/skeptic-risk-agent.md`
    - `skills/spec-review-cycle.md`
-   - `skills/release-readiness-review.md`
    - `skills/conversation-retro.md`
    - `boundaries/human-review-boundary.md`
    - `operating-model.md`
