@@ -1,0 +1,2 @@
+NOTE in-scope: [scope-summary] 35 file(s) matched, from 10 configured glob(s)
+WARN README.md: [unmatched-glob] this in-scope glob matches no path in this repo, so it enforces nothing
