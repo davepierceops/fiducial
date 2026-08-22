@@ -1,14 +1,17 @@
 ---
 status: draft
 last-reviewed: null
-audience: [test-designer-agent, reviewer-agent, human]
+audience: [reviewer-agent, human]
 ---
 
 # Skill: Test Plan Review
 
+This procedure runs in an execution session.
+
 ## Purpose
 
 Evaluate whether a test plan is sufficient for the intended change and risk.
+The plan's author does not review it.
 
 ## Use when
 
@@ -32,23 +35,11 @@ Evaluate whether a test plan is sufficient for the intended change and risk.
 2. Identify untested criteria.
 3. Identify mocks and fixtures.
 4. Identify live/browser verification needs.
-5. Check that the plan includes a red-gate step — tests must be run and
-   confirmed failing before the Coder begins; flag if absent.
-6. Check whether SLO verification needs are addressed for affected Top K user
-   journeys; flag if no production monitoring check is planned.
-7. Check negative/failure cases.
-8. Identify over-testing or unnecessary complexity.
-9. Recommend changes.
+5. Check that the plan includes a red-gate step; flag if absent.
+6. Check negative/failure cases.
+7. Identify over-testing or unnecessary complexity.
+8. Recommend changes.
 
 ## Output
 
-A test-plan review with:
-
-- adequate areas
-- gaps
-- red-gate coverage (present / absent)
-- SLO verification coverage for affected Top K journeys
-- unnecessary tests
-- boundary concerns
-- required live/browser checks
-- recommendation
+A review artifact, in the shape the review-artifact skill states.

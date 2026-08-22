@@ -1,16 +1,17 @@
 ---
-status: agreed
-last-reviewed: reviews/expedited-log.md @ c9e87ad253b5b9c2b67f4721d00e3d231c3326b3
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
-name: command-blocks
-description: Constrains fenced shell-command blocks handed to a human or agent to run as given — copyable as rendered, verbatim, captured output, explicit remotes, safe to re-run. Use when emitting a shell block, command, or command sequence for someone or something else to run, including the sync block preceding an execution block.
 ---
 
 # Skill: Command Blocks
 
+This file governs both decision sessions and execution sessions.
+
 A command block is a paste block whose content is shell commands intended to run
-as given. It is not an execution block — that term is reserved for instructions
-to an LLM agent (`LEXICON.md`). Command blocks are emitted in many contexts that
+as given. It is not an execution block: an execution block is a paste block of
+instructions an LLM agent session carries out, and it is never described as
+executing or being executed. Command blocks are emitted in many contexts that
 involve no directive at all.
 
 **A block runs verbatim as pasted.** No manual steps inside a fence. A fence is
@@ -45,16 +46,15 @@ exit status having been checked. An unverified sync followed by unconditional
 work is how a stale tree gets reported as current.
 
 **The block must be copyable in the surface that delivers it.** A block the
-reader cannot copy whole is not a paste block at all — it fails the definition
-(`LEXICON.md`) before any rule below applies. This failure is invisible from the
+reader cannot copy whole is not a paste block at all — a paste block is copied
+whole and pasted whole, and a block that cannot be copied whole fails that
+definition before any rule below applies. This failure is invisible from the
 author's side: the text is well-formed, every command is valid, and the problem
 appears only in rendering, which the author does not see. So avoid constructs
 known to break the surface in use.
 
-*Known instance, not the rule:* heredocs (`<<'EOF'`) suppress the copy control
-in the Claude desktop client. Prefer repeated `-m` flags for multi-paragraph
-commit messages. Surfaces differ — adopting projects should substitute their own
-known cases and keep the principle.
+*Known instance, not the rule:* heredocs (`<<'EOF'`) suppress the desktop copy
+control. Prefer repeated `-m` flags for multi-paragraph commit messages.
 
 **Send one block per turn when a human must relay output between blocks.** Wait
 for the output, then compose the next. A second block written before the first
@@ -72,20 +72,26 @@ the session.
 *Known instances, not the rule:* `exit`, `exec`, `logout`, `|| { …; exit; }`,
 and `set -e` — which ends an interactive shell on the next failing command
 exactly as `exit` does, while being the idiomatic opening line of a careful
-multi-command block. The list is open; adopting projects should add the
-constructs their own shells terminate on.
+multi-command block.
+
+**One purpose per block, and no placeholders.** An unknown value is a question
+asked above the block, not a token the reader is expected to substitute.
+
+**State the expected output in one line below the block**, and where the block
+is destructive, state its blast radius above it.
 
 ## Conformance criteria
 
-Every command block satisfies all seven. An untested block is still a command
+Every command block satisfies all nine. An untested block is still a command
 block, and still non-conformant.
 
 - Every command is valid and non-harmful.
 - Every command runs safely as given, with no manual step inside the fence.
-- The whole is safe to re-run: re-running does not compound damage. (*Safe to
-  re-run*, not *idempotent* — a block containing a commit, an issue creation,
-  or an append to a log cannot be idempotent, and demanding it would make the
-  rule unfollowable.)
+- The whole is safe to re-run: re-running does not compound damage, and an
+  append is guarded by the entry's own marker. (*Safe to re-run*, not
+  *idempotent* — a block containing a commit, an issue creation, or an append
+  to a log cannot be idempotent, and demanding it would make the rule
+  unfollowable.)
 - Any command producing evidence captures its output to a named path, where
   *evidence* is output cited later or leaving the session.
 - The block renders with its delivery surface's copy control intact.
@@ -94,8 +100,6 @@ block, and still non-conformant.
   `set -e`. Preconditions fall through via `if…elif…else…fi`.
 - Every sync or remote command names its remote and ref, and its exit status is
   checked before anything downstream acts on the result.
-
-New criteria are appended rather than slotted into body order. Other documents
-cite these by ordinal rather than restating them — which is what keeps a rule
-like criterion 6 in one place instead of drifting across two
-(`decisions/log.md` `DEC-000100`) — so the existing numbering has to hold.
+- The block has one purpose and carries no placeholders.
+- The expected output is stated in one line below the block, and the blast
+  radius above it where the block is destructive.
