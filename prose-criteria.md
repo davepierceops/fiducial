@@ -1,7 +1,7 @@
 ---
 status: draft
-audience: [editor, section-writer, human]
-purpose: Criteria for Dave's public-facing published prose. The governing instrument for the Editor role and the instruction set every section-writing session receives.
+last-reviewed: null
+audience: [writer, human]
 ---
 
 # Public Prose Criteria
@@ -38,6 +38,10 @@ happens.
   such statements it was literally accurate."
 - Blunt categorical claim first, then the personal instance.
 - Hacker register is in-voice: grok, box.
+- Tier is carried by verb choice and frame, never by narrated self-correction.
+  "What I noticed" stays; "I should be careful with my own story here" is cut.
+- A point is made once, flat. No contrast pair that restates it from the other
+  side.
 
 ## Readers with many languages
 
@@ -59,24 +63,21 @@ tier legible to the reader:
    noticed," "in my experience").
 4. **Opinion** — clearest of all, by the same means.
 
-This is the public-facing translation of the evidence vocabulary in
-`davepierceops/ai` (`context-sets/base.md`). Tier-blurring — an opinion
-dressed as an inference, an inference dressed as proof — is a defect.
+Tier-blurring — an opinion dressed as an inference, an inference dressed as
+proof — is a defect.
 
 ## Terminology
 
-- Define and use the methodology's own terms (the governed vocabulary in
-  `davepierceops/ai`, `LEXICON.md`); build the public vocabulary
-  deliberately.
-- When an industry-standard term exists for a concept the methodology names
-  differently, flag the mismatch and decide — the resolution may flow back
-  into `LEXICON.md`.
+Use the methodology's own governed vocabulary; define each term where it first
+appears for a public reader. When an industry-standard term exists for a
+concept the methodology names differently, flag the mismatch to Dave; he
+decides which the piece uses.
 
 ## Profanity
 
 Rare, and each use earns its place. Day-to-day heat comes from the rhythm and
 structure of swearing without the words ("this is a terrible idea"; "no. no no
-no."). Enforced by the justification-ledger pass (`roles/reviewer.md`).
+no.").
 
 ## Naming
 
@@ -96,6 +97,14 @@ and examples; it never licenses taking credit by omission.
   if problems recur.
 - Standing convention: summary sections are labeled **TL;DR**.
 
+## Length and duplication
+
+Wordy means duplicated ideas, not duplicated words; a draft inside its word
+budget can still be wordy. When Dave suspects duplication, report an audit of
+the repeated ideas before cutting anything. Dave does not pick which
+duplicates go: he sets a word target and the writer chooses. After a wordy
+draft the target is 10% under budget, not back to budget.
+
 ## Continuity
 
 Build across pieces is allowed, but every piece lands clean for a cold
@@ -111,7 +120,7 @@ readability wins.** The register is never altered for discoverability.
 ## Repo citation
 
 When a piece discusses a methodology mechanism, link the canonical document
-in the public repo (`davepierceops/ai`) as the authoritative artifact.
+in the public repo (`davepierceops/fiducial`) as the authoritative artifact.
 
 ## Venue and portability
 
@@ -129,8 +138,7 @@ including those that started in an LLM. No per-piece disclosure.
 
 ## AI prose-smell — named defect class
 
-Enforced adversarially in its own editing pass (`roles/reviewer.md`, AI-smell
-purge). The tell list is open; add tells as they are noticed. Current
+Defect class. The tell list is open; add tells as they are noticed. Current
 entries:
 
 - "load-bearing"
@@ -140,6 +148,3 @@ entries:
 - hedge-then-assert patterns
 - re-stating the thesis at every section opening
 - summary sentences that add nothing ("This matters because...")
-
-A tell appearing in a draft is not a crisis; a tell surviving the purge pass
-is a defect.
