@@ -17,8 +17,6 @@ One self-contained directive per session.
   state the tree assignment in each directive.
 - **Pin STOP conditions to the reviewed ref**, not the head of the branch the
   directive lands on — the directive's own commit moves that head.
-- **Mid-delta directives derive from the spec branch, not the default branch**,
-  and pin its SHA.
 - **No blanket constraint may contradict an explicit instruction in the same
   file.** Read the constraint block against the instruction list before sending.
 - **Scope Do-not lists to the blast radius.** Where a required consistency fix

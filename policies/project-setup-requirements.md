@@ -43,14 +43,11 @@ human at adoption.
 
 The repo runs its own frontmatter check over its spec documents at commit time.
 
-The in-scope set is the documents agents consume as governing context —
-policies, role documents, context sets, boundary documents, skill documents,
-spec documents, vendor documents, and the operating model, the lexicon, and the
-readme at the root. State trackers, adapters, and instantiated project
-artifacts are out of scope. Adoption of the metadata schema is not optional for
-an adopting project's spec documents, and the methodology repo's hooks cannot
-reach a project repo, so each project installs its own. (In this repo, the
-instance is `bin/install-hooks`, which installs a pre-commit hook running
+The in-scope set is the one the document metadata policy defines.
+Adoption of the metadata schema is not optional for an adopting project's spec
+documents, and the methodology repo's hooks cannot reach a project repo, so
+each project installs its own. (In this repo, the instance is
+`bin/install-hooks`, which installs a pre-commit hook running
 `bin/check-frontmatter --staged`.)
 
 Hook installation is local state. It is per-clone, it is not recorded in git,
@@ -67,8 +64,8 @@ problem rather than the setup omission it is.
 
 If documents enter migration already marked `agreed`, the repo records a
 one-time per-document disposition list naming exactly which ones, and its
-adoption record declares where that list lives.
+adoption record declares where that list lives. Recording "none" is a valid and
+complete answer.
 
-A document absent from the list does not qualify, and **if no disposition list
-exists, the grandfather clause does not apply at all**. Recording "none" is a
-valid and complete answer.
+What the list licenses, and what its absence licenses, is stated per the
+Document Versioning & Metadata policy.

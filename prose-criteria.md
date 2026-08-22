@@ -2,6 +2,7 @@
 status: draft
 last-reviewed: null
 audience: [writer, human]
+order: 11
 ---
 
 # Public Prose Criteria
@@ -15,15 +16,14 @@ yet at all.
 
 ## Trust model — every word is reviewed
 
-Dave reviews every word before publication. Agents draft under direction;
-nothing publishes on agent judgment.
+Dave reads every word of a piece before it publishes.
 
 ## Purpose and audience
 
 Readers: adopters, peers, potential clients. Goal now: establish thought
 leadership. Goal later: drive adoption, expected to become primary when the
-SRE-focused methodology work is public. Revisit the register when that shift
-happens.
+SRE-focused methodology work is public. When that shift happens, put the
+register question to Dave; do not change the register on your own.
 
 ## Voice and register
 
@@ -38,8 +38,9 @@ happens.
   such statements it was literally accurate."
 - Blunt categorical claim first, then the personal instance.
 - Hacker register is in-voice: grok, box.
-- Tier is carried by verb choice and frame, never by narrated self-correction.
-  "What I noticed" stays; "I should be careful with my own story here" is cut.
+- Claim tier is carried by verb choice and frame, never by narrated
+  self-correction. "What I noticed" stays; "I should be careful with my own
+  story here" is cut.
 - A point is made once, flat. No contrast pair that restates it from the other
   side.
 
@@ -58,13 +59,16 @@ tier legible to the reader:
 1. **Relayed** — someone else's claim, passed along. Attributed as such.
 2. **Demonstrated** — Dave's evidence constitutes proof: hypothesis, test,
    result. The piece can show the work.
-3. **Inferred** — grounded in experience, observation, or data below the bar
+3. **Grounded** — resting on experience, observation, or data below the bar
    for proof. The prose carries the tier in verb choice and frame ("what I
    noticed," "in my experience").
 4. **Opinion** — clearest of all, by the same means.
 
-Tier-blurring — an opinion dressed as an inference, an inference dressed as
-proof — is a defect.
+This ladder is claim strength — how firmly a sentence may assert — not
+provenance; provenance is stated per Core.
+
+Tier-blurring — an opinion dressed as a grounded claim, a grounded claim
+dressed as proof — is a defect.
 
 ## Terminology
 
@@ -93,8 +97,8 @@ and examples; it never licenses taking credit by omission.
 
 ## Structure
 
-- Length and structure are per-piece decisions, not criteria — revisit only
-  if problems recur.
+- Length and structure are per-piece decisions, not criteria: take them from
+  Dave for the piece at hand rather than applying a standing shape.
 - Standing convention: summary sections are labeled **TL;DR**.
 
 ## Length and duplication
@@ -124,10 +128,9 @@ in the public repo (`davepierceops/fiducial`) as the authoritative artifact.
 
 ## Venue and portability
 
-Canonical home: Dave's own site (pending; LinkedIn interim). Until settled:
-write venue-independent prose with no platform-specific formatting
-dependencies. Once the site exists it is canonical and everything else is a
-cross-post.
+Write venue-independent prose, with no platform-specific formatting
+dependencies. The canonical home is Dave's own site (pending; LinkedIn is the
+interim venue); everything else is a cross-post.
 
 ## Disclosure
 
@@ -138,8 +141,8 @@ including those that started in an LLM. No per-piece disclosure.
 
 ## AI prose-smell — named defect class
 
-Defect class. The tell list is open; add tells as they are noticed. Current
-entries:
+Defect class. The list is open: put any new tell you notice to Dave rather than
+adding it yourself. Current entries:
 
 - "load-bearing"
 - em-dash cascades (a pair landing a payoff word is not a cascade)

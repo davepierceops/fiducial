@@ -42,9 +42,6 @@ its decision record is the cycle directive.
 - Retros live in the project repo at `retros/`, sibling to the project's
   review artifacts. They are local project history and never travel to
   the methodology repo.
-- Retros are state/tracker-class artifacts, exempt from the document metadata
-  policy: no lifecycle frontmatter (`status`, `last-reviewed`, and the rest).
-  Their status is their content.
 - The header block in the retro schema below is synthesis metadata
   (project, date, source pointer), not governance metadata. It serves
   corpus tooling and carries no lifecycle semantics.

@@ -1,12 +1,13 @@
 ---
 status: draft
 last-reviewed: null
-audience: [implementer, skeptic, assistant, human]
+audience: [implementer, critic, assistant, human]
 ---
 
 # Skill: Engagement Change Package
 
-This skill runs in an execution session.
+Produced in an execution session by the Implementer. The Assistant reads it;
+it does not produce one.
 
 The lean change package for engagement work. One screen.
 
@@ -21,7 +22,7 @@ The lean change package for engagement work. One screen.
 4. **The diff** — pull request link
 5. **Evidence** — what was verified, using the evidence classes precisely;
    what remains unverified
-6. **Skeptic verdict, where one was requested** — attached verbatim
+6. **Critic verdict, where one was requested** — attached verbatim
 7. **Recommendation** — what should happen next, and any Dave decision points
 
 ## Rules

@@ -10,8 +10,7 @@ The Spec Reviewer runs as an execution session and returns a review artifact;
 the triage of its findings happens in a decision session.
 
 The Spec Reviewer Agent owns spec quality. It is a hard gate on spec agreement
-and revision, it is the designated owner of spec continuity scanning, and it
-does not author or co-author the documents it gates.
+and revision, and it is the designated owner of spec continuity scanning.
 
 This role is distinct from the Reviewer Agent (which reviews implementation)
 and the Skeptic/Risk Agent (which evaluates change package risk). The Spec
@@ -24,20 +23,16 @@ The Spec Reviewer fires in two modes:
 
 ### 1. Gate review
 Triggered on:
-- initial authorship of any canonical document, before Dave agrees it — any
-  canonical document, PRD and TRD and the methodology documents equally
-- any revision to a canonical document, before Dave agrees the revision
+- initial authorship of a PRD or a TRD, before Dave agrees it
+- any revision to a PRD, a TRD, or the acceptance criteria derived from them,
+  before Dave agrees the revision
 
-This is a **hard gate**. Dave does not agree a canonical document or a revision
-to one without a Spec Reviewer sign-off.
+This is a **hard gate**. Dave does not agree a PRD, a TRD, or their acceptance
+criteria — nor a revision to one — without a Spec Reviewer sign-off.
 
-**What the gate fires over is a diff reaching the default branch, not each edit.**
-Where a tranche's spec edits accumulate on a spec branch, the gate fires once
-over the whole delta at reconciliation.
-
-The gate's reach is any canonical document, not `specs/` only. Two bounded
-exceptions substitute a different check for this gate; the document-metadata
-policy states them and their conditions, and this role does not restate them.
+The gate reaches the PRD, the TRD, and the acceptance criteria derived from
+them, and nothing else. Every other governed document is the Context Quality
+Reviewer's.
 
 ### 2. Continuity scan
 Triggered on:

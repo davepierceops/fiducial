@@ -31,15 +31,14 @@ project artifacts.
 - `specs/**`
 - `vendors/**`
 - `operating-model.md`
-- `README.md`
 - `LEXICON.md`
 
 **Out of scope:**
 
 - State and tracker artifacts: `MANIFEST.md`, `OPEN-ITEMS.md`,
   `COLLAB-STATE.md`, `BACKLOG-v2.md`, review artifacts
-  (`reviews/**`, `REVIEW-*.md`), merge history (`MERGE-NOTES-v0.4.md`).
-  Their status is their content.
+  (`reviews/**`, `REVIEW-*.md`), retros (`retros/`), merge history
+  (`MERGE-NOTES-v0.4.md`). Their status is their content.
 - Adapters — the per-tool entry files that point a vendor's harness at
   this methodology, and their configuration directories. These are thin
   deployment targets, and leading YAML may collide with tool
@@ -88,9 +87,12 @@ lines, before any content.
     declares where that list lives. A document absent from the list
     does not qualify. If no disposition list exists, the clause does
     not apply and normal rules govern.
-- `audience:` list of roles that consume this document. Values are
-  `roles/` file slugs plus two reserved values: `all-roles` and
-  `human`. Any other value fails enforcement.
+- `audience:` list of roles that consume this document. Values are the
+  basename slug of any role document under `roles/` or `engagements/`
+  (including `engagements/sre/`), plus three reserved values:
+  `all-roles`, `all-decision-roles`, and `human`. `all-decision-roles`
+  selects every role that runs as a decision session. Any other value
+  fails enforcement.
 
 ## Conditional fields
 
@@ -149,7 +151,6 @@ round-trip, the cycle directive, and the per-cycle review artifact.
    - `skills/conversation-retro.md`
    - `boundaries/human-review-boundary.md`
    - `operating-model.md`
-   - `README.md`
 
    These return to `agreed` only through a full cycle. The list is
    normative where it names a document, and cannot bound the class; a
@@ -182,9 +183,6 @@ that exists, and **the SHA cited in `last-reviewed` must appear in an
 entry in the log** — same commit, same form, so a checker matches pointer
 to entry character-for-character or normalizes both through `git
 rev-parse`. The log is append-only; entries are never edited or removed.
-
-An adopting repo creates an empty `reviews/expedited-log.md` when it
-stands up enforcement at project setup.
 
 ### Sequence
 
@@ -277,4 +275,5 @@ lands in its own commit, per the expedited path's "no other tracked path" rule.
   explicitly directs it for a specific task.
 - Never consume `superseded` or `deprecated` docs except to follow a
   `superseded-by` pointer.
-- Orchestrators may select context by `audience`.
+- Bundle membership is declared by the document's `audience` value; no
+  reader selects it.

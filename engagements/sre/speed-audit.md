@@ -1,12 +1,13 @@
 ---
 status: draft
 last-reviewed: null
-audience: [assistant, cartographer, skeptic, implementer, human]
+audience: [assistant, cartographer, critic, implementer, human]
 ---
 
 # Skill: Speed Audit
 
-This skill runs in a decision session.
+Runs in a decision session. The Implementer and Critic read it for their
+step-5 assignments; they do not run the play.
 
 The end-to-end engagement play for "make X faster," sized to a one-week
 engagement. Composes the other engagement skills; the roles execute their
@@ -22,24 +23,17 @@ parts.
    evidence.
 4. **Propose** — for the top stages, the Assistant drafts Improvement Proposals.
    Dave selects with the client's priorities in mind.
-5. **Attack** — the Implementer builds; the Skeptic reviews where a review is
-   requested; changes land as pull requests through the client's own gates;
-   re-measure after each landing, not in batches.
+5. **Attack** — the Implementer builds; the Critic reviews where a review is
+   requested; re-measure after each landing, not in batches.
 6. **Write up** — before/after distributions, the remaining ranked
    opportunities, and the recommendation. Written for the client's engineers to
    keep, in their vocabulary, citing their systems.
 
 ## The Improvement Proposal
 
-One screen, drafted by the Assistant from the Cartographer's map and the
-baseline. The Cartographer does not propose; the Implementer does not
-self-authorize.
+Drafted by the Assistant from the Cartographer's map and the baseline, in the
+shape the Artifacts list states. The Cartographer does not propose; the
+Implementer does not self-authorize.
 
-- target stage, with baseline cite (p50/p95)
-- the change
-- expected delta, stated in advance
-- effort estimate and blast radius, with rollback path
-- draft acceptance criteria
-
-**Agreed** means Dave says yes; the proposal records it and the change package
-cites it. The acceptance criteria are agreed in the same breath.
+**Dave's go:** the proposal records it and the change package cites it. The
+acceptance criteria are agreed in the same breath.

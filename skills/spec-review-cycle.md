@@ -11,8 +11,9 @@ run in an execution session.
 
 ## Purpose
 
-Execute one external-gate review cycle over a canonical document. The Context
-Quality Reviewer runs rubric cycles; the Spec Reviewer runs spec cycles.
+Execute one external-gate review cycle over a governed document. The Spec
+Reviewer gates the PRD, the TRD, and their acceptance criteria; the Context
+Quality Reviewer gates every other governed document.
 
 ## Use when
 
@@ -33,8 +34,8 @@ interactive co-authoring or artifact-pane review.
   documents are never carried through the decision session.
 - **Reviewed commit SHAs are recorded in the directive.** This is the audit
   link from directive to reviewed state. A directive without SHAs is invalid.
-  Mid-delta, those SHAs are on the tranche's spec branch, not the default
-  branch (Reconciliation, below).
+  Which revisions those SHAs name mid-delta is stated per the Spec and Change
+  Discipline context set.
 
 ## Inputs
 
@@ -82,8 +83,9 @@ interactive co-authoring or artifact-pane review.
 1. Bring the spec to full agreement with what was actually built. Reconciliation
    is not a review of intentions — a spec that still describes something the
    tranche did not build is not reconciled.
-2. Open a pull request from the tranche's spec branch to the default branch. The
-   diff under review is the whole delta, not one edit within it.
+2. Open a pull request from the tranche's spec branch to the default branch.
+   What the gate fires over there is stated per the Commit and Change Control
+   policy.
 3. Run the cycle from step 1 of the Procedure, with the spec-branch SHAs as the
    reviewed revisions. Findings are triaged and executed against the spec
    branch; the pull request updates in place.

@@ -11,7 +11,6 @@ This procedure runs in an execution session.
 ## Purpose
 
 Evaluate whether a test plan is sufficient for the intended change and risk.
-The plan's author does not review it.
 
 ## Use when
 

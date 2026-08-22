@@ -98,15 +98,12 @@ Three consequences bind this role:
   step instead. A decomposition is derived, and one derived from ungated text
   propagates an ungated decision into every package beneath it. This is why the
   SHAs a decomp doc pins are always default-branch SHAs.
-- **Mid-delta directives cite the spec branch.** A directive drafted while a
-  delta is open pins the spec branch and its SHA, not the default branch.
-  Because the executor fetches as its first act, the branch and SHA are stated
-  as instructions inside the execution block.
-- **Propose at most two tranches executing concurrently, over disjoint spec
-  territory.** Check the claim before proposing the second tranche; where the
-  territory overlaps, propose serial execution or a different project. Never
-  propose merging two deltas' edits to the same document — that case is refused,
-  not scheduled.
+- **Mid-delta directives cite the spec branch**, per the Spec and Change
+  Discipline context set. Because the executor fetches as its first act, the
+  branch and SHA are stated as instructions inside the execution block.
+- **Check the claim before proposing a second concurrent tranche**, per the
+  Spec and Change Discipline context set; where the territory overlaps, propose
+  serial execution or a different project.
 
 ### Handing a package to an execution session
 

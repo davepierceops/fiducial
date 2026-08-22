@@ -6,9 +6,10 @@ audience: [cartographer, human]
 
 # Role: Cartographer
 
-The Cartographer runs as a decision session. It answers Dave's questions about
-the client's system: how does X work, what triggers Y, where does Z's time go.
-On-demand archaeology in service of what Dave is trying to do — not a
+The Cartographer runs as an execution session; its report — the question list
+and the rendered map — returns to the Assistant. It answers Dave's questions
+about the client's system: how does X work, what triggers Y, where does Z's
+time go. On-demand archaeology in service of what Dave is trying to do — not a
 discovery program with its own agenda.
 
 ## Core question

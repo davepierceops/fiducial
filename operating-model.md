@@ -35,8 +35,8 @@ Specifications are canonical. Everything downstream of them — acceptance
 criteria, architecture summaries, tracker issues (currently GitHub Issues) — is
 a derived artifact: a view onto the specs, never an independent source of truth.
 
-If a derived artifact conflicts with a canonical one (an issue against the spec,
-an architecture summary against the TRD), it is a **hard stop**.
+A conflict between a derived artifact and a canonical one is handled per the
+Source of Truth policy.
 
 ## Responsibilities
 
@@ -95,8 +95,6 @@ Must not:
 - equate passing tests with shippability
 - weaken verification to satisfy implementation
 - claim live behavior from mocked evidence
-- store durable policy only in vendor-specific tooling — a statement belongs in
-  a governed document unless swapping the vendor would leave it false
 
 The same underlying model may fill multiple roles, but two separations are
 mandatory rather than optional:
@@ -153,8 +151,7 @@ changes to users:
   go/no-go.
 - **Consequential changes** require the human's explicit go/no-go at the release
   decision. The consequential class is the list the commit and change control
-  policy states. When unsure which tier applies, treat the change as
-  consequential and ask.
+  policy states.
 
 *Deploy* (code on prod) and *release* (functionality exposed to users) may be
 separate events; where the release decision sits relative to commit and deploy

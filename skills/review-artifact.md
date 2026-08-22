@@ -1,7 +1,7 @@
 ---
 status: draft
 last-reviewed: null
-audience: [spec-reviewer-agent, context-quality-reviewer, reviewer-agent, skeptic-risk-agent, release-manager-agent, chief-of-staff, human]
+audience: [spec-reviewer-agent, context-quality-reviewer, reviewer-agent, skeptic-risk-agent, release-manager-agent, chief-of-staff, critic, human]
 ---
 
 # Skill: Review Artifact
@@ -37,12 +37,6 @@ not retrofitted** — they are the review record of documents already agreed, an
 rewriting a record of what happened to match a later format would be the drift
 this repo exists to prevent.
 
-## Gap labels
-
-An agent applies `blocking`, `deferred`, or `not-material`. `accepted-risk` is
-applied only where Dave's go or the release process has already accepted the
-gap; otherwise the gap is `blocking`.
-
 ## Filenames
 
 A review artifact is `reviews/<stem>-cycle-<n>.md`, where `<stem>` is the
@@ -52,6 +46,12 @@ derivable from the document path without looking it up. Where the stem already
 ends in `-cycle` or a digit, apply the rule unchanged and let it repeat —
 `reviews/spec-review-cycle-cycle-1.md`. A special case would cost more than the
 repetition does.
+
+Where the basename is not unique in the corpus, the stem is
+`<parent-dir>-<basename>`.
+
+On a rename or a split the cycle number restarts at 1, and `Prior cycle` names
+the predecessor stem.
 
 ## Header
 

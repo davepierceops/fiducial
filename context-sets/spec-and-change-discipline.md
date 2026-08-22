@@ -46,10 +46,9 @@ exactly as before, and an agent that edits a spec document without being told to
 has not found a loophole here — what an open delta removes is the *gate* on the
 owner's own edits, not the rule about who authors canonical text.
 
-**Reconciliation blocks the next tranche's decomposition.** Decomposing from
-unreviewed spec is prohibited. Dave may invoke reconciliation early,
-mid-tranche, at will — frequent small reconciliations are the encouraged norm,
-and the tranche boundary is a deadline rather than a target.
+**Reconciliation may be invoked early.** Dave may invoke it mid-tranche, at
+will — frequent small reconciliations are the encouraged norm, and the tranche
+boundary is a deadline rather than a target.
 
 **A directive issued mid-delta derives from the spec branch.** It cites the spec
 branch and pins its SHA, not the default branch: truth-at-handoff. Provenance

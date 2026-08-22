@@ -22,8 +22,7 @@ review of one, and the two are not competing.
 - identify SLO verification needs for affected Top K user journeys
 - specify failure cases
 - define what evidence will be required
-- run tests and confirm they fail (red-gate) before handing off to the Coder;
-  a test that passes before implementation is a broken test, not a head start
+- run tests and confirm they fail (red-gate) before handing off to the Coder
 - mark each gap the test plan leaves open with its release impact label
 
 ## Non-goals

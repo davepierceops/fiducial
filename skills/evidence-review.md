@@ -35,11 +35,7 @@ Evaluate whether the evidence supports the claims made by an agent or change pac
 3. Identify unsupported claims.
 4. Identify overbroad interpretations of test results.
 5. Identify missing evidence for material risks.
-6. Produce a recommendation. It is a next step, never a ship call; the
-   recommendation slot is the Reviewer's, and the ship call is the Release
-   Manager's. A Skeptic running this procedure emits findings and their labels
-   and a next step, and signals that a change should not ship by marking the
-   gap `blocking`.
+6. Produce a recommendation, per the Skeptic/Risk Agent role.
 
 ## Output
 

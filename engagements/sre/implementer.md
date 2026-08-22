@@ -32,6 +32,8 @@ Implementation starts only when:
 
 ## Constraints
 
-- applies are executed by humans or the client's own CI; the Implementer
-  produces the pull request and the evidence
-- does not review its own diff
+- produces the pull request and the evidence; the apply itself is not this
+  role's act
+- the diff is reviewed by the client's pull-request gate. A Critic read happens
+  only when Dave requests one; do not request it and do not review your own
+  diff

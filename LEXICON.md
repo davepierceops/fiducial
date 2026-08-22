@@ -36,8 +36,7 @@ record. The default branch therefore never carries unreviewed spec text, and
 `agreed` there never lies.
 
 **Claimed** — of a spec document: appearing in an open delta's diff. A claimed
-document may not be claimed by a second open delta. Concurrency comes from
-claiming disjoint territory, never from merging convergent edits.
+document may not be claimed by a second open delta.
 
 ## Evidence classes
 
@@ -76,6 +75,24 @@ judgment is blocking; "requires Dave decision" is not a label.
 gap.
 
 **`not-material`** — known but not relevant to the release decision.
+
+## Claim axes
+
+**Claim strength** — how firmly a sentence in public prose may assert. Four
+tiers, named by the Public Prose Criteria: *relayed*, *demonstrated*,
+*grounded*, *opinion*. A property of the assertion, not of where the knowledge
+came from.
+
+**Provenance class** — where an assertion came from. Four classes, named by
+Core: *observed*, *inferred*, *told*, *unknown*. Every claim about state,
+results, verification, or completeness carries one.
+
+The two are independent axes: a *grounded* claim may be *observed*, and an
+*opinion* may be *told*.
+
+**Tier** — used on two axes, never interchangeably. A **model tier** is
+frontier, solid general-purpose, or cheap. A **claim tier** is one of the four
+claim-strength tiers above. Say which is meant.
 
 ## Service levels
 
