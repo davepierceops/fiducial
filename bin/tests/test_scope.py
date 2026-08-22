@@ -71,7 +71,7 @@ class TestParseInScopeGlobs(unittest.TestCase):
         removing one is a policy change that should break a test.
         """
         self.assertGreaterEqual(len(EXPECTED_GLOBS), 4)
-        for anchor in ["policies/**", "skills/**", "README.md", "LEXICON.md"]:
+        for anchor in ["policies/**", "skills/**", "vendors/**", "LEXICON.md"]:
             self.assertIn(anchor, EXPECTED_GLOBS)
 
     def test_sc1_extracts_the_in_scope_list_in_document_order(self):
@@ -142,8 +142,8 @@ class TestMatches(unittest.TestCase):
     def test_sc3_non_directory_globs_are_fnmatch_over_the_whole_path(self):
         """AC-SC-3: a plain entry matches the whole relative path only."""
         self.assertTrue(scope.matches("operating-model.md", self.globs))
-        self.assertTrue(scope.matches("README.md", self.globs))
-        self.assertFalse(scope.matches("docs/README.md", self.globs))
+        self.assertTrue(scope.matches("LEXICON.md", self.globs))
+        self.assertFalse(scope.matches("docs/LEXICON.md", self.globs))
         self.assertFalse(scope.matches("sub/operating-model.md", self.globs))
 
     def test_sc4_only_markdown_is_ever_in_scope(self):

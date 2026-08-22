@@ -6,10 +6,10 @@ audience: [cartographer, assistant, human]
 
 # Skill: System Discovery
 
-This skill runs in an execution session.
+This skill runs in an execution session, executed by the Cartographer. Its
+report — the question list and the rendered map — returns to the Assistant.
 
-Procedure for building the System Map of a client pipeline. Executed by the
-Cartographer.
+Procedure for building the System Map of a client pipeline.
 
 ## Procedure
 
@@ -27,16 +27,14 @@ Cartographer.
    come from — existing logs, CI APIs, workflow annotations? Prefer measurement
    that requires no changes at all; then measurement requiring only PR-able
    changes; flag anything that would need write access.
-5. **Render the map.** One document: pipeline narrative, stage table, claim
-   provenance, unknowns, proposed measurement plan. Small enough to read in one
-   sitting; everything else links out.
+5. **Render the map** in the shape and place the Artifacts list states;
+   everything it does not carry links out.
 
 ## Output
 
-The System Map, in the engagement working area — a client-hosted repository
-designated at kickoff — plus the unknowns list ready for the Assistant's
-triage. The map is a living document: corrections from later evidence amend it,
-and amendments note what earlier belief they replaced.
+The System Map, plus the unknowns list ready for the Assistant's triage. The
+map is a living document: corrections from later evidence amend it, and
+amendments note what earlier belief they replaced.
 
 ## Failure modes to avoid
 

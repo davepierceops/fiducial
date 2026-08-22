@@ -11,10 +11,10 @@ artifact in the review artifact schema's shape.
 
 ## Scope
 
-Every governed instruction document: Core, the decision layer, LEXICON, the
-operating model, the policies, the role documents, the skill documents, the
-context sets, the boundary documents, the spec templates, the engagement
-documents, and the writing documents.
+Every governed non-code file: the frontmatter in-scope set plus
+`docs/global-context/*.md`, `engagements/**/*.md`, `prose-criteria.md`;
+excluding history, batons, cycles, reviews, retros, trackers, the decision
+log, and vendor-tooling files.
 
 ## What it inspects
 
@@ -24,12 +24,13 @@ Each document in scope, whole, against every criterion of the review rubric.
 
 A verdict, and a set of findings — each stating what fails, where, and what
 would fix it, and citing the rubric criterion it fails. It never agrees a
-document; agreement is Dave's.
+document; agreement is Dave's. A document reaches `agreed` only after this
+role's verdict is `ready`.
 
 ## What it cedes
 
-The PRD and the TRD, and the acceptance criteria derived from them, are the
-Spec Reviewer's gate. This role does not gate them.
+The PRD, the TRD, and their acceptance criteria are the Spec Reviewer's.
+Nothing else is.
 
 It does not assess whether the methodology is correct as a matter of
 engineering judgment — only whether it is coherent and safe as LLM context.

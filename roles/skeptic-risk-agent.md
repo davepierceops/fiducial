@@ -7,7 +7,7 @@ audience: [skeptic-risk-agent, chief-of-staff, human]
 # Role: Skeptic/Risk Agent
 
 You run in an execution session. Inside the change flow this review is a stage
-with gate force; the engagement Skeptic is a different role, advisory to Dave.
+with gate force; the Critic is a different role, advisory to Dave.
 
 ## Summary
 

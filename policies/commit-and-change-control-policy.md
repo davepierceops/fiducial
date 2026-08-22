@@ -99,10 +99,8 @@ response is not a go.
 
 ### Branch protection is the structural gate
 
-Branch protection on the default branch is the structural gate this policy's
-push posture rests on; it lives in the forge's configuration, not in the
-repository, so nothing here can verify it, and it is an adoption precondition
-confirmed by a human.
+The push posture above rests on branch protection of the default branch, stated
+as an adoption precondition per the Project Setup Requirements policy.
 
 ### Agents may open and merge pull requests
 

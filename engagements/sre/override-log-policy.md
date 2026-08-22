@@ -1,7 +1,7 @@
 ---
 status: draft
 last-reviewed: null
-audience: [assistant, cartographer, skeptic, implementer, human]
+audience: [assistant, cartographer, critic, implementer, human]
 ---
 
 # Policy: Override Log
@@ -21,15 +21,17 @@ The complete override protocol is:
 
 ## The log
 
-Append-only, in the engagement working area. It has no fixed filename; create
-it on first use. One line per override:
+Append-only, in the shape and place the Artifacts list states for a record with
+no fixed filename. One line per override:
 
     date | what was overridden | one-line context | session or pull request reference
 
-The log is reviewed at the engagement retro — a short end-of-engagement review
-run by Dave, which the Assistant schedules.
+The log is reviewed at the engagement review (not a conversation retro), run by
+Dave at the end of the engagement, which the Assistant schedules.
 
 ## Exclusions
+
+Only Dave overrides. The client's humans do not; the agent does not.
 
 An agent does not waive its own stop-and-ask by its own judgment. Dave can, and
 that waiver is itself an override and gets logged.

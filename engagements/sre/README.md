@@ -1,7 +1,7 @@
 ---
 status: draft
 last-reviewed: null
-audience: [assistant, cartographer, skeptic, implementer, human]
+audience: [assistant, cartographer, critic, implementer, human]
 ---
 
 # Engagement Pack
@@ -24,31 +24,44 @@ specification, and the artifact chain is:
 about where time goes) → **Improvement Proposal** (a change with a stated
 expected delta) → **change package**.
 
-The Cartographer builds the map; the system-discovery skill is the procedure.
+The Cartographer builds the map; system discovery is what produces it.
 
 ### The red-gate becomes the baseline-gate
 
 **The baseline is the failing test.** No optimization is implemented until the
 stopwatch exists, the baseline distribution is captured, and the expected delta
-is stated in advance. The baseline-measurement skill is the procedure.
+is stated in advance. Baseline measurement is what produces the Measurement
+Baseline.
 
 ### Ownership becomes guest posture
 
-Everything lands as a pull request; nothing is pushed. The client's humans hold
-the release gate on their own systems.
+Changes land as pull requests through the client's own gates; nothing is
+pushed. An engagement has no release gate. Release is the client's concern, not
+this role's; do not inquire into or reason about the client's release timing.
 
 ### Ceremony has a floor and an override log
 
 The engagement runs the minimum ceremony that preserves the evidence chain: the
-baseline-gate, a lean change package, and clean-context Skeptic review where one
-is requested. Every ceremonial element is trivially overridable by Dave, the
-override is logged, and the log is reviewed at the engagement retro.
+baseline-gate, a lean change package, and clean-context Critic review where one
+is requested. A Critic read is advisory; its verdict is input to Dave and gates
+nothing.
 
-## Key principles
+## Artifacts
 
-1. Manage the proof, not the code — and in an engagement, the first proof is
-   the measurement.
-2. Discovery precedes specification.
-3. The baseline is the failing test.
-4. Changes land as pull requests through the client's own gates.
-5. Ceremony is minimal, overridable, and every override is logged.
+- **System Map** — pipeline narrative, stage table, claim provenance, unknowns,
+  and the proposed measurement plan; one document in the engagement working
+  area, small enough to read in one sitting.
+- **Measurement Baseline** — per-stage p50 and p95, the total, the date range,
+  the run count, and known confounds; one document beside the System Map.
+- **Improvement Proposal** — one screen: target stage with its baseline cite,
+  the change, the expected delta stated in advance, effort estimate and blast
+  radius with rollback path, and draft acceptance criteria; in the engagement
+  working area.
+- **engagement working area** — the client-hosted repository designated at
+  kickoff. Every engagement artifact lives here.
+- **baseline-gate** — the standing condition that a Measurement Baseline
+  covering the affected stage exists and the expected delta is stated before
+  an optimization is implemented.
+- **A record with no fixed filename, created on first use, kept in the
+  engagement working area** — the shape the override log and the Assistant's
+  loose-end record both take.

@@ -242,14 +242,43 @@ def staged_entries(root):
     return entries
 
 
+_ROLE_HEADING = re.compile(r"^#\s+Role:", re.MULTILINE)
+
+
+def _is_role_document(path):
+    """True when `path`'s first top-level heading is `# Role:` (the convention
+    every `roles/*.md` document already follows)."""
+    try:
+        text = path.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError):
+        return False
+    for line in text.splitlines():
+        if line.startswith("# "):
+            return bool(_ROLE_HEADING.match(line))
+    return False
+
+
 def role_slugs(root, home=None):
-    """Set of `roles/*.md` basenames, from the invoking repo or the home clone."""
+    """Set of role-document basenames, from the invoking repo or the home clone.
+
+    A role document is `roles/*.md` (every file there opens with a `# Role:`
+    heading), or a document under `engagements/*.md` or `engagements/sre/*.md`
+    whose own first heading is `# Role:` — `engagements/working-with-dave.md`
+    and `engagements/sre/README.md`, for example, are not.
+    """
     for base in [pathlib.Path(root), pathlib.Path(home) if home else None]:
         if base is None:
             continue
         roles = base / "roles"
-        if roles.is_dir():
-            return {p.stem for p in roles.glob("*.md")}
+        if not roles.is_dir():
+            continue
+        slugs = {p.stem for p in roles.glob("*.md") if _is_role_document(p)}
+        for engagements_dir in [base / "engagements", base / "engagements" / "sre"]:
+            if engagements_dir.is_dir():
+                slugs |= {
+                    p.stem for p in engagements_dir.glob("*.md") if _is_role_document(p)
+                }
+        return slugs
     return set()
 
 

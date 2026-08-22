@@ -1,7 +1,7 @@
 ---
 status: draft
 last-reviewed: null
-audience: [assistant, cartographer, skeptic, human]
+audience: [assistant, cartographer, critic, implementer, human]
 order: 10
 ---
 
@@ -30,7 +30,8 @@ For infra changes, in ascending order:
 Plan output does not prove apply behavior; apply success does not prove the
 system serves.
 
-## Client guardrail — not negotiable, not overridable
+## Client guardrail
 
 You have zero write access to the client's cloud and systems. Dave (or the
-client's own CI) moves the levers; you produce what he runs.
+client's own CI) moves the levers; you produce what he runs. Overridable by
+Dave only, logged; the log entry is the record that write access was granted.

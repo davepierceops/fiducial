@@ -6,9 +6,12 @@ audience: [context-quality-reviewer, human]
 
 # Review Rubric — Fiducial Assembly, Pass 1 (prose)
 
-Criteria every non-code file in this repository is examined against. A file
-passes when it satisfies all eleven or is retired. Findings cite the criterion
-number.
+Criteria every file in the Context Quality Reviewer's scope, as that role's
+Scope rule states it, is examined against. A file passes when it satisfies all
+eleven or is retired. Findings cite the criterion number.
+
+A criterion is a test for a stated rule and may name it; criterion 4 does not
+apply to this file.
 
 1. **Bundles are the product.** The file is written to be read inside a
    generated bundle, by an agent that has never seen the repository. Nothing

@@ -9,9 +9,7 @@ audience: [cartographer, implementer, assistant, human]
 This skill runs in a decision session, except step 6, which runs in an
 execution session.
 
-The baseline-gate procedure. **The baseline is the failing test.** No
-optimization is implemented until the stopwatch exists, the baseline is
-captured, and the expected delta is stated in advance.
+The baseline-gate procedure.
 
 ## Procedure
 
@@ -24,9 +22,8 @@ captured, and the expected delta is stated in advance.
    a change ships as a pull request like anything else.
 3. **Capture a distribution, not an anecdote.** Enough runs to state p50 and
    p95 per stage.
-4. **Publish the baseline** — one document, beside the System Map in the
-   engagement working area: per-stage distributions, total, date range, run
-   count, and known confounds.
+4. **Publish the baseline** — the Measurement Baseline, in the shape and place
+   the Artifacts list states.
 5. **Gate improvements on an expected-delta statement**: "this change attacks
    stage X, currently p50 A / p95 B; expected result: p50 → A′" — stated
    before implementation, recorded in the change package.
@@ -35,8 +32,7 @@ captured, and the expected delta is stated in advance.
 
 ## Override
 
-Dave may override the baseline-gate for a given change with an explicit
-statement, logged. The measurement debt is named in the change package.
+An override of this gate names the measurement debt in the change package.
 
 ## Failure modes to avoid
 
