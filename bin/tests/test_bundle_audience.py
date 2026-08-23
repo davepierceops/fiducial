@@ -261,15 +261,37 @@ class TestMembership(unittest.TestCase):
 
     def test_ba2_non_matching_value_is_excluded(self):
         """AC-BA-2: a document whose `audience:` names neither the value nor
-        `all-roles` is not a member."""
-        self.seed({"policies/other.md": doc(["some-other-role"])})
+        `all-roles` is not a member.
+
+        `policies/keeps-value-known.md` keeps `target-role` in AC-BA-5's known
+        set (Amendment 1) — otherwise AC-BA-6 (unknown value) would fire
+        before the membership rule this test is about ever runs, as
+        `test_ba2_all_decision_roles_selects_a_decision_session_role_slug`'s
+        docstring already notes for its own fixture.
+        """
+        self.seed(
+            {
+                "policies/other.md": doc(["some-other-role"]),
+                "policies/keeps-value-known.md": doc(["target-role"]),
+            }
+        )
         rc, out, err = self.bundle("--audience", "target-role")
         self.assertEqual(rc, 0, "stderr=%r" % err)
         self.assertNotIn("policies/other.md", out)
 
     def test_ba2_all_roles_is_always_a_member(self):
-        """AC-BA-2: `audience: [all-roles]` is a member of any requested bundle."""
-        self.seed({"policies/broad.md": doc(["all-roles"])})
+        """AC-BA-2: `audience: [all-roles]` is a member of any requested bundle.
+
+        `policies/keeps-value-known.md` keeps `target-role` in AC-BA-5's known
+        set (Amendment 1), for the same reason as
+        `test_ba2_non_matching_value_is_excluded`.
+        """
+        self.seed(
+            {
+                "policies/broad.md": doc(["all-roles"]),
+                "policies/keeps-value-known.md": doc(["target-role"]),
+            }
+        )
         rc, out, err = self.bundle("--audience", "target-role")
         self.assertEqual(rc, 0, "stderr=%r" % err)
         self.assertIn("policies/broad.md", out)
