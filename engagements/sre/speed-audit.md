@@ -26,7 +26,7 @@ parts.
 4. **Propose** — for the top stages, the Assistant drafts Improvement Proposals.
    Dave selects with the client's priorities in mind.
 5. **Attack** — the Implementer builds; the Critic reviews where a review is
-   requested; the Cartographer re-measures against the baseline.
+   requested; the Cartographer re-measures against the baseline, after each landing, not in batches.
 6. **Write up** — before/after distributions, the remaining ranked
    opportunities, and the recommendation. Written for the client's engineers to
    keep, in their vocabulary, citing their systems.
