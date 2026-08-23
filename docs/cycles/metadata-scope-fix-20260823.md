@@ -1,0 +1,1 @@
+Decision, dictated here (this directive is the origin): the Architect and the Release Manager run as execution sessions; the Writer runs as a decision session. Known and accepted: wording in roles/architect-agent.md and roles/release-manager-agent.md implies otherwise; that is tracked separately and is not this directive's to fix.
