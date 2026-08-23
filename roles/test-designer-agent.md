@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/corpus-regate-cycle-2.md @ df35ea7
+last-reviewed: reviews/test-designer-agent-cycle-2.md @ cd7db71
 audience: [test-designer-agent, chief-of-staff, human]
 session: execution
 ---
