@@ -12,9 +12,12 @@ below states the criteria at the level a PRD carries them.
 
 Its content is dictated by Dave in the decision session that directed this
 authorship; the directive file `docs/cycles/bin-land-spec-20260823T190444Z.md`
-@ `9be1f68a` is the origin of that wording and this document does not restate
-it as if it were derived from somewhere else. Assertions about this repository
-carry a provenance class: *observed*, *inferred*, *told*, *unknown*.
+@ `9be1f68a` is the origin of that wording, and the cycle-2 directive
+`docs/cycles/bin-land-spec-2-20260823T192131Z.md` @ `4145d1bd` is the origin of
+the revisions carrying Dave's dispositions on the cycle-1 review. This document
+does not restate either as if it were derived from somewhere else. Assertions
+about this repository carry a provenance class: *observed*, *inferred*, *told*,
+*unknown*.
 
 ## 1. Problem and intent
 
@@ -55,8 +58,10 @@ Two standing decisions constrain this and are cited rather than re-argued:
 **Primary actor — an execution session.** An LLM agent session carrying out a
 directive against a working tree. It uses `bin/land` twice in a typical cycle:
 once to land the directive file as its first act, and once to land the work the
-directive produced. It has a local clone, whatever credentials the environment
-already gave `git`, and no reliable knowledge of what its sandbox permits.
+directive produced. These are two invocations of one form, not two modes of
+the tool (*told* — dictated). It has a local clone, whatever credentials the
+environment already gave `git`, and no reliable knowledge of what its sandbox
+permits.
 
 **Secondary actor — Dave, and the decision session.** Consumes the tool's
 output as evidence that a landing happened and that the content landed intact.
@@ -79,8 +84,10 @@ Top K = 3.
 - **Actor**: execution session.
 - **Trigger**: the session's first act under a directive.
 - **Steps**: invokes `bin/land <branch> <message> <directive-path>`; the tool
-  fetches, branches, stages the named file, commits, pushes, and verifies; the
-  session reads the reported branch, head SHA, and per-file blob match.
+  fetches, finds the named branch absent at the remote and creates it from
+  `origin/main` HEAD, stages the named file, commits, pushes, and verifies; the
+  session reads the reported branch, the prior-head field reading `created`,
+  the head SHA, and the per-file blob match.
 - **Expected outcome**: exit 0, and a head SHA the session can report and a
   decision session can cite, established by reading remote state back rather
   than by the absence of an error.
@@ -89,10 +96,13 @@ Top K = 3.
 
 - **Actor**: execution session.
 - **Trigger**: the directive's work is complete and its gates have run.
-- **Steps**: invokes `bin/land` with the branch, a message, and the changed
-  files, or with no files to take every change.
-- **Expected outcome**: exit 0, and per-file confirmation that the content at
-  the remote matches the content committed.
+- **Steps**: invokes `bin/land` with the same branch, a message, and the
+  changed files, or with no files to take every change. The branch now exists
+  at the remote, so the tool prints that branch's current head and lands on top
+  of it.
+- **Expected outcome**: exit 0, per-file confirmation that the content at the
+  remote matches the content committed, and a prior head SHA recording what
+  this landing extended.
 
 ### J3 — a landing that cannot be verified
 
@@ -110,17 +120,40 @@ Top K = 3.
 
 Invocation: `bin/land <branch> <message> [files...]`.
 
-- **G1 — Start from the remote's current default branch.** Fetch origin and
-  branch from `origin/main` HEAD, so a stale working tree cannot silently
-  become the base of the work (*told* — dictated stale-tree guard).
+- **G1 — Base the commit on remote state, and report what it was built on.**
+  `bin/land <branch> <message> [files...]` means: put this commit on that
+  branch. The invocation names the branch every time, so its intent is fully
+  stated by the invocation; there are no flags and no modes (*told* —
+  dictated). After fetching origin, the tool takes one of two arms according to
+  whether the branch exists at the remote:
+  - **Branch absent at origin** — create it from `origin/main` HEAD. The
+    report's prior-head field reads `created`.
+  - **Branch present at origin** — land on top of that branch's current head,
+    and print that prior head SHA in the output *before* landing, so the report
+    carries what the landing extended even if a later step fails.
+
+  In both arms the base is remote state as of this invocation's own fetch, so a
+  stale local working tree cannot silently become the base of the work (*told*
+  — dictated stale-tree guard). What the tool does not do is judge whether the
+  branch's remote head was the one the session expected. Staleness of that kind
+  is detected by the evidence trail — the printed prior head, carried into the
+  executor's report — not prevented by the tool (*told* — dictated).
 - **G2 — Stage what was named.** Stage the named files; stage all changes if
   none are named.
 - **G3 — Commit with the given message.**
-- **G4 — Push, and do not read success or failure out of the transport's
-  chatter.** The string `fatal: failed to store: 100001` is non-fatal noise
-  from the credential helper and does not indicate that the push failed
-  (*told* — dictated; *observed* in the research findings, where the fetch,
-  push, and `ls-remote` all emitted it and all succeeded).
+- **G4 — Push, and take git's exit status as the push's outcome.** The tool's
+  determination that a push succeeded rests on git's exit status and on the
+  verification in G5, and on nothing else. No behaviour keys on the content of
+  stderr, in either direction (*told* — dictated).
+
+  A note for the reader, carried as context and not as a requirement on the
+  tool: in the sandboxes this repository's execution sessions run in, git's
+  credential helper writes `fatal: failed to store: 100001` to stderr during
+  fetch, push, and `ls-remote` while those operations exit 0 and take effect
+  (*observed*, per the research findings, and *observed* again in the session
+  that produced the cycle-1 review). The tool ignores this by design — not by
+  recognising the string, but by never reading stderr for a success decision.
+  A message the tool never parses cannot go stale on it.
 - **G5 — Verify content, not landing.** Verify by `git ls-remote` **and** by
   per-file blob-SHA comparison against the state fetched from the remote after
   the push. The comparison is what makes the claim a content claim rather than
@@ -128,12 +161,21 @@ Invocation: `bin/land <branch> <message> [files...]`.
   and `bin/aimeta/repo.py` already exposes a `blob_at_rev` primitive for it
   (*observed*, per the research findings). This goal is what closes the gap
   `policies/remote-write-verification-policy.md` names as open.
-- **G6 — Emit a machine-readable report.** Branch, head SHA, and per-file blob
-  match, each claim labelled *observed* or *unknown*. The tool emits two of
-  Core's four provenance classes and no others: a tool observes a fact or fails
-  to, and it is never in a position to infer or to be told. This is a subset of
-  Core's set, not a redefinition of it. The concrete output format is named at
-  the TRD stage.
+- **G6 — Emit a machine-readable report carrying named fields.** The report
+  carries five fields:
+  - **branch** — the branch landed on;
+  - **head SHA** — the commit this invocation put at that branch's head;
+  - **prior head** — the branch's head SHA before this landing, or `created`
+    where G1's first arm applied;
+  - **per-file blob match** — one result for each file in the commit;
+  - **verification outcome** — whether full verification was established.
+
+  Each claim is labelled *observed* or *unknown*. The tool emits two of Core's
+  four provenance classes and no others: a tool observes a fact or fails to,
+  and it is never in a position to infer or to be told. This is a subset of
+  Core's set, not a redefinition of it. These five fields are the PRD-level
+  contract; how they are serialized is a technical decision, named at the TRD
+  stage, and the format the TRD names carries all five.
 - **G7 — Exit 0 only on full verification.** On any failure, print what was
   established and what was not, and exit non-zero. Never retry a write. Never
   delete or force-push anything.
@@ -168,8 +210,9 @@ retries at all.
   instead of a sequence, and the report shape is the tool's output rather than
   the session's narration of it.
 - **Observability**: the tool prints the state it read back, never a success
-  word standing in for it. On failure the output separates established from
-  unestablished.
+  word standing in for it, and it prints the branch's prior head before it
+  lands, so the report names what was extended whether or not the landing
+  completes. On failure the output separates established from unestablished.
 - **Portability / Compatibility**: depends on `git` and on nothing else
   network-facing. The tool makes no assertion about what the sandbox permits;
   it attempts the operation and reports what it observed.
@@ -222,28 +265,42 @@ Derived from §4. Each is concrete enough to derive a test case from; the test
 substrate is expected to be a bare repository served over `file://`, which makes
 the remote half testable offline (*inferred*, per the research findings).
 
-- **AC-LAND-01** — Given a working tree whose checked-out branch is behind the
-  remote default branch, an invocation produces a commit whose parent is
-  `origin/main` HEAD as of the invocation's own fetch.
+- **AC-LAND-01a** — Given the named branch does not exist at the remote, and a
+  working tree whose checked-out branch is behind the remote default branch,
+  the invocation produces a commit whose parent is `origin/main` HEAD as of the
+  invocation's own fetch, and the report's prior-head field reads `created`.
+- **AC-LAND-01b** — Given the named branch exists at the remote, the invocation
+  produces a commit whose parent is that branch's remote head as of the
+  invocation's own fetch; the report's prior-head field carries that same SHA;
+  and every commit already on the branch is still reachable from the new head.
+  Given the same starting state and a step that fails after the branch was
+  resolved, the output still names that prior head.
 - **AC-LAND-02** — Given named files, only those paths appear in the resulting
   commit. Given no named files, every change present in the tree appears in it.
 - **AC-LAND-03** — The commit message is exactly the message argument.
-- **AC-LAND-04** — Given a push that emits `fatal: failed to store: 100001` on
-  stderr and otherwise succeeds, the invocation exits 0. The tool's success
-  determination is not derived from stderr content in either direction.
+- **AC-LAND-04** — Given a push that writes `fatal: failed to store: 100001` to
+  stderr and exits 0, the invocation proceeds to verification and, verification
+  passing, exits 0. Given a push that writes nothing to stderr and exits
+  non-zero, the invocation exits non-zero. No code path in the source reads,
+  matches, or branches on stderr content; verifiable statically over the source
+  as well as by the two induced cases.
 - **AC-LAND-05** — After a successful push, `git ls-remote` for the branch
   returns the same SHA the tool reports as head.
 - **AC-LAND-06** — For each file in the commit, the blob SHA at the
   post-push fetched remote branch equals the blob SHA committed locally. Where
   any file differs, the invocation exits non-zero and names that file.
-- **AC-LAND-07** — The output carries the branch, the head SHA, and one
-  per-file blob-match result, each labelled *observed* or *unknown*, and parses
-  mechanically into those fields by the format the TRD names.
+- **AC-LAND-07** — The output carries all five G6 fields — branch, head SHA,
+  prior head (a SHA or `created`), one per-file blob-match result for each file
+  in the commit, and the verification outcome — each labelled *observed* or
+  *unknown*. This criterion tests field presence and labelling only; that the
+  fields parse mechanically is a property of the serialization format, which
+  the TRD names and tests.
 - **AC-LAND-08** — Exit status is 0 if and only if `ls-remote` confirmed the
   head SHA and every per-file blob comparison matched.
 - **AC-LAND-09** — On any failure the output names what was established and
-  what was not, as separate statements, and no failure path issues a second
-  write of any kind.
+  what was not, as separate statements — including the prior head, where the
+  branch existed at the remote — and no failure path issues a second write of
+  any kind.
 - **AC-LAND-10** — No code path invokes `gh`, force-pushes, deletes a ref, or
   merges. Verifiable statically over the source.
 
@@ -272,9 +329,6 @@ an unverified landing is acceptable; that judgment is Dave's.
 
 ## 8. Open product questions
 
-- **Q1 (dictated; must remain open at this stage).** Whether directive-file-
-  first landing becomes a mode of `bin/land` or stays two invocations. Resolved
-  by: Dave's decision at the TRD/AC stage.
 - **Q2 (dictated).** The binary name `land` is provisional, pending Dave's
   `LEXICON.md` check. `LEXICON.md` carries an active retirement programme, and
   a term new to the methodology is a vocabulary decision. This document does
@@ -285,9 +339,12 @@ an unverified landing is acceptable; that judgment is Dave's.
   the mechanics, but something governed still has to say when to invoke it and
   what its output means (*observed*, per that document). Resolved by: Dave's
   sequencing decision.
-- **Q4 (raised by the author).** What `bin/land` does when the named branch
-  already exists at the remote — the case J1 followed by J2 produces on every
-  cycle. G1 states the branch is taken from `origin/main` HEAD and does not
-  say what happens on the second invocation. Resolved by: a stated behaviour at
-  the TRD/AC stage; Q1's resolution does not settle it, because the
-  "two invocations" answer requires it and the "mode" answer does not remove it.
+
+Q2 and Q3 are the only open questions this document carries. The two it carried
+at cycle 1 and no longer does were closed by Dave in the cycle-2 directive
+(*told*): Q1 — whether directive-file-first landing becomes a mode of the tool
+or stays two invocations — resolved as two invocations of one form, stated in
+§2, in §3 J1 and J2, and in G1's "no flags and no modes"; and Q4 — what the
+tool does when the named branch already exists at the remote — resolved by G1's
+second arm. Their identifiers are retired rather than reused, so a reader of the
+cycle-1 review artifact can still find what each referred to.
