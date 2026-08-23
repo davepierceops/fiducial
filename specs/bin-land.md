@@ -347,25 +347,30 @@ an unverified landing is acceptable; that judgment is Dave's.
 
 ## 8. Open product questions
 
-- **Q3 (raised by the author).** Whether a governed standing write-path
-  document lands before this tool becomes agent-facing. The research findings
-  rank that document first and name it a prerequisite: the tool encapsulates
-  the mechanics, but something governed still has to say when to invoke it and
-  what its output means (*observed*, per that document). Resolved by: Dave's
-  sequencing decision.
+This document carries no open questions. The four it carried at earlier cycles
+were closed by Dave (*told*). Q1 — whether directive-file-first landing becomes
+a mode of the tool or stays two invocations — and Q4 — what the tool does when
+the named branch already exists at the remote — were closed in the cycle-2
+directive: Q1 as two invocations of one form, stated in §2, in §3 J1 and J2,
+and in G1's "no flags and no modes"; Q4 by G1's second arm. Q2 — whether the
+binary name `land` was provisional pending a `LEXICON.md` check — was closed in
+the cycle-3 directive `docs/cycles/bin-land-spec-3-20260823T195212Z.md` @
+`621b007e`, which is the origin of this wording: the binary keeps the name
+`land`, and no `LEXICON.md` entry is added, because binaries are not
+methodology vocabulary — the precedent is `bundle`, `flip-agreed`, and
+`cycle-open`, each a binary in `bin/` carrying no `LEXICON.md` entry
+(*observed*).
 
-Q3 is the only open question this document carries. The three it carried at
-earlier cycles and no longer does were closed by Dave (*told*). Q1 — whether
-directive-file-first landing becomes a mode of the tool or stays two
-invocations — and Q4 — what the tool does when the named branch already exists
-at the remote — were closed in the cycle-2 directive: Q1 as two invocations of
-one form, stated in §2, in §3 J1 and J2, and in G1's "no flags and no modes";
-Q4 by G1's second arm. Q2 — whether the binary name `land` was provisional
-pending a `LEXICON.md` check — was closed in the cycle-3 directive
-`docs/cycles/bin-land-spec-3-20260823T195212Z.md` @ `621b007e`, which is the
-origin of this wording: the binary keeps the name `land`, and no `LEXICON.md`
-entry is added, because binaries are not methodology vocabulary — the precedent
-is `bundle`, `flip-agreed`, and `cycle-open`, each a binary in `bin/` carrying
-no `LEXICON.md` entry (*observed*). All three identifiers are retired rather
-than reused, so a reader of an earlier review artifact can still find what each
-referred to.
+Q3 — whether a governed standing write-path document lands before this tool
+becomes agent-facing — was closed in the cycle-7 directive
+`docs/cycles/bin-land-spec-7-20260823T203500Z.md` @ `8a77c2a`, which is the
+origin of this wording, by Dave's sequencing decision: a governed standing
+write-path document — stating when an agent invokes `bin/land` and what its
+output means — must be agreed before the tool becomes agent-facing, where
+agent-facing means the first directive instructing an executor to invoke it.
+Implementation — tests confirmed red, then code to green — may proceed under
+the build-gating rule in `policies/document-metadata-policy.md` without waiting
+on that document.
+
+All four identifiers are retired rather than reused, so a reader of an earlier
+review artifact can still find what each referred to.
