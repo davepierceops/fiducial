@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/corpus-regate-cycle-1.md @ 8402c23
+last-reviewed: reviews/prd-template-cycle-2.md @ cd7db71
 audience: [chief-of-staff, spec-reviewer-agent, human]
 ---
 
