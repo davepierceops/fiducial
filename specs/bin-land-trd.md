@@ -127,7 +127,10 @@ document does not restate them as such.
 
 The split between `land.py` and `report.py` exists so that the mechanical-parse
 test (§5, AC-LAND-T01) can construct every report shape — including every
-failure shape — without performing a landing.
+failure shape — without performing a landing. What each exposes to the others is
+§3.7; it is stated at the end of this section rather than here so that §3.2's
+step numbering, which the rest of this document and its review artifacts cite by
+number, is not disturbed.
 
 ### 3.2 The sequence
 
@@ -138,40 +141,111 @@ One invocation runs these steps in order, and stops at the first that fails.
    CLI (*observed*).
 2. **Fetch.** `git fetch origin`. Its exit status is the only thing read;
    stderr is captured for diagnostics and never inspected for a decision (G4).
-3. **Resolve the base, from the remote rather than from a cached ref.**
-   `git ls-remote --heads origin <branch>` answers presence and, where present,
-   the head SHA. Presence decides which of G1's two arms applies; the base SHA
-   comes from this read, not from `refs/remotes/origin/<branch>`.
+3. **Resolve the base, from the remote rather than from a cached ref.** One
+   read: `git ls-remote --heads origin <branch> main`. Its output answers both
+   questions at once — whether `<branch>` exists at the remote, which decides
+   which of G1's two arms applies, and `main`'s head, which is the base in the
+   branch-absent arm. Where `<branch>` is present, its head is the base and the
+   report's prior-head field carries that SHA; where it is absent, `main`'s head
+   is the base and the prior-head field reads `created` (PRD G1, first arm).
+   Either way the base SHA comes from this read, not from
+   `refs/remotes/origin/<branch>`.
 
-   This is a deliberate technical decision, not a restatement of environment
-   lore. `policies/remote-write-verification-policy.md` rule 1 makes the
+   One read rather than one per arm, so §8's stated count of remote reads before
+   the write is true on both arms rather than only on the branch-present one.
+
+   The tool selects lines from the output by exact ref name —
+   `refs/heads/<branch>` and `refs/heads/main` — never by position or by line
+   count. `ls-remote`'s patterns match against the tail of the ref on slash
+   boundaries, so `main` also matches a branch named `sub/main` and the output
+   may carry more lines than patterns given (*observed* — run against `git`
+   2.55.0 over a `file://` remote: with `sub/main` present at the remote,
+   `git ls-remote --heads origin feat main` returns three lines). A pattern
+   matching nothing is not an error and does not change the exit status
+   (*observed*, same substrate), which is what makes branch-absence a readable
+   result rather than a failure.
+
+   Reading the remote rather than a tracking ref is a deliberate technical
+   decision, not a restatement of environment lore.
+   `policies/remote-write-verification-policy.md` rule 1 makes the
    repository's own log against the **fetched** remote the authority on what
    landed (*observed*); a remote-tracking ref is a cache of a previous fetch,
    and the failure it produces — a base cut from a stale ref — has been
    observed in this repository's own sessions (*observed*, recorded in
    `docs/cycles/bin-land-flip-20260823T210300Z.md`). Reading the remote
    directly removes the class rather than warning about it.
-
-   Where the branch is absent, the same read is performed for `main` and its
-   SHA is the base; the report's prior-head field reads `created` (PRD G1,
-   first arm).
 4. **Confirm the base object is present locally.** `git cat-file -e <base>^{commit}`.
-   If the object is absent, the remote moved between step 2 and step 3 and the
-   tool refuses rather than fetching again — a second fetch would race the same
-   way, and the tool does not loop (§6, FM-2).
-5. **Divergence guard, before anything is staged.** `git merge-base --is-ancestor HEAD <base>`.
-   Exit 0 means local HEAD is at or behind the base and the sequence continues.
-   Non-zero means the local tree carries at least one commit the base does not,
-   and the tool refuses: it names the divergence, the base SHA, and the local
-   HEAD SHA, and exits non-zero (PRD G1, AC-LAND-01c).
+   If the object is absent, the tool refuses rather than fetching again — a
+   second fetch would race the same way, and the tool does not loop (§6, FM-2).
+
+   The tool refuses without asserting *why* the object is absent. The cause the
+   design has in mind is that the remote moved between step 2's fetch and step
+   3's read (*inferred* — not reproduced here; demonstrating it needs a
+   concurrent writer). It is not the only cause: a narrowed
+   `remote.origin.fetch` refspec produces the same state with the remote never
+   having moved (*observed* — run against `git` 2.55.0 over a `file://` remote,
+   with `remote.origin.fetch` restricted to `main`, `ls-remote` reports another
+   branch's head and `cat-file -e` on that SHA exits non-zero). A shallow or
+   partial clone is a third. The refusal is identical in every case, so the tool
+   reports the state it observed and names no cause — which is the only thing a
+   report carrying just *observed* and *unknown* can honestly do here.
+5. **Divergence guard, before anything is staged.** Two checks, both against
+   the base step 3 resolved, both before any ref moves.
+
+   - `git merge-base --is-ancestor HEAD <base>`. Exit 0 means local HEAD is at
+     or behind the base. Non-zero means the local tree carries at least one
+     commit the base does not.
+   - Where `<branch>` exists locally,
+     `git merge-base --is-ancestor <branch> <base>`. This is the ref step 6
+     rewrites, and local HEAD is not it. With HEAD on any other branch the first
+     check passes while `<branch>` carries unpushed commits the base does not,
+     and step 6 then resets `<branch>` and leaves those commits reachable from
+     no ref at all (*observed* — run against `git` 2.55.0 in a throwaway
+     repository: with `feature` two commits ahead of the base and HEAD on
+     `main`, `merge-base --is-ancestor HEAD <base>` exits 0,
+     `git checkout -B feature <base>` reports "Switched to and reset branch
+     'feature'", and the prior tip is thereafter absent from `git rev-list --all`
+     and not an ancestor of HEAD). The second check exits non-zero on exactly
+     that state (*observed*, same substrate), and it is the only thing standing
+     between the ordinary post-checkout tree state and the destructive class PRD
+     §7 puts under "Not accepted".
+
+   Either check failing produces one refusal in one shape — FM-3 (§6), not two
+   failure modes: the tool names the divergence, the base SHA, the local HEAD
+   SHA, and, where it was the second check that failed, the local head of
+   `<branch>`; then exits non-zero (PRD G1, AC-LAND-01c). Where `<branch>` does
+   not exist locally the second check has no subject and is skipped, which is
+   not a pass being assumed: there is no ref to orphan.
 
    The guard runs **before** step 6 because step 6 moves a ref. Ordering is
    load-bearing: AC-LAND-01c requires every local-only commit to remain
-   reachable from local HEAD afterwards, and that holds precisely because the
-   tool has touched no ref by the time it refuses.
+   reachable afterwards, and that holds precisely because the tool has touched
+   no ref by the time it refuses.
 6. **Establish the base.** `git checkout -B <branch> <base>`. See §3.3.
-7. **Stage.** `git add -- <paths>` for named paths; `git add -A` when none are
-   named (PRD G2). Paths are always separated by `--`.
+7. **Stage, authoritatively over the index.** The index is first reset to the
+   base — `git reset --mixed <base>` — and only then is content staged:
+   `git add -- <paths>` for named paths, `git add -A` when none are named
+   (PRD G2). Paths are always separated by `--`.
+
+   The reset is not redundant with step 6, because `git checkout -B` does not
+   clear a pre-populated index. Without it, content staged before the invocation
+   survives into the commit alongside the named paths and defeats AC-LAND-02
+   (*observed* — run against `git` 2.55.0: with `unrelated.txt` staged
+   beforehand, `git checkout -B target <base>` leaves `git status --short` still
+   reporting `A  unrelated.txt`, and a following `git add -- wanted.txt` and
+   `git commit` produce a commit listing both files). With the reset in place
+   the same setup commits `wanted.txt` alone, and the no-paths arm commits every
+   change the tree carries — the formerly-staged file included, since by then it
+   is simply one of the tree's changes, which is what G2's second arm asks for
+   (*observed*, same substrate).
+
+   The reset touches the index only: working-tree modifications and untracked
+   files are left exactly as they were, and no ref moves, because step 6 has
+   already put both HEAD and `<branch>` at the base (*observed*, same
+   substrate). `git read-tree <base>` is equivalent for this purpose
+   (*observed*); `reset --mixed` is named because it also refreshes the index's
+   stat cache. Neither touches the working tree, which is the property that
+   rules them in — the tool must never discard what it exists to land.
 8. **Commit.** `git commit -m <message>`, with the message passed as an argv
    element and never through a shell. The repository's hooks run: `bin/land`
    never passes `--no-verify`. The pre-commit frontmatter hook is part of this
@@ -185,10 +259,25 @@ One invocation runs these steps in order, and stops at the first that fails.
     path in the commit, compare the blob SHA at the fetched remote commit
     against the blob SHA in the local commit (AC-LAND-06).
 11. **Report and exit.** The report is serialized to stdout on every terminal
-    path, including every failure path (§5).
+    path the sequence reaches — the success path and every failure mode §6
+    enumerates as detected (§5). Two terminal paths lie outside that rule, and
+    are stated here rather than left for an implementer to decide:
 
-Steps 2, 9, and 10 are the only network operations, and there is exactly one of
-each write: one push per invocation, on every path. §8 states how that is
+    - **A usage error.** Parsing belongs to `argparse`, in `bin/land`, and runs
+      before the sequence begins (§3.1). `argparse` writes its own diagnostic to
+      stderr and exits 2; **stdout carries nothing and no report is emitted.**
+      That is consistent with `aimeta/cli.py`'s standing discipline —
+      diagnostics on stderr, stdout reserved for machine-consumable output — and
+      with §7's mapping of 2 to a usage error. Nothing is intercepted and no
+      failure mode is added for it: an invocation that never named a branch has
+      established no fact for a report to carry, and `branch` is precisely the
+      field every other failure path does carry. §3.1's division of
+      responsibility is unchanged by this.
+    - **FM-10**, an invocation killed mid-sequence, which emits nothing because
+      no code of the tool's runs to emit it (§6).
+
+Steps 2, 3, 9, and 10 are the only network operations, and there is exactly one
+of each write: one push per invocation, on every path. §8 states how that is
 enforced.
 
 ### 3.3 Base establishment for the at-or-behind case
@@ -202,19 +291,30 @@ and the operation joining them is not stated at PRD level — recorded as
 resets the local branch `<branch>` to the fetched base, checks it out, and
 carries uncommitted working-tree changes across.
 
-What the working tree holds afterwards, stated because O1 records that the
-three candidates "differ only in what they leave in the tree afterwards"
-(*observed*):
+What the working tree **and the index** hold afterwards, stated because O1
+records that the three candidates "differ only in what they leave in the tree
+afterwards" (*observed*), and because the index is the half of that answer
+`checkout -B` gets wrong:
 
 - **Immediately after step 6**: the tracked content of the fetched base, plus
   every uncommitted modification and untracked file the session had before the
   invocation. Nothing the session produced is discarded; that is the property
   that rules out `git reset --hard`, which would destroy exactly the work the
-  tool exists to land.
+  tool exists to land. The **index is carried across unchanged**: `checkout -B`
+  does not clear it, so anything the caller staged before the invocation is
+  still staged at this point (*observed*, §3.2 step 7). This is the reason step
+  7 resets the index rather than merely adding to it; left alone, that
+  pre-staged content would enter the commit and defeat AC-LAND-02.
+- **Immediately after step 7**: the working tree is untouched by the reset, and
+  the index holds the base plus exactly what was staged from the named paths —
+  or plus every change in the tree, where none were named. What the caller had
+  staged before the invocation has no bearing on the commit either way.
 - **After a successful invocation**: HEAD on `<branch>`, at the new commit,
   which is also the branch's head at the remote. Paths that were landed are
   clean. Where paths were named and other changes existed, those other changes
-  are still present and uncommitted.
+  are still present in the working tree, uncommitted — and unstaged, since step
+  7's reset dropped them from the index and the named paths were all that was
+  added back.
 
 Two consequences are stated rather than left to be discovered:
 
@@ -225,15 +325,27 @@ Two consequences are stated rather than left to be discovered:
   ref directly — would leave the session's second invocation staging the same
   file again against a base that already contains it.
 - **HEAD moves.** If the checkout was on some branch other than `<branch>`,
-  `checkout -B` moves HEAD off it. The prior branch's ref is not touched and no
-  commit becomes unreachable, because step 5 has already established that local
-  HEAD is an ancestor of the base. Whether the tool should nonetheless refuse
-  rather than move HEAD off an unrelated branch is OQ-5.
+  `checkout -B` moves HEAD off it, and the prior branch's ref is not touched.
+  That no commit becomes unreachable is **not** a property of `checkout -B`, and
+  step 5's first check does not establish it: that check speaks for the branch
+  HEAD was on, while the ref this step rewrites is `<branch>`. Run without a
+  guard on `<branch>`, this step orphans whatever unpushed commits `<branch>`
+  carried (*observed*, the probe recorded at §3.2 step 5). The claim holds only
+  because step 5's second check refuses in that state — the guard is what makes
+  it true, not the mechanism. Whether the tool should nonetheless refuse rather
+  than move HEAD off an unrelated branch, in the cases the guard permits, is
+  OQ-5.
 
-`checkout -B` fails when a locally-modified file's content differs between the
-old HEAD and the base. That is a real and reachable state, it is caught before
-any commit or push, and the tool stops there (§6, FM-4). A false stop is cheap
-(*observed*, PRD §7).
+`checkout -B` fails when a locally-modified file's committed content differs
+between the old HEAD and the base (*observed* — run against `git` 2.55.0 in a
+throwaway repository: with `f.txt` modified in the working tree and its
+committed content differing between the old HEAD and the base,
+`git checkout -B target <base>` prints "Your local changes to the following
+files would be overwritten by checkout", exits 1, and leaves the modification
+in place; where the modified file's committed content is identical in the two,
+the same command exits 0 and carries the modification across). That is a real
+and reachable state, it is caught before any commit or push, and the tool stops
+there (§6, FM-4). A false stop is cheap (*observed*, PRD §7).
 
 ### 3.4 The branch-absent diverged case
 
@@ -251,6 +363,12 @@ extra rule. The reason to prefer it over proceeding is concrete: with
 would move `<branch>` — which, in the branch-absent arm, may be the very local
 branch carrying those commits — and abandon them to the reflog. Refusing costs
 a stall; proceeding costs commits.
+
+Step 5's second check makes this mechanical rather than merely intended: where
+the local `<branch>` is the ref carrying the commits, that check refuses; where
+some other branch carries them, the first check does. So the refusal in this arm
+now falls out of the guard on both routes, and the proposal below is a question
+about whether the PRD should *say* so, not about what the tool would do.
 
 This is a proposal, not a decision. No PRD goal or criterion decides it, and
 Dave has held cycle-5 O1 out of scope. Recorded as OQ-2.
@@ -270,7 +388,9 @@ Dave has held cycle-5 O1 out of scope. Recorded as OQ-2.
   PRD §4 Non-goals, per the research findings).
 - **The repository's own pre-commit hook**, when installed by
   `bin/install-hooks`. In-process from the tool's perspective: it runs inside
-  step 8's `git commit`.
+  step 8's `git commit`. In-process is not the same as controlled — it is
+  declared as boundary B5 (§3.6, §4.2), and its evidence class is the one this
+  design leaves weakest.
 
 ### 3.6 Boundaries
 
@@ -283,9 +403,79 @@ The points where the tool meets something it does not control:
 - **B3 — the sandbox network policy.** Whether the remote is reachable at all.
 - **B4 — `git` itself.** The plumbing this design relies on:
   `ls-remote --heads`, `merge-base --is-ancestor`, `cat-file -e <rev>^{commit}`,
-  `checkout -B`, `rev-parse <rev>:<path>`.
+  `checkout -B`, `reset --mixed`, `rev-parse <rev>:<path>`.
+- **B5 — this repository's own pre-commit hook.** Installed by
+  `bin/install-hooks`, it runs inside step 8's `git commit` and can refuse it
+  (§6, FM-6). Running in-process is what made it easy to miss as a boundary, and
+  it is not what decides the question: the hook is this repository's governance
+  standing on the write path, the tool deliberately does not bypass it, and the
+  tool does not control what it does. That is a boundary.
 
 Each is declared in §4 with its representation and evidence class.
+
+### 3.7 Interfaces between components
+
+The sequence in §3.2 fixes the semantics; this states the seams that sequence
+implies. It is here because `land.py` and `report.py` are written by separate
+agents, from this text and from each other, under this repository's separation of
+test authorship from implementation — so the seam has to be in the document or
+the two modules do not meet. Names and signatures are proposals at the
+granularity an implementer needs, not a frozen API.
+
+**`bin/land` → `land.py`.** One entry point:
+
+    land(branch: str, message: str, paths: list[str], cwd: str) -> Report
+
+`paths` is empty for G2's no-paths arm. It raises nothing for an expected
+failure: every terminal state of §3.2 that the sequence reaches, success and
+failure alike, comes back as a `Report`. `bin/land` serializes what it is handed
+and maps the report's exit code onto its own. That is the whole of `bin/land`'s
+substance, which is what §3.1's "contains no git logic" means concretely.
+
+**Within `land.py` — what a step returns.** Each step of §3.2 returns either the
+facts it established or a stop:
+
+    StepResult(ok: bool, facts: dict, stage: str, git_status: int | None)
+
+`facts` carries only what that step established, keyed as §5.2 and §5.3 name the
+fields — step 3 returns `base` and `prior_head`, step 5 returns `local_head`,
+step 8 returns `head`, step 10 returns the per-file results. `stage` is that
+step's token from §5.3's enumeration, carried on the stop so the report can
+report where the sequence halted. `git_status` is the failing invocation's exit
+status, or `None` where the stop was a comparison rather than a subprocess. The
+sequence accumulates `facts` across steps and halts at the first `ok: False`. No
+step reads another step's git output; a step consumes established facts, never
+text.
+
+**`land.py` → `report.py`.** `land.py` never formats:
+
+    Report.build(branch: str, facts: dict, stop: StepResult | None) -> Report
+
+`build` is where §5.2's rules are applied: any of the five contract fields absent
+from `facts` is emitted with `class: "unknown"` and `value: null`. Unknown-ness
+is therefore a property of what was established, computed in one place, rather
+than something each of nine failure paths has to remember to say — which is what
+makes the failure paths correct by construction and makes B4's class of defect
+structurally hard to reintroduce.
+
+**What `report.py` exposes.** A `Report` carries the five contract fields and the
+`detail` object of §5.3, and offers:
+
+    Report.to_json(self) -> str      # §5.2's format: two-space indent, sorted
+                                     # keys, UTF-8, one trailing newline
+    Report.exit_code(self) -> int    # §7's mapping
+
+`to_json` is a pure function of the `Report`: it touches no git, no filesystem,
+and no clock. That is what lets AC-LAND-T01 construct every report shape,
+failure shapes included, by calling `Report.build` with synthetic facts and never
+performing a landing — the property §3.1 claims for the split, which until now
+had no stated surface to rest on.
+
+**`report.py` → nothing.** It imports no `repo.py` and starts no subprocess. The
+dependency runs one way — `bin/land` → `land.py` → `report.py` — with `land.py`
+reaching `repo.py` for git, and both executables taking their exit constants from
+`cli.py`. A cycle between the two new modules would defeat the reason for
+splitting them.
 
 ## 4. Verification boundaries (standing)
 
@@ -368,30 +558,78 @@ content-verification test in PRD §5 induces its mismatch).
 - Currently represented as: whatever `git` the test host has.
 - Evidence class: **live-verified, incidentally** — every test in the suite
   runs against a real `git`, but only the one version present.
-- Does not prove: behaviour on another version. No minimum version is asserted
-  today; OQ-8 asks whether one should be pinned and tested.
+- Does not prove: behaviour on another version. No minimum version is asserted,
+  and §9 records that as a decision rather than an omission; the identifier OQ-8,
+  which once asked whether a floor should be pinned and tested, is retired there.
+
+**B5 — this repository's own pre-commit hook.**
+- Production surface: the `pre-commit` hook `bin/install-hooks` installs, running
+  inside step 8's `git commit` in a real clone of this repository. It is what
+  makes FM-6 a failure mode rather than a hypothetical.
+- Currently represented as: **not represented.** `bin/tests/helpers.py`'s
+  `make_repo` runs `git init` and three `git config` calls and installs no hook
+  (*observed*), and the suite's isolation constraint states that its subprocesses
+  "never inherit the developer's `AI_METHODOLOGY_HOME`, global git config, or
+  global hooks" (*observed*, that module's docstring). The substrate §4.1 decides
+  therefore cannot produce FM-6's trigger at all.
+- Evidence class: **assumed.**
+- Does not prove: that a hook refusal surfaces as a non-zero `git commit` exit
+  rather than some other outcome; that the report on that path carries the stage
+  and status §6 states; or that the hook's own diagnostics stay off stdout, which
+  AC-LAND-T01's "stdout carries no text outside that object" requires and which
+  nothing currently checks.
+- Deferred-verification path: a test that installs this repository's `pre-commit`
+  hook into the substrate repo and induces FM-6 with a file the frontmatter check
+  rejects.
+
+Leaving B5 **assumed** is a permitted outcome; leaving it undeclared was not.
+§3.2 step 8 makes the hook load-bearing on purpose — a tool on the write path
+that bypassed governance would be landing work the governance never saw — so a
+dependency the design routes governance through, which produces an enumerated
+failure mode, and which the substrate provably does not exercise, is exactly what
+this section exists to name. The declaration is what puts the choice in front of
+Dave: buy the deferred path, or accept the class knowingly. What it removes is
+the third option, of shipping FM-6 on evidence nobody classified.
 
 ### 4.3 A note on what the per-file comparison proves
 
 Stated plainly because it bears on how much B1's contract-verified class
-carries. Under git's content addressing, a commit SHA determines its tree, so
-once `ls-remote` returns the same commit SHA the tool pushed, the per-file blob
-SHAs necessarily agree (*inferred*). AC-LAND-06's comparison is therefore not
-independent evidence *for a git-transport write*.
+carries, and because PRD §1 names closing the content-verification gap as this
+tool's distinguishing goal.
 
-It is not redundant in two other senses, and both are why PRD G5 asks for it:
-the report must carry a per-file result (G6), and the check is the one that
-would catch the failure class `policies/remote-write-verification-policy.md`
-records — a write path carrying content as a request parameter, where a
-placeholder replaced a ~64KB file with 19 bytes and landing-verification
-confirmed the destruction as a success (*observed*, that policy's Known gap).
+Under git's content addressing a commit SHA determines its tree, so once
+`ls-remote` returns the same commit SHA the tool pushed, the per-file blob SHAs
+necessarily agree (*inferred*). **Under git transport, therefore, the per-file
+comparison adds nothing to the `ls-remote` check.** It cannot fail where that
+check passed. It is not independent evidence, and this document does not claim
+it as any, in either of the two senses an earlier draft of this section did.
 
-A strictly stronger check exists — comparing the bytes fetched back from the
-remote against the bytes of the named file on disk, rather than against the
-blob SHA in the local commit — which would additionally catch a mis-staged
-file. It is not adopted here because AC-LAND-06 states the comparison as
-"equals the blob SHA committed locally" (*observed*), and changing what an
-agreed criterion asserts is Dave's. Recorded as OQ-6.
+It is still required, for one reason, and the reason is not evidential: PRD G6
+requires the report to carry a per-file result, and the comparison is how that
+field gets its value.
+
+The check that would catch the failure class
+`policies/remote-write-verification-policy.md` records is the other one. That
+policy's Known gap describes a write whose response is truthful and whose commit
+is real, because the *request* was wrong: a call carrying a placeholder string as
+its content parameter replaced a ~64KB file with 19 bytes, and
+landing-verification confirmed the destruction as a success (*observed*, that
+policy's Known gap). The git-transport analogue of a wrong request is a
+**mis-staged file** — and a mis-staged file is committed locally with the wrong
+content, so its blob SHA in the local commit and its blob SHA at the remote agree
+exactly, and AC-LAND-06's comparison passes (*inferred*). What would catch it is
+a comparison of the bytes fetched back from the remote against the bytes of the
+named file on disk: the form that does not reduce to commit-SHA equality.
+
+That stronger form is not adopted here, because AC-LAND-06 states the comparison
+as "equals the blob SHA committed locally" (*observed*), and changing what an
+agreed criterion asserts is Dave's, not this document's. The consequence is
+recorded rather than softened: as AC-LAND-06 is written, the tool would ship a
+content-verification step arithmetically redundant with its own landing check,
+and the gap PRD §1 and G5 name as this tool's reason for existing would remain
+open while the PRD, this document, and every change package recorded it as
+closed. That is OQ-6 — not a question of optional strengthening, but the question
+G5's stated purpose depends on.
 
 ## 5. Data and state
 
@@ -409,7 +647,7 @@ State it touches, and who is authoritative:
 | Local object database | Objects written by fetch and commit | Local, until pushed |
 | Local branch ref `<branch>` | Reset to the base at step 6; advanced by the commit | Local |
 | `HEAD` | Moved to `<branch>` at step 6 | Local |
-| The index | Reset by step 6's checkout; written by step 7 | Local |
+| The index | **Not** cleared by step 6's checkout — `checkout -B` carries a pre-populated index across intact (*observed*, §3.2 step 7). Reset to the base by step 7, then written by step 7's staging | Local |
 | `refs/remotes/origin/*` | Updated by step 2's fetch | A cache — never read as the base (§3.2, step 3) |
 | The remote ref | Advanced by step 9's push | **The remote.** Rule 1 of the remote-write policy makes the repository's own log against the fetched remote the record (*observed*) |
 | stdout | The report | Derived; nothing reads it back |
@@ -464,14 +702,37 @@ Rules the format holds on every path:
   (*observed*).
 - `value` is `null` wherever `class` is `"unknown"`. An unestablished fact is
   never rendered as an empty string or a plausible placeholder.
-- `prior_head.value` is either a 40-character SHA or the literal string
-  `"created"` (PRD G1, first arm).
+- `prior_head.value` is a 40-character SHA, the literal string `"created"`, or
+  `null`; `null` only with `class: "unknown"` (PRD G1, first arm).
 - `files` is a list, possibly empty. `match` is `true`, `false`, or `null`;
   `null` only with `class: "unknown"`.
-- `verification.value` is `"complete"` or `"incomplete"`. `"complete"` if and
-  only if `ls-remote` confirmed the head SHA and every per-file comparison
-  matched — the same biconditional as AC-LAND-08's exit status, so the two can
-  never disagree.
+- `verification.value` is `"complete"`, `"incomplete"`, or `null`; `null` only
+  with `class: "unknown"`. `"complete"` if and only if `ls-remote` confirmed the
+  head SHA and every per-file comparison matched — the same biconditional as
+  AC-LAND-08's exit status, so the two can never disagree.
+
+The three value-domain rules are written to one shape on purpose. Each admits
+`null`, and each admits it only under `class: "unknown"`, so none of them
+contradicts the null-on-unknown rule above it on the failure paths where §6 says
+the contract fields are unestablished. A rule list that permitted only
+`"complete"` or `"incomplete"` would force an implementer to emit
+`verification: {"value": "incomplete", "class": "observed"}` on a fetch failure —
+asserting the tool observed an incomplete verification it never attempted, which
+inverts exactly the distinction PRD G6 exists to draw.
+
+**An empty `files` list where no commit was made.** On FM-1 through FM-6 no
+commit exists, so there are no per-file entries and `files` is `[]`. That `[]` is
+**not** a claim that the commit contained no files — there is no commit for it to
+be a claim about. It is the absence of entries. `detail.stage` is what
+distinguishes it from FM-5, where an empty staged set is the established answer
+and the same `[]` means something different; §5.3 closes that field's value set,
+which is what makes the distinction firm enough to rest this on. No union type is
+introduced: giving `files` a leaf form of `{"value": null, "class": "unknown"}` in
+place of the list would put a type switch into a parse contract whose whole
+burden is that a failed landing stays mechanically readable, and it would buy
+nothing the stage token does not already carry. Where §6's rows say the contract
+fields are `unknown`, `files` is read accordingly — its unknown-ness is carried
+by the stage token and by having no entries, not by a `class` on the list.
 
 ### 5.3 The failure path and the five-field contract
 
@@ -489,9 +750,38 @@ facts, each an object with the same `value`/`class` shape:
 | Key in `detail` | Emitted on | Meaning |
 | --- | --- | --- |
 | `local_head` | The divergence refusal, and any failure after step 5 | Local `HEAD` SHA at the guard |
+| `branch_head` | The divergence refusal, where the local `<branch>` was the failing check (§3.2 step 5) | Local SHA of `<branch>` before step 6 would have rewritten it |
 | `base` | Any failure after step 3 | The SHA resolved as the landing base |
 | `stage` | Every failure | Which step of §3.2 stopped the sequence |
 | `git_status` | Any failure at a git invocation | That invocation's exit status |
+
+**The permitted `detail.stage` values.** `stage` is the one field a machine
+reader branches on to interpret a failure report, so its value set is closed
+rather than open text. One token per step of §3.2 at which the sequence can
+stop:
+
+| Token | §3.2 step it names | Failure modes reaching it |
+| --- | --- | --- |
+| `fetch` | 2, fetch | FM-1 |
+| `resolve` | 3, resolve the base from the remote | FM-1's class, where the remote read is what failed |
+| `base-object` | 4, confirm the base object is present locally | FM-2 |
+| `guard` | 5, divergence guard | FM-3 |
+| `base` | 6, establish the base | FM-4 |
+| `stage` | 7, stage | FM-5 |
+| `commit` | 8, commit | FM-5, FM-6 |
+| `push` | 9, push | FM-7 |
+| `verify` | 10, verify | FM-8, FM-9 |
+
+Nine tokens and no others. Two readings the table is meant to foreclose: `stage`
+is one value of one field, not a second step alongside `commit`, which matters
+because §6's FM-5 row lists two tokens for one failure mode and because the token
+`stage` and the step named "Stage" are otherwise easy to conflate; and
+`base-object` is step 4's own token rather than step 3's, so a report from the
+step-4 refusal no longer says `resolve` and name a step that succeeded.
+
+Steps 1 and 11 have no token, deliberately. A usage error emits no report at all
+(§3.2 step 11), so there is nothing to label; step 11 is where the report is
+written rather than a place the sequence can halt.
 
 This reconciles the two requirements without either being weakened.
 AC-LAND-07's presence-and-labelling test is unaffected: it asserts the five,
@@ -505,22 +795,36 @@ either disposition.
 
 ### 5.4 The mechanical-parse test
 
-Named here as AC-LAND-07 defers it. This is a TRD-stage criterion; it is
-proposed for the derived acceptance-criteria artifact and is not an amendment
+Named here as AC-LAND-07 defers it. These are TRD-stage criteria; they are
+proposed for the derived acceptance-criteria artifact and are not an amendment
 to PRD §6.
 
-- **AC-LAND-T01 — the report parses mechanically, on every terminal path.**
-  For each terminal state of §3.2 — the success path and each failure mode
-  enumerated in §6 — the tool's **stdout** parses with `json.loads` without
-  error; the parsed value is an object; its keys are exactly `branch`, `head`,
+- **AC-LAND-T01 — the report parses mechanically, on every terminal path the
+  sequence reaches.** The enumeration is the success path and each failure mode
+  in §6 **except FM-10**, which the tool does not detect and which emits nothing
+  by construction, so it is not a case this criterion can be written against. The
+  usage-error path is likewise outside the enumeration: it emits no report, and
+  what it does emit is covered by the separate assertion below. For each case in
+  the enumeration, the tool's **stdout** parses with `json.loads` without error;
+  the parsed value is an object; its keys are exactly `branch`, `head`,
   `prior_head`, `files`, `verification`, `detail`; every leaf object carries a
-  `class` in `{"observed", "unknown"}`; every leaf whose `class` is
-  `"unknown"` has `value` of `null`; and stdout carries no text outside that
-  object. Enumerating the failure modes is what makes this a real test rather
-  than a test of the success path: the format's whole burden is that a failed
-  landing is still machine-readable.
+  `class` in `{"observed", "unknown"}`; every leaf whose `class` is `"unknown"`
+  has `value` of `null`; the three value-domain rules of §5.2 hold; and stdout
+  carries no text outside that object. On every failure case, `detail.stage` is
+  present and its value is one of the nine tokens §5.3 enumerates — the token
+  §5.3 assigns to the step that stopped the sequence, so the set is tested rather
+  than merely documented. Enumerating the failure modes is what makes this a real
+  test rather than a test of the success path: the format's whole burden is that
+  a failed landing is still machine-readable.
 
-- **AC-LAND-T02 — `verification` and exit status agree.** Across the same
+- **AC-LAND-T01a — the usage-error path emits no report.** Given an invocation
+  `argparse` rejects, stdout is empty, stderr is non-empty, and the exit status
+  is 2 (§3.2 step 11, §7). Stated as its own case rather than folded into T01
+  because the property under test is the opposite one — that nothing is written
+  to stdout — and a criterion asserting both shapes at once would be satisfied by
+  either.
+
+- **AC-LAND-T02 — `verification` and exit status agree.** Across T01's
   enumeration, exit status is 0 if and only if `verification.value` is
   `"complete"`. This is AC-LAND-08 read through the serialization, and it is
   what stops the report and the exit code from drifting apart.
@@ -540,11 +844,11 @@ and a non-zero exit.
 
 | # | Failure mode | Detected by | `detail.stage` | Established at that point |
 | --- | --- | --- | --- | --- |
-| FM-1 | Fetch fails — no network, no such remote, auth refused | `git fetch` exit status | `fetch` | Nothing. All five contract fields `unknown` except `branch`. |
-| FM-2 | The remote moved between fetch and resolve; the base object is not present locally | `git cat-file -e` | `resolve` | `branch`; `detail.base`. |
-| FM-3 | **Divergence refusal, before staging** | `merge-base --is-ancestor` non-zero | `guard` | `branch`; `prior_head` where the branch existed; `detail.base`, `detail.local_head`. Nothing staged, no ref moved, no commit made. |
+| FM-1 | A remote read fails — no network, no such remote, auth refused | `git fetch` or step 3's `git ls-remote` exit status | `fetch` / `resolve` | Nothing, where the fetch failed. All five contract fields `unknown` except `branch`. |
+| FM-2 | The base object is not present locally (§3.2 step 4 names the candidate causes; the tool asserts none of them) | `git cat-file -e` | `base-object` | `branch`; `prior_head` where the branch existed; `detail.base`. |
+| FM-3 | **Divergence refusal, before staging** — local HEAD, or the local `<branch>` the sequence would rewrite, carries a commit the base does not | either `merge-base --is-ancestor` non-zero (§3.2 step 5) | `guard` | `branch`; `prior_head` where the branch existed; `detail.base`, `detail.local_head`, and the local head of `<branch>` where that was the failing check. Nothing staged, no ref moved, no commit made. |
 | FM-4 | Base establishment fails — a locally-modified file differs between old HEAD and base | `git checkout -B` exit status | `base` | As FM-3. |
-| FM-5 | Nothing to commit — a named path does not exist, or the staged set is empty | `git add` / `git commit` exit status | `stage` / `commit` | As FM-4, plus the base established. |
+| FM-5 | Nothing to commit — a named path does not exist, or the staged set is empty | `git add` / `git commit` exit status | `stage` or `commit` — one field, one value (§5.3) | As FM-4, plus the base established. |
 | FM-6 | A repository hook refuses the commit | `git commit` exit status | `commit` | As FM-5. No commit exists. |
 | FM-7 | Push fails | `git push` exit status | `push` | Everything up to and including a **local** commit, whose SHA is reported as `head` with `class: "observed"`; `verification` is `incomplete`. |
 | FM-8 | `ls-remote` disagrees with the pushed head | Comparison at step 10 | `verify` | The push's exit status and the local head; the remote's head as `detail`. |
@@ -559,7 +863,10 @@ here.** `reviews/bin-land-cycle-4.md` O2 records that PRD §3's J3 trigger —
 it, because no step failed and verification was never attempted (*observed*).
 That is a PRD-side documentation gap, held out of scope by Dave; this section
 does not depend on it. FM-3 is detected, reported, and tested regardless, and
-AC-LAND-01c already states the behaviour directly (*observed*). Whether J3's
+AC-LAND-01c already states the behaviour directly (*observed*). It is one failure
+mode reached by either of §3.2 step 5's two checks: the second check exists
+because local HEAD is not the ref step 6 rewrites, and a refusal it produces is
+FM-3 in the same shape, not a mode of its own. Whether J3's
 trigger should enumerate it is a question for the PRD and is not resolved here;
 cycle-4 O2's proposed three-word fix is on the record there. This document
 notes only that its own §6 is complete over the failure modes the design
@@ -652,12 +959,15 @@ present in a clone or it is not.
   tool an automatic trigger — a hook, a scheduled run — this paragraph would
   stop being true and a real gate would be needed.
 
-**Operating it responsibly.** Two standing obligations follow from §4: B1's
+**Operating it responsibly.** Three standing obligations follow from §4. B1's
 contract-verified class means the change package for the implementing change
-should record whether a live landing was performed (OQ-7); and B2's mock
+should record whether a live landing was performed (OQ-7). B2's mock
 representation means the static no-stderr-branching scan is the part that must
 never be deleted, because it is the only half of AC-LAND-04 that cannot go
-stale.
+stale. And B5 is **assumed**: FM-6 ships on a hook the test substrate never
+installs, so either its deferred-verification path is bought or that class is
+accepted knowingly — and whichever it is, the boundary audit at the implementing
+change's release decision is where it is said out loud rather than inherited.
 
 ## 8. Constraints, NFRs, and non-goals
 
@@ -667,8 +977,10 @@ dimension.
 **Performance.** No latency target, per the PRD. The concrete constraint is
 negative and enforceable: one invocation performs exactly one `fetch` for
 objects, one `ls-remote` before the write, one `push`, and one `ls-remote` plus
-one targeted `fetch` after it. No sleep, no backoff, no retry loop, and no
-second write on any path. Enforced by a test that records the git argv sequence
+one targeted `fetch` after it. The pre-write count is one on **both** of G1's
+arms, because §3.2 step 3 reads `<branch>` and `main` in a single `ls-remote`
+rather than one per arm. No sleep, no backoff, no retry loop, and no second write
+on any path. Enforced by a test that records the git argv sequence
 of a full invocation — over the `file://` substrate, where every git call is
 observable — and asserts that `push` appears exactly once on the success path
 and at most once on every failure path. That test is also what makes
@@ -712,9 +1024,12 @@ surfaces: the report, the diagnostics, the exit code.
 
 **Portability / Compatibility.** Python 3, standard library, and `git`. No
 assertion about the operating system beyond what the other seven tools already
-assume. No minimum `git` version is asserted; the plumbing used is long-stable,
-and OQ-8 asks whether to pin and test a floor. The tool makes no assertion
-about what the sandbox permits (*observed*, PRD §4).
+assume. **No minimum `git` version is asserted**, and that is a decision rather
+than an omission: the plumbing used is long-stable, and §9 records the decision
+and retires OQ-8, which had asked whether to pin and test a floor. §4.2's B4
+carries what that costs — the suite is live-verified against one `git` version
+incidentally and proves nothing about another. The tool makes no assertion about
+what the sandbox permits (*observed*, PRD §4).
 
 **Compliance.** N/A. No regulatory, legal, or data-residency dimension.
 
@@ -746,7 +1061,10 @@ Stated so no implementer has to infer them.
 
 ## 9. Open technical questions
 
-Ten. Each names what would resolve it. None is settled here.
+Nine open, and one retired. Each open question names what would resolve it; none
+is settled here. The retired identifier is kept in place rather than reused, so a
+reader arriving from a review artifact that cites it by number can still find
+what it referred to — the precedent PRD §8 sets for its own Q1–Q4 (*observed*).
 
 - **OQ-1 — No SLO exists for J1, J2, or J3.** §2 states this explicitly, as the
   template requires, and gives the structural reason: no production surface, no
@@ -777,17 +1095,27 @@ Ten. Each names what would resolve it. None is settled here.
   of whether G1's clause states a purpose or a mechanism.
 
 - **OQ-5 — Whether the tool should refuse when the checkout is on a branch
-  other than the named one.** §3.3 has `checkout -B` move HEAD, losing no
-  commit but changing which branch the session is on. *Resolved by*: a decision
-  on what the tool is permitted to do to the session's working tree — which is
-  a contract with the executor rather than a purely internal choice.
+  other than the named one.** §3.3 has `checkout -B` move HEAD. It loses no
+  commit — but that is now a property of §3.2 step 5's second check rather than
+  of the mechanism, so what remains open is narrower than it was: with the guard
+  in place the residue is that the session's checked-out branch changes under it.
+  *Resolved by*: a decision on what the tool is permitted to do to the session's
+  working tree — which is a contract with the executor rather than a purely
+  internal choice.
 
-- **OQ-6 — Whether the per-file comparison should compare fetched bytes against
-  the file on disk rather than blob SHAs against the local commit.** §4.3 gives
-  the argument: the stronger form additionally catches a mis-staged file, and
-  it is the form that is independent of commit-SHA equality. It is not adopted
-  because AC-LAND-06 states the weaker one. *Resolved by*: Dave deciding
-  whether AC-LAND-06 changes.
+- **OQ-6 — Whether PRD G5's stated purpose is achieved by AC-LAND-06 as
+  written.** G5 states that the goal "is what closes the gap
+  `policies/remote-write-verification-policy.md` names as open" (*observed*).
+  §4.3 gives the argument that it does not: under git transport AC-LAND-06's
+  comparison adds nothing to the `ls-remote` check, and the gap's failure class —
+  whose git analogue is a mis-staged file — passes that comparison. The form that
+  would catch it compares fetched bytes against the named file on disk. This is
+  not an optional strengthening but the question the goal depends on, which is
+  why it is ranked here rather than as a refinement. *Resolved by*: Dave deciding
+  whether AC-LAND-06 changes — a content edit to an agreed spec, which flips
+  `specs/bin-land.md` to `in-review` and takes its own reviewer cycle. Until then
+  this document specifies AC-LAND-06 as agreed and says plainly what that leaves
+  unclosed.
 
 - **OQ-7 — Whether a live landing against the real `origin` is required before
   release, and on what cadence B1's deferred verification re-runs.** §4.2
@@ -795,12 +1123,25 @@ Ten. Each names what would resolve it. None is settled here.
   *Resolved by*: the boundary audit at that change's release decision, under
   `policies/verification-boundary-policy.md`.
 
-- **OQ-8 — Whether a minimum `git` version is pinned and tested.** §3.2 relies
-  on `ls-remote --heads`, `merge-base --is-ancestor`, `cat-file -e <rev>^{commit}`,
-  `checkout -B`, and `rev-parse <rev>:<path>`. No floor is asserted today.
-  *Resolved by*: establishing the oldest `git` any target environment supplies
-  — which is *unknown* here, since the sandbox runner is not this repository's
-  to inspect.
+- **OQ-8 — retired, not answered.** It asked whether a minimum `git` version is
+  pinned and tested. **The decision is that no minimum `git` version is
+  asserted**, and the reason is on the record rather than left to be inferred.
+  The resolver OQ-8 named was establishing the oldest `git` any target
+  environment supplies, and that is not this repository's to establish: the
+  sandbox runner is supplied from outside it, which PRD §4's non-goals already
+  treat as a variance to survive rather than control (*observed*). So the
+  question had no closing move and would have stood open at every future cycle —
+  which is a different thing from an open question. The plumbing §3.2 relies on —
+  `ls-remote --heads`, `merge-base --is-ancestor`, `cat-file -e <rev>^{commit}`,
+  `checkout -B`, `reset --mixed`, and `rev-parse <rev>:<path>` — is long-stable,
+  and §4.2's B4 states the residual honestly: the suite is live-verified against
+  one `git` version incidentally and proves nothing about another. If a floor
+  ever becomes load-bearing, the evidence will be a failure observed on a real
+  runner, and that opens a new question rather than reopens this one.
+
+  The identifier is retired rather than reused, so a reader of
+  `reviews/bin-land-trd-cycle-1.md`, whose O3 is about OQ-8 by that number, can
+  still find what it referred to.
 
 - **OQ-9 — How AC-X-5's containment scan accommodates a tool that writes to a
   remote.** That criterion asserts "no tool writes outside the invoking repo"
