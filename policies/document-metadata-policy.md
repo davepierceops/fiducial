@@ -76,6 +76,11 @@ lines, before any content.
   the reviewed commit SHA — or `null` if never reviewed.
   - Format: `<reviews/path.md> @ <sha>`
   - `status: agreed` requires a non-null `last-reviewed`.
+  - The cited artifact must state, in its own scope, that it reviewed
+    this document at the cited SHA.
+  - `status: agreed` requires that artifact's verdict to be `ready` or
+    `ready-with-findings`. Non-blocking findings do not bar agreement;
+    Dave weighs them when he agrees. `changes-required` never satisfies.
   - **Grandfather clause:** documents agreed before this policy's
     adoption may carry `last-reviewed: null` until their next revision,
     at which point normal rules apply. Applicability is not judged
@@ -157,7 +162,11 @@ round-trip, the cycle directive, and the per-cycle review artifact.
    - `roles/context-quality-reviewer.md`
    - `skills/spec-review-cycle.md`
    - `skills/conversation-retro.md`
+   - `skills/review-artifact.md`
    - `boundaries/human-review-boundary.md`
+   - `docs/global-context/core.md`
+   - `docs/global-context/decision-layer.md`
+   - `docs/global-context/review-rubric.md`
    - `operating-model.md`
 
    These return to `agreed` only through a full cycle. The list is

@@ -20,8 +20,8 @@ apply to this file.
    in it assumes the reader can open another file.
 
 2. **`audience:` is the selector.** The file carries `audience:` with at least
-   one value from the known set, and `order:` where its position in a bundle
-   matters.
+   one value from the known set, and `order:` if it must load before another
+   file in the same bundle.
 
 3. **No references to other files by path.** If the file needs something
    another file states, it states it. A path-shaped reference is a defect.
