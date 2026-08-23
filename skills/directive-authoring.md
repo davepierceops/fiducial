@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/expedited-log.md @ 83b60511f4cc6e0346b08e4e111a7c17a14bc0d9
+status: in-review
+last-reviewed: null
 audience: [chief-of-staff, human]
 ---
 
@@ -31,5 +31,6 @@ One self-contained directive per session.
 ## Naming
 
 A directive file is `docs/cycles/<descriptor>-<timestamp>.md`, the timestamp in
-ISO 8601 basic format — except a reviewer-gated cycle directive, which is
+ISO 8601 basic format with date and time components both present (as
+`20260820T161541`) — except a reviewer-gated cycle directive, which is
 `docs/cycles/cycle-<n>-directive.md` per its stated convention.
