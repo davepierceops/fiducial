@@ -561,9 +561,169 @@ class TestValidate(unittest.TestCase):
         self.assertEqual(
             fm.EXCLUDED_FIELDS, {"version", "last-modified", "author", "changelog"}
         )
-        self.assertEqual(fm.RESERVED_AUDIENCE, {"all-roles", "human"})
+        self.assertEqual(
+            fm.RESERVED_AUDIENCE, {"all-roles", "all-decision-roles", "human"}
+        )
+        self.assertEqual(fm.SESSIONS, {"decision", "execution"})
         self.assertEqual(
             fm.FIELD_ORDER, ["status", "last-reviewed", "audience", "superseded-by"]
+        )
+
+
+class TestSessionAndOrder(unittest.TestCase):
+    """AC-FM-17: `session:` on role documents; `order:` as an integer.
+
+    `session:` is required on a role document, is one of `decision` or
+    `execution`, and is permitted on nothing else. The discrimination is by
+    **first top-level heading**, not by directory: that is how the metadata
+    policy states it, and how `aimeta.repo` already selects role documents for
+    the `audience:` vocabulary. A file under `roles/` whose first heading is
+    something else is therefore not a role document, and a role document
+    anywhere in the in-scope set is.
+
+    `order:` is optional everywhere and, where present, is an integer.
+    """
+
+    ROLE_BODY = "\n# Role: Widget\n\nRole prose.\n"
+    PLAIN_BODY = "\n# Sample Document\n\nProse.\n"
+
+    def doc(self, body, **fields):
+        base = {"status": "draft", "last_reviewed": None, "audience": ["all-roles"]}
+        base.update(fields)
+        return frontmatter_block(**base) + body
+
+    # ---------------------------------------------------------------- session
+
+    def test_fm17_role_document_without_session_is_a_finding(self):
+        """AC-FM-17: a `# Role:` document must carry `session:`."""
+        found = code_set(validate(self.doc(self.ROLE_BODY), path="roles/widget.md"))
+        self.assertIn("missing-session", found)
+
+    def test_fm17_null_session_on_a_role_document_is_absent(self):
+        """AC-FM-17: null == absent, so `session: null` does not satisfy the rule."""
+        found = code_set(
+            validate(self.doc(self.ROLE_BODY, session=None), path="roles/widget.md")
+        )
+        self.assertIn("missing-session", found)
+
+    def test_fm17_both_session_values_are_accepted(self):
+        """AC-FM-17: `decision` and `execution` are the whole vocabulary."""
+        for value in ["decision", "execution"]:
+            with self.subTest(session=value):
+                found = code_set(
+                    validate(
+                        self.doc(self.ROLE_BODY, session=value), path="roles/widget.md"
+                    )
+                )
+                self.assertNotIn("missing-session", found)
+                self.assertNotIn("invalid-session", found)
+
+    def test_fm17_session_outside_the_vocabulary_is_invalid_not_missing(self):
+        """AC-FM-17: a wrong value is `invalid-session`, naming the value."""
+        findings = validate(
+            self.doc(self.ROLE_BODY, session="batch"), path="roles/widget.md"
+        )
+        found = code_set(findings)
+        self.assertIn("invalid-session", found)
+        self.assertNotIn("missing-session", found)
+        self.assertIn("batch", " ".join(f.message for f in findings))
+
+    def test_fm17_session_on_a_non_role_document_is_not_permitted(self):
+        """AC-FM-17: `session:` states what a *role* runs as; nothing else has one."""
+        found = code_set(
+            validate(
+                self.doc(self.PLAIN_BODY, session="execution"),
+                path="policies/sample.md",
+            )
+        )
+        self.assertIn("session-not-permitted", found)
+
+    def test_fm17_absent_or_null_session_on_a_non_role_document_is_clean(self):
+        """AC-FM-17: null == absent here too, so neither form is a finding."""
+        for text in [
+            self.doc(self.PLAIN_BODY),
+            self.doc(self.PLAIN_BODY, session=None),
+        ]:
+            with self.subTest(text=text):
+                found = code_set(validate(text, path="policies/sample.md"))
+                self.assertNotIn("session-not-permitted", found)
+                self.assertNotIn("missing-session", found)
+
+    def test_fm17_role_ness_is_the_first_heading_not_the_directory(self):
+        """AC-FM-17: `roles/` does not make a document a role document.
+
+        The guard that matters: were role-ness read from the path, this
+        document would be required to carry `session:` and the next one
+        would be forbidden from carrying it. Both would be wrong.
+        """
+        under_roles = self.doc("\n# Policy: Not A Role\n\nProse.\n")
+        found = code_set(validate(under_roles, path="roles/not-a-role.md"))
+        self.assertNotIn("missing-session", found)
+
+        outside_roles = self.doc(self.ROLE_BODY, session="execution")
+        found = code_set(validate(outside_roles, path="engagements/sre/widget.md"))
+        self.assertNotIn("session-not-permitted", found)
+        self.assertNotIn("missing-session", found)
+
+    def test_fm17_a_heading_below_the_first_does_not_make_a_role_document(self):
+        """AC-FM-17: only the *first* top-level heading decides."""
+        body = "\n# Sample Document\n\nProse.\n\n# Role: Mentioned Later\n"
+        found = code_set(validate(self.doc(body), path="policies/sample.md"))
+        self.assertNotIn("missing-session", found)
+
+    def test_fm17_all_decision_roles_is_a_reserved_audience_value(self):
+        """AC-FM-17: the policy names three reserved values; so does the checker.
+
+        Without this the checker rejects `docs/global-context/decision-layer.md`,
+        which the in-scope set now reaches.
+        """
+        text = self.doc(self.PLAIN_BODY, audience=["all-decision-roles", "human"])
+        self.assertNotIn("invalid-audience", code_set(validate(text)))
+
+    # ------------------------------------------------------------------ order
+
+    def test_fm17_integer_order_is_accepted(self):
+        """AC-FM-17: an integer `order:` is clean, negative and zero included."""
+        for value in ["0", "1", "11", "-3", "+4"]:
+            with self.subTest(order=value):
+                text = self.doc(self.PLAIN_BODY, order=value)
+                self.assertNotIn("invalid-order", code_set(validate(text)))
+
+    def test_fm17_absent_or_null_order_is_clean(self):
+        """AC-FM-17: `order:` is optional; null == absent."""
+        for text in [self.doc(self.PLAIN_BODY), self.doc(self.PLAIN_BODY, order=None)]:
+            with self.subTest(text=text):
+                self.assertNotIn("invalid-order", code_set(validate(text)))
+
+    def test_fm17_non_integer_order_is_a_finding(self):
+        """AC-FM-17: anything that is not an integer is `invalid-order`."""
+        for value in ["soon", "3.5", "1st", "", "0x2"]:
+            with self.subTest(order=value):
+                text = self.doc(self.PLAIN_BODY, order=value)
+                self.assertIn("invalid-order", code_set(validate(text)))
+
+    def test_fm17_list_valued_order_is_a_finding(self):
+        """AC-FM-17: a list is not an integer either."""
+        text = "---\nstatus: draft\nlast-reviewed: null\naudience: [all-roles]\n"
+        text += "order: [1, 2]\n---\nbody\n"
+        self.assertIn("invalid-order", code_set(validate(text)))
+
+    def test_fm17_a_compliant_role_document_has_no_findings(self):
+        """AC-FM-17: the two new rules add nothing to a document that obeys them."""
+        text = (
+            frontmatter_block(
+                status="draft",
+                last_reviewed=None,
+                audience=["all-roles"],
+                session="execution",
+                order="7",
+            )
+            + self.ROLE_BODY
+        )
+        doc = fm.parse_text(text)
+        self.assertTrue(doc.has_frontmatter)
+        self.assertEqual(
+            fm.validate(doc, path="roles/widget.md", role_slugs=ROLE_SLUGS), []
         )
 
 

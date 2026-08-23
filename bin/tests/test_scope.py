@@ -67,11 +67,20 @@ class TestParseInScopeGlobs(unittest.TestCase):
         Both sides of the AC-SC-1 assertions now read the same file. If the
         derivation silently returned nothing, or drifted off the in-scope
         section, those assertions would hold vacuously. These anchors are the
-        floor: the policy has stated all four since `1f5b715`, and any edit
-        removing one is a policy change that should break a test.
+        floor: the policy has stated the first four since `1f5b715` and the
+        last three since the governed-context roots were folded in, and any
+        edit removing one is a policy change that should break a test.
         """
-        self.assertGreaterEqual(len(EXPECTED_GLOBS), 4)
-        for anchor in ["policies/**", "skills/**", "vendors/**", "LEXICON.md"]:
+        self.assertGreaterEqual(len(EXPECTED_GLOBS), 7)
+        for anchor in [
+            "policies/**",
+            "skills/**",
+            "vendors/**",
+            "LEXICON.md",
+            "docs/global-context/**",
+            "engagements/**",
+            "prose-criteria.md",
+        ]:
             self.assertIn(anchor, EXPECTED_GLOBS)
 
     def test_sc1_extracts_the_in_scope_list_in_document_order(self):
@@ -145,6 +154,40 @@ class TestMatches(unittest.TestCase):
         self.assertTrue(scope.matches("LEXICON.md", self.globs))
         self.assertFalse(scope.matches("docs/LEXICON.md", self.globs))
         self.assertFalse(scope.matches("sub/operating-model.md", self.globs))
+
+    def test_sc3_the_governed_context_roots_are_in_scope(self):
+        """AC-SC-3: the global-context, engagement, and prose-criteria roots.
+
+        These three were governed context the frontmatter set did not reach —
+        `bin/bundle` carried them as extra roots of its own. The policy now
+        names them, so enforcement reaches them from the same one place.
+        """
+        for path in [
+            "docs/global-context/core.md",
+            "docs/global-context/decision-layer.md",
+            "engagements/assistant.md",
+            "engagements/sre/implementer.md",
+            "prose-criteria.md",
+        ]:
+            with self.subTest(path=path):
+                self.assertTrue(scope.matches(path, self.globs))
+
+    def test_sc5_history_is_out_of_scope_including_its_own_roles_tree(self):
+        """AC-SC-5: `docs/history/**` is excluded, and the new globs do not reach it.
+
+        `roles/**` and `engagements/**` anchor at the repo root, so the retired
+        copies under `docs/history/engagements/` stay out. Asserted rather than
+        assumed, because `engagements/**` would otherwise be one `fnmatch`
+        change away from resurrecting a retired corpus.
+        """
+        for path in [
+            "docs/history/writing/pieces/converging-on-intent/draft.md",
+            "docs/history/engagements/comfy/roles/writer.md",
+            "docs/history/engagements/comfy/policies/override-log-policy.md",
+            "docs/history/engagements/comfy/skills/discovery.md",
+        ]:
+            with self.subTest(path=path):
+                self.assertFalse(scope.matches(path, self.globs))
 
     def test_sc4_only_markdown_is_ever_in_scope(self):
         """AC-SC-4: a non-`.md` file under an in-scope prefix is out of scope."""

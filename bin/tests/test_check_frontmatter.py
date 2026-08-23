@@ -533,6 +533,139 @@ class TestPolicyDrivenScope(CheckFrontmatterTestCase):
         self.assertEqual(rc, 0, "stdout=%r stderr=%r" % (out, err))
 
 
+class TestSessionAndOrderEnforcement(CheckFrontmatterTestCase):
+    """AC-CF-13: the CLI reports the `session:` and `order:` rules, over the
+    in-scope set the policy now names — the three governed-context roots
+    included.
+
+    The unit-level rules live in `test_frontmatter.py`; these assert that
+    `check-frontmatter` actually reaches the documents they govern and exits
+    non-zero, which is the part a hook depends on.
+    """
+
+    ROLE_BODY = "\n# Role: Widget Agent\n\nRole prose.\n"
+
+    def test_cf13_role_document_without_session_is_reported(self):
+        """AC-CF-13: a `# Role:` document missing `session:` fails the check."""
+        write(self.repo, "roles/widget-agent.md", agreed_doc(body=self.ROLE_BODY))
+        commit(self.repo, "add role doc", env=self.env)
+
+        rc, out, err = self.check("--all")
+        self.assertEqual(rc, 1, "stdout=%r stderr=%r" % (out, err))
+        self.assertIn("missing-session", bracket_codes(err))
+        self.assertIn("roles/widget-agent.md", err)
+
+    def test_cf13_role_document_with_a_session_value_passes(self):
+        """AC-CF-13: the same document, with `session:`, is silent and exits 0."""
+        write(
+            self.repo,
+            "roles/widget-agent.md",
+            frontmatter_block(
+                status="draft",
+                last_reviewed=None,
+                audience=["all-roles"],
+                session="execution",
+            )
+            + self.ROLE_BODY,
+        )
+        commit(self.repo, "add role doc", env=self.env)
+
+        rc, out, err = self.check("--all")
+        self.assertEqual(rc, 0, "stdout=%r stderr=%r" % (out, err))
+        self.assertNotIn("ERROR", out + err)
+
+    def test_cf13_session_on_a_non_role_document_is_reported(self):
+        """AC-CF-13: `session:` outside a role document fails the check."""
+        write(
+            self.repo,
+            TARGET,
+            frontmatter_block(
+                status="draft",
+                last_reviewed=None,
+                audience=["all-roles"],
+                session="execution",
+            )
+            + BODY_V1,
+        )
+        commit(self.repo, "add policy with session", env=self.env)
+
+        rc, out, err = self.check("--all")
+        self.assertEqual(rc, 1, "stdout=%r stderr=%r" % (out, err))
+        self.assertIn("session-not-permitted", bracket_codes(err))
+
+    def test_cf13_non_integer_order_is_reported(self):
+        """AC-CF-13: `order:` must be an integer where it appears."""
+        write(
+            self.repo,
+            TARGET,
+            frontmatter_block(
+                status="draft",
+                last_reviewed=None,
+                audience=["all-roles"],
+                order="soon",
+            )
+            + BODY_V1,
+        )
+        commit(self.repo, "add policy with bad order", env=self.env)
+
+        rc, out, err = self.check("--all")
+        self.assertEqual(rc, 1, "stdout=%r stderr=%r" % (out, err))
+        self.assertIn("invalid-order", bracket_codes(err))
+
+    def test_cf13_the_governed_context_roots_are_enforced(self):
+        """AC-CF-13: the three roots the policy added are checked like any other.
+
+        One document per root, each broken in a different way, so a glob that
+        silently failed to land could not be masked by a single passing path.
+        """
+        write(self.repo, "docs/global-context/core.md", "# Core with no frontmatter\n")
+        write(self.repo, "engagements/assistant.md", agreed_doc(body=self.ROLE_BODY))
+        write(
+            self.repo,
+            "prose-criteria.md",
+            frontmatter_block(status="draft", last_reviewed=None, audience=["bogus-role"])
+            + BODY_V1,
+        )
+        commit(self.repo, "seed governed context roots", env=self.env)
+
+        rc, out, err = self.check("--all")
+        self.assertEqual(rc, 1, "stdout=%r stderr=%r" % (out, err))
+        found = set(bracket_codes(err))
+        self.assertIn("missing-frontmatter", found)
+        self.assertIn("missing-session", found)
+        self.assertIn("invalid-audience", found)
+        for relpath in [
+            "docs/global-context/core.md",
+            "engagements/assistant.md",
+            "prose-criteria.md",
+        ]:
+            self.assertIn(relpath, err)
+
+    def test_cf13_all_decision_roles_is_accepted_over_the_new_roots(self):
+        """AC-CF-13: the decision layer's own `audience:` value validates.
+
+        `docs/global-context/decision-layer.md` carries
+        `audience: [all-decision-roles, human]`; the policy has named that
+        reserved value all along, and the in-scope set now reaches the file.
+        """
+        write(
+            self.repo,
+            "docs/global-context/decision-layer.md",
+            frontmatter_block(
+                status="draft",
+                last_reviewed=None,
+                audience=["all-decision-roles", "human"],
+                order="1",
+            )
+            + BODY_V1,
+        )
+        commit(self.repo, "seed decision layer", env=self.env)
+
+        rc, out, err = self.check("--all")
+        self.assertEqual(rc, 0, "stdout=%r stderr=%r" % (out, err))
+        self.assertNotIn("ERROR", out + err)
+
+
 class TestUsage(CheckFrontmatterTestCase):
     def test_cf1_staged_with_paths_is_a_usage_error(self):
         """AC-CF-1: `--staged` takes no paths (spec §2.4 exit 2)."""
