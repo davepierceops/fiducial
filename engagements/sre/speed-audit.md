@@ -1,6 +1,6 @@
 ---
-status: draft
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/corpus-regate-cycle-6.md @ 12ecaeb
 audience: [assistant, cartographer, critic, implementer, human]
 ---
 
