@@ -10,14 +10,16 @@ This is the PRD in the spec spine for the `bin/land` tool. The TRD and the
 acceptance criteria derived from this document follow at the TRD/AC stage; §6
 below states the criteria at the level a PRD carries them.
 
-Its content is dictated by Dave in the decision session that directed this
-authorship; the directive file `docs/cycles/bin-land-spec-20260823T190444Z.md`
-@ `9be1f68a` is the origin of that wording, and the cycle-2 directive
-`docs/cycles/bin-land-spec-2-20260823T192131Z.md` @ `4145d1bd` is the origin of
-the revisions carrying Dave's dispositions on the cycle-1 review. This document
-does not restate either as if it were derived from somewhere else. Assertions
-about this repository carry a provenance class: *observed*, *inferred*, *told*,
-*unknown*.
+Its content is dictated by Dave in the decision sessions that direct its
+authorship and each revision of it. The origin of the wording any cycle landed
+is that cycle's directive file, committed under `docs/cycles/` with the stem
+`bin-land-spec` — the first at
+`docs/cycles/bin-land-spec-20260823T190444Z.md` @ `9be1f68a`, and one per cycle
+since. That file series is this document's provenance register; naming the
+series rather than enumerating it keeps this paragraph true as cycles
+accumulate. This document does not restate any of those directives as if it
+were derived from somewhere else. Assertions about this repository carry a
+provenance class: *observed*, *inferred*, *told*, *unknown*.
 
 ## 1. Problem and intent
 
@@ -133,7 +135,13 @@ Invocation: `bin/land <branch> <message> [files...]`.
     carries what the landing extended even if a later step fails. The landing
     base is that branch head as fetched from origin during this invocation: the
     local tree's prior state never supplies the base, and a local tree behind
-    the fetched head does not alter the outcome.
+    the fetched head does not alter the outcome. Where the local tree instead
+    carries commits the fetched head does not, the tool refuses: it stops
+    before staging, names the divergence and both heads in its output, and
+    exits non-zero. It never rebases, discards, or incorporates a local-only
+    commit to resolve the mismatch — resolving a divergence is the session's
+    business, and the tool acting on the ambiguity is the failure §7 rules out
+    (*told* — dictated scope; the behaviour follows §7's posture).
 
   In both arms the base is remote state as of this invocation's own fetch, so a
   stale local working tree cannot silently become the base of the work (*told*
@@ -272,12 +280,18 @@ the remote half testable offline (*inferred*, per the research findings).
   working tree whose checked-out branch is behind the remote default branch,
   the invocation produces a commit whose parent is `origin/main` HEAD as of the
   invocation's own fetch, and the report's prior-head field reads `created`.
-- **AC-LAND-01b** — Given the named branch exists at the remote, the invocation
-  produces a commit whose parent is that branch's remote head as of the
-  invocation's own fetch; the report's prior-head field carries that same SHA;
-  and every commit already on the branch is still reachable from the new head.
-  Given the same starting state and a step that fails after the branch was
-  resolved, the output still names that prior head.
+- **AC-LAND-01b** — Given the named branch exists at the remote, and a working
+  tree behind that branch's remote head, the invocation produces a commit whose
+  parent is that branch's remote head as of the invocation's own fetch; the
+  report's prior-head field carries that same SHA; and every commit already on
+  the branch is still reachable from the new head. Given the same starting
+  state and a step that fails after the branch was resolved, the output still
+  names that prior head.
+- **AC-LAND-01c** — Given the named branch exists at the remote, and a local
+  tree carrying one or more commits that the branch's fetched head does not,
+  the invocation stops before staging, names the divergence and both heads in
+  its output, and exits non-zero. Every local-only commit is still reachable
+  from local HEAD afterwards, and the branch's remote head is unchanged.
 - **AC-LAND-02** — Given named files, only those paths appear in the resulting
   commit. Given no named files, every change present in the tree appears in it.
 - **AC-LAND-03** — The commit message is exactly the message argument.
