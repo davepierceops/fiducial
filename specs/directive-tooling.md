@@ -14,11 +14,14 @@ them.
 Its content is dictated by Dave in the decision sessions that directed this
 authorship. The directive file
 `docs/cycles/directive-tooling-spec-20260823T194242Z.md` @ `c5398a42` is the
-origin of the cycle-1 wording, and
+origin of the cycle-1 wording,
 `docs/cycles/directive-tooling-spec-2-20260823T195803Z.md` @ `d5a82172` is the
-origin of the cycle-2 dispositions this revision carries. This document does not
-restate either as if it were derived from somewhere else. Assertions about this
-repository carry a provenance class: *observed*, *inferred*, *told*, *unknown*.
+origin of the cycle-2 dispositions, and
+`docs/cycles/directive-tooling-spec-3-20260823T203821Z.md` @ `d258434e` is the
+origin of the cycle-3 dispositions this revision carries. This document does not
+restate any of the three as if it were derived from somewhere else. Assertions
+about this repository carry a provenance class: *observed*, *inferred*, *told*,
+*unknown*.
 
 ## 1. Problem and intent
 
@@ -69,15 +72,6 @@ a named directory plus the command creating it (e.g.
 `git worktree add ../fiducial-pass2 origin/main`). The executor stopped correctly;
 the omission class is the target.
 
-One qualification, *observed*, that the tool design must respect, and its
-resolution. The committed sentence in `skills/directive-authoring.md` @ `27ca4560`
-reads: "Two sessions sharing a tree mutate each other's preconditions. Prefer not
-splitting; where unavoidable, state the tree assignment in each directive." It
-requires the assignment to be *stated*, it does not in that sentence require the
-command that creates the tree, and it conditions the requirement on splitting. The
-dictated characterization is therefore stronger than the committed text it cites,
-in both dimensions.
-
 **Dictated disposition** (*told* — the cycle-2 directive is its origin, and it
 closes what §8 Q3 and Q7 previously carried): every directive states its
 working-tree disposition explicitly — either an **exclusive assignment** (a named
@@ -86,13 +80,32 @@ The requirement is unconditional; there is no parallel/sole-tree distinction for
 the lint to draw, because both branches are stated dispositions and one of them is
 always required.
 
-That disposition creates one prerequisite, stated here rather than deferred
-(*inferred* from §4 G6). G6 forbids the lint from enforcing a requirement no
-governed file states. `skills/directive-authoring.md` as committed states the
-weaker, conditional rule. So M3 is enforceable only once that skill is amended to
-state the unconditional two-branch rule. The amendment is a prerequisite of the
-lint, not of this PRD, and it is out of this document's change scope; §8 Q4 is
-where the sequencing sits.
+**That disposition is governed text, and the lint's prerequisite is discharged**
+(*observed*). `skills/directive-authoring.md` @ `48ad7fd1` states, as the first
+rule under "Writing the directive file": "**Every directive states its
+working-tree disposition** — either an exclusive assignment (a named directory
+plus the command creating it) or an explicit sole-tree declaration. A prohibition
+is not a disposition." That is the unconditional two-branch rule in both the
+dimensions earlier cycles found missing: it names the command, and it conditions
+the requirement on nothing. It also names the motivating incident's exact failure
+in its own words — a prohibition is not a disposition. The file carries
+`status: agreed` and `last-reviewed: reviews/expedited-log.md @ 48ad7fd1`, whose
+entry reads "2026-08-23 — skills/directive-authoring.md @ 48ad7fd1… —
+working-tree disposition made mandatory for every directive"; it reached
+`origin/main` in merge commit `820d071e`.
+
+Two citation notes, stated because M2 below is about exactly this discipline.
+First, `48ad7fd1` is the **content commit** — the commit that introduced the rule
+text — and is the SHA the expedited log uses to select the agreement; the last
+commit touching the file is `511b4dca`, a frontmatter-only status transition to
+`agreed` (*observed*, both). This document cites the content commit, as the log
+does. Second, the earlier cycles' reading was accurate when made: at `27ca4560`
+the sentence read "Two sessions sharing a tree mutate each other's preconditions.
+Prefer not splitting; where unavoidable, state the tree assignment in each
+directive," which required the assignment to be stated, did not require the
+command, and conditioned the requirement on splitting (*observed*). The amendment
+closed both gaps. G6 is therefore satisfied for M3 as of `48ad7fd1`, and M3
+carries no standing qualification anywhere in this document.
 
 **Purpose** (*told* — dictated). Two tools, together: `bin/directive` shrinks the
 freehand surface by emitting the invariant text from committed sources, and
@@ -184,11 +197,38 @@ built beside `cycle-open`, and not a replacement that discards the cycle format.
 **Migration scope**, stated so a TRD does not have to guess and does not claim
 more than this PRD does: what moves is `cycle-open`'s **skeleton emission** — the
 behaviour of `render_directive` at `bin/cycle-open:115` and the identity and
-document-set resolution feeding it. Nothing else is claimed at PRD level. In
-particular this document makes no claim about `cycle-open`'s bundle emission
-(`write_bundle`), its `--bundle` context-set expansion, its `--out` directory
-contract, or its `--allow-dirty` behaviour; whether those travel with the mode,
-stay where they are, or split is a TRD question.
+document-set resolution feeding it. Nothing else is claimed to move. In
+particular this document makes no claim about **where** `cycle-open`'s bundle
+emission (`write_bundle`), its `--bundle` context-set expansion, its `--out`
+directory contract, or its `--allow-dirty` behaviour end up; whether those travel
+with the mode, stay where they are, or split is a TRD question. What this document
+does claim about them is stated immediately below and is orthogonal to placement:
+they keep working, because the contract that governs them is preserved whole.
+
+**The governing contract for what moves** (*observed* for the sources; the
+disposition to name them is *told* — cycle-3 directive B2). `bin/cycle-open` is not
+ungoverned code. `docs/packages/package-a-spec.md` §3.6 specifies its CLI and
+carries **AC-CO-1 through AC-CO-12**, and `bin/tests/test_cycle_open.py` implements
+them, referring to `AC-CO-` identifiers 34 times. AC-CO-3 fixes the skeleton's
+structure — the `# Cycle <n> Directive — <title>` heading, the `Date:` line, the
+`Documents in scope:` list of `- <path> @ <full sha>` entries, a `## Decisions`
+section with a commented placeholder carrying `Finding: / Resolution: /
+Dictated wording:`, `## Deferred / out of scope`, and `## Execution notes` — and
+AC-CO-4 fixes the SHA rule. Those are precisely the behaviours the migration moves,
+and until this cycle this document named the tool without naming what governs it.
+
+**The disposition of that contract: preserved intact, under the cycle mode**
+(*told* — dictated). AC-CO-1 through AC-CO-12 are neither superseded nor split.
+`docs/packages/package-a-spec.md` §3.6 remains the authoritative acceptance-criteria
+artifact for the behaviour it specifies, and the cycle mode of `bin/directive`
+satisfies it unchanged: the same filename contract (AC-CO-1 — which is why M8
+admits two forms), the same skeleton structure (AC-CO-3), the same SHA rule
+(AC-CO-4), the same refusals, and the same `--out` and bundle behaviour wherever
+the TRD lands those. `bin/tests/test_cycle_open.py` is the **named test surface
+that must stay green through the migration**: it is the executable statement of the
+contract, and a migration that reds it has changed the contract rather than moved
+it (AC-DT-15). What the TRD may decide is where those criteria are *invoked* from —
+which binary, which mode — not what they require.
 
 Two committed decisions bind the cycle mode and are carried, not re-decided
 (*observed*, `decisions/log.md`):
@@ -203,6 +243,27 @@ Two committed decisions bind the cycle mode and are carried, not re-decided
   a reader may remember is dead, and that the live rule is DEC-000180's
   all-three-every-time with *fresh* and *Opus 5* as stated-and-overridable class
   defaults.
+
+**One landing requirement follows from G0, and it is not a code change** (*told* —
+the cycle-3 directive is its origin; *observed* for the records it names). Three
+committed records name `bin/cycle-open` by name as the bearer of a decided
+obligation: `decisions/log.md` DEC-000150 ("`bin/cycle-open` (TP-1) must emit
+Route, Model, and Track"), DEC-000180 ("`bin/cycle-open` (TP-1, shelved) emits
+Route and Model and no Track"), and `OPEN-ITEMS.md`'s section headed
+"`bin/cycle-open` and the retirement of Track". `policies/decision-log-policy.md`
+makes the log append-only — "A decision is never edited in place. To change or
+reverse one, append a new entry whose `Supersedes:` names the old ID" — so those
+references cannot be rewritten where they stand, and Core rule 13's
+changed-fact-changes-everywhere is satisfied by supersession, not by edit. The
+requirement: **the migration does not land until a new decision-log entry
+supersedes DEC-000180**, restating its still-live content and re-anchoring the
+tooling consequence on `bin/directive` in its cycle mode. That is whole-entry
+supersession, exactly the mechanism DEC-000180 itself used against DEC-000150 and
+DEC-000150 against DEC-000110. DEC-000150's own `cycle-open` reference is already
+inert, DEC-000180 having superseded it (*observed*), so no action reaches it.
+**No decision-log edit is made in this cycle** (*told* — dictated): this document
+states the requirement as AC-DT-16, and the entry is appended by a decision session
+when the migration lands.
 
 `cycle-open`'s existing docstring principle — "Every SHA is the full id of the
 last commit touching the path, read from git — never invented, never abbreviated"
@@ -231,14 +292,30 @@ states for citations. The generalization inherits it rather than introducing it.
   author. Its whole contribution is to make the invariant text correct by
   construction; `bin/check-directive` is where refusal lives. Keeping generation
   ungated is what allows the generator to be adopted before the lint is trusted.
-- **G11 — The skeleton records its own sources, in the file.** The generator emits,
-  as part of the skeleton it writes, a **source manifest**: for each invariant
-  section, the committed path it was read from. The manifest is part of the
+- **G11 — The skeleton records its own sources *and their extents*, in the file.**
+  The generator emits, as part of the skeleton it writes, a **source manifest**:
+  one entry per emitted region, carrying that region's source **and its location in
+  the emitted file**. Location is mechanical, not descriptive. The generator emits **every** region of the
+  skeleton — each invariant section and the task-specific author slot alike —
+  under a named, stable section marker of its own choosing, and the manifest names
+  every region in emission order, each entry carrying either the committed path
+  that region was read from or an explicit marking that the region is the author's
+  slot. Because every region is marked and the manifest enumerates them all, the
+  markers partition the whole file: a region's extent runs from its own marker to
+  the next marker or to end of file, with nothing falling between two regions. The
+  generator-supplied share is the sum of the extents whose entries name a committed
+  path. Marking the author slot is the part that makes this work, and it is
+  required, not incidental: without it an invariant section's extent would run
+  through whatever the author wrote after it, and the share would compute to
+  everything. Extent is therefore computable by reading the landed file together
+  with the manifest it carries, without knowing what the generator emitted, without
+  the generator being present, and without any tooling. The manifest is part of the
   directive the executor lands, not a side channel to the author's terminal. Two
-  things depend on it that nothing else supplies: AC-DT-02's static check needs a
-  declared set of sources to range over, and §5's first measurement needs the
-  generator-supplied region of a landed directive to be identifiable from the
-  committed file alone.
+  things depend on it that nothing else supplies: AC-DT-02's static check needs a declared set of
+  sources to range over, and §5's first measurement needs the generator-supplied
+  region of a landed directive to be identifiable **as a byte range, not merely as
+  a count**, from the committed file alone. Which marker syntax is used is a TRD
+  question; that every region carries one, and that the manifest names it, is not.
 
 #### `bin/check-directive` — the lint
 
@@ -250,12 +327,13 @@ states for citations. The generalization inherits it rather than introducing it.
   sources are `docs/global-context/core.md`'s Vocabulary,
   `docs/global-context/decision-layer.md` rule 14, `skills/directive-authoring.md`,
   and `decisions/log.md` (*told* — dictated for the first three; the decision log
-  is added this cycle per the cycle-2 directive's B3). No requirement is invented
-  in the tool. A requirement the tool enforces and no governed file states is a
-  defect in the tool, not a stricter tool. §1 records the one place this bites
-  today: M3's unconditional two-branch rule is not yet in
-  `skills/directive-authoring.md`, and enforcing it before the amendment lands
-  would violate this goal.
+  was added in cycle 2 per that cycle's B3). No requirement is invented in the
+  tool. A requirement the tool enforces and no governed file states is a defect in
+  the tool, not a stricter tool. The one place this bit is closed: M3's
+  unconditional two-branch rule is governed text as of
+  `skills/directive-authoring.md` @ `48ad7fd1` (§1), so every element M1–M8 traces
+  to committed text and none is held back. The goal itself is unchanged and still
+  binds every element added later.
 - **G7 — Mechanically checkable elements only.** The lint checks properties
   decidable by inspecting the directive text and the repository. It makes no
   claim about properties requiring judgment, and its output does not imply one.
@@ -284,12 +362,52 @@ states for citations. The generalization inherits it rather than introducing it.
 | --- | --- | --- | --- |
 | M1 | A reviewed-ref pin is present and resolves to a commit | `skills/directive-authoring.md`, "Pin STOP conditions to the reviewed ref" | none |
 | M2 | Each companion citation `<path> @ <sha>` names a path present at the reviewed ref, and a SHA that resolves to a **commit touching that path** | Core Vocabulary, "Companion document ... Cited with its own path and SHA" and "Directive file ... thereafter cited by path and the SHA of the commit that landed it"; `policies/document-metadata-policy.md`, "The version of a document at reference time is the SHA of the last commit touching the file" | none |
-| M3 | A working-tree disposition is present, in **exactly one** of two forms: an exclusive assignment (a named directory plus the command creating it), or a literal sole-tree declaration. Unconditional — every directive, no parallelism test | The cycle-2 directive's B2 disposition, which strengthens `skills/directive-authoring.md`'s "state the tree assignment in each directive" — see §1's prerequisite | not enforceable until `skills/directive-authoring.md` states the unconditional rule (G6) |
+| M3 | A working-tree disposition is present, in **exactly one** of two forms: an exclusive assignment (a named directory plus the command creating it), or a literal sole-tree declaration. Unconditional — every directive, no parallelism test | `skills/directive-authoring.md` @ `48ad7fd1`, "Writing the directive file", first rule: "Every directive states its working-tree disposition — either an exclusive assignment (a named directory plus the command creating it) or an explicit sole-tree declaration. A prohibition is not a disposition." | none |
 | M4 | The stop conditions are present: cannot-execute-as-written, and concurrent tree mutation | Core rules 11 and 15 | none |
 | M5 | The first instruction is write-the-directive-file, commit, push, report the SHA | Core Vocabulary, "Execution block" | DEC-000160 fixes this for **every** directive class, so no class exemption exists for the lint to carry |
 | M6 | A report section is present and enumerates its required fields | Decision Layer rule 14, "Write it so the returned report is triageable by the next decision session" | none |
 | M7 | The claim-label instruction is present | Core rule 6 | none |
-| M8 | The directive filename conforms to `docs/cycles/<descriptor>-<timestamp>.md`, timestamp in ISO 8601 basic | `skills/directive-authoring.md`, "Naming"; Core rule 14 | none |
+| M8 | The directive filename conforms to **exactly one of two forms**: `docs/cycles/<descriptor>-<timestamp>.md` with the timestamp in ISO 8601 basic, or `docs/cycles/cycle-<N>-directive.md` for a reviewer-gated cycle directive. No third form passes | first form: `skills/directive-authoring.md` @ `48ad7fd1`, "Naming", and Core rule 14. Second form: `docs/packages/package-a-spec.md` §3.6 AC-CO-1, which Core rule 14 defers to as a stated convention | none |
+
+**M8 admits two forms because two governed sources name two conventions, and G0
+puts both inside one tool** (*told* — the cycle-3 directive is the origin of the
+disposition; *observed* for the sources). `skills/directive-authoring.md` @
+`48ad7fd1`, "Naming", states the timestamp form. `docs/packages/package-a-spec.md`
+§3.6 AC-CO-1 requires `bin/cycle-open` to write `docs/cycles/cycle-<N>-directive.md`
+for `--cycle N`, which carries no timestamp. G0 folds that generator into
+`bin/directive`, so a single-pattern M8 would fail — at the executor's first act,
+under J3 — a well-formed directive this spec's own generator was told to produce.
+The disposition: the form is **determined by the generator's mode**, not chosen by
+the author. The cycle mode emits the AC-CO-1 form; every other mode emits the
+timestamp form; M8 is a two-pattern check accepting exactly these two and nothing
+else. Core rule 14 states the timestamp form "when no stated convention names the
+file" and adds "Where a convention names it, follow the convention," so AC-CO-1 is
+licensed by the rule it appears to contradict. Both governed sources stay licensed
+and neither is amended.
+
+One residual, recorded rather than fixed because it is a defect in another file and
+outside this cycle's blast radius (*observed*). The yield clause lives in Core rule
+14; `skills/directive-authoring.md`'s "Naming" section, which specialises that rule
+to directives, restates it without the clause — "A directive file is
+`docs/cycles/<descriptor>-<timestamp>.md`, the timestamp in ISO 8601 basic format."
+Read literally and alone, that sentence admits only the first form. M8's second form
+therefore rests on Core rule 14 and AC-CO-1, not on the skill's Naming sentence. The
+direction of the gap is the safe one — the lint is permissive where the skill is
+strict, and G6 forbids enforcing what no governed file states rather than declining
+to enforce what one does — but the two sentences do not agree on their face.
+Closing it means adding the yield clause to that skill's Naming section, which is
+Dave's call in that file and not this document's to make.
+
+Historical directive files are **not retrofitted** (*told* — dictated); the lint
+governs directives written after adoption, and renaming the existing corpus would
+break every citation by path that points into it. The dictated figure for the
+non-conforming set is 37, which was the count against the **single-pattern** M8 at
+cycle 2 (*told*). Against the two-pattern M8 this cycle adopts, and at this
+document's own revision, `docs/cycles/` holds 95 markdown files, of which 59 match
+the timestamp form, 7 match `cycle-<N>-directive.md`, and **29 match neither** —
+mostly the `<slug>-directive.md` and `<slug>-<YYYY-MM-DD>-directive.md` forms
+(*observed*). The disposition is unchanged by the count; the count is restated
+because Core rule 13 requires a changed number to change where it appears.
 
 No element in this table covers route or model tier. That is deliberate and is
 the answer §8 Q5 now carries: Core's Vocabulary distinguishes the **directive**
@@ -337,8 +455,10 @@ leading directories," and a bare `mkdir` of the same path was denied while
 `/Users/dave/code` stood `drwxr-xr-x dave:staff` (*observed*, cycle 1; the probes
 were removed and the failed add left no entry in `.git/worktrees`). The cycle-2
 directive carries the corrected constraint — worktrees under `$TMPDIR` — as told,
-and its assignment executed (*observed*, this cycle). Executability is a property
-of the executor's sandbox, discoverable only at execution and only after the
+and its assignment executed (*observed*, cycle 2); the cycle-3 assignment, also
+under `$TMPDIR`, executed the same way (*observed*, cycle 3). Executability is a
+property of the executor's sandbox, discoverable only at execution and only after
+the
 constraint has been learned once. The lint checks that a disposition was *made*;
 it cannot check that it can be *carried out*, and G9 requires it to say so.
 
@@ -418,8 +538,16 @@ it cannot check that it can be *carried out*, and G9 requires it to say so.
   (*observed*, `bin/cycle-open:115`) — small, but not zero, and the measurement
   starts from it rather than from nothing.
   **Attribution mechanism**: G11's source manifest, carried in the landed file.
-  The manifest names each generator-supplied section, so the split is recoverable
-  from the committed artifact with no tooling beyond reading it. Its bound, stated
+  The manifest names every region of the file in emission order — each invariant
+  section by its committed source, the task-specific region as the author's slot —
+  and names the marker that begins each, so the markers partition the file and each
+  region's extent runs from its marker to the next marker or to end of file. The
+  byte share is therefore computable from the committed artifact alone — sum the
+  extents whose entries name a committed source, divide by file size — by reading
+  the file and its manifest and nothing else. That is the
+  mechanism the signal needs and that naming a source path alone did not supply:
+  a source locates where text *came from*, and a share requires knowing where it
+  *sits*. Its bound, stated
   because the signal would otherwise be read as tighter than it is: the author may
   edit inside a generator-supplied section, and the manifest does not record that.
   The signal therefore measures the *region the generator supplied*, not the bytes
@@ -465,18 +593,34 @@ offline (*inferred*).
   from a slot that has been filled.
 - **AC-DT-04** — The generator exits 0 for every invocation that produces a
   skeleton, and rejects no content. It has no refusal path.
-- **AC-DT-05** — The generator emits a source manifest naming, per invariant
-  section, the committed file it was read from, and the manifest is part of the
-  skeleton written to the directive file rather than terminal-only output.
+- **AC-DT-05** — The generator emits a source manifest naming, per emitted
+  region, **the marker that begins that region** and either the committed file the
+  region was read from or an explicit marking that the region is the author's slot;
+  and the manifest is part of the skeleton written to the directive file rather
+  than terminal-only output. Every marker the manifest names appears in the emitted
+  file exactly once, every region the generator emits carries one, and the manifest
+  enumerates every region in emission order — so taking each entry's extent from
+  its marker to the next marker or to end of file partitions the **whole file**
+  with no overlap and no gap, and the generator-supplied share is the sum of the
+  extents whose entries name a committed source. Verifiable by generating a
+  skeleton and computing that partition from the file alone.
 - **AC-DT-06** — For each element in the mechanically-checkable table M1–M8, a
   fixture directive missing exactly that element causes a non-zero exit, and the
   output names that element and cites the governed text it derives from. For M3
   the check is an **unconditional presence test** over two named forms, with no
-  parallelism precondition: a fixture with neither an exclusive assignment nor a
-  sole-tree declaration exits non-zero, a fixture carrying both exits non-zero,
-  and each of the two single-form fixtures exits 0 on that element. The fixture
-  set includes a sole-tree directive, which under this criterion must pass M3
-  rather than be exempt from it.
+  parallelism precondition and no sequencing precondition — the governed rule is
+  committed (`skills/directive-authoring.md` @ `48ad7fd1`), so this criterion is
+  live now and its fixtures are written now: a fixture with neither an exclusive
+  assignment nor a sole-tree declaration exits non-zero, a fixture carrying both
+  exits non-zero, and each of the two single-form fixtures exits 0 on that element.
+  The fixture set includes a sole-tree directive, which under this criterion must
+  pass M3 rather than be exempt from it, and a fixture whose only working-tree
+  statement is a **prohibition**, which must exit non-zero — that is the motivating
+  incident, and the governed rule decides it in its own words ("A prohibition is
+  not a disposition"). For M8 the check is a **two-pattern test**: a
+  `<descriptor>-<timestamp>.md` fixture and a `cycle-<N>-directive.md` fixture each
+  exit 0 on that element, and a fixture matching neither — a bare
+  `<slug>-directive.md`, the historical form — exits non-zero.
 - **AC-DT-07** — A well-formed fixture directive carrying every element M1–M8
   exits 0.
 - **AC-DT-08** — Exit 0 output includes the unchecked set — at minimum, that
@@ -507,13 +651,28 @@ offline (*inferred*).
 - **AC-DT-13** — The lint enforces no requirement absent from its cited governed
   sources. Verifiable by review of the requirement table against those files, and
   mechanically to the extent each requirement carries the citation AC-DT-06
-  demands. M3 is the standing case: until `skills/directive-authoring.md` states
-  the unconditional two-branch rule, a lint enforcing M3 fails this criterion.
+  demands. Every element M1–M8 satisfies this as written, M3 included
+  (`skills/directive-authoring.md` @ `48ad7fd1`); no element is held back and none
+  carries a sequencing qualification. The criterion binds every element added
+  later, which is the case it now exists to catch.
 - **AC-DT-14** — After migration, `bin/` contains exactly one directive-skeleton
   generator. The reviewer-gated cycle skeleton is produced by `bin/directive` in
   its cycle mode, it carries Route and Model and no Track (DEC-000180), and
   `bin/cycle-open` no longer emits a skeleton of its own. Verifiable by generating
   a cycle skeleton through the new path and by static inspection of `bin/`.
+- **AC-DT-15** — The migration preserves the contract it absorbs:
+  `bin/tests/test_cycle_open.py` passes after the migration, with AC-CO-1 through
+  AC-CO-12 satisfied and none of them retired — whichever binary each criterion is
+  invoked through, which is the TRD's question and not this criterion's. A red in
+  that suite is a failed migration, not a superseded criterion. Verifiable by
+  running the pre-existing suite.
+- **AC-DT-16** — The migration does not land until `decisions/log.md` carries a new
+  entry whose `Supersedes:` names DEC-000180 and whose tooling consequence names
+  `bin/directive`'s cycle mode rather than `bin/cycle-open`. Verifiable by reading
+  the log. This is a landing precondition on the implementation rather than a
+  property of either tool's behaviour, and it is stated as a criterion because
+  supersession by a new entry is the only mechanism the append-only log offers for
+  a committed record to stop naming a binary that no longer bears the obligation.
 
 ## 7. Risk tolerance
 
@@ -552,8 +711,10 @@ and this one is bounded by the migration.
 does not state its bounds. Any invariant text or required element hardcoded in a
 tool rather than read from committed text — that failure recreates the drift the
 tools exist to remove, in a place with less visibility than prose. Any write, of
-any kind, from either tool. Any lint enforcement of M3 before the governed text
-states it (G6, AC-DT-13).
+any kind, from either tool. Any lint enforcement of a requirement no governed file
+states (G6, AC-DT-13) — the one element that stood in that position, M3, is now
+governed text, and the prohibition stands undiminished for every element added
+after it.
 
 **Escalation.** A lint failure returns the directive to the decision session; the
 executor never repairs it. Anything the lint cannot decide is reported unknown and
@@ -569,7 +730,7 @@ acceptable is Dave's judgment, never the tool's.
   rank a standing write-path document first among its options and call it a
   precondition for the other options being citable (*observed*, per that
   document), so this question overlaps a decision already in flight. AC-DT-02 was
-  restated this cycle so that no acceptance criterion depends on the answer.
+  restated in cycle 2 so that no acceptance criterion depends on the answer.
   Resolved by: Dave, at the TRD stage.
 - **Q2 (dictated).** Lint sequencing relative to commit and push — specifically,
   whether a failing directive still lands for the audit trail. The tension is
@@ -580,12 +741,21 @@ acceptable is Dave's judgment, never the tool's.
   parallel directive from a sole-tree one. It does not: M3 is unconditional, and
   both cases are stated dispositions. No parallelism marker is needed in the
   directive text or the skeleton.
-- **Q4 (dictated; widened this cycle).** Whether these tools change the text of
-  `skills/directive-authoring.md` or sit beneath it. §1 makes one half of this
-  concrete and no longer optional: M3's unconditional two-branch rule must be
-  stated in that skill before the lint may enforce it (G6), so at least one
-  amendment is a prerequisite rather than a preference. What remains open is the
-  scope of the rest, and the sequencing against it. Resolved by: Dave.
+- **Q4 — the sequencing item is closed** (cycle 3); the original question stays
+  open, narrower. Whether these tools change the text of
+  `skills/directive-authoring.md` or sit beneath it. The half that had become a
+  prerequisite is discharged: M3's unconditional two-branch rule is stated in that
+  skill as of `48ad7fd1`, agreed via `reviews/expedited-log.md` and merged to
+  `origin/main` in `820d071e`, so nothing in this document waits on an amendment
+  and no element is held back (§1, §4 G6, AC-DT-13). **The governed home is settled
+  with it** (*told* — cycle-3 directive, disposing cycle-1 finding O1): the
+  mandatory working-tree rule lives in `skills/directive-authoring.md`, not in the
+  `skills/directive-execution.md` that `OPEN-ITEMS.md` proposes for
+  directive-execution mechanics. The amendment settles it by landing there, which
+  is a stronger answer than an argument for either home would have been. What
+  remains open is the narrower original question: whether the *rest* of these
+  tools' requirements eventually move into that skill's text or sit beneath it
+  unchanged. Resolved by: Dave.
 - **Q5 — narrowed to near-closure** (cycle 2, against `decisions/log.md` and Core
   Vocabulary). Whether the directive **file** is the right unit for the lint,
   given that a directive package is route + model + execution block. Core's
@@ -605,6 +775,19 @@ acceptable is Dave's judgment, never the tool's.
   requirement is "a named directory" or "a named directory plus the command
   creating it." It is the latter, for the assignment branch, with a literal
   sole-tree declaration as the only alternative. M3 is now writable as a test
-  (AC-DT-06). The residual obligation this creates — amending
-  `skills/directive-authoring.md` so G6 is satisfied — is carried in §1 and Q4,
-  not here.
+  (AC-DT-06). The residual obligation this created — amending
+  `skills/directive-authoring.md` so G6 is satisfied — is **discharged**: the
+  amendment landed at `48ad7fd1` and is recorded in §1 and Q4, not here.
+
+- **Q8 — closed** (cycle 3, by dictated disposition). Which filename convention M8
+  enforces, given that G0 puts a generator required to emit
+  `cycle-<N>-directive.md` inside a lint that a single-pattern M8 would require to
+  reject it. Recorded as a question because the choice lay between two governed
+  conventions and was not the author's to make. Chosen: **two forms, determined by
+  the generator's mode** — the cycle mode emits the AC-CO-1 form, every other mode
+  emits the timestamp form, M8 accepts exactly these two, and neither governed
+  source is amended. Chosen by: Dave, in
+  `docs/cycles/directive-tooling-spec-3-20260823T203821Z.md` @ `d258434e`. The
+  residual §4 records — that `skills/directive-authoring.md`'s "Naming" sentence
+  restates Core rule 14 without its yield clause — is not reopened by this closure
+  and is not this document's to fix.
