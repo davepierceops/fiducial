@@ -1,0 +1,20 @@
+# Review: engagements/sre/baseline-measurement.md — cycle 2
+
+Verdict: changes-required
+Reviewed: engagements/sre/baseline-measurement.md @ df35ea7
+Reviewer: Context Quality Reviewer (execution session)
+Date: 2026-08-23
+Scope: the whole file, all eleven criteria of the review rubric @ df35ea7, judged against the current foundation. Confirmation pass within the Pass 1 re-gate confirmation cycle; the added question is whether the two cuts and the Artifacts-list reference PR #130 made close SRE-BM-1 through SRE-BM-3 without opening anything.
+Cross-checked: docs/global-context/core.md (Vocabulary — decision session, execution session), docs/global-context/decision-layer.md, LEXICON.md (Evidence classes), operating-model.md, engagements/sre/README.md (Artifacts), engagements/sre/override-log-policy.md, engagements/sre/implementer.md, engagements/cartographer.md, engagements/assistant.md, engagements/sre/speed-audit.md, engagements/working-with-dave.md — all @ df35ea7; plus docs/cycles/pass1-regate-fix-20260822T230000.md (D3, D4, instructions 13 and 16). Bundle membership computed mechanically over every `audience:` value in the 51-file set at df35ea7.
+Not inspected: whether p50/p95 is the right distribution summary as a matter of engineering judgment; the four failure modes' completeness.
+Findings: 1 — 1 blocking
+Prior cycle: reviews/sre-baseline-measurement-cycle-1.md
+Dave should inspect: SRE-BM-4 — it is the one file in the engagement pack that decision D4 was not applied to, and D3 widened the mismatch rather than causing it.
+
+## SRE-BM-4 — blocking
+Claim: The file declares a decision session for five of its six steps and is delivered to two roles that both run as execution sessions, without stating who reads it — which is the shape decision D4 governs and the shape PR #130 fixed in the pack's two other skills.
+Location: engagements/sre/baseline-measurement.md:9-10 ("This skill runs in a decision session, except step 6, which runs in an execution session.") and :4 (`audience: [cartographer, implementer, assistant, human]`)
+Evidence: Verified by running. Of the three role slugs in the audience, engagements/sre/implementer.md:9 states "The Implementer runs as an execution session" and engagements/cartographer.md:9 — as rewritten by this same PR under D3 — states "The Cartographer runs as an execution session"; only engagements/assistant.md:9 is a decision session. `git diff 8cdc0b9 287fa78 -- engagements/sre/baseline-measurement.md` touches the opening restatement, step 4, and the Override section, and does not touch line 9. The two sibling skills were conformed: engagements/sre/speed-audit.md:9-10 now reads "Runs in a decision session. The Implementer and Critic read it for their step-5 assignments; they do not run the play," and engagements/sre/engagement-change-package.md:9-10 now reads "Produced in an execution session by the Implementer. The Assistant reads it; it does not produce one." docs/cycles/pass1-regate-fix-20260822T230000.md D4 states the governing rule: "Audiences are never narrowed to resolve a session-kind mismatch; the file states who runs it and who reads it." This file states who runs it and not who reads it. Criterion 7.
+Consequence: Two of the three roles that receive this file are told, in its first line, that five of its six steps are not theirs — and step 6, the one step the line assigns to an execution session, is the Implementer's re-measurement, which cites the baseline steps 1 through 4 produced. The Cartographer, which step 1 depends on for the System Map's stage list, is given no statement of its relation to the procedure at all. An agent holding this file cannot tell whether it is reading a procedure to run or a procedure to cite.
+Fix: Apply D4 as the two sibling skills apply it. "Steps 1 through 5 run in a decision session; step 6 runs in an execution session. The Cartographer supplies the stage list from the System Map and the Implementer runs step 6; neither runs the gate." Adjust to whatever the true division is — the requirement is that the line name the readers, not that it name these ones.
+Related: SA-4
