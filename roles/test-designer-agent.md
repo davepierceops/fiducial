@@ -2,6 +2,7 @@
 status: draft
 last-reviewed: null
 audience: [test-designer-agent, chief-of-staff, human]
+session: execution
 ---
 
 # Role: Test Designer Agent

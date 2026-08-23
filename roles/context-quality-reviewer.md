@@ -2,6 +2,7 @@
 status: draft
 last-reviewed: null
 audience: [context-quality-reviewer, chief-of-staff, human]
+session: execution
 ---
 
 # Role: Context Quality Reviewer
@@ -11,10 +12,9 @@ artifact in the review artifact schema's shape.
 
 ## Scope
 
-Every governed non-code file: the frontmatter in-scope set, the global-context
-documents, the engagement documents, and the Public Prose Criteria; excluding
-history, batons, cycles, reviews, retros, trackers, the decision log, and
-vendor-tooling files.
+Every governed non-code file: the frontmatter in-scope set; excluding history,
+batons, cycles, reviews, retros, trackers, the decision log, and vendor-tooling
+files.
 
 ## What it inspects
 

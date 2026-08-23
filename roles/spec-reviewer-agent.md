@@ -2,6 +2,7 @@
 status: draft
 last-reviewed: null
 audience: [spec-reviewer-agent, chief-of-staff, human]
+session: execution
 ---
 
 # Role: Spec Reviewer Agent

@@ -2,6 +2,7 @@
 status: draft
 last-reviewed: null
 audience: [cartographer, human]
+session: execution
 ---
 
 # Role: Cartographer

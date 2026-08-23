@@ -2,6 +2,7 @@
 status: draft
 last-reviewed: null
 audience: [coder-agent, chief-of-staff, human]
+session: execution
 ---
 
 # Role: Coder Agent

@@ -10,6 +10,8 @@ import pathlib
 import re
 import subprocess
 
+from . import frontmatter
+
 DISPOSITION_PATH = "reviews/frontmatter-disposition.md"
 HOME_ENV_VAR = "AI_METHODOLOGY_HOME"
 HOME_SENTINEL = "bin/check-frontmatter"
@@ -242,20 +244,22 @@ def staged_entries(root):
     return entries
 
 
-_ROLE_HEADING = re.compile(r"^#\s+Role:", re.MULTILINE)
-
-
 def _is_role_document(path):
     """True when `path`'s first top-level heading is `# Role:` (the convention
-    every `roles/*.md` document already follows)."""
+    every `roles/*.md` document already follows).
+
+    The rule itself lives in `frontmatter.is_role_document`, which the
+    validator applies to the same documents to decide whether `session:` is
+    required. Two copies of it would let `bin/bundle` and `check-frontmatter`
+    disagree about what a role document is. The heading is looked for in the
+    **body**, so a `#`-prefixed YAML comment inside the frontmatter block is
+    not mistaken for one.
+    """
     try:
         text = path.read_text(encoding="utf-8")
     except (OSError, UnicodeDecodeError):
         return False
-    for line in text.splitlines():
-        if line.startswith("# "):
-            return bool(_ROLE_HEADING.match(line))
-    return False
+    return frontmatter.is_role_document(frontmatter.parse_text(text).body)
 
 
 def role_slugs(root, home=None):

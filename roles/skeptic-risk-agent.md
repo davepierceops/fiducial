@@ -2,6 +2,7 @@
 status: draft
 last-reviewed: null
 audience: [skeptic-risk-agent, chief-of-staff, human]
+session: execution
 ---
 
 # Role: Skeptic/Risk Agent
