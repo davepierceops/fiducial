@@ -1,6 +1,6 @@
 ---
-status: draft
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/corpus-regate-cycle-1.md @ 8402c23
 audience: [reviewer-agent, skeptic-risk-agent, release-manager-agent, human]
 ---
 
