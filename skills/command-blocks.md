@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/corpus-regate-cycle-1.md @ 8402c23
+last-reviewed: reviews/command-blocks-cycle-6.md @ cd7db71
 audience: [all-roles, human]
 ---
 
