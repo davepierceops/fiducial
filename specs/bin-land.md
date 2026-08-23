@@ -278,9 +278,9 @@ substrate is expected to be a bare repository served over `file://`, which makes
 the remote half testable offline (*inferred*, per the research findings).
 
 - **AC-LAND-01a** — Given the named branch does not exist at the remote, and a
-  working tree whose checked-out branch is behind the remote default branch,
-  the invocation produces a commit whose parent is `origin/main` HEAD as of the
-  invocation's own fetch, and the report's prior-head field reads `created`.
+  working tree at or behind the remote default branch, the invocation produces
+  a commit whose parent is `origin/main` HEAD as of the invocation's own
+  fetch, and the report's prior-head field reads `created`.
 - **AC-LAND-01b** — Given the named branch exists at the remote, and a working
   tree at or behind that branch's remote head, the invocation produces a commit
   whose parent is that branch's remote head as of the invocation's own fetch;
