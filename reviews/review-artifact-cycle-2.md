@@ -1,0 +1,20 @@
+# Review: skills/review-artifact.md — cycle 2
+
+Verdict: changes-required
+Reviewed: skills/review-artifact.md @ df35ea7
+Reviewer: Context Quality Reviewer (execution session)
+Date: 2026-08-23
+Scope: the whole file, all eleven criteria of the review rubric @ df35ea7, judged against the current foundation. Confirmation pass within the Pass 1 re-gate confirmation cycle; the added question is whether the two convention sentences PR #130 added actually derive the artifact paths the corpus now contains.
+Cross-checked: docs/global-context/core.md (Evidence 10; Acting 14), LEXICON.md (Release impact labels), docs/global-context/review-rubric.md, roles/context-quality-reviewer.md, roles/skeptic-risk-agent.md, skills/evidence-review.md, skills/test-plan-review.md, engagements/critic.md — all @ df35ea7; plus every `reviews/*.md` filename at df35ea7, read mechanically for stem collisions and cycle numbering; plus docs/cycles/pass1-regate-fix-20260822T230000.md (instruction 21) and docs/cycles/pass1-regate-confirm-20260823T000500.md (instruction 7, which dictates the `sre-` stems again).
+Not inspected: whether the header fields are the right fields (settled across the spec-review-cycle cycles); the 200-odd existing artifacts, which this document explicitly does not retrofit.
+Findings: 1 — 1 blocking
+Prior cycle: reviews/review-artifact-cycle-1.md
+Dave should inspect: RA-4. The disambiguation rule landed as dictated and it is the right rule; it is narrower than the practice it was written to authorize, and the gap is now seven files wide.
+
+## RA-4 — blocking
+Claim: The disambiguation rule fires only where the basename is not unique, and six of the seven `engagements/sre/` artifacts in the tree carry a `sre-` prefix for basenames that are unique — so the convention still does not derive the paths the corpus actually uses.
+Location: skills/review-artifact.md:50-51 ("Where the basename is not unique in the corpus, the stem is `<parent-dir>-<basename>`.")
+Evidence: Verified by running. At df35ea7 the tree contains `reviews/sre-README-cycle-1.md`, `sre-baseline-measurement-cycle-1.md`, `sre-engagement-change-package-cycle-1.md`, `sre-implementer-cycle-1.md`, `sre-override-log-policy-cycle-1.md`, `sre-speed-audit-cycle-1.md`, and `sre-system-discovery-cycle-1.md`. Of the seven source basenames, only `README` repeats in the corpus — `vendors/README.md` and the retired repository-root `README.md` share it. The other six — `baseline-measurement`, `engagement-change-package`, `implementer`, `override-log-policy`, `speed-audit`, `system-discovery` — appear exactly once each across the 51-file set, so the landed rule's condition is false for all six and the rule prescribes bare stems for them. Six artifacts in the tree say otherwise, and docs/cycles/pass1-regate-confirm-20260823T000500.md instruction 7 dictates `sre-<basename>` a second time. Criterion 11 — the convention leaves the case to the writer's judgment, which is the same defect RA-1 named and the same one this sentence was added to close.
+Consequence: The convention's stated purpose is that "the path a reader needs is derivable from the document path without looking it up." A reader deriving the artifact path for `engagements/sre/implementer.md` gets `reviews/implementer-cycle-1.md`, finds nothing, and concludes the document is unreviewed; it has been reviewed once, at `reviews/sre-implementer-cycle-1.md`. Six of the seven engagement-pack documents are in that state, and every future cycle over them either follows the rule and splits the history or follows practice and contradicts the rule.
+Fix: Widen the condition to the case the practice already covers: "Where the reviewed document is not at the repository root or in a single flat directory of its own kind — any document under a nested directory such as `engagements/sre/` — the stem is `<parent-dir>-<basename>`, whether or not the basename repeats." Or state the narrower fact directly: every document under `engagements/sre/` takes the `sre-` stem. Either makes the six existing paths derivable; leaving the sentence as it stands does not.
+Related: RA-1

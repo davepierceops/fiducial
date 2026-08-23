@@ -1,0 +1,19 @@
+# Review: engagements/critic.md — cycle 1
+
+Verdict: ready-with-findings
+Reviewed: engagements/critic.md @ df35ea7
+Reviewer: Context Quality Reviewer (execution session)
+Date: 2026-08-23
+Scope: the whole file, all eleven criteria of the review rubric @ df35ea7, criterion 10 answered first. Cycle 1 of this stem: the file is engagements/skeptic.md renamed at PR #130 under decision D2, and the cycle number restarts per the convention this repository landed in the same pull request. Confirmation pass within the Pass 1 re-gate confirmation cycle; the added questions are whether SK-1 and SK-2 closed and what the rename left behind.
+Cross-checked: docs/global-context/core.md, docs/global-context/decision-layer.md, LEXICON.md, operating-model.md, skills/review-artifact.md, roles/skeptic-risk-agent.md, engagements/sre/README.md, engagements/sre/engagement-change-package.md, engagements/sre/speed-audit.md, engagements/sre/implementer.md, engagements/assistant.md, engagements/working-with-dave.md, roles/writer.md — all @ df35ea7; plus docs/cycles/pass1-regate-fix-20260822T230000.md (D2, D8, instructions 2, 4, 12, 15) and a corpus-wide sweep for `skeptic` as an audience value or engagement-role reference over the 51-file set. Bundle membership computed mechanically over every `audience:` value in that set.
+Not inspected: whether the infra false-confidence checklist is the right list as a matter of engineering judgment; whether Critic is the right name — D2 settled it.
+Findings: 1 — 1 non-blocking
+Prior cycle: reviews/skeptic-cycle-2.md (this document under its predecessor stem, `skeptic`; also reviews/skeptic-cycle-1.md)
+Dave should inspect: none.
+
+## CR-1 — non-blocking
+Claim: The release-gate rule is stated here and, word for word, in engagements/sre/README.md, and both files are in this file's only bundle.
+Location: engagements/critic.md:12-13 ("An engagement has no release gate. Release is the client's concern, not this role's; do not inquire into or reason about the client's release timing.") against engagements/sre/README.md:39-40, which carries the identical two sentences.
+Evidence: Verified by running. Both sentences were written by PR #130 under decision D8; docs/cycles/pass1-regate-fix-20260822T230000.md instruction 12 dictates the README wording and then says "engagements/critic.md line 12 takes the identical sentence," so the duplication is deliberate, not drift. Bundle membership computed over `audience:` at df35ea7: this file carries `audience: [critic, human]`, engagements/sre/README.md carries `audience: [assistant, cartographer, critic, implementer, human]`, and the `critic` bundle resolves to 24 files containing both. Cycle 2's finding SK-2 proposed the opposite resolution — "That keeps one statement and removes the contradiction without touching the README" — and the directive chose to state it twice instead. Criterion 6 ("Rules are stated; arguments for them are cut... restatements of a stated rule... are cut") and criterion 10.
+Consequence: The contradiction SK-2 named is genuinely gone, which is what mattered; what replaced it is one rule with two homes in one bundle, and the corpus's own reasoning about why that is a cost — a restated rule is where drift starts — applies here as it applied to the eighteen duplicate-rule rows PR #130 consolidated. The clause that is this file's own and that the README does not carry, "Your verdict is input to Dave's decision, not a gate on anything," is the sentence that earns its place; the two before it are the ones that repeat.
+Fix: Keep the rule in engagements/sre/README.md, which is in every engagement bundle, and cut the two duplicated sentences here, leaving "Your verdict is input to Dave's decision, not a gate on anything." Or accept it explicitly as a deliberate double-statement for a summoned-only role that may be read outside the pack, and record that so a later cycle does not consolidate it away.
