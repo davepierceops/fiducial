@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/corpus-regate-cycle-1.md @ 8402c23
+last-reviewed: reviews/remote-write-verification-policy-cycle-7.md @ cd7db71
 audience: [all-roles, human]
 ---
 
