@@ -2,6 +2,7 @@
 status: draft
 last-reviewed: null
 audience: [architect-agent, chief-of-staff, human]
+session: execution
 ---
 
 # Role: Architect Agent
