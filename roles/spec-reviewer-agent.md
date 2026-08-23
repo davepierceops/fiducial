@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/corpus-regate-cycle-2.md @ df35ea7
+last-reviewed: reviews/spec-reviewer-agent-cycle-4.md @ cd7db71
 audience: [spec-reviewer-agent, chief-of-staff, human]
 session: execution
 ---
