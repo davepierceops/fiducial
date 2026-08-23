@@ -22,7 +22,8 @@ Procedure for building the System Map of a client pipeline.
    what dependencies between them. Cite the file and line that establishes each
    link.
 3. **Tag every claim** with its provenance. The unknowns become the question
-   list for Dave.
+   list for the Assistant's triage; the Assistant carries to Dave what needs
+   his decision.
 4. **Identify the measurement points.** For each stage: where would a timestamp
    come from — existing logs, CI APIs, workflow annotations? Prefer measurement
    that requires no changes at all; then measurement requiring only PR-able

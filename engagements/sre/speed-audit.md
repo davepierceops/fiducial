@@ -16,7 +16,9 @@ parts.
 ## The play
 
 1. **Discover** — the Cartographer maps the pipeline, producing the System Map;
-   unknowns go to Dave; Dave decides what to ask the client.
+   unknowns go to the Assistant in the Cartographer's report; the Assistant
+   carries to Dave what needs his decision, and Dave decides what to ask the
+   client.
 2. **Baseline** — capture per-stage distributions, producing the Measurement
    Baseline. Change nothing yet. This is typically days one and two.
 3. **Rank** — order stages by cost at p50 and p95. Present the ranking with the

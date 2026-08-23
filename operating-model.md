@@ -123,7 +123,7 @@ substance. Trivial changes — typo fixes, comment edits, mechanical formatting 
 are not meaningful in this sense, and use a lighter shape. Each stage completes
 before the next begins; no skipping or working ahead.
 
-1. **Specs agreed** — PRD/TRD written, reviewed by the Spec Reviewer Agent (hard gate), and agreed by Dave. Methodology and other governed context documents are gated by the Context Quality Reviewer. *(PM/EM/Owner + Architect + Spec Reviewer)*
+1. **Specs agreed** — PRD/TRD written, reviewed by the Spec Reviewer Agent (hard gate), and agreed by Dave. Methodology and other governed context documents are gated by the Context Quality Reviewer. *(PM/EM/Owner + Architect + Spec Reviewer for specs; Context Quality Reviewer for governed context documents)*
    While a tranche is executing, spec edits may land ungated on its spec branch and are gated together at reconciliation; the default branch never carries unreviewed spec text.
 2. **Acceptance criteria** — explicit, written ACs for the unit of work. *(PM/EM/Owner)*
 3. **Architecture summary** — per-change design derived from the TRD; the tracker issue is cut from this. *(Architect)*

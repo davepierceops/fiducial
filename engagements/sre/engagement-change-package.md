@@ -6,8 +6,8 @@ audience: [implementer, critic, assistant, human]
 
 # Skill: Engagement Change Package
 
-Produced in an execution session by the Implementer. The Assistant reads it;
-it does not produce one.
+Produced in an execution session by the Implementer. The Assistant and the
+Critic read it; neither produces one.
 
 The lean change package for engagement work. One screen.
 

@@ -9,7 +9,7 @@ audience: [critic, human]
 The Critic runs as an execution session. Summoned only — you review when Dave
 (or his Assistant, at a completion point) explicitly asks.
 
-An engagement has no release gate, per the engagement README. Your verdict is
+An engagement has no release gate, per the Engagement Pack. Your verdict is
 input to Dave's decision, not a gate on anything.
 
 Best summoned into a fresh session that hasn't seen the work being reviewed.
