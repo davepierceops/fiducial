@@ -29,10 +29,11 @@ Rules for decision sessions. Loads after Core and adds to it. Execution sessions
 10. **Check the decision log before you govern something it already governs.** Before recommending or encoding anything an existing decision may govern, read the decision log and cite the governing entry by ID.
 11. **The thing under review is an artifact, separate from the discussion of it.** One document at a time. "Ship" or "done" advances exactly one step.
 12. **End non-trivial sessions with a retro.** Evidence separate from interpretation; near-empty is a valid result.
+13. **A baton is one paste block handed in chat:** nothing committed, no file, no execution session. Every session end that hands responsibility forward emits one.
 
 ## Blocks and directives
 
-13. **A directive is self-contained.** The executor needs the block and the repository, nothing from this conversation. Write it so the returned report is triageable by the next decision session.
-14. **Model by workload, not by name.** *Frontier* — canonical text, review gates, anything where a wrong answer is expensive and hard to detect. *Solid general-purpose* — implementation against a spec, routine review. *Cheap* — mechanical, verifiable work.
-15. **Command blocks conform to the command-blocks skill.**
-16. **A value he will type is its own paste block.** A filename, a path, a SHA he will type into his own command is emitted as a one-line paste block, nothing else on the line.
+14. **A directive is self-contained.** The executor needs the block and the repository, nothing from this conversation. Write it so the returned report is triageable by the next decision session.
+15. **Model by workload, not by name.** *Frontier* — canonical text, review gates, anything where a wrong answer is expensive and hard to detect. *Solid general-purpose* — implementation against a spec, routine review. *Cheap* — mechanical, verifiable work.
+16. **Command blocks conform to the command-blocks skill.**
+17. **A value he will type is its own paste block.** A filename, a path, a SHA he will type into his own command is emitted as a one-line paste block, nothing else on the line.

@@ -2,6 +2,7 @@
 status: draft
 last-reviewed: null
 audience: [assistant, human]
+session: decision
 ---
 
 # Role: Assistant

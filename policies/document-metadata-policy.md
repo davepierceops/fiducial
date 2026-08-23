@@ -30,11 +30,18 @@ project artifacts.
 - `skills/**`
 - `specs/**`
 - `vendors/**`
+- `docs/global-context/**`
+- `engagements/**`
 - `operating-model.md`
 - `LEXICON.md`
+- `prose-criteria.md`
 
 **Out of scope:**
 
+- History: `docs/history/**`. Retired material, kept for the record and
+  explicitly excluded. The in-scope globs anchor at the repository root, so
+  the retired copies under `docs/history/engagements/` are out of scope for
+  the same reason.
 - State and tracker artifacts: `MANIFEST.md`, `OPEN-ITEMS.md`,
   `COLLAB-STATE.md`, `BACKLOG-v2.md`, review artifacts
   (`reviews/**`, `REVIEW-*.md`), retros (`retros/`), merge history
@@ -95,11 +102,18 @@ lines, before any content.
   `engagements/sre/README.md` are not role documents. `all-decision-roles`
   selects every role that runs as a decision session. Any other value
   fails enforcement.
+- `session:` one of `decision | execution`, stating the session kind the
+  role runs as. Required on every role document — one whose first heading
+  is `# Role:` — and permitted on no other document. This is the field
+  `all-decision-roles` reads.
 
 ## Conditional fields
 
 - `superseded-by:` required if and only if `status: superseded`. A path
   or URL to the successor.
+- `order:` optional on any document. An integer fixing the document's
+  position within a bundle, lower first. Absent means the document sorts
+  after every ordered file.
 - Null semantics: null ≡ absent. A key present with value `null` (e.g.,
   `superseded-by: null` on a draft) is permitted and treated as the
   field being absent.

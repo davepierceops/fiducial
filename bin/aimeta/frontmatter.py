@@ -13,13 +13,40 @@ import re
 
 STATUSES = {"draft", "in-review", "agreed", "superseded", "deprecated"}
 EXCLUDED_FIELDS = {"version", "last-modified", "author", "changelog"}
-RESERVED_AUDIENCE = {"all-roles", "human"}
+#: The three reserved `audience:` values the metadata policy names. Kept in
+#: step with `bin/bundle`'s `RESERVED_AUDIENCES`, which reads the same policy
+#: sentence: a value accepted by one and rejected by the other would mean a
+#: compliant document the checker refuses, or a bundle selector no document
+#: can satisfy.
+RESERVED_AUDIENCE = {"all-roles", "all-decision-roles", "human"}
+#: The `session:` vocabulary: the two session kinds Core defines.
+SESSIONS = {"decision", "execution"}
 FIELD_ORDER = ["status", "last-reviewed", "audience", "superseded-by"]
 LAST_REVIEWED_RE = r"^reviews/\S+\.md @ [0-9a-f]{7,40}$"
+#: `order:` is an integer. Deliberately not `int()`, which also accepts
+#: `1_0`, surrounding whitespace, and other spellings a reader of the
+#: document would not call an integer.
+ORDER_RE = r"^[+-]?[0-9]+$"
 
 FENCE = "---"
 
 _ITEM_RE = re.compile(r"^\s*-\s+(.*)$")
+_ROLE_HEADING_RE = re.compile(r"^#\s+Role:")
+
+
+def is_role_document(body):
+    """True when `body`'s first top-level heading is `# Role:`.
+
+    The metadata policy defines a role document by its heading rather than by
+    its directory, so this reads the text. That is also the only thing
+    available in `--staged` mode, where the document being judged is a blob
+    and not a file, and it is why `aimeta.repo._is_role_document` defers here
+    instead of applying the rule a second time.
+    """
+    for line in body.splitlines():
+        if line.startswith("# "):
+            return bool(_ROLE_HEADING_RE.match(line))
+    return False
 
 
 class Finding:
@@ -287,6 +314,42 @@ def validate(doc, *, path=None, role_slugs=None, grandfathered=False):
                         % (value,),
                     )
                 )
+
+    # Null semantics are the policy's: a key present with value `null` is the
+    # field being absent, so `fields.get` answers both questions at once.
+    session = fields.get("session")
+    if is_role_document(doc.body):
+        if session is None:
+            findings.append(
+                Finding(
+                    "missing-session",
+                    "`session` is required on a role document (first heading `# Role:`)",
+                )
+            )
+        elif session not in SESSIONS:
+            findings.append(
+                Finding(
+                    "invalid-session",
+                    "session %r is not one of %s"
+                    % (session, ", ".join(sorted(SESSIONS))),
+                )
+            )
+    elif session is not None:
+        findings.append(
+            Finding(
+                "session-not-permitted",
+                "`session` is set to %r, but this document's first heading is not "
+                "`# Role:`; only a role document states a session kind" % (session,),
+            )
+        )
+
+    order = fields.get("order")
+    if order is not None and not (
+        isinstance(order, str) and re.match(ORDER_RE, order)
+    ):
+        findings.append(
+            Finding("invalid-order", "order %r is not an integer" % (order,))
+        )
 
     pointer = fields.get("superseded-by")
     if status == "superseded" and pointer is None:

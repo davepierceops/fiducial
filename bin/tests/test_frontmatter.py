@@ -690,14 +690,24 @@ class TestSessionAndOrder(unittest.TestCase):
                 self.assertNotIn("invalid-order", code_set(validate(text)))
 
     def test_fm17_absent_or_null_order_is_clean(self):
-        """AC-FM-17: `order:` is optional; null == absent."""
-        for text in [self.doc(self.PLAIN_BODY), self.doc(self.PLAIN_BODY, order=None)]:
+        """AC-FM-17: `order:` is optional; null == absent, and so is empty.
+
+        `order:` with nothing after the colon parses to `None` under the
+        dialect's own rule (`parse_value`), so it is the absent case, not a
+        malformed integer.
+        """
+        for text in [
+            self.doc(self.PLAIN_BODY),
+            self.doc(self.PLAIN_BODY, order=None),
+            "---\nstatus: draft\nlast-reviewed: null\naudience: [all-roles]\n"
+            "order:\n---\nbody\n",
+        ]:
             with self.subTest(text=text):
                 self.assertNotIn("invalid-order", code_set(validate(text)))
 
     def test_fm17_non_integer_order_is_a_finding(self):
         """AC-FM-17: anything that is not an integer is `invalid-order`."""
-        for value in ["soon", "3.5", "1st", "", "0x2"]:
+        for value in ["soon", "3.5", "1st", "0x2", "1e3"]:
             with self.subTest(order=value):
                 text = self.doc(self.PLAIN_BODY, order=value)
                 self.assertIn("invalid-order", code_set(validate(text)))

@@ -2,6 +2,7 @@
 status: draft
 last-reviewed: null
 audience: [chief-of-staff, human]
+session: decision
 ---
 
 # Role: Chief of Staff
