@@ -1,6 +1,6 @@
 ---
-status: in-review
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/corpus-regate-cycle-1.md @ 8402c23
 audience: [all-roles, human]
 ---
 

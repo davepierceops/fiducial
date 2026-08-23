@@ -1,6 +1,6 @@
 ---
-status: draft
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/corpus-regate-cycle-2.md @ df35ea7
 audience: [skeptic-risk-agent, chief-of-staff, human]
 session: execution
 ---
