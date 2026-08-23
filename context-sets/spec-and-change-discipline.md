@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/corpus-regate-cycle-2.md @ df35ea7
+last-reviewed: reviews/spec-and-change-discipline-cycle-8.md @ cd7db71
 audience: [all-roles, human]
 order: 4
 depends-on: []
