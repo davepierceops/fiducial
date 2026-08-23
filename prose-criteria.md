@@ -7,6 +7,8 @@ order: 11
 
 # Public Prose Criteria
 
+Read by the Writer role, a decision session.
+
 ## Scope
 
 Public-facing prose published on the open internet under Dave's byline —

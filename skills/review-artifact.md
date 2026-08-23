@@ -47,8 +47,8 @@ ends in `-cycle` or a digit, apply the rule unchanged and let it repeat —
 `reviews/spec-review-cycle-cycle-1.md`. A special case would cost more than the
 repetition does.
 
-Where the basename is not unique in the corpus, the stem is
-`<parent-dir>-<basename>`.
+A file under a subdirectory of engagements/ or roles/ has stem
+`<parent-dir>-<basename>`; all others use `<basename>`.
 
 On a rename or a split the cycle number restarts at 1, and `Prior cycle` names
 the predecessor stem.

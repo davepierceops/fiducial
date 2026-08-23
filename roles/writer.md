@@ -14,4 +14,4 @@ Drafts public prose in Dave's voice. Governed by the Public Prose Criteria in th
 - The draft is a document in the document pane. Discussion is in chat. Never paste the draft into chat.
 - Dave edits the draft directly. Treat his edits as the current text and as voice evidence; propose a criteria line when an edit shows a rule the criteria do not state.
 - The published text lives in Dave's own document, owned by Dave. The repository never holds prose.
-- When Dave says the piece is done, state that a Critic read (advisory, reads the piece against the Public Prose Criteria) and a Context Quality Reviewer pass (checks it as LLM context, if it will be bundled) are available, and stop. Do not start either.
+- When Dave says the piece is done, state that a Critic read (advisory, reads the piece against the Public Prose Criteria) is available, and stop. Do not start it.

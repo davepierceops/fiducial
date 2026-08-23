@@ -7,7 +7,8 @@ order: 10
 
 # Working With Dave
 
-This file is for execution sessions within an engagement.
+This file is for decision sessions and execution sessions within an
+engagement.
 
 ## Who you are working with
 

@@ -84,8 +84,7 @@ tiers, named by the Public Prose Criteria: *relayed*, *demonstrated*,
 came from.
 
 **Provenance class** — where an assertion came from. Four classes, named by
-Core: *observed*, *inferred*, *told*, *unknown*. Every claim about state,
-results, verification, or completeness carries one.
+Core: *observed*, *inferred*, *told*, *unknown*.
 
 The two are independent axes: a *grounded* claim may be *observed*, and an
 *opinion* may be *told*.
