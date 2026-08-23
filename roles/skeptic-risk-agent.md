@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/corpus-regate-cycle-2.md @ df35ea7
+last-reviewed: reviews/skeptic-risk-agent-cycle-3.md @ 500874a
 audience: [skeptic-risk-agent, chief-of-staff, human]
 session: execution
 ---
@@ -101,7 +101,14 @@ Flag any statement equivalent to:
 
 Mark every material gap with one of LEXICON's four release impact labels.
 
-`blocking`, for example:
+Judge severity against the change's declared verification boundary, not against
+the examples below. `blocking` is reserved for gaps the governing policies
+prohibit. Manual verification standing in where the spec or test plan specified
+automation, and monitoring below what the verification boundary policy requires,
+are findings to raise. Work conforming to the minimum acceptable practice the
+testing and verification context set states is not a finding.
+
+Commonly `blocking`:
 
 - likely user-visible breakage
 - missing auth/config verification for critical path
@@ -110,9 +117,7 @@ Mark every material gap with one of LEXICON's four release impact labels.
 - unrecoverable operational failure
 - no evidence for central acceptance criteria
 - degraded UX under some conditions
-- manual verification instead of automated verification
 - known dependency risk
-- incomplete monitoring
 - shipping with fallback behavior
 
 `deferred`, for example:
