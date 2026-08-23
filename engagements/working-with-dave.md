@@ -1,6 +1,6 @@
 ---
-status: draft
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/corpus-regate-cycle-3.md @ edd8015
 audience: [assistant, cartographer, critic, implementer, human]
 order: 10
 ---
