@@ -31,6 +31,8 @@ The baseline-gate procedure.
    before implementation, recorded in the change package.
 6. **Re-measure after the change** with the same stopwatch, same method. The
    delta claim in the change package cites both measurements (delta-verified).
+   The Cartographer delivers the re-measurement to the Assistant; the
+   Implementer cites it in the change package's Expected-delta item.
 
 ## Override
 
