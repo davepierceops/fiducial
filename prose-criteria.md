@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/corpus-regate-cycle-3.md @ edd8015
+last-reviewed: reviews/prose-criteria-cycle-3.md @ cd7db71
 audience: [writer, human]
 order: 11
 ---

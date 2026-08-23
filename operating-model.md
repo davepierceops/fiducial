@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/corpus-regate-cycle-4.md @ b6102de
+last-reviewed: reviews/operating-model-cycle-8.md @ cd7db71
 audience: [all-roles, human]
 order: 3
 ---

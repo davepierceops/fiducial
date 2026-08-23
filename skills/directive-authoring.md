@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/corpus-regate-cycle-2.md @ df35ea7
+last-reviewed: reviews/directive-authoring-cycle-2.md @ cd7db71
 audience: [chief-of-staff, human]
 ---
 

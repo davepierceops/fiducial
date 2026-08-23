@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/corpus-regate-cycle-4.md @ b6102de
+last-reviewed: reviews/critic-cycle-3.md @ cd7db71
 audience: [critic, human]
 session: execution
 ---

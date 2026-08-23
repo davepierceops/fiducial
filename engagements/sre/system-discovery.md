@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/corpus-regate-cycle-4.md @ b6102de
+last-reviewed: reviews/sre-system-discovery-cycle-2.md @ cd7db71
 audience: [cartographer, assistant, human]
 ---
 

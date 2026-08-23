@@ -1,6 +1,6 @@
 ---
-status: in-review
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/core-cycle-10.md @ cd7db71
 audience: [all-roles, human]
 order: 0
 ---

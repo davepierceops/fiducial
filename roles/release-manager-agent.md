@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/corpus-regate-cycle-1.md @ 8402c23
+last-reviewed: reviews/release-manager-agent-cycle-2.md @ cd7db71
 audience: [release-manager-agent, chief-of-staff, human]
 session: execution
 ---

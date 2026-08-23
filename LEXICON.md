@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/corpus-regate-cycle-3.md @ edd8015
+last-reviewed: reviews/LEXICON-cycle-15.md @ cd7db71
 audience: [all-roles, human]
 order: 2
 ---

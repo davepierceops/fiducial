@@ -1,6 +1,6 @@
 ---
-status: draft
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/review-rubric-cycle-3.md @ cd7db71
 audience: [context-quality-reviewer, chief-of-staff, human]
 ---
 

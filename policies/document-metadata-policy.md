@@ -1,6 +1,6 @@
 ---
-status: draft
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/document-metadata-policy-cycle-18.md @ cd7db71
 audience: [all-roles, human]
 ---
 
