@@ -1,6 +1,6 @@
 ---
-status: draft
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/corpus-regate-cycle-4.md @ b6102de
 audience: [critic, human]
 session: execution
 ---
