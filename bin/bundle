@@ -18,7 +18,74 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from aimeta import cli, closure, repo  # noqa: E402
+from aimeta import cli, closure, frontmatter, repo  # noqa: E402
+
+# ============================================================================
+# STUB FOR bundle-audience-tests-2 (Test Designer red run) — TEST-ONLY.
+#
+# Everything between this banner and its closing counterpart below exists
+# only to give bin/tests/test_bundle_audience.py a red run that fails on
+# assertions rather than on argparse/import errors. It is deliberately wrong
+# on AC-BA-1 (governed set omits docs/global-context/**, engagements/**,
+# prose-criteria.md), AC-BA-2 (membership is literal-value-only: no
+# all-roles/all-decision-roles expansion), AC-BA-3 (order ignores `order:`,
+# sorts by path only), AC-BA-4 (no header stamp, no bundle-methodology-shaped
+# separators, --out is ignored), AC-BA-5 (--list omits the reserved values),
+# and AC-BA-6 (no validation: any --audience value "succeeds"). AC-BA-7 is
+# untouched by omission: the positional closure mode below is unmodified, so
+# it still exits 0, which is itself the wrong behaviour AC-BA-7's tests
+# expect to fail on.
+#
+# The Coder replaces this entire block (and the --audience/--list wiring in
+# build_parser() and main() below) with a real implementation of AC-BA-1..8;
+# nothing in this block is meant to survive.
+
+
+def _stub_governed_files(root):
+    """AC-BA-1, deliberately incomplete: check-frontmatter's glob scan only."""
+    ctx = cli.load_context()
+    return cli.in_scope_files(ctx)
+
+
+def _stub_audience_values(root, relpath):
+    text, finding = cli.read_document(root / relpath)
+    if finding is not None:
+        return []
+    doc = frontmatter.parse_text(text)
+    value = doc.fields.get("audience")
+    if value is None:
+        return []
+    if isinstance(value, (list, tuple)):
+        return list(value)
+    return [value]
+
+
+def _stub_list(root):
+    """AC-BA-5, deliberately incomplete: no reserved values are added."""
+    values = set()
+    for relpath in _stub_governed_files(root):
+        values.update(_stub_audience_values(root, relpath))
+    for value in sorted(values):
+        print(value)
+    return cli.EXIT_OK
+
+
+def _stub_audience(root, value):
+    """AC-BA-2/3/4/6, deliberately wrong: literal membership only, `order:`
+    ignored in favor of (length, path) descending, no header/separators, no
+    --out support, no validation."""
+    matches = [
+        relpath
+        for relpath in _stub_governed_files(root)
+        if value in _stub_audience_values(root, relpath)
+    ]
+    for relpath in sorted(matches, key=lambda r: (len(r), r), reverse=True):
+        print(relpath)
+    return cli.EXIT_OK
+
+
+# ============================================================================
+# END STUB FOR bundle-audience-tests-2.
 
 
 def build_parser():
@@ -29,7 +96,7 @@ def build_parser():
             "produce the full context set implied by an entry point."
         ),
     )
-    p.add_argument("entries", nargs="+", metavar="ENTRY", help="context-set name or path")
+    p.add_argument("entries", nargs="*", metavar="ENTRY", help="context-set name or path")
     p.add_argument(
         "--format", choices=["list", "json", "concat"], default=None, help="output form"
     )
@@ -48,6 +115,17 @@ def build_parser():
         default=None,
         metavar="DIR",
         help="directory to write the bundle into (only with --write; defaults to $HOME/Downloads)",
+    )
+    p.add_argument(
+        "--audience",
+        default=None,
+        metavar="VALUE",
+        help="[STUB] emit the governed-document bundle for an audience value",
+    )
+    p.add_argument(
+        "--list",
+        action="store_true",
+        help="[STUB] list every known audience value",
     )
     return p
 
@@ -91,6 +169,20 @@ def resolve_out_dir(argument):
 
 def main(argv=None):
     args = build_parser().parse_args(argv)
+
+    # STUB FOR bundle-audience-tests-2: --list / --audience short-circuit
+    # before the (unmodified, AC-BA-7-violating) positional closure mode.
+    if args.list:
+        root = cli.load_root()
+        return _stub_list(root)
+    if args.audience is not None:
+        root = cli.load_root()
+        return _stub_audience(root, args.audience)
+    if not args.entries:
+        raise cli.ToolError(
+            "an ENTRY, --audience VALUE, or --list is required", cli.EXIT_USAGE
+        )
+    # END STUB.
 
     if args.out is not None and not args.write:
         raise cli.ToolError("--out is only meaningful with --write", cli.EXIT_USAGE)
