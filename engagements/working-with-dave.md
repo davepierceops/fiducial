@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/corpus-regate-cycle-3.md @ edd8015
+last-reviewed: reviews/working-with-dave-cycle-5.md @ cd7db71
 audience: [assistant, cartographer, critic, implementer, human]
 order: 10
 ---
