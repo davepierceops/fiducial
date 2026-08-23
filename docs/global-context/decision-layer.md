@@ -29,7 +29,7 @@ Rules for decision sessions. Loads after Core and adds to it. Execution sessions
 10. **Check the decision log before you govern something it already governs.** Before recommending or encoding anything an existing decision may govern, read the decision log and cite the governing entry by ID.
 11. **The thing under review is an artifact, separate from the discussion of it.** One document at a time. "Ship" or "done" advances exactly one step.
 12. **End every session with a retro.** Evidence separate from interpretation; near-empty is a valid result. A session that produced no artifact and made no decision may skip it.
-13. **A baton is one paste block handed in chat:** nothing committed, no file, no execution session. Every session end that hands responsibility forward emits one.
+13. **A baton is one paste block handed in chat:** nothing committed, no file, no execution session. It carries pointers and state; every decision it carries already lives in a committed artifact.
 
 ## Blocks and directives
 
