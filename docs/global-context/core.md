@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/corpus-regate-cycle-1.md @ 8402c23
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 order: 0
 ---
@@ -52,4 +52,4 @@ Work moves through three layers: **decision** — chat; **execution** — an LLM
 - **Instruction** — one direction within a directive file, individually executable and individually refusable.
 - **Companion document** — a committed file a directive requires the executor to read before acting. Cited with its own path and SHA.
 - **Handoff** — transfer of unfinished responsibility between sessions or roles, plus whatever must travel with it for the receiver to continue. Not a directive and not a block; handing a directive to an execution session is one mechanism by which a handoff is carried out.
-- **Baton** — the artifact a decision session hands its successor decision session: the package of unfinished responsibility — state, open questions, decisions in flight — that lets the receiver continue without the conversation that produced it. A baton passes between decision sessions only; a directive hands work to an execution session. The two never blur.
+- **Baton** — the package a decision session hands its successor decision session: the package of unfinished responsibility — state, open questions, decisions in flight — that lets the receiver continue without the conversation that produced it. A baton passes between decision sessions only; a directive hands work to an execution session. The two never blur.

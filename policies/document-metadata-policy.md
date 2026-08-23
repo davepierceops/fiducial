@@ -9,12 +9,6 @@ audience: [all-roles, human]
 This file governs both session kinds; the conditions marked **Dave's** are
 decision-session acts.
 
-## Principle
-
-Git is the versioning system. Document metadata carries only semantic
-state that git cannot derive. Anything git history already knows — when
-a doc changed, who changed it, what changed — is excluded from metadata.
-
 ## Scope
 
 Frontmatter applies to documents that agents consume as governing
@@ -45,11 +39,9 @@ project artifacts.
 - State and tracker artifacts: `MANIFEST.md`, `OPEN-ITEMS.md`,
   `COLLAB-STATE.md`, `BACKLOG-v2.md`, review artifacts
   (`reviews/**`, `REVIEW-*.md`), retros (`retros/`), merge history
-  (`MERGE-NOTES-v0.4.md`). Their status is their content.
+  (`MERGE-NOTES-v0.4.md`).
 - Adapters — the per-tool entry files that point a vendor's harness at
-  this methodology, and their configuration directories. These are thin
-  deployment targets, and leading YAML may collide with tool
-  consumption.
+  this methodology, and their configuration directories.
 - Instantiated project PRDs/TRDs. These live in project repos, not
   here, so this repo's enforcement does not reach them mechanically —
   but adoption is not optional. Every project applying this methodology
@@ -61,8 +53,7 @@ Enforcement (hooks) checks exactly the in-scope set.
 ## Versioning
 
 - The version of a document at reference time is the SHA of the last
-  commit touching the file. No per-document version numbers. No
-  repo-wide version number in `MANIFEST.md`.
+  commit touching the file.
 - Supersession is conditional on agreement: upon this policy reaching
   `agreed`, it supersedes the prior "single version declared once in
   `MANIFEST.md`" decision. The removal of the `Tree version` line from
@@ -181,8 +172,6 @@ round-trip, the cycle directive, and the per-cycle review artifact.
 
 *Any* finding escalates, however small; an edit that acquires one does
 not get a second attempt at this path and becomes a full cycle.
-Enforcement checks none of this: conditions 1, 2 and 4 bound how much an
-unread diff could do; conditions 3 and 5 are judgments.
 
 The five conditions are necessary, not sufficient. A document may
 exclude its own revisions from this path, and the retro skill does.
@@ -247,7 +236,7 @@ The path reaches only documents in the frontmatter in-scope set above.
 5. **Not under `specs/`.** Spec agreement is gated by the Spec Reviewer Agent;
    this path neither reaches that gate nor overrides it.
 
-Enforcement checks none of this either: it verifies the pointer's format, that
+Enforcement checks none of this: it verifies the pointer's format, that
 the cited SHA resolves to an entry in the log, and that the transition commit is
 frontmatter-only — it cannot see whether a document was co-authored, swept, or
 asked for. The five conditions are necessary, not sufficient, here as on the

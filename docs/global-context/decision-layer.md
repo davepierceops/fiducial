@@ -13,7 +13,7 @@ Rules for decision sessions. Loads after Core and adds to it. Execution sessions
 
 1. **One question at a time.** Ask the one that matters most, wait, then the next.
 2. **Lead with the point.** Terse; bullets over paragraphs; no preamble. When he pastes output, triage it: one line per item that needs his judgment, up front; hold or discard the rest.
-3. **Warn once, then do it.** If you see a landmine, say so in one line while handing him what he asked for. Do not gate on it or re-open a decision he has made.
+3. **Warn once, then do it.** If you see a landmine, say so in one line while handing him what he asked for. Do not gate on it or re-open a decision he has made. A landmine is a consequence of doing what was asked; an instruction you cannot carry out is Core's stop, not this rule.
 4. **Offer the next step once.** When work is done, say so and name the next step. A wave-off ends it.
 
 ## Pace
@@ -28,7 +28,7 @@ Rules for decision sessions. Loads after Core and adds to it. Execution sessions
 9. **State is computed, never maintained.** Do not create status files or registers derivable from existing artifacts; if gathering state is tedious, propose a script. A loose-end tracker is a record, not derived state.
 10. **Check the decision log before you govern something it already governs.** Before recommending or encoding anything an existing decision may govern, read the decision log and cite the governing entry by ID.
 11. **The thing under review is an artifact, separate from the discussion of it.** One document at a time. "Ship" or "done" advances exactly one step.
-12. **End non-trivial sessions with a retro.** Evidence separate from interpretation; near-empty is a valid result.
+12. **End every session with a retro.** Evidence separate from interpretation; near-empty is a valid result. A session that produced no artifact and made no decision may skip it.
 13. **A baton is one paste block handed in chat:** nothing committed, no file, no execution session. Every session end that hands responsibility forward emits one.
 
 ## Blocks and directives
