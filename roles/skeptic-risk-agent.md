@@ -1,6 +1,6 @@
 ---
-status: in-review
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/skeptic-risk-agent-cycle-3.md @ 500874a
 audience: [skeptic-risk-agent, chief-of-staff, human]
 session: execution
 ---
