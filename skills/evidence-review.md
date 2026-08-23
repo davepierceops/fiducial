@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/corpus-regate-cycle-2.md @ df35ea7
+last-reviewed: reviews/evidence-review-cycle-2.md @ cd7db71
 audience: [reviewer-agent, skeptic-risk-agent, release-manager-agent, human]
 ---
 
