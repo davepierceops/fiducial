@@ -47,9 +47,10 @@ Two standing decisions constrain this and are cited rather than re-argued:
 
 - `DEC-000160` retired the deferred `bin/dispatch`, "whose premise was a
   chat-side commit to gate" (*observed*). `bin/land` does not revive it: it is
-  an execution-session tool that lands what the executor already committed and
-  reads the result back, not a decision-session tool gating a chat-side write.
-  The retirement is cited here so the difference in premise is on the record.
+  an execution-session tool that lands the work the executor produced in its
+  own tree — staging and committing that work itself — and reads the result
+  back, not a decision-session tool gating a chat-side write. The retirement is
+  cited here so the difference in premise is on the record.
 - `policies/remote-write-verification-policy.md` names an open gap in its own
   rules: they verify that a write **landed**, not that what landed is what was
   intended (*observed*). Closing that gap is this tool's distinguishing goal;
@@ -281,10 +282,10 @@ the remote half testable offline (*inferred*, per the research findings).
   the invocation produces a commit whose parent is `origin/main` HEAD as of the
   invocation's own fetch, and the report's prior-head field reads `created`.
 - **AC-LAND-01b** — Given the named branch exists at the remote, and a working
-  tree behind that branch's remote head, the invocation produces a commit whose
-  parent is that branch's remote head as of the invocation's own fetch; the
-  report's prior-head field carries that same SHA; and every commit already on
-  the branch is still reachable from the new head. Given the same starting
+  tree at or behind that branch's remote head, the invocation produces a commit
+  whose parent is that branch's remote head as of the invocation's own fetch;
+  the report's prior-head field carries that same SHA; and every commit already
+  on the branch is still reachable from the new head. Given the same starting
   state and a step that fails after the branch was resolved, the output still
   names that prior head.
 - **AC-LAND-01c** — Given the named branch exists at the remote, and a local
