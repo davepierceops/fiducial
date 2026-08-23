@@ -52,3 +52,4 @@ derived facts are allowed to live.
 - 2026-08-17 — engagements/comfy/skills/system-discovery.md @ 9a8b8b0508c8f2aef5d388d9804906e3ad803293 — new: System Map procedure; agreed via Dave's merge review of PR #71
 - 2026-08-23 — skills/directive-authoring.md @ 48ad7fd1e827a7c92660fd2cd9ebc5871c1dbc21 — working-tree disposition made mandatory for every directive
 - 2026-08-23 — skills/directive-authoring.md @ 83b60511f4cc6e0346b08e4e111a7c17a14bc0d9 — numbered cycle-directive form licensed alongside the timestamp form
+- 2026-08-23 — skills/directive-authoring.md @ 6179221a013e8006e573d6a35a4dca75dd966ccb — timestamp form requires date and time components both present
