@@ -14,8 +14,8 @@ The lean change package for engagement work. One screen.
 ## Contents
 
 1. **Intent** — what this change accomplishes, one paragraph, citing the
-   Improvement Proposal (with its agreed acceptance criteria) or directive it
-   derives from
+   Improvement Proposal (with its acceptance criteria, given Dave's go) or
+   directive it derives from
 2. **Blast radius** — what it touches; worst plausible outcome; rollback path
 3. **Expected delta** — the pre-stated measurement claim, citing the baseline
    (or the logged override that waived it)

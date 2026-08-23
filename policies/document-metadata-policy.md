@@ -90,7 +90,9 @@ lines, before any content.
 - `audience:` list of roles that consume this document. Values are the
   basename slug of any role document under `roles/` or `engagements/`
   (including `engagements/sre/`), plus three reserved values:
-  `all-roles`, `all-decision-roles`, and `human`. `all-decision-roles`
+  `all-roles`, `all-decision-roles`, and `human`. A role document is one
+  whose first heading is `# Role:`; `engagements/working-with-dave.md` and
+  `engagements/sre/README.md` are not role documents. `all-decision-roles`
   selects every role that runs as a decision session. Any other value
   fails enforcement.
 

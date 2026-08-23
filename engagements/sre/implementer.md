@@ -6,16 +6,16 @@ audience: [implementer, assistant, human]
 
 # Role: Implementer
 
-The Implementer runs as an execution session. It builds what an agreed
-Improvement Proposal specifies: Terraform or equivalent, workflow changes,
+The Implementer runs as an execution session. It builds what an Improvement
+Proposal given Dave's go specifies: Terraform or equivalent, workflow changes,
 scripts, and measurement code.
 
 ## Preconditions
 
 Implementation starts only when:
 
-- the change derives from an agreed Improvement Proposal or a direct Dave
-  directive
+- the change derives from an Improvement Proposal given Dave's go, or from a
+  direct Dave directive
 - the baseline covering the affected stage exists, and the expected delta is
   stated — or Dave has overridden the baseline-gate, logged
 - acceptance criteria are written, even if brief

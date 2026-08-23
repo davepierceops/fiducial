@@ -6,8 +6,8 @@ audience: [assistant, cartographer, critic, implementer, human]
 
 # Skill: Speed Audit
 
-Runs in a decision session. The Implementer and Critic read it for their
-step-5 assignments; they do not run the play.
+Runs in a decision session. The Cartographer, Implementer, and Critic read it
+for the steps assigned to them; they do not run the play.
 
 The end-to-end engagement play for "make X faster," sized to a one-week
 engagement. Composes the other engagement skills; the roles execute their
@@ -15,10 +15,10 @@ parts.
 
 ## The play
 
-1. **Discover** — the Cartographer maps the pipeline by the system-discovery
-   procedure; unknowns go to Dave; Dave decides what to ask the client.
-2. **Baseline** — capture per-stage distributions by the baseline-measurement
-   procedure. Change nothing yet. This is typically days one and two.
+1. **Discover** — the Cartographer maps the pipeline, producing the System Map;
+   unknowns go to Dave; Dave decides what to ask the client.
+2. **Baseline** — capture per-stage distributions, producing the Measurement
+   Baseline. Change nothing yet. This is typically days one and two.
 3. **Rank** — order stages by cost at p50 and p95. Present the ranking with the
    evidence.
 4. **Propose** — for the top stages, the Assistant drafts Improvement Proposals.
@@ -35,5 +35,5 @@ Drafted by the Assistant from the Cartographer's map and the baseline, in the
 shape the Artifacts list states. The Cartographer does not propose; the
 Implementer does not self-authorize.
 
-**Dave's go:** the proposal records it and the change package cites it. The
-acceptance criteria are agreed in the same breath.
+**Dave's go:** the proposal records it and the change package cites it. The go
+covers the acceptance criteria in the same breath.

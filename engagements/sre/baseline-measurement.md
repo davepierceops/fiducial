@@ -6,8 +6,9 @@ audience: [cartographer, implementer, assistant, human]
 
 # Skill: Baseline Measurement
 
-This skill runs in a decision session, except step 6, which runs in an
-execution session.
+Steps 1-5 run in a decision session by the Assistant; step 6 runs in an
+execution session by whichever of the Cartographer or Implementer re-measures.
+All three read the whole file.
 
 The baseline-gate procedure.
 
