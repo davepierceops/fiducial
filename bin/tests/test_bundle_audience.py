@@ -35,11 +35,16 @@ tracker entry rather than from `docs/packages/package-a-spec.md`").
   `<!-- FILE i/N: path @ sha -->` / `BAR` triple). `--out <dir>` writes
   `<dir>/bundle-<value>-<timestamp>.md`; without `--out`, the document goes to
   stdout instead.
-- **AC-BA-5** `bin/bundle --list` emits every literal `audience:` value
-  present in any governed file, deduplicated, one per line, sorted, plus the
-  three reserved values (`all-roles`, `all-decision-roles`, `human` — the set
-  named in `policies/document-metadata-policy.md` §Required fields), and
-  exits 0.
+- **AC-BA-5** `bin/bundle --list` emits every valid audience value: the
+  basename slug of every role document under `roles/` or `engagements/` (as
+  `aimeta.repo.role_slugs`/`_is_role_document` discriminates), plus the three
+  reserved values (`all-roles`, `all-decision-roles`, `human` — the set named
+  in `policies/document-metadata-policy.md` §Required fields), plus every
+  literal `audience:` value present in any governed file — deduplicated, one
+  per line, sorted, exit 0. Amendment 1 to
+  `docs/cycles/bundle-audience-coder-20260823T045135Z.md` adds the
+  role-document-slug member to what was, pre-amendment, literal values plus
+  the three reserved values only.
 - **AC-BA-6** `bin/bundle --audience <value>` for a `<value>` outside the set
   AC-BA-5 would list exits non-zero, naming `<value>` in its message.
 - **AC-BA-7** The positional path-following closure mode (`bin/bundle ENTRY
@@ -256,15 +261,37 @@ class TestMembership(unittest.TestCase):
 
     def test_ba2_non_matching_value_is_excluded(self):
         """AC-BA-2: a document whose `audience:` names neither the value nor
-        `all-roles` is not a member."""
-        self.seed({"policies/other.md": doc(["some-other-role"])})
+        `all-roles` is not a member.
+
+        `policies/keeps-value-known.md` keeps `target-role` in AC-BA-5's known
+        set (Amendment 1) — otherwise AC-BA-6 (unknown value) would fire
+        before the membership rule this test is about ever runs, as
+        `test_ba2_all_decision_roles_selects_a_decision_session_role_slug`'s
+        docstring already notes for its own fixture.
+        """
+        self.seed(
+            {
+                "policies/other.md": doc(["some-other-role"]),
+                "policies/keeps-value-known.md": doc(["target-role"]),
+            }
+        )
         rc, out, err = self.bundle("--audience", "target-role")
         self.assertEqual(rc, 0, "stderr=%r" % err)
         self.assertNotIn("policies/other.md", out)
 
     def test_ba2_all_roles_is_always_a_member(self):
-        """AC-BA-2: `audience: [all-roles]` is a member of any requested bundle."""
-        self.seed({"policies/broad.md": doc(["all-roles"])})
+        """AC-BA-2: `audience: [all-roles]` is a member of any requested bundle.
+
+        `policies/keeps-value-known.md` keeps `target-role` in AC-BA-5's known
+        set (Amendment 1), for the same reason as
+        `test_ba2_non_matching_value_is_excluded`.
+        """
+        self.seed(
+            {
+                "policies/broad.md": doc(["all-roles"]),
+                "policies/keeps-value-known.md": doc(["target-role"]),
+            }
+        )
         rc, out, err = self.bundle("--audience", "target-role")
         self.assertEqual(rc, 0, "stderr=%r" % err)
         self.assertIn("policies/broad.md", out)
@@ -597,6 +624,16 @@ class TestList(unittest.TestCase):
         self.assertEqual(rc, 0, "stdout=%r stderr=%r" % (out, err))
         self.assertTrue(no_traceback(out, err))
 
+    def test_ba5_list_includes_a_role_document_slug_with_no_literal_reference(self):
+        """AC-BA-5, Amendment 1: a role document's basename slug is listed even
+        when no governed file's `audience:` names it literally."""
+        write(self.repo, "roles/widget-role.md", role_doc("widget-role"))
+        write(self.repo, "policies/unrelated.md", doc(["some-other-value"]))
+        commit(self.repo, "seed role-slug list fixture", env=self.env)
+        rc, out, err = self.bundle("--list")
+        self.assertEqual(rc, 0, "stderr=%r" % err)
+        self.assertIn("widget-role", out.splitlines())
+
 
 # --------------------------------------------------------------- AC-BA-6
 
@@ -623,6 +660,16 @@ class TestInvalidAudienceValue(unittest.TestCase):
         rc, out, err = self.bundle("--audience", "no-such-audience-value")
         self.assertIn("no-such-audience-value", out + err)
         self.assertTrue(no_traceback(out, err))
+
+    def test_ba6_a_role_document_slug_is_valid_with_no_literal_reference(self):
+        """AC-BA-6, Amendment 1: a role document's basename slug is a valid
+        `--audience` value even when no governed file's `audience:` names it
+        literally — it is a member of AC-BA-5's set by role-document slug
+        alone, so AC-BA-6 does not reject it."""
+        write(self.repo, "roles/widget-role.md", role_doc("widget-role"))
+        commit(self.repo, "seed role-slug validity fixture", env=self.env)
+        rc, out, err = self.bundle("--audience", "widget-role")
+        self.assertEqual(rc, 0, "stdout=%r stderr=%r" % (out, err))
 
 
 # --------------------------------------------------------------- AC-BA-7

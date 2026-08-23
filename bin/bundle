@@ -1,57 +1,109 @@
 #!/usr/bin/env python3
-"""Compute the reference closure from entry-point context-sets.
+"""`bin/bundle --audience <value>` — audience-scoped governed-document bundle.
 
-Contract: `docs/packages/package-a-spec.md` §3.7.
-
-Edges are (a) `depends-on:` frontmatter entries resolved to
-`context-sets/<name>.md` and (b) backticked repo-relative `*.md` paths in the
-body that exist as files. Only declared `depends-on` edges are strict: a
-backticked string that is not a repo file is prose, not a broken reference.
+Contract: `docs/cycles/bundle-audience-tests-20260823T043025Z.md` and
+`docs/cycles/bundle-audience-coder-20260823T045135Z.md` (including its
+"Amendment 1"). AC-BA-1..8, as asserted by `bin/tests/test_bundle_audience.py`.
 """
+
+from __future__ import annotations
 
 import argparse
 import datetime
-import json
 import os
 import pathlib
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from aimeta import cli, closure, frontmatter, repo  # noqa: E402
+from aimeta import cli, frontmatter, repo  # noqa: E402
 
-# ============================================================================
-# STUB FOR bundle-audience-tests-2 (Test Designer red run) — TEST-ONLY.
-#
-# Everything between this banner and its closing counterpart below exists
-# only to give bin/tests/test_bundle_audience.py a red run that fails on
-# assertions rather than on argparse/import errors. It is deliberately wrong
-# on AC-BA-1 (governed set omits docs/global-context/**, engagements/**,
-# prose-criteria.md), AC-BA-2 (membership is literal-value-only: no
-# all-roles/all-decision-roles expansion), AC-BA-3 (order ignores `order:`,
-# sorts by path only), AC-BA-4 (no header stamp, no bundle-methodology-shaped
-# separators, --out is ignored), AC-BA-5 (--list omits the reserved values),
-# and AC-BA-6 (no validation: any --audience value "succeeds"). AC-BA-7 is
-# untouched by omission: the positional closure mode below is unmodified, so
-# it still exits 0, which is itself the wrong behaviour AC-BA-7's tests
-# expect to fail on.
-#
-# The Coder replaces this entire block (and the --audience/--list wiring in
-# build_parser() and main() below) with a real implementation of AC-BA-1..8;
-# nothing in this block is meant to survive.
+REPO_NAME = "davepierceops/fiducial"
+
+#: AC-BA-1: governed roots beyond check-frontmatter's configured globs.
+GOVERNED_EXTRA_DIRS = ("docs/global-context", "engagements")
+GOVERNED_EXTRA_FILES = ("prose-criteria.md",)
+
+#: AC-BA-5: the three reserved audience values.
+RESERVED_AUDIENCES = {"all-roles", "all-decision-roles", "human"}
+
+BAR = "<!-- " + "=" * 60 + " -->"
 
 
-def _stub_governed_files(root):
-    """AC-BA-1, deliberately incomplete: check-frontmatter's glob scan only."""
-    ctx = cli.load_context()
-    return cli.in_scope_files(ctx)
+def build_parser():
+    p = argparse.ArgumentParser(
+        prog="bundle",
+        description=(
+            "Render the governed-document bundle for an audience value, or "
+            "list every valid audience value."
+        ),
+    )
+    p.add_argument(
+        "entries", nargs="*", metavar="ENTRY", help=argparse.SUPPRESS
+    )
+    p.add_argument(
+        "--audience",
+        default=None,
+        metavar="VALUE",
+        help="emit the governed-document bundle for an audience value",
+    )
+    p.add_argument(
+        "--list",
+        action="store_true",
+        help="list every valid audience value, sorted, one per line",
+    )
+    p.add_argument(
+        "--out",
+        default=None,
+        metavar="DIR",
+        help="directory to write the bundle into (with --audience; default: stdout)",
+    )
+    return p
 
 
-def _stub_audience_values(root, relpath):
-    text, finding = cli.read_document(root / relpath)
-    if finding is not None:
+# ------------------------------------------------------------- governed set
+
+
+def _walk_md_files(root, reldir):
+    """Every `.md` file under `root/reldir`, repo-relative, slash-separated."""
+    base = pathlib.Path(root) / reldir
+    if not base.is_dir():
         return []
-    doc = frontmatter.parse_text(text)
+    found = []
+    for dirpath, dirnames, filenames in os.walk(str(base)):
+        dirnames[:] = [d for d in dirnames if d != ".git"]
+        for name in filenames:
+            if not name.endswith(".md"):
+                continue
+            rel = os.path.relpath(os.path.join(dirpath, name), str(root))
+            found.append(rel.replace(os.sep, "/"))
+    return found
+
+
+def governed_files(ctx):
+    """AC-BA-1: the governed file set, sorted."""
+    files = set(cli.in_scope_files(ctx))
+    for reldir in GOVERNED_EXTRA_DIRS:
+        files.update(_walk_md_files(ctx.root, reldir))
+    for relfile in GOVERNED_EXTRA_FILES:
+        if (pathlib.Path(ctx.root) / relfile).is_file():
+            files.add(relfile)
+    return sorted(files)
+
+
+def _document(root, relpath):
+    """Parsed `frontmatter.Document` for `relpath`, or `None` if unreadable."""
+    text, finding = cli.read_document(pathlib.Path(root) / relpath)
+    if finding is not None:
+        return None
+    return frontmatter.parse_text(text)
+
+
+def audience_values(root, relpath):
+    """AC-BA-2: `relpath`'s `audience:` values, as a list."""
+    doc = _document(root, relpath)
+    if doc is None:
+        return []
     value = doc.fields.get("audience")
     if value is None:
         return []
@@ -60,170 +112,204 @@ def _stub_audience_values(root, relpath):
     return [value]
 
 
-def _stub_list(root):
-    """AC-BA-5, deliberately incomplete: no reserved values are added."""
-    values = set()
-    for relpath in _stub_governed_files(root):
-        values.update(_stub_audience_values(root, relpath))
-    for value in sorted(values):
-        print(value)
-    return cli.EXIT_OK
+def order_value(root, relpath):
+    """AC-BA-3: `relpath`'s `order:` value as an int, or `None`."""
+    doc = _document(root, relpath)
+    if doc is None:
+        return None
+    raw = doc.fields.get("order")
+    if raw is None:
+        return None
+    try:
+        return int(raw)
+    except (TypeError, ValueError):
+        return None
 
 
-def _stub_audience(root, value):
-    """AC-BA-2/3/4/6, deliberately wrong: literal membership only, `order:`
-    ignored in favor of (length, path) descending, no header/separators, no
-    --out support, no validation."""
-    matches = [
-        relpath
-        for relpath in _stub_governed_files(root)
-        if value in _stub_audience_values(root, relpath)
-    ]
-    for relpath in sorted(matches, key=lambda r: (len(r), r), reverse=True):
-        print(relpath)
-    return cli.EXIT_OK
+# ---------------------------------------------------------------- AC-BA-2
 
 
-# ============================================================================
-# END STUB FOR bundle-audience-tests-2.
+def _role_document_path(root, slug):
+    """The role document for `slug` under `roles/`/`engagements/`, or `None`.
+
+    Scans `root`'s own trees directly with `repo._is_role_document` rather
+    than going through `repo.role_slugs` — that helper only inspects a base's
+    `engagements/` when the same base also has a `roles/` dir, and falls back
+    to the methodology home otherwise, which would wrongly miss an
+    engagements-only role document in the invoking repo.
+    """
+    for candidate in (
+        pathlib.Path(root) / "roles" / ("%s.md" % slug),
+        pathlib.Path(root) / "engagements" / ("%s.md" % slug),
+        pathlib.Path(root) / "engagements" / "sre" / ("%s.md" % slug),
+    ):
+        if candidate.is_file() and repo._is_role_document(candidate):
+            return candidate
+    return None
 
 
-def build_parser():
-    p = argparse.ArgumentParser(
-        prog="bundle",
-        description=(
-            "Walk depends-on frontmatter and in-body document references to "
-            "produce the full context set implied by an entry point."
-        ),
+def local_role_slugs(root):
+    """AC-BA-5: basename slugs of every role document under `root`'s own
+    `roles/`/`engagements/`/`engagements/sre/`, independent of
+    `repo.role_slugs`'s methodology-home fallback (see `_role_document_path`)."""
+    root = pathlib.Path(root)
+    slugs = set()
+    roles_dir = root / "roles"
+    if roles_dir.is_dir():
+        slugs |= {p.stem for p in roles_dir.glob("*.md") if repo._is_role_document(p)}
+    for engagements_dir in (root / "engagements", root / "engagements" / "sre"):
+        if engagements_dir.is_dir():
+            slugs |= {
+                p.stem for p in engagements_dir.glob("*.md") if repo._is_role_document(p)
+            }
+    return slugs
+
+
+def _is_decision_role(ctx, slug):
+    """True when `slug` names a role document whose `session:` is `decision`."""
+    path = _role_document_path(ctx.root, slug)
+    if path is None:
+        return False
+    doc = _document(ctx.root, os.path.relpath(str(path), str(ctx.root)))
+    if doc is None:
+        return False
+    return doc.fields.get("session") == "decision"
+
+
+def is_member(ctx, relpath, value):
+    """AC-BA-2: whether `relpath` is a member of bundle `value`."""
+    values = audience_values(ctx.root, relpath)
+    if value in values:
+        return True
+    if "all-roles" in values:
+        return True
+    if "all-decision-roles" in values and _is_decision_role(ctx, value):
+        return True
+    return False
+
+
+# ---------------------------------------------------------------- AC-BA-3
+
+
+def _sort_key(root, relpath):
+    order = order_value(root, relpath)
+    if order is None:
+        return (1, 0, relpath)
+    return (0, order, relpath)
+
+
+def ordered_members(ctx, value):
+    return sorted(
+        (relpath for relpath in governed_files(ctx) if is_member(ctx, relpath, value)),
+        key=lambda relpath: _sort_key(ctx.root, relpath),
     )
-    p.add_argument("entries", nargs="*", metavar="ENTRY", help="context-set name or path")
-    p.add_argument(
-        "--format", choices=["list", "json", "concat"], default=None, help="output form"
-    )
-    p.add_argument("--max-depth", type=int, metavar="N", help="truncate the walk")
-    p.add_argument("--why", action="store_true", help="annotate with referrer and depth")
-    p.add_argument(
-        "--strict", action="store_true", help="exit 1 on a dangling depends-on reference"
-    )
-    p.add_argument(
-        "--write",
-        action="store_true",
-        help="render the concat form and write it to a file under --out DIR",
-    )
-    p.add_argument(
-        "--out",
-        default=None,
-        metavar="DIR",
-        help="directory to write the bundle into (only with --write; defaults to $HOME/Downloads)",
-    )
-    p.add_argument(
-        "--audience",
-        default=None,
-        metavar="VALUE",
-        help="[STUB] emit the governed-document bundle for an audience value",
-    )
-    p.add_argument(
-        "--list",
-        action="store_true",
-        help="[STUB] list every known audience value",
-    )
-    return p
 
 
-def render_concat(root, walked):
-    """The `concat` form's text, per-document, exactly as `emit` prints it."""
-    parts = []
-    for item in walked:
-        sha = repo.last_commit_sha(root, item["path"]) or "uncommitted"
-        parts.append("===== %s @ %s =====\n" % (item["path"], sha))
-        text, finding = cli.read_document(root / item["path"])
-        if finding is not None:
-            cli.diagnostic("WARN", item["path"], finding.code, finding.message)
-            continue
-        parts.append(text)
-    return "".join(parts)
-
-
-def emit(root, walked, fmt, why):
-    if fmt == "json":
-        print(json.dumps(walked, indent=2))
-        return
-    if fmt == "concat":
-        print(render_concat(root, walked), end="")
-        return
-    for item in walked:
-        if why and item["via"]:
-            print("%s  <- %s (depth %d)" % (item["path"], item["via"], item["depth"]))
-        else:
-            print(item["path"])
+# ---------------------------------------------------------------- AC-BA-4
 
 
 def resolve_out_dir(argument):
-    """`--out DIR`, tilde-expanded then resolved against the invoking cwd,
-    matching `bundle-methodology`'s convention for a non-default value."""
+    """`--out DIR`, tilde-expanded then resolved against the invoking cwd."""
     path = pathlib.Path(argument).expanduser()
     if not path.is_absolute():
         path = pathlib.Path.cwd() / path
     return path
 
 
+def render_bundle(ctx, value, members):
+    """AC-BA-4: the self-contained bundle document for `value`."""
+    repo_sha = repo.git("rev-parse", "HEAD", cwd=ctx.root)
+    generated = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    count = len(members)
+
+    shas = {}
+    bodies = {}
+    for relpath in members:
+        sha = repo.short_blob_sha(ctx.root, "HEAD", relpath)
+        body = repo.file_at_rev(ctx.root, "HEAD", relpath)
+        shas[relpath] = sha if sha is not None else "uncommitted"
+        bodies[relpath] = body if body is not None else ""
+
+    lines = [
+        "# bundle-%s\n" % value,
+        "- Repo: %s" % REPO_NAME,
+        "- HEAD: %s" % repo_sha,
+        "- Generated: %s" % generated,
+        "- Files:\n",
+    ]
+    lines += [
+        "  %d. %s (blob %s)" % (i, relpath, shas[relpath])
+        for i, relpath in enumerate(members, 1)
+    ]
+    lines.append("")
+    for i, relpath in enumerate(members, 1):
+        lines += [
+            "",
+            BAR,
+            "<!-- FILE %d/%d: %s @ %s -->" % (i, count, relpath, shas[relpath]),
+            BAR,
+            "",
+            bodies[relpath].rstrip("\n"),
+            "",
+        ]
+    return "\n".join(lines) + "\n"
+
+
+# ---------------------------------------------------------------- AC-BA-5/6
+
+
+def known_audience_values(ctx):
+    """AC-BA-5 (Amendment 1): role-doc slugs, reserved values, and every
+    literal `audience:` value present in any governed file."""
+    values = set(RESERVED_AUDIENCES)
+    values |= local_role_slugs(ctx.root)
+    for relpath in governed_files(ctx):
+        values.update(audience_values(ctx.root, relpath))
+    return values
+
+
+def cmd_list(ctx):
+    for value in sorted(known_audience_values(ctx)):
+        print(value)
+    return cli.EXIT_OK
+
+
+def cmd_audience(ctx, value, out):
+    known = known_audience_values(ctx)
+    if value not in known:
+        raise cli.ToolError(
+            "unknown audience value %r (see `bundle --list`)" % value, cli.EXIT_USAGE
+        )
+    members = ordered_members(ctx, value)
+    text = render_bundle(ctx, value, members)
+    if out is None:
+        print(text, end="")
+        return cli.EXIT_OK
+    out_dir = resolve_out_dir(out)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.datetime.now().strftime("%Y%m%dT%H%M%S")
+    dest = out_dir / ("bundle-%s-%s.md" % (value, stamp))
+    dest.write_text(text, encoding=cli.ENCODING)
+    return cli.EXIT_OK
+
+
+# ---------------------------------------------------------------------- main
+
+
 def main(argv=None):
     args = build_parser().parse_args(argv)
 
-    # STUB FOR bundle-audience-tests-2: --list / --audience short-circuit
-    # before the (unmodified, AC-BA-7-violating) positional closure mode.
     if args.list:
-        root = cli.load_root()
-        return _stub_list(root)
+        return cmd_list(cli.load_context())
+
     if args.audience is not None:
-        root = cli.load_root()
-        return _stub_audience(root, args.audience)
-    if not args.entries:
-        raise cli.ToolError(
-            "an ENTRY, --audience VALUE, or --list is required", cli.EXIT_USAGE
-        )
-    # END STUB.
+        return cmd_audience(cli.load_context(), args.audience, args.out)
 
-    if args.out is not None and not args.write:
-        raise cli.ToolError("--out is only meaningful with --write", cli.EXIT_USAGE)
-    if args.write and len(args.entries) > 1:
-        raise cli.ToolError("--write accepts exactly one ENTRY, got %d" % len(args.entries), cli.EXIT_USAGE)
-    if args.write and args.format is not None and args.format != "concat":
-        raise cli.ToolError(
-            "--write cannot be combined with --format %s (only concat)" % args.format,
-            cli.EXIT_USAGE,
-        )
-
-    fmt = args.format
-    if fmt is None:
-        fmt = "concat" if args.write else "list"
-
-    root = cli.load_root()
-    entries = [closure.resolve_entry(root, entry) for entry in args.entries]
-    dangling = []
-    walked = closure.walk(root, entries, args.max_depth, dangling)
-
-    if args.write:
-        if dangling and args.strict:
-            return cli.EXIT_POLICY
-        text = render_concat(root, walked)
-        entry_stem = pathlib.Path(entries[0]).stem
-        stamp = datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
-        out_dir = (
-            resolve_out_dir(args.out)
-            if args.out is not None
-            else pathlib.Path.home() / "Downloads"
-        )
-        out_dir.mkdir(parents=True, exist_ok=True)
-        dest = out_dir / ("%s-context-bundle-%s.md" % (entry_stem, stamp))
-        dest.write_text(text, encoding=cli.ENCODING)
-        print("wrote %s" % dest.resolve())
-    else:
-        emit(root, walked, fmt, args.why)
-
-    if dangling and args.strict:
-        return cli.EXIT_POLICY
-    return cli.EXIT_OK
+    # AC-BA-7: the positional path-following closure mode is removed.
+    raise cli.ToolError(
+        "an ENTRY is no longer accepted; use --audience VALUE or --list",
+        cli.EXIT_USAGE,
+    )
 
 
 if __name__ == "__main__":
