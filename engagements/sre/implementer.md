@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/corpus-regate-cycle-3.md @ edd8015
+last-reviewed: reviews/sre-implementer-cycle-2.md @ cd7db71
 audience: [implementer, assistant, human]
 session: execution
 ---
