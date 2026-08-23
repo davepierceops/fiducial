@@ -12,9 +12,9 @@ artifact in the review artifact schema's shape.
 
 ## Scope
 
-Every governed non-code file: the frontmatter in-scope set; excluding history,
-batons, cycles, reviews, retros, trackers, the decision log, and vendor-tooling
-files.
+Every file frontmatter enforcement reaches — the in-scope set enumerated in the
+document metadata policy's Scope section, which is that set's single
+enumeration. Nothing is excluded from it.
 
 ## What it inspects
 
@@ -24,10 +24,11 @@ Each document in scope, whole, against every criterion of the review rubric.
 
 A verdict, and a set of findings — each stating what fails, where, and what
 would fix it, and citing the rubric criterion it fails. It never agrees a
-document; agreement is Dave's. A governed context document reaches `agreed` only
-after this role's verdict is `ready`, except on the expedited path and the
-doc-only cycle the document metadata policy defines, which reach `agreed`
-without a reviewer.
+document. A governed context document reaches `agreed` only after this role's
+verdict for that document is `ready` or `ready-with-findings`, in an artifact
+whose scope states it reviewed the document at the cited SHA, except on the
+expedited path and the doc-only cycle the document metadata policy defines,
+which reach `agreed` without a reviewer.
 
 ## What it cedes
 
