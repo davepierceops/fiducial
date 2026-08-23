@@ -13,3 +13,11 @@ In bin/tests/test_bundle.py: delete tests that exercise the removed closure mode
 Run bin/tests/run. All 38 test_bundle_audience.py tests green; all retained test_bundle.py tests green; the two pre-existing test_bn10 failures unchanged; no other failure. Then run `bin/bundle --list` and `bin/bundle --audience chief-of-staff --out /tmp/bundle-check` against the live repo and report the list output and the member file count — this is the first run of the bundler against the corpus; label it observed.
 
 Do not edit any governed document or any other file under bin/tests/. Cannot execute as written → stop and surface. Concurrent tree mutation → stop and surface. Report: both SHAs, green-run counts, deleted test names, live --list output, chief-of-staff member count, and anything needing Dave's judgment, one line each, up front.
+
+## Amendment 1
+
+Amendment to docs/cycles/bundle-audience-coder-20260823T045135Z.md, dictated here; append this block verbatim to that file as a section headed "Amendment 1" in your first commit on bundle-audience-coder-2 so the directive file carries it.
+
+AC-BA-5 — `--list` emits every valid audience value: the basename slug of every role document under roles/ or engagements/ as repo.py discriminates, plus all-roles, all-decision-roles, human, plus every literal value present in any governed file's `audience:`; deduplicated, sorted, one per line, exit 0. AC-BA-6 — a value outside that set exits non-zero with a message naming the value. Amend the docstring and the tests asserting AC-BA-5 and AC-BA-6 only; the other 33 tests stay untouched and must pass. Confirm the amended tests fail against the stub before implementing.
+
+Everything else in the directive stands: run `git checkout origin/main` then `git checkout -b bundle-audience-coder-2`, implement, retire the closure-mode tests in test_bundle.py, green run, live --list and chief-of-staff bundle run, merge via curl, report as specified.
