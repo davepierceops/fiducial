@@ -24,8 +24,10 @@ origin of the cycle-4 dispositions, and
 `docs/cycles/directive-tooling-spec-5-20260823T214112Z.md` @ `ff0f56f0` is the
 origin of the cycle-5 dispositions, and
 `docs/cycles/directive-tooling-spec-6-20260823T222826Z.md` @ `fe4ee58c` is the
-origin of the cycle-6 dispositions this revision carries. This document does not
-restate any of the six as if it were derived from somewhere else. Assertions
+origin of the cycle-6 dispositions, and
+`docs/cycles/directive-tooling-spec-7-20260823T230004Z.md` @ `34a57ac7` is the
+origin of the cycle-7 dispositions this revision carries. This document does not
+restate any of the seven as if it were derived from somewhere else. Assertions
 about this repository carry a provenance class: *observed*, *inferred*, *told*,
 *unknown*.
 
@@ -342,8 +344,10 @@ have been absorbed without anyone seeing it. The rule that replaces it:
   `docs/packages/package-a-spec.md` §3.6, made there, not a reading taken here.
 - Where a conflict has been dispositioned, the resolution is stated at the goal or
   criterion it reaches, so precedence is a decision on the record rather than a
-  default. The three found so far are stated where they land: refusals at G4,
-  writes at AC-DT-12, filenames at M8.
+  default. The four found so far are stated where they land: refusals at G4,
+  writes at AC-DT-12, and filenames at M8 **twice** — the pattern set in cycle 5,
+  where M8 moved to admit AC-CO-1's second branch, and the `<SLUG>` character class
+  in cycle 7, where M8 moved again to stop rejecting a legal invocation of it.
 
 **Reading either mode's claims.** Two claims here were previously written as
 though they were global, and both now name their mode: **G4 / AC-DT-04** (no
@@ -461,7 +465,7 @@ exercises.
 | M5 | The first instruction is write-the-directive-file, commit, push, report the SHA | Core Vocabulary, "Execution block" | DEC-000160 fixes this for **every** directive class, so no class exemption exists for the lint to carry |
 | M6 | A report section is present and enumerates its required fields | Decision Layer rule 14, "Write it so the returned report is triageable by the next decision session" | none |
 | M7 | The claim-label instruction is present | Core rule 6 | none |
-| M8 | The directive filename is a member of the **licensed form set**: it matches **exactly one of three patterns** — `docs/cycles/<descriptor>-<timestamp>.md`, the timestamp in ISO 8601 basic format with date and time components **both present**, `YYYYMMDDThhmmss`, optionally `Z`-suffixed; or `docs/cycles/cycle-<N>-directive.md`; or `docs/cycles/<SLUG>-directive.md`, `<SLUG>` being lowercase alphanumerics and hyphens with no leading and no trailing hyphen. A trailing date with no time component is **not** a timestamp for this check. Membership is the **whole** claim: no fourth pattern passes, and M8 asserts nothing about whether the pattern a filename matches is the one that directive's mode should have produced — see "What M8 claims" below the table | pattern 1 from `skills/directive-authoring.md` @ `6179221a`, "Naming": "A directive file is `docs/cycles/<descriptor>-<timestamp>.md`, the timestamp in ISO 8601 basic format with date and time components both present (as `20260820T161541`) — except a reviewer-gated cycle directive, which is `docs/cycles/cycle-<n>-directive.md` per its stated convention." Patterns 2 and 3 anchor **directly** on the stated convention that sentence defers to: `docs/packages/package-a-spec.md` §3.6 AC-CO-1 @ `434e5921`, quoted whole — "Writes `docs/cycles/cycle-<N>-directive.md` for `--cycle N`, or `docs/cycles/<SLUG>-directive.md` for `--name SLUG`; exactly one of the two is required (exit 2)." Corroborated for pattern 1 by Core rule 14, whose yield clause is what licenses 2 and 3 | The `<SLUG>` character class is **the lint's own contract**, not a governed constraint: AC-CO-1 leaves the class unstated and `bin/cycle-open` does not constrain it, so M8 states the normalization it applies rather than leaving pattern 3's boundary undefined (*told* — the cycle-6 directive's N1) |
+| M8 | The directive filename is a member of the **licensed form set**: it matches **exactly one of three patterns** — `docs/cycles/<descriptor>-<timestamp>.md`, the timestamp in ISO 8601 basic format with date and time components **both present**, `YYYYMMDDThhmmss`, optionally `Z`-suffixed; or `docs/cycles/cycle-<N>-directive.md`; or `docs/cycles/<SLUG>-directive.md`, `<SLUG>` being **any** slug the preserved contract can emit — the pattern constrains the `-directive.md` suffix and states no character class. A trailing date with no time component is **not** a timestamp for this check. Membership is the **whole** claim: no fourth pattern passes, and M8 asserts nothing about whether the pattern a filename matches is the one that directive's mode should have produced — see "What M8 claims" below the table | pattern 1 from `skills/directive-authoring.md` @ `6179221a`, "Naming": "A directive file is `docs/cycles/<descriptor>-<timestamp>.md`, the timestamp in ISO 8601 basic format with date and time components both present (as `20260820T161541`) — except a reviewer-gated cycle directive, which is `docs/cycles/cycle-<n>-directive.md` per its stated convention." Patterns 2 and 3 anchor **directly** on the stated convention that sentence defers to: `docs/packages/package-a-spec.md` §3.6 AC-CO-1 @ `434e5921`, quoted whole — "Writes `docs/cycles/cycle-<N>-directive.md` for `--cycle N`, or `docs/cycles/<SLUG>-directive.md` for `--name SLUG`; exactly one of the two is required (exit 2)." Corroborated for pattern 1 by Core rule 14, whose yield clause is what licenses 2 and 3 | none — pattern 3 states **no character class**, because no governed file states one: AC-CO-1 leaves the class unstated and `bin/cycle-open` does not constrain it, so under G6 a class here would be a requirement the lint enforces and no governed file states (*told* — the cycle-7 directive's B1; see "Pattern 3 states no character class" below the table) |
 
 **M8 admits three patterns because AC-CO-1 names two filename branches, and G0
 puts both inside one tool** (*told* — the cycle-5 directive's B1 is the origin of
@@ -485,6 +489,30 @@ two cycles is that until now this document quoted AC-CO-1 by halves.
 Core rule 14 states the timestamp form "when no stated convention names the file"
 and adds "Where a convention names it, follow the convention," so both AC-CO-1
 branches are licensed by the rule they appear to contradict.
+
+**Pattern 3 states no character class, and that is a G6 consequence rather than a
+preference** (*told* — the cycle-7 directive's B1 dispositions it; *observed* for
+the sources). Cycle 6 gave pattern 3 a `<SLUG>` class — lowercase alphanumerics and
+hyphens, no leading and no trailing hyphen — as the lint's own normalization of a
+boundary AC-CO-1 leaves unstated. No governed file states such a class. AC-CO-1
+reads, whole, "Writes `docs/cycles/cycle-<N>-directive.md` for `--cycle N`, or
+`docs/cycles/<SLUG>-directive.md` for `--name SLUG`; exactly one of the two is
+required (exit 2)", and `bin/cycle-open` takes `--name SLUG` as a free-form string
+(`bin/cycle-open:39`) and interpolates it into the path unvalidated (`:67`), with
+`bin/tests/test_cycle_open.py` asserting the branch and nothing about the class
+(*observed*). G6 is the ground and it is unambiguous: "A requirement the tool
+enforces and no governed file states is a defect in the tool, not a stricter tool."
+A class in M8 would have made `bin/directive --name Pass3_Fix` — a legal AC-CO-1
+invocation, whose output AC-DT-15 forbids reddening — emit a filename the same
+binary's lint rejects, which is exactly the case the conflict rule under "Mode
+scoping" exists to surface rather than absorb. So pattern 3 accepts **any**
+filename of the form `<slug>-directive.md` that the preserved contract can emit.
+The looseness this admits is not a new residual: it falls inside the
+mode-appropriateness residual §7 already accepts, and it is bounded the same way —
+the generator names the file, so no directive the generator produced can carry a
+name its mode did not choose. With the class gone, AC-DT-13's "as written" claim
+and §7's final "Not accepted" item are true of M8 again, and neither needed a
+carve-out to become so. The corpus recount is unchanged by the drop (below).
 
 **What M8 claims, and what it does not** (*told* — the cycle-6 directive's B1 is
 the origin of this scoping; it replaces a cycle-5 sentence that read "the pattern
@@ -632,12 +660,20 @@ decides it (*told* — the cycle-5 directive's N1, governed at `6179221a` per B2
 
 **The corpus recount against the three-pattern check** (*observed*, recounted at
 this revision; the disposition to recount is *told* — the cycle-5 directive's B1
-and N1). `docs/cycles/` holds **98** markdown files, of which **62** match pattern
+and N1). `docs/cycles/` holds **99** markdown files, of which **63** match pattern
 1, **7** match pattern 2 `cycle-<N>-directive.md`, **26** match pattern 3
 `<SLUG>-directive.md`, and **3 match none**. The total and the pattern-1 count each
-rise by one against cycle 5's 97/61, as cycle 5's each rose by one against cycle
-4's 96/60, because each cycle's own directive file is in the directory by the time
-its revision recounts. The three that match none are `metadata-scope-fix-20260823.md`
+rise by one against cycle 6's 98/62, as cycle 6's each rose by one against cycle
+5's 97/61 and cycle 5's against cycle 4's 96/60, because each cycle's own directive
+file is in the directory by the time its revision recounts. **Dropping pattern 3's
+character class this cycle changed none of these figures** (*told* — the cycle-7
+directive's B1 directs this be stated; *observed* for the verification): the
+classification run with the class and run without it agrees on every file in the
+corpus, which cycle 6's gate verified at 98 files
+(`reviews/directive-tooling-cycle-6.md` @ `d8f8d7a6`, O4) and which reproduces at
+99 at this revision. The one figure that moved is the +1 the paragraph above
+accounts for — this cycle's own directive file — and it is not an effect of the
+disposition. The three that match none are `metadata-scope-fix-20260823.md`
 (N1's date-only case) and two files that are not directives at all —
 `doc-review-2026-08-02-questions.md` and `friction-refactor-2026-08-09-decisions.md`
 — which the lint would never be pointed at, since it takes the directive file the
@@ -648,12 +684,11 @@ adoption has **exactly one** name the three-pattern check rejects.
 number to be reproducible where it appears: the classification was computed at
 this revision over every `*.md` entry in `docs/cycles/`, applying, in order,
 pattern 1 = `.+-\d{8}T\d{6}Z?\.md`, pattern 2 = `cycle-\d+-directive\.md`,
-pattern 3 = `[a-z0-9]+(-[a-z0-9]+)*-directive\.md`, first match wins. Those three
+pattern 3 = `.+-directive\.md`, first match wins. Those three
 are transcriptions of **M8's own patterns**, not classification rules of the
-recount's: pattern 3's character class is the one M8's row states — lowercase
-alphanumerics and hyphens, no leading and no trailing hyphen — which is why the
-recount is reproducible from the criterion rather than only from this block
-(*told* — the cycle-6 directive's N1). Pattern 2 is
+recount's: pattern 3 carries no character class because M8's row states none
+(*told* — the cycle-7 directive's B1), which is why the recount is reproducible
+from the criterion rather than only from this block. Pattern 2 is
 a subset of pattern 3 and is tested first so the two counts do not double-count.
 The one non-`.md` entry in the directory
 (`comfy-archive-and-generalize-20260822T195900-check.txt`) is out of scope and is
@@ -665,12 +700,15 @@ because 26 of the 29 were `<SLUG>-directive.md` names that pattern 3 now admits 
 2 were never directive files. The dictated cycle-2 figure of 37, counted against
 the **single-pattern** M8, stays on the record with its provenance, as does cycle
 4's 29 (*told* — the cycle-4 directive's O1). The cost of the widening is stated
-rather than buried: pattern 3 constrains a filename to a lowercase-and-hyphens slug
-ending in `-directive.md` and to nothing else, so M8 is a weak check on any name of
-that shape. That is what licensing AC-CO-1's second branch buys; §6's AC-DT-06
-fixture set is where the residual strength of the check is pinned, and "What M8
-claims" above is where the weakness is scoped rather than talked around — the
-residual it leaves is an accepted defect class (§7), not an unstated one.
+rather than buried: pattern 3 constrains a filename to the `-directive.md` suffix
+and to nothing else, so M8 is a weak check on any name of that shape — and cycle 7
+made it weaker still, by dropping the character class cycle 6 had given it. That is
+what licensing AC-CO-1's second branch buys, at the price G6 sets: the class was a
+requirement no governed file states, so keeping it would have cost more than the
+looseness does. §6's AC-DT-06 fixture set is where the residual strength of the
+check is pinned, and "What M8 claims" above is where the weakness is scoped rather
+than talked around — the residual it leaves, at either width, is an accepted defect
+class (§7), not an unstated one.
 
 No element in this table covers route or model tier. That is deliberate and is
 the answer §8 Q5 now carries: Core's Vocabulary distinguishes the **directive**
@@ -834,8 +872,9 @@ it cannot check that it can be *carried out*, and G9 requires it to say so.
   begun. Baseline for the second: at least one, the motivating incident (*told*).
   Mechanism: execution reports and retros.
 - **Invariant text stops contradicting itself.** Signal: **contradictory
-  instructions** across concurrently-live directives — one directive instructing a
-  mechanism another instructs the opposite of, with neither superseding the other.
+  instructions** among the directives authored after adoption — one directive
+  instructing a mechanism another instructs the opposite of, with neither
+  superseding the other.
   Baseline: the merge-mechanism contradiction across eight directives and their
   successor (*observed*, per the research findings). Mechanism: a recount of
   **contradiction instances** over directives authored after adoption, read against
@@ -851,11 +890,30 @@ it cannot check that it can be *carried out*, and G9 requires it to say so.
   from the filename recount. So the filename recount does not re-baseline this
   outcome, because it is not evidence for it in either direction. Where the
   filename number does belong is stated where it is measured: M8's yield against
-  the pre-adoption corpus is **1 non-conforming directive file of 98**, with the
+  the pre-adoption corpus is **1 non-conforming directive file of 99**, with the
   classification and its provenance in §4, and it is a property of the lint's
   reach, not a measured user outcome. Recording it here as this outcome's baseline
   would have been the re-baselining branch, and it was declined because it would
   put a number under a signal that does not produce it.
+  **The term "concurrently-live" is dropped, and the outcome is narrowed to what
+  the recount reproduces without it** (*told* — the cycle-7 directive's N2). The
+  signal previously read "across **concurrently-live** directives", and nothing in
+  this document, or in any document it cites, decides when a committed directive
+  stops being live: no mechanism here retires one, and supersession is defined for
+  decision-log entries by `policies/decision-log-policy.md`, not for directive
+  files (*observed*). A counter would therefore have had to invent a liveness rule
+  per pair of directives, which makes the outcome unfalsifiable — the property Core
+  rule 13's discipline exists to prevent. What the recount reproduces without the
+  term is narrower, and is what the signal now states: contradiction instances
+  **among the post-adoption directives**, which is the set these tools govern (§4,
+  "Historical directive files are **not** retrofitted"), counted against the
+  nine-directive merge-mechanism baseline the research findings measured over the
+  corpus as it stood. The narrowing is real and is stated rather than absorbed: a
+  contradiction between a post-adoption directive and a pre-adoption one is
+  **outside** the count, so this outcome measures whether the tools stop *new*
+  invariant text from contradicting itself, not whether the standing corpus
+  becomes consistent. Nothing in this document claims the latter, and §4's
+  no-retrofit disposition is why.
 
 Not measured, and stated so the list is not read as exhaustive: whether directive
 *quality* improves in the judgment dimensions of §4's second table. The lint makes
@@ -944,8 +1002,14 @@ fixture repository" is not read as covering every entry.
   `cycle-<N>-directive.md` fixture, and a `<SLUG>-directive.md` fixture — the third
   added in cycle 5 per B1, because AC-CO-1's `--name SLUG` branch requires the
   cycle mode to emit exactly that name and AC-DT-15 forbids reddening the test that
-  asserts it. Failing: a fixture whose trailing field is a **date with no time**
-  (`<descriptor>-YYYYMMDD.md`) exits non-zero, because M8 requires the full
+  asserts it. **No fixture exercises a `<SLUG>` character boundary, and none may**
+  (*told* — the cycle-7 directive's N1, resolved by its B1): pattern 3 constrains
+  the `-directive.md` suffix only and states no character class (§4, "Pattern 3
+  states no character class"), so a boundary fixture would assert a requirement M8
+  does not carry and G6 forbids. The passing slug fixture may therefore use any
+  slug; what it establishes is that the suffix form passes, which is the whole of
+  what pattern 3 decides. Failing: a fixture whose trailing field is a **date with
+  no time** (`<descriptor>-YYYYMMDD.md`) exits non-zero, because M8 requires the full
   `<date>T<time>` form that `skills/directive-authoring.md` @ `6179221a` states and
   a calendar date alone is not a timestamp for this check
   (cycle 5, N1; governed at the source in cycle 6, B2); and a fixture matching no
@@ -956,10 +1020,17 @@ fixture repository" is not read as covering every entry.
   assert mode-appropriateness, which this criterion does not claim.
 - **AC-DT-07** — A well-formed fixture directive carrying every element M1–M8
   exits 0.
-- **AC-DT-08** — Exit 0 output includes the unchecked set — at minimum, that
-  executability of the working-tree disposition, route and model tier (which do
-  not reach the directive file, per §4), and every judgment-only rule in §4 were
-  not checked.
+- **AC-DT-08** — Exit 0 output includes the unchecked set — at minimum, that the
+  following were **not** checked: executability of the working-tree disposition;
+  route and model tier (which do not reach the directive file, per §4); every
+  judgment-only rule in §4; and **mode-appropriateness of the filename** — M8
+  checked form-set membership only, and did not check whether the pattern the
+  filename matches is the pattern this directive's mode should have produced
+  (*told* — the cycle-7 directive's B2). That last entry is the disclosure §7's
+  accepted defect class requires at the point of use: without it, a lint built to
+  this criterion could exit 0 on a hand-written `<slug>-directive.md` while naming
+  an unchecked set that omits the one bound making the pass narrow, which is the
+  halo failure §7 names as the primary risk.
 - **AC-DT-09** — A directive citing a companion by a SHA that resolves to a blob,
   a tag, or a commit that does not touch the cited path exits non-zero and names
   the citation. The fixtures are **synthetic and live in the fixture repository**:
@@ -1003,9 +1074,11 @@ fixture repository" is not read as covering every entry.
   (`skills/directive-authoring.md` @ `48ad7fd1`) and M8's timestamp rule included
   (the same file @ `6179221a`, which states the date-and-time requirement M8
   enforces). No element is held back, none carries a sequencing qualification, and
-  **no element carries a carve-out from this criterion**: where an element has
-  outrun its source in this effort, twice now, the resolution was an expedited
-  amendment to the governed file rather than an exception recorded here. The
+  **no element carries a carve-out from this criterion**: an element has outrun its
+  source in this effort three times, and the resolution was an expedited amendment
+  to the governed file twice (M3 at `48ad7fd1`, M8's timestamp rule at `6179221a`)
+  and **deletion of the requirement** once (M8's `<SLUG>` character class, cycle 7's
+  B1) — never an exception recorded here. The
   criterion binds every element added
   later, which is the case it now exists to catch.
 - **AC-DT-14** — After migration, `bin/` contains exactly one directive-skeleton
@@ -1102,8 +1175,17 @@ pattern correct by construction because the mode chooses the name and the author
 does not, and G4 keeps the general mode ungated so it can be adopted before the
 lint is trusted. The class does not reach generated directives at all, and a
 hand-written directive that also omits a required element is still failed by
-M1–M7. What would close it is a mode or class marker in the directive file for the
-lint to read, which is Q5's open question and not a change this document makes.
+M1–M7. **The defect class is disclosed at the point of use**: AC-DT-08's unchecked
+set names mode-appropriateness explicitly, so a lint built to §6 cannot exit 0
+without stating this bound (*told* — the cycle-7 directive's B2). Cycle 7 also
+**widened the defect class**, by dropping pattern 3's character class: the residual
+now reaches any hand-written `<slug>-directive.md`, not only a
+lowercase-and-hyphens one. It is accepted at that width, for the same reason and with the same
+mitigation — the class the drop removed was a requirement no governed file states,
+which G6 forbids the lint from enforcing (§4, "Pattern 3 states no character
+class"). What would close it is a mode or class marker in the directive file for
+the lint to read, which is Q5's open question and not a change this document
+makes.
 
 **Accepted.** A lint that stops an executor on a well-formed directive it
 mis-parses. A false stop costs one invocation and returns the question to a
@@ -1133,12 +1215,19 @@ writes" to "only these writes," and what is not accepted is a write outside it �
 the narrowing is of the claim, not of the protection. Any refusal by either mode
 that turns on the *content* of a directive rather than on a precondition, which
 would put refusal in two places and make the generator a second gate. Any lint
-enforcement of a requirement no governed file states (G6, AC-DT-13). Two elements
-have stood in that position in this effort and neither does now: M3's unconditional
-two-branch rule is governed text at `skills/directive-authoring.md` @ `48ad7fd1`,
-and M8's date-and-time requirement is governed text in the same file @ `6179221a`.
-Both were closed by amending the governed source, not by taking an exception here,
-and the prohibition stands undiminished for every element added after them.
+enforcement of a requirement no governed file states (G6, AC-DT-13). **Three**
+elements have stood in that position in this effort and **none does now**. Two were
+closed by amending the governed source, not by taking an exception here: M3's
+unconditional two-branch rule is governed text at `skills/directive-authoring.md` @
+`48ad7fd1`, and M8's date-and-time requirement is governed text in the same file @
+`6179221a`. The **third** stood for exactly one cycle and was closed the other
+admissible way — by **deletion** rather than amendment: cycle 6's `<SLUG>`
+character class stated a requirement no governed file states, and cycle 7's B1
+removed it from M8 instead of seeking an amendment or recording a carve-out (*told*
+— the cycle-7 directive's B1). Deletion is the cheaper route where the requirement
+was never needed, and that it was available is what keeps this item true without a
+fourth expedited amendment. The prohibition stands undiminished for every element
+added after all three.
 
 **Escalation.** A lint failure returns the directive to the decision session; the
 executor never repairs it. Anything the lint cannot decide is reported unknown and
@@ -1226,7 +1315,13 @@ acceptable is Dave's judgment, never the tool's.
   cycle-5 wording implied M8 decided it, and §4's "What M8 claims" now states that
   the generator guarantees it by construction and M8 does not check it, with the
   hand-written residual accepted in §7. Scoped by: Dave, in
-  `docs/cycles/directive-tooling-spec-6-20260823T222826Z.md` @ `fe4ee58c`. What Q8
+  `docs/cycles/directive-tooling-spec-6-20260823T222826Z.md` @ `fe4ee58c`.
+  **Loosened, cycle 7**: pattern 3 states **no character class**. The class cycle 6
+  gave it was a requirement no governed file states, which G6 forbids the lint from
+  enforcing, and which would have made a legal AC-CO-1 invocation emit a name the
+  same binary's lint rejects; dropping it leaves the three-pattern answer intact and
+  changes no figure in the corpus recount (§4). Loosened by: Dave, in
+  `docs/cycles/directive-tooling-spec-7-20260823T230004Z.md` @ `34a57ac7`. What Q8
   does
   **not** answer, and what §4 now routes elsewhere: whether a fourth branch exists
   anywhere in AC-CO-1 through AC-CO-12. Under the conflict rule in §4's "Mode
