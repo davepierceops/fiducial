@@ -4,7 +4,7 @@ This file tracks open questions, deferred decisions, and outstanding fixes
 for the AI operating model. Updated at defined checkpoints per
 `context-sets/spec-and-change-discipline.md`.
 
-Last updated: 2026-08-21
+Last updated: 2026-08-23
 
 ---
 
@@ -1109,3 +1109,16 @@ chat commits.
 ## `bin/bundle`'s path-following closure mode is retired, replaced in Pass 2 by audience selection
 
 Recorded 2026-08-21, Pass 1 cycle 12 revision: rubric criterion 3 proceeds as written, so removing in-body backticked `*.md` paths from the corpus silently shrinks `bin/bundle`'s closure to `depends-on` edges only; no edit to `bin/` was made in that cycle, and audience selection replaces the path-following mode in Pass 2.
+
+## `bin/land` is not agent-facing until a governed write-path usage document is agreed
+
+Dave's sequencing decision, recorded in `specs/bin-land.md` §8 and originating
+in `docs/cycles/bin-land-spec-7-20260823T203500Z.md` @
+`8a77c2a017977976d88552d86bf523109bbdd0b5`: a governed standing write-path
+usage document — stating when an agent invokes `bin/land` and what its output
+means — must be agreed before the tool becomes agent-facing, where
+agent-facing means the first directive instructing an executor to invoke it.
+Implementation is not blocked by this gate; the build-gating rule in
+`policies/document-metadata-policy.md` governs implementation independently.
+
+**Source:** `specs/bin-land.md` §8; `docs/cycles/bin-land-spec-7-20260823T203500Z.md` @ `8a77c2a017977976d88552d86bf523109bbdd0b5`.
