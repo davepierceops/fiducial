@@ -3,6 +3,7 @@ status: draft
 last-reviewed: null
 audience: [writer, human]
 order: 10
+session: decision
 ---
 
 # Role: Writer
