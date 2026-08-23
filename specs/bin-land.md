@@ -130,7 +130,10 @@ Invocation: `bin/land <branch> <message> [files...]`.
     report's prior-head field reads `created`.
   - **Branch present at origin** — land on top of that branch's current head,
     and print that prior head SHA in the output *before* landing, so the report
-    carries what the landing extended even if a later step fails.
+    carries what the landing extended even if a later step fails. The landing
+    base is that branch head as fetched from origin during this invocation: the
+    local tree's prior state never supplies the base, and a local tree behind
+    the fetched head does not alter the outcome.
 
   In both arms the base is remote state as of this invocation's own fetch, so a
   stale local working tree cannot silently become the base of the work (*told*
@@ -281,9 +284,9 @@ the remote half testable offline (*inferred*, per the research findings).
 - **AC-LAND-04** — Given a push that writes `fatal: failed to store: 100001` to
   stderr and exits 0, the invocation proceeds to verification and, verification
   passing, exits 0. Given a push that writes nothing to stderr and exits
-  non-zero, the invocation exits non-zero. No code path in the source reads,
-  matches, or branches on stderr content; verifiable statically over the source
-  as well as by the two induced cases.
+  non-zero, the invocation exits non-zero. No code path in the source matches or
+  branches on stderr content; verifiable statically over the source as well as
+  by the two induced cases.
 - **AC-LAND-05** — After a successful push, `git ls-remote` for the branch
   returns the same SHA the tool reports as head.
 - **AC-LAND-06** — For each file in the commit, the blob SHA at the
@@ -329,10 +332,6 @@ an unverified landing is acceptable; that judgment is Dave's.
 
 ## 8. Open product questions
 
-- **Q2 (dictated).** The binary name `land` is provisional, pending Dave's
-  `LEXICON.md` check. `LEXICON.md` carries an active retirement programme, and
-  a term new to the methodology is a vocabulary decision. This document does
-  not add `land` to `LEXICON.md`. Resolved by: Dave.
 - **Q3 (raised by the author).** Whether a governed standing write-path
   document lands before this tool becomes agent-facing. The research findings
   rank that document first and name it a prerequisite: the tool encapsulates
@@ -340,11 +339,18 @@ an unverified landing is acceptable; that judgment is Dave's.
   what its output means (*observed*, per that document). Resolved by: Dave's
   sequencing decision.
 
-Q2 and Q3 are the only open questions this document carries. The two it carried
-at cycle 1 and no longer does were closed by Dave in the cycle-2 directive
-(*told*): Q1 — whether directive-file-first landing becomes a mode of the tool
-or stays two invocations — resolved as two invocations of one form, stated in
-§2, in §3 J1 and J2, and in G1's "no flags and no modes"; and Q4 — what the
-tool does when the named branch already exists at the remote — resolved by G1's
-second arm. Their identifiers are retired rather than reused, so a reader of the
-cycle-1 review artifact can still find what each referred to.
+Q3 is the only open question this document carries. The three it carried at
+earlier cycles and no longer does were closed by Dave (*told*). Q1 — whether
+directive-file-first landing becomes a mode of the tool or stays two
+invocations — and Q4 — what the tool does when the named branch already exists
+at the remote — were closed in the cycle-2 directive: Q1 as two invocations of
+one form, stated in §2, in §3 J1 and J2, and in G1's "no flags and no modes";
+Q4 by G1's second arm. Q2 — whether the binary name `land` was provisional
+pending a `LEXICON.md` check — was closed in the cycle-3 directive
+`docs/cycles/bin-land-spec-3-20260823T195212Z.md` @ `621b007e`, which is the
+origin of this wording: the binary keeps the name `land`, and no `LEXICON.md`
+entry is added, because binaries are not methodology vocabulary — the precedent
+is `bundle`, `flip-agreed`, and `cycle-open`, each a binary in `bin/` carrying
+no `LEXICON.md` entry (*observed*). All three identifiers are retired rather
+than reused, so a reader of an earlier review artifact can still find what each
+referred to.
