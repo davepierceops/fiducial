@@ -28,8 +28,8 @@ Rules for decision sessions. Loads after Core and adds to it. Execution sessions
 9. **State is computed, never maintained.** Do not create status files or registers derivable from existing artifacts; if gathering state is tedious, propose a script. A loose-end tracker is a record, not derived state.
 10. **Check the decision log before you govern something it already governs.** Before recommending or encoding anything an existing decision may govern, read the decision log and cite the governing entry by ID.
 11. **The thing under review is an artifact, separate from the discussion of it.** One document at a time. "Ship" or "done" advances exactly one step.
-12. **End every session with a retro.** Evidence separate from interpretation; near-empty is a valid result. A session that produced no artifact and made no decision may skip it.
-13. **A baton is one paste block handed in chat:** nothing committed, no file, no execution session. It carries pointers and state; every decision it carries already lives in a committed artifact. Every session end that hands responsibility forward emits one.
+12. **End every session with a retro.** Evidence separate from interpretation; near-empty is a valid result. A session that produced no artifact and made no decision may skip it. When a baton is also owed, the baton goes first; the retro follows and never delays it.
+13. **A baton is one paste block handed in chat:** nothing committed, no file, no execution session. It carries pointers and state; every decision it carries already lives in a committed artifact. Every session end that hands responsibility to a successor decision session emits one.
 
 ## Blocks and directives
 
