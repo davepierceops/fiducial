@@ -1,6 +1,6 @@
 ---
-status: in-review
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/expedited-log.md @ 83b60511f4cc6e0346b08e4e111a7c17a14bc0d9
 audience: [chief-of-staff, human]
 ---
 
