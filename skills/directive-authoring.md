@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/directive-authoring-cycle-2.md @ cd7db71
+last-reviewed: reviews/expedited-log.md @ 48ad7fd1e827a7c92660fd2cd9ebc5871c1dbc21
 audience: [chief-of-staff, human]
 ---
 
@@ -12,9 +12,11 @@ This procedure runs in a decision session.
 
 One self-contained directive per session.
 
-- **Exclusive working trees for split directives.** Two sessions sharing a tree
-  mutate each other's preconditions. Prefer not splitting; where unavoidable,
-  state the tree assignment in each directive.
+- **Every directive states its working-tree disposition** — either an
+  exclusive assignment (a named directory plus the command creating it) or an
+  explicit sole-tree declaration. A prohibition is not a disposition. Two
+  sessions sharing a tree mutate each other's preconditions; prefer not
+  splitting work across trees.
 - **Pin STOP conditions to the reviewed ref**, not the head of the branch the
   directive lands on — the directive's own commit moves that head.
 - **No blanket constraint may contradict an explicit instruction in the same
