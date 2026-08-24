@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+"""Land a commit on a branch at `origin`, and verify what landed.
+
+Contract: `specs/bin-land.md` (the PRD) and `specs/bin-land-trd.md` (the TRD).
+
+    bin/land <branch> <message> [files...]
+
+One invocation replaces the hand-run remote-write sequence: fetch, resolve the
+base from the remote, guard against divergence, establish the base, stage,
+commit, push, and read the result back. Exit 0 is a claim the tool has
+verified, not a claim it finished — the report on stdout carries what was
+established and what was not, each labelled `observed` or `unknown`.
+
+This file is argument parsing, the report's serialization, the diagnostic, and
+the exit code. It contains no git logic (TRD §3.1): the sequence is
+`aimeta/land.py` and the report is `aimeta/report.py`.
+"""
+
+import argparse
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from aimeta import cli, land as landing  # noqa: E402
+
+
+def build_parser():
+    p = argparse.ArgumentParser(
+        prog="land",
+        description=(
+            "Commit and push onto a branch at origin, then verify the landing "
+            "by reading remote state back."
+        ),
+    )
+    p.add_argument("branch", metavar="BRANCH", help="branch to land on")
+    p.add_argument("message", metavar="MESSAGE", help="commit message")
+    p.add_argument(
+        "files",
+        metavar="FILE",
+        nargs="*",
+        help="paths to stage; every change in the tree when none are given",
+    )
+    return p
+
+
+def main(argv=None):
+    # TRD §3.2 step 11: a usage error is `argparse`'s, and it writes its own
+    # diagnostic to stderr and exits 2. Stdout carries nothing and no report is
+    # emitted — an invocation that never named a branch has established no fact
+    # for a report to carry.
+    args = build_parser().parse_args(argv)
+
+    # §7 maps 2 onto the outside-a-repo case as well. Nothing is established
+    # there either, so nothing is reported.
+    cli.load_root()
+
+    report = landing.land(args.branch, args.message, list(args.files), os.getcwd())
+
+    # The report is serialized on every terminal path the sequence reaches,
+    # success and failure alike, and stdout carries nothing else.
+    sys.stdout.write(report.to_json())
+    sys.stdout.flush()
+
+    code = report.diagnostic_code()
+    if code is not None:
+        cli.err("ERROR: [%s] %s" % (code, report.diagnostic_message()))
+    return report.exit_code()
+
+
+if __name__ == "__main__":
+    sys.exit(cli.run(main))
