@@ -38,14 +38,20 @@ origin of the cycle-12 dispositions, and
 `docs/cycles/directive-tooling-spec-14-20260824T013026Z.md` @ `ef5755f4` is the
 origin of the cycle-14 dispositions, and
 `docs/cycles/directive-tooling-spec-15-20260824T021751Z.md` @ `438fa4f5` is the
-origin of the cycle-15 dispositions this revision carries. Cycle 8 contributes no
+origin of the cycle-15 dispositions, and
+`docs/cycles/directive-tooling-spec-17-20260824T033019Z.md` @ `7010e8ff` is the
+origin of the cycle-17 dispositions this revision carries. Cycle 8 contributes no
 dispositions and has no directive in this series: it was the **independent
 gate** on the cycle-7 revision — the first cycle whose review was not written by
 the session that authored the revision — run under
 `docs/cycles/directive-tooling-gate-20260823T231530Z.md` @ `b642d4fc`, and its
 findings are what the cycle-9 directive dispositions (*observed*). **Cycle 13 is
 the second independent gate and likewise contributes no directive in this
-series**: it reviewed the cycle-12 revision at `0eafc306` and its findings are
+series**: it was run under
+`docs/cycles/directive-tooling-gate-2-20260824T005952Z.md` — named here so a
+reader tracing the second independent gate has the same path for it that the
+first has (*told* — the cycle-17 directive's O6, disposing the cycle-16 gate's
+O6) — it reviewed the cycle-12 revision at `0eafc306`, and its findings are
 what the cycle-14 directive dispositions — B1 (M3's search predicate), N1
 (AC-DT-02's single exclusion rule), N2 (the lint's manifest contract), and N3
 (the lint's path resolution), with O1–O5 taking no action (*observed*, by
@@ -57,7 +63,18 @@ whole-file branch), N1 (the check stated once and referenced everywhere else),
 N2 (§7's residual enumeration, stated in extension), and N3 (the third
 enumerated shape of M3's retired predicate), with O1–O4 taking no action
 (*observed*, by reading `reviews/directive-tooling-cycle-14.md` and the cycle-15
-directive). This document
+directive). **Cycle 16 is the third independent gate and contributes no
+directive in this series either**: it was run under
+`docs/cycles/directive-tooling-gate-3-20260824T030834Z.md`, it reviewed the
+cycle-15 revision at `0b1c90c6`, and its findings are what the cycle-17
+directive dispositions — B1
+(the skeleton could not convey the label form M3 matches, and AC-DT-03 and
+AC-DT-06's fixture (v) contradicted each other about it), N1 (M3's count clause,
+and the extension over which §7 stated its residual), N2 (the label form
+untracked in §8), N3 (§1's motivating incident stated narrower than the current
+governed rule), and N4 (the conflict rule's scope), with O6 accepted and O1–O5
+taking no action (*observed*, by reading
+`reviews/directive-tooling-cycle-16.md` and the cycle-17 directive). This document
 does not restate any of them as if it were derived from somewhere else. Assertions
 about this repository carry a provenance class: *observed*, *inferred*, *told*,
 *unknown*.
@@ -128,9 +145,9 @@ not, and neither is approximate. The figure above is the **research document's**
 markdown files in `docs/cycles/` as the directory stood at `49bd6ff4` — 91
 present, 90 in the measured corpus — and it says nothing about how many of them
 are directives. §4's recount is **this document's own**, taken at this revision
-against M8's three patterns: **107** markdown files, of which 3 match no
+against M8's three patterns: **109** markdown files, of which 3 match no
 licensed pattern and 2 of those 3 are not directives at all. The two figures
-differ because the directory has grown by sixteen files since the research was
+differ because the directory has grown by eighteen files since the research was
 written and because one counts files while the other classifies them. Neither
 supersedes the other, and **neither is a count of directives as a class**. One
 figure in this document is class-scoped — §4's "exactly one" non-conforming
@@ -140,11 +157,29 @@ one non-conforming directive file remains. It is stated with that derivation
 where it appears, and it is the only place a class figure is asserted.
 
 **Dictated motivating incident, which this spec must state and must prevent
-recurring** (*told*): a parallel directive stated a working-tree prohibition
-instead of an assignment; `skills/directive-authoring.md` requires an assignment —
-a named directory plus the command creating it (e.g.
-`git worktree add ../fiducial-pass2 origin/main`). The executor stopped correctly;
-the omission class is the target.
+recurring** (*told* for the incident; *observed* for the rule as it now stands):
+a parallel directive **stated** a working-tree prohibition and no disposition of
+either admitted form. The executor stopped correctly; the omission class is the
+target.
+
+**That paragraph is the incident's record, and the requirement it is measured
+against is the governed rule at its current form** (*told* — the cycle-17
+directive's N3, disposing the cycle-16 gate's N3). It is stated in the past
+tense because it records something that happened, and the rule it was originally
+narrated against — "requires an assignment — a named directory plus the command
+creating it" — was accurate when the cycle-1 directive dictated it and is
+narrower than the rule in force now, in two dimensions: the current rule at
+`skills/directive-authoring.md` @ `b4a0fa58` admits an **explicit sole-tree
+declaration** as an equal branch beside the exclusive assignment, and it
+additionally requires the disposition to be stated as **its own labelled
+statement**. The incident fails the current rule as it failed its predecessor,
+and for the rule's own reason twice over: a prohibition is neither admitted form,
+and it is not a labelled disposition statement. Nothing in the rule's currency
+softens what this spec must prevent, and `git worktree add ../fiducial-pass2
+origin/main` remains what it always was here — an **example** of the assignment
+branch, not a statement of the requirement. This is the changed-fact-changes-
+everywhere class of Core rule 13, closed at the site where a reader takes the
+requirement's shape before reaching §4.
 
 **Dictated disposition** (*told* — the cycle-2 directive is its origin, and it
 closes what §8 Q3 and Q7 previously carried): every directive states its
@@ -228,7 +263,9 @@ directive missing a required element.
 **Primary actor — the decision session**, authoring a directive. It runs
 `bin/directive`, receives a skeleton whose invariant sections are already filled
 from committed repo text, and writes only the task-specific middle **and the
-working-tree disposition's author region** (§4 G3). **Two freehand regions, not
+working-tree disposition's author region** — into which the generator has
+already emitted the label, so what the author supplies there is the statement's
+**content** (§4 G3; *told* — the cycle-17 directive's B1). **Two freehand regions, not
 one** (*told* — the cycle-11 directive's N2 dispositions this; the cycle-10
 gate's N2 is the finding). The one-region phrasing this replaces predates the
 cycle-10 slot split, and after that split this sentence was the last site in the
@@ -277,16 +314,24 @@ Top K = 3.
 - **Steps**: invokes `bin/directive`; receives a skeleton carrying the sandbox
   constraints, stop conditions, the working-tree disposition **prompt**, the
   verification steps, the report format, and the claim-label instruction, each
-  read from committed repo text at generation time, together with an empty
-  **disposition author region** beneath that prompt (§4 G3); fills the
-  task-specific middle and the disposition author region, and no other region;
-  hands the directive to an execution session.
+  read from committed repo text at generation time, together with a
+  **disposition author region** beneath that prompt carrying the **label over an
+  empty content slot** (§4 G3); fills the task-specific middle and the
+  disposition content slot, and no other region; hands the directive to an
+  execution session.
 - **Expected outcome**: a directive whose invariant text matches the repository's
   current committed text, with the author's freehand contribution confined to the
   **task-specific middle and the disposition author region** — the two regions §2,
   G2, G11, and AC-DT-18 name, and no others. This line carried the same one-region
   phrasing §2 did, and is corrected with it under Core rule 13 (*told* — the
   cycle-11 directive's N2 directs the correction "everywhere it appears").
+  **A skeleton whose disposition content slot is filled faithfully passes the
+  lint** (*told* — the cycle-17 directive's B1, disposing the cycle-16 gate's
+  B1). The generator emits the label M3 matches, in the form M3 matches it, so
+  the author supplies content and nothing else and is never asked to reconstruct
+  a form the skeleton did not show them. That property is stated here as an
+  expected outcome of this journey because it is the one the two tools have to
+  share: J1 produces what J2 checks.
 
 ### J2 — the executor's first act clears the lint
 
@@ -296,6 +341,15 @@ Top K = 3.
   and — on exit 0 — commits and pushes as it does today.
 - **Expected outcome**: exit 0, plus a statement of which elements were checked
   and which properties were not, so the pass is not read as broader than it is.
+  For a directive generated by `bin/directive` and filled as J1 describes, the
+  **M3 half of that exit is guaranteed by construction** rather than by the
+  author's care (*told* — the cycle-17 directive's B1; §4, "The two generated
+  cases"). The generator and the lint cannot disagree about the label, because
+  one of them fixes it and the other matches what it emitted. A generator/lint
+  pair that lost that property would be a defect in this document, surfaced
+  under the conflict rule in §4's "Mode scoping", which reaches conflicts
+  between this document's own goals and not only conflicts with a preserved
+  AC-CO criterion (*told* — the cycle-17 directive's N4).
 
 ### J3 — a directive missing a required element
 
@@ -312,11 +366,15 @@ Top K = 3.
   presence-and-form test over **labelled disposition statements** (§4, M3's row;
   §4, "M3's check is over the labelled statement") — fails. It carries **no
   labelled disposition statement**, so it fails whatever else in the file
-  mentions a tree or a command, and the check needs no reading of where in the
-  file anything sits. A skeleton generated for that directive and left unfilled
-  fails the same way and for the same reason: the prompt region names both
-  admitted forms, but a prompt is not a labelled disposition statement, so an
-  unfilled author region leaves the file carrying none.
+  mentions a tree or a command, and the check needs no reading of **which region**
+  of the file anything sits in. A skeleton generated for that directive and left
+  **unfilled** fails too, though on the other half of the check: the prompt region
+  names both admitted forms but is not a labelled statement, and the author region
+  carries the emitted label over a **blank content slot**, so the file carries
+  exactly one labelled disposition statement carrying **neither** admitted form
+  and fails on form-membership (*told* — the cycle-17 directive's B1; §4, "The two
+  generated cases"). Both routes to this journey are mechanical and neither turns
+  on reading the author's intent.
 
 ## 4. Goals and non-goals
 
@@ -499,6 +557,21 @@ have been absorbed without anyone seeing it. The rule that replaces it:
   M8 gained a third pattern by disposition, on the record, rather than AC-CO-1
   quietly overriding M8 in the cycle mode or M8 quietly narrowing "preserved
   intact".
+- **The rule is not confined to conflicts with a preserved AC-CO criterion**
+  (*told* — the cycle-17 directive's N4, disposing the cycle-16 gate's N4). Where
+  **any** two of this document's own goals or criteria cannot both be satisfied,
+  the conflict is a defect in this document and surfaces the same way: raised as
+  a blocking finding at the next gate review, resolved by a dictated disposition
+  stated at the goals or criteria it reaches, never absorbed by one side
+  silently winning. The class this widening exists for is the
+  **generator/lint** conflict — a skeleton `bin/directive` emits that
+  `bin/check-directive` fails — which has no AC-CO criterion on either side and
+  which the rule as first written did not reach, though three sites cited it for
+  exactly that. A silently-absorbed internal conflict is the same failure as a
+  silently-absorbed inherited one, which is the reasoning the bullet above
+  already rests on. The demonstrating instance is the cycle-16 gate's B1: a
+  prompt that named the labelling requirement without the label's form, guiding
+  a faithful author into a directive the same binary's lint fails.
 - The obligation runs the other way too. A conflict is **not** resolved in this
   document's favour either: no goal or criterion here narrows a preserved AC-CO
   criterion by implication, and a proposal to retire or split one is a change to
@@ -586,7 +659,13 @@ exercises.
     last part is not optional decoration: a prompt that named the forms and not
     the label would guide an author into a directive the same binary's lint
     fails, which is the generator/lint conflict §4's "Mode scoping" rule exists
-    to surface rather than absorb. The author
+    to surface rather than absorb — a class that rule reaches explicitly as of
+    this revision, having been scoped to conflicts with a preserved AC-CO
+    criterion before it (*told* — the cycle-17 directive's N4, disposing the
+    cycle-16 gate's N4, which found this citation outside the rule's stated
+    scope). The prompt is **necessary** for the property but not sufficient for
+    it: the generator also emits the **label**, which is what makes a faithfully
+    filled skeleton pass (AC-DT-03; *told* — the cycle-17 directive's B1). The author
     neither writes it nor edits it, and the manifest entry for it names a
     committed path. **M3 does not match this region, in any file** (*told* — the
     cycle-15 directive's B1, which retires the region scoping this bullet
@@ -595,17 +674,43 @@ exercises.
     outside M3's match wherever the region sits and whatever else the file
     carries (§4, M3's row). No manifest is needed to buy that exclusion and none
     is consulted for it.
-  - **The disposition author region** — the **author's**, and empty as emitted.
-    It carries the actual exclusive assignment or sole-tree declaration for this
-    directive, written as the **labelled statement** the governed rule requires
-    (`skills/directive-authoring.md` @ `b4a0fa58`; M3's row). It is one of the
-    two freehand regions G2 names, it is the only part of the slot J1 hands to
-    the author, it is the region AC-DT-03 requires to be present and empty and
-    AC-DT-18 counts as author-marked, and the manifest entry for it is
-    author-marked. **It is not an extent M3's search is scoped to**, because M3
-    has no search extent: what M3 matches is the labelled statement itself,
-    wherever the author put it (*told* — the cycle-15 directive's B1, which
-    retires the scoping the cycle-11 and cycle-14 dispositions stated here).
+  - **The disposition author region** — the **author's**, and emitted carrying
+    the **label over an empty content slot** (*told* — the cycle-17 directive's
+    B1, disposing the cycle-16 gate's B1; this bullet previously read "empty as
+    emitted"). The generator emits the TRD-fixed **label** as the **marker that
+    begins this region** — which is what G11's manifest already names per
+    emitted region (AC-DT-05) — and leaves the **content slot** beneath it
+    blank. The author writes the content, the actual exclusive assignment or
+    sole-tree declaration for this directive, and label plus content is the
+    **labelled statement** the governed rule requires
+    (`skills/directive-authoring.md` @ `b4a0fa58`; M3's row).
+
+    **The label is not governed text, and G1 does not reach it.** The governed
+    rule delegates the label's fixed form to tooling in its own words — "the
+    label's fixed form is a tooling concern, not this document's" — so no
+    committed governed file holds it, and a generator emitting it recreates no
+    drift, which is the single test G1 applies. G1's prohibition is on a tool
+    holding text that **also lives in a governed file**; a TRD-fixed label lives
+    in no such file by the governed rule's own disposition.
+
+    **The region's classification does not move, and the two-region split
+    stands.** The label is the region's **marker**, not its content, so this
+    region remains one of the two freehand regions G2 names, the only part of the
+    slot J1 hands to the author, author-marked in the manifest, and the region
+    AC-DT-18 counts as author-marked; AC-DT-05's partition attributes the
+    marker's bytes as it attributes every other region's marker. What changed is
+    only what AC-DT-03 asserts of the region **as emitted** — a present label
+    over a blank content slot, rather than a blank region — and the dual
+    classification the split exists to prevent is not reintroduced, because no
+    region is claimed by both classifications.
+
+    **It is not an extent M3's search is scoped to**, because M3
+    has no **region** extent: what M3 matches is the labelled statement itself,
+    wherever in the file the author put it (*told* — the cycle-15 directive's B1,
+    which retires the scoping the cycle-11 and cycle-14 dispositions stated
+    here). M3's one structural sensitivity is the **fence exclusion** (M3's row;
+    §4, "The count is exactly one"), and that is a property of a passage's
+    markdown context rather than of a region of the skeleton.
 
   **The split is what makes the slot classifiable, and the dual classification it
   replaces was a real defect rather than a wording infelicity.** Before it, G1
@@ -747,7 +852,7 @@ exercises.
 | --- | --- | --- | --- |
 | M1 | A reviewed-ref pin is present and resolves to a commit | `skills/directive-authoring.md`, "Pin STOP conditions to the reviewed ref" | none |
 | M2 | Each companion citation `<path> @ <sha>` names a path present at the reviewed ref, and a SHA that resolves to a **commit touching that path**. Neither fullness nor lastness is checked — see the narrowing note below the table | Core Vocabulary, "Companion document ... Cited with its own path and SHA" and "Directive file ... thereafter cited by path and the SHA of the commit that landed it"; `bin/cycle-open`'s docstring principle, "never invented" | none |
-| M3 | A working-tree disposition is present as **its own labelled statement**, and that statement carries **exactly one** of two forms: an exclusive assignment (a named directory plus the command creating it), or a literal sole-tree declaration. Unconditional — every directive, no parallelism test. **The check is over labelled disposition statements, and this row is where it is fixed: exactly one labelled disposition statement is present in the file, and it carries exactly one of the two admitted forms. Zero labelled statements fails, whatever else the file mentions. Two or more fails. A labelled statement carrying neither admitted form — a prohibition, for instance — fails on form-membership, and so does one carrying both.** Text instantiating an admitted form **without** the label is not a disposition for M3's purposes and is outside M3's match; that exclusion is the governed rule's own rather than this document's normalization of it, the rule requiring the disposition to be stated "as its own labelled statement, mechanically distinguishable from incidental mention of trees or commands elsewhere in the file". **M3's contract at this level is label-presence and form-membership, and nothing else**; the label's fixed **lexical form** is a **TRD decision**, and the delegation is the governed rule's, which states that "the label's fixed form is a tooling concern, not this document's" — so a TRD fixing one discharges a delegation a governed file makes rather than inventing a requirement (G6, AC-DT-13). Because the match is over labelled statements, **no part of M3 turns on where in the file the statement sits**: M3 has no search extent, no region scoping, and no whole-file fallback, and the locatability predicate, the region-scoped branch, and the whole-file branch the three prior dispositions built are **retired** (*told* — the cycle-15 directive `docs/cycles/directive-tooling-spec-15-20260824T021751Z.md` @ `438fa4f5`, B1, which is the origin of this check; the retired region scoping originates in the cycle-11 directive's B1, the whole-file fallback in the cycle-12 directive's B1, and the predicate joining them in the cycle-14 directive's B1, and the defect the labelled-statement anchor closes is the cycle-14 gate's B1). **M3 remains total by construction**: every file either carries exactly one labelled disposition statement carrying an admitted form or does not, with no third outcome, so M3 is never an element the lint cannot decide (AC-DT-10). Every other mention of M3 in this document is a **reference to this row** and states no test of its own; where any of them appears to say something different, this row governs, and the difference is a defect in that site rather than a second rule. See "M3's check is over the labelled statement" below the table | `skills/directive-authoring.md` @ `b4a0fa58`, "Writing the directive file", first rule: "Every directive states its working-tree disposition — either an exclusive assignment (a named directory plus the command creating it) or an explicit sole-tree declaration. A prohibition is not a disposition. The disposition is stated as its own labelled statement, mechanically distinguishable from incidental mention of trees or commands elsewhere in the file; the label's fixed form is a tooling concern, not this document's." | none |
+| M3 | A working-tree disposition is present as **its own labelled statement**, and that statement carries **exactly one** of two forms: an exclusive assignment (a named directory plus the command creating it), or a literal sole-tree declaration. Unconditional — every directive, no parallelism test. **The check is over labelled disposition statements, and this row is where it is fixed: exactly one labelled disposition statement is present in the file outside fenced code blocks, and it carries exactly one of the two admitted forms. Zero such statements fails, whatever else the file mentions. Two or more fails. Text inside a fenced code block is outside M3's match entirely, labelled or not. A labelled statement carrying neither admitted form — a prohibition, for instance — fails on form-membership, and so does one carrying both.** The **fence exclusion** and the **exactly-one count** are dictated (*told* — the cycle-17 directive `docs/cycles/directive-tooling-spec-17-20260824T033019Z.md` @ `7010e8ff`, N1, which is the origin of both; the ground each rests on is stated below the table under "The count is exactly one", and the exposure the count creates against G6 is disclosed in §7's "Not accepted" and at AC-DT-13). **The fence exclusion is M3's only markdown sensitivity at this level**; any finer markdown-awareness — indentation, list nesting, block quotes, HTML blocks — is a **TRD** concern and is not fixed here. Text instantiating an admitted form **without** the label is not a disposition for M3's purposes and is outside M3's match; that exclusion is the governed rule's own rather than this document's normalization of it, the rule requiring the disposition to be stated "as its own labelled statement, mechanically distinguishable from incidental mention of trees or commands elsewhere in the file". **M3's contract at this level is label-presence and form-membership, and nothing else**; the label's fixed **lexical form** is a **TRD decision**, and the delegation is the governed rule's, which states that "the label's fixed form is a tooling concern, not this document's" — so a TRD fixing one discharges a delegation a governed file makes rather than inventing a requirement (G6, AC-DT-13). Because the match is over labelled statements, **no part of M3 turns on which region of the file the statement sits in**: M3 has no region extent, no manifest scoping, and no whole-file fallback, and the locatability predicate, the region-scoped branch, and the whole-file branch the three prior dispositions built are **retired** (*told* — the cycle-15 directive `docs/cycles/directive-tooling-spec-15-20260824T021751Z.md` @ `438fa4f5`, B1, which is the origin of this check; the retired region scoping originates in the cycle-11 directive's B1, the whole-file fallback in the cycle-12 directive's B1, and the predicate joining them in the cycle-14 directive's B1, and the defect the labelled-statement anchor closes is the cycle-14 gate's B1). **M3 remains total by construction**: every file either carries exactly one unfenced labelled disposition statement carrying an admitted form or does not, with no third outcome, so M3 is never an element the lint cannot decide (AC-DT-10). Every other mention of M3 in this document is a **reference to this row** and states no test of its own; where any of them appears to say something different, this row governs, and the difference is a defect in that site rather than a second rule. See "M3's check is over the labelled statement" below the table | `skills/directive-authoring.md` @ `b4a0fa58`, "Writing the directive file", first rule: "Every directive states its working-tree disposition — either an exclusive assignment (a named directory plus the command creating it) or an explicit sole-tree declaration. A prohibition is not a disposition. The disposition is stated as its own labelled statement, mechanically distinguishable from incidental mention of trees or commands elsewhere in the file; the label's fixed form is a tooling concern, not this document's." | **Label-presence and form-membership: none.** The **exactly-one count** and the **fence exclusion** are **dictated** by the cycle-17 directive @ `7010e8ff` (N1) rather than read off the governed sentence; the reading each rests on is stated below the table under "The count is exactly one", and the exposure the count creates against G6 is disclosed in §7's "Not accepted" and at AC-DT-13 |
 | M4 | The stop conditions are present: cannot-execute-as-written, and concurrent tree mutation | Core rules 11 and 15 | none |
 | M5 | The first instruction is write-the-directive-file, commit, push, report the SHA | Core Vocabulary, "Execution block" | DEC-000160 fixes this for **every** directive class, so no class exemption exists for the lint to carry |
 | M6 | A report section is present and enumerates its required fields | Decision Layer rule 14, "Write it so the returned report is triageable by the next decision session" | none |
@@ -808,19 +913,72 @@ unknown, and the anchor it turns on is carried by the governed rule rather than
 by a manifest, so hand-written directives stay inside M3's range at the cost of
 a label.
 
-**The two generated cases are decided without any scoping.** A
-**correctly-filled** skeleton carries the prompt and one labelled statement
-carrying one admitted form: one labelled statement, form-member, exit 0. An
-**unfilled** one carries the prompt and no filled disposition, and it fails
-either because it carries no labelled disposition statement at all or because a
-label emitted as part of the empty slot carries neither admitted form. Both
-readings fail it, so whichever the TRD's label form produces, the exit is the
-same — which is why AC-DT-03 and AC-DT-06 state the unfilled case in those
-terms rather than depending on the answer.
+**The two generated cases are decided without any scoping, and the ordinary
+generated path passes by construction** (*told* — the cycle-17 directive's B1,
+disposing the cycle-16 gate's B1). The generator emits the label over an empty
+content slot (G3, AC-DT-03), so a **correctly-filled** skeleton carries the
+prompt and exactly one unfenced labelled statement whose content is one admitted
+form: count one, form-member, exit **0**. That is not a coincidence of the
+author's care. The only thing a faithful author supplies is the **content**, the
+label being already present in the exact form M3 matches, so **filling the slot
+faithfully is sufficient for M3 to pass** — the property J1 and J2 now state,
+and the property the cycle-16 gate's B1 found this document nowhere carried. An
+**unfilled** skeleton carries the prompt and the label over a blank content
+slot: count one, carrying **neither** admitted form, exit **non-zero**.
+
+**The unfilled case is decided on form-membership, not on the count, and that
+is what reconciles AC-DT-03 with AC-DT-06's fixture (v).** The previous revision
+left two readings of the unfilled skeleton — a file carrying no labelled
+statement at all, or one carrying a label with neither form — and stated one at
+each criterion, so two implementations conforming to §6 produced different
+files. There is now one reading: the generator emits the label, so the file
+always carries exactly one labelled statement, and an unfilled slot fails
+because its content is neither form. The exit is the same whatever lexical form
+the TRD fixes, which is why both criteria can state the case without waiting on
+that decision (§8 Q9).
+
+**The count is exactly one, it is scoped outside fenced code blocks, and both
+halves are dictated rather than read off the governed sentence** (*told* — the
+cycle-17 directive
+`docs/cycles/directive-tooling-spec-17-20260824T033019Z.md` @ `7010e8ff`, N1,
+disposing the cycle-16 gate's N1; M3's row is where the check itself is fixed).
+The **ground** the disposition states is the authoring corpus the check has to
+live in. The same governed skill's fifth authoring rule reads: "**Carry dictated
+wording as a pointer** — the source's path and SHA plus its field or section,
+never restated — **unless the directive is itself the wording's origin**, in
+which case it carries it inline and downstream artifacts point at it"
+(*observed*, `skills/directive-authoring.md` at `origin/main`, `:29-32`, quoted
+**whole**; the judgment-only table below cites the same rule). That exception is not rare in this effort. A directive that
+originates other directives' dispositions — a fixture set, a dictated example,
+this document's own directives — carries their labelled statements **inline**,
+and carries several at once. Fenced carriage is how such wording travels, so
+**fenced text is outside M3's match**: a directive quoting or originating other
+labelled statements inside fences states exactly one disposition of its own,
+unfenced, and passes. The motivating incident is untouched by the exclusion —
+it carries no labelled statement anywhere, fenced or not, and fails on count
+zero.
+
+**Neither half is governed text, and this document says so rather than implying
+otherwise.** The governed sentence states that the disposition is its own
+labelled statement, mechanically distinguishable from incidental mention.
+**Label-presence**, **form-membership**, the exclusivity of the two forms, and
+**at-least-one** read straight off it. **At-most-one** does not: the sentence
+states no count, and its only carrier is the definite singular of "the
+disposition" read together with the first rule's "**every** directive states
+**its** working-tree disposition" — a reading, not a read-off. The fence
+exclusion is likewise this document's, though it runs the other way, narrowing
+what the lint matches rather than adding a requirement to enforce. The reading
+is stated here so it can be audited instead of assumed, and the exposure the
+count creates against G6 is recorded where this document keeps such exposures —
+§7's "Not accepted", and AC-DT-13, which is the criterion that would be tested.
+Closing it takes an expedited amendment fixing the count in the governed skill,
+or deletion of the clause; the disposition takes neither and keeps the count.
 
 **M3 is still total, and AC-DT-10's non-reach is still derived rather than
-declared.** Every file either carries exactly one labelled disposition statement
-carrying an admitted form or does not; there is no third outcome and no input on
+declared.** Every file either carries exactly one **unfenced** labelled
+disposition statement carrying an admitted form or does not; fencing is a
+property of the text a parser decides before the count is taken, so it adds no
+third outcome and no input on
 which M3 has nothing to decide. So M3 is never an element the lint cannot
 decide, AC-DT-10 stands unamended and has no M3 instance to govern, and the
 **Reliability** goal is not excepted for M3. Totality is also what keeps the
@@ -1163,32 +1321,33 @@ and N1). **Scope of this count**, stated with it because §1 carries a different
 count of the same directory: this is every `*.md` entry in `docs/cycles/` **as
 the directory stands at this revision**, classified against M8's three patterns —
 not the research document's 91/90 measured at `49bd6ff4` (§1), and not a count
-of directives as a class. `docs/cycles/` holds **107** markdown files, of which
-**71** match pattern 1, **7** match pattern 2 `cycle-<N>-directive.md`, **26**
+of directives as a class. `docs/cycles/` holds **109** markdown files, of which
+**73** match pattern 1, **7** match pattern 2 `cycle-<N>-directive.md`, **26**
 match pattern 3 `<SLUG>-directive.md`, and **3 match none**. The total and the
-pattern-1 count each rise by **one** against cycle 14's 106/70, which is the
-normal per-cycle rise: cycle 14's 106/70 rose by two from cycle 12's 104/68,
+pattern-1 count each rise by **two** against cycle 15's 107/71: cycle 15's
+107/71 rose by one from cycle 14's 106/70, that by two from cycle 12's 104/68,
 that by one from cycle 11's 103/67, that from cycle 10's 102/66 and that from
 cycle 9's 101/65, and cycle 6's 98/62 rose by one from
 cycle 5's 97/61 and that from cycle 4's 96/60, because each cycle's own
 directive file is in the directory by the time its revision recounts. The rise
 is **two** only when an independent gate's directive lands in the same interval,
-which has happened twice — at cycle 9, against cycle 7's 99/63, and at cycle 14,
-cycle 13 having been the second independent gate. **It does not happen here**:
-cycle 14 was a self-gate and cycle 15 is a self-gate, so no gate directive landed
-in this interval and this cycle's single new file is
-`docs/cycles/directive-tooling-spec-15-20260824T021751Z.md`, this cycle's own,
-which matches pattern 1 (*observed*). This paragraph's figures are a **consequential update
-under Core rule 13**, not a dictated disposition: the cycle-15 directive
+and **that is what happened here** — the **third** occurrence, after cycle 9
+(against cycle 7's 99/63) and cycle 14 (cycle 13 having been the second
+independent gate). The two files this interval added are
+`docs/cycles/directive-tooling-gate-3-20260824T030834Z.md`, the **third
+independent gate**'s directive, whose review this cycle dispositions, and
+`docs/cycles/directive-tooling-spec-17-20260824T033019Z.md`, this cycle's own;
+both match pattern 1 (*observed*, by running). This paragraph's figures are a **consequential update
+under Core rule 13**, not a dictated disposition: the cycle-17 directive
 dispositions no figure, and the recount is restated because it is stated "at
-this revision" and the one file this interval added is in the directory. **Cycle 9's pattern-3 disposition moves none of these figures,
+this revision" and the two files this interval added are in the directory. **Cycle 9's pattern-3 disposition moves none of these figures,
 and nor did cycle 7's** (*told* — the cycle-7 directive's B1 and the cycle-9
 directive's B2 each direct this be stated; *observed* for the verification; the
 cycle-12 directive's N2 is the origin of naming cycle 9 explicitly here, the
 deictics it replaces having named cycle 9 implicitly since cycle 9). The classification run with cycle 6's character class and run
 without it agrees on every file in the corpus — which cycle 6's gate verified at
 98 files (`reviews/directive-tooling-cycle-6.md` @ `d8f8d7a6`, O4) and which
-reproduces at 107 at this revision — and the single-component boundary added in
+reproduces at 109 at this revision — and the single-component boundary added in
 cycle 9 is likewise inert over the corpus, because `docs/cycles/` **contains no
 subdirectory**: `git ls-tree` at this revision returns blobs only, so no
 committed name carries a path separator to be admitted or rejected (*observed*).
@@ -1313,9 +1472,9 @@ it cannot check that it can be *carried out*, and G9 requires it to say so.
   directive quality. A lint that cannot decide an element reports it unknown and
   exits non-zero, rather than passing it. The rule admits no exception, and M3 is
   not one: M3's check is total by construction — every file either carries
-  exactly one labelled disposition statement carrying an admitted form or does
-  not, with no third outcome (§4, M3's row; §4, "M3's check is over the labelled
-  statement") — so M3 is never an element the lint cannot decide and the rule
+  exactly one **unfenced** labelled disposition statement carrying an admitted
+  form or does not, with no third outcome (§4, M3's row; §4, "M3's check is over
+  the labelled statement"; §4, "The count is exactly one") — so M3 is never an element the lint cannot decide and the rule
   simply has no M3 instance to govern. That is a derived consequence of the
   check, not a carve-out from this goal.
 - **Scalability**: N/A. One directive per invocation; no growth dimension.
@@ -1465,7 +1624,7 @@ it cannot check that it can be *carried out*, and G9 requires it to say so.
   from the filename recount. So the filename recount does not re-baseline this
   outcome, because it is not evidence for it in either direction. Where the
   filename number does belong is stated where it is measured: M8's yield against
-  the pre-adoption corpus is **1 non-conforming directive file of 107 markdown
+  the pre-adoption corpus is **1 non-conforming directive file of 109 markdown
   files in `docs/cycles/` at this revision** — the scope §4 states with the
   recount — with the
   classification and its provenance in §4, and it is a property of the lint's
@@ -1642,20 +1801,32 @@ fixture repository" is not read as covering every entry.
   the generator and the lint in agreement: M3 checks label-presence, so a prompt
   omitting the labelling requirement would produce skeletons whose faithful
   completion fails M3.
-  **The author region** is present and **empty**, is structurally
-  distinguishable from an author region that has been filled, and is the only
-  part of the slot the author writes into — the region into which the author
-  writes the **labelled disposition statement** M3 requires (*told* — the
-  cycle-15 directive's B1, which retires the search-scoping this criterion
-  stated here; §4, M3's row). Present-and-empty is therefore exactly the state
-  AC-DT-06's unfilled-skeleton fixture requires M3 to fail on: an empty author
-  region leaves the file carrying no labelled disposition statement, and the
-  prompt above it is not one. Structural distinguishability from a filled region
-  is what makes that fixture decidable.
+  **The author region** is present and carries the **labelled statement with an
+  empty content slot**: the TRD-fixed **label** is emitted by the generator as
+  the region's marker, the **content slot** beneath it is blank, and a blank
+  content slot is structurally distinguishable from one an author has filled
+  (*told* — the cycle-17 directive's B1, disposing the cycle-16 gate's B1). This
+  criterion previously required the region to be "present and **empty**", which
+  put the label's form nowhere in the skeleton and left a faithful author unable
+  to learn the form M3 matches — the defect that gate filed as blocking. The
+  author writes the **content** and nothing else; label plus content is the
+  **labelled disposition statement** M3 requires (§4, M3's row).
+  This is the state AC-DT-06's unfilled-skeleton fixture (v) requires M3 to fail
+  on, and it fails on **form-membership**, not on the count: the file carries
+  exactly one labelled disposition statement, whose empty content carries neither
+  admitted form, and the prompt above it is not a labelled statement at all. The
+  two criteria now state the **same file**, which the previous revision did not
+  (§4, "The unfilled case is decided on form-membership").
+  **Together the two regions secure the property the generated path rests on** —
+  that a skeleton whose content slot is filled faithfully passes M3 (J1, J2; §4,
+  "The two generated cases"). The prompt states the requirement; the emitted
+  label supplies the form. Neither half is sufficient alone, which is why this
+  criterion binds both.
   Verifiable by generating a skeleton
   and asserting, from the file and its manifest alone, that the prompt region's
-  text matches the committed source its manifest entry names and that the author
-  region is present and blank.
+  text matches the committed source its manifest entry names, that the author
+  region is present and begins with the label its manifest entry names as the
+  region's marker, and that the content slot beneath that label is blank.
 - **AC-DT-04** — Scoped to the **general mode** (§4, "Mode scoping"). In the
   general mode the generator exits 0 for every invocation that produces a
   skeleton, rejects no content, and has no refusal path. In **both** modes it
@@ -1675,7 +1846,16 @@ fixture repository" is not read as covering every entry.
   classifications**, never both and never neither, which is well-defined at the
   working-tree disposition because G3 splits it: the disposition **prompt** is
   an entry naming a committed file, and the disposition **author region** is an
-  author-marked entry (*told* — the cycle-10 directive's B1). Every marker the manifest names appears in the emitted
+  author-marked entry (*told* — the cycle-10 directive's B1). **The label the
+  generator emits into the disposition author region is that region's marker,
+  and the partition treats it as it treats every other marker** (*told* — the
+  cycle-17 directive's B1): every region the generator emits begins with a
+  generator-emitted marker, the task-specific author slot included, and each
+  marker's bytes fall inside the extent of the region it begins. So emitting the
+  label introduces no asymmetry into the partition and no new bias into §5's
+  first measurement — the convention is uniform across regions and was already
+  uniform before the label existed. What the measurement is bounded by is
+  unchanged and stated at §5's first outcome. Every marker the manifest names appears in the emitted
   file exactly once, every region the generator emits carries one, and the manifest
   enumerates every region in emission order — so taking each entry's extent from
   its marker to the next marker or to end of file partitions the **whole file**
@@ -1692,12 +1872,24 @@ fixture repository" is not read as covering every entry.
   output names that element and cites the governed text it derives from. For M3
   the check is an **unconditional presence-and-form test over labelled
   disposition statements**, with no parallelism precondition, no sequencing
-  precondition, and **no search extent of any kind** (*told* — the cycle-15
+  precondition, and **no region extent of any kind** — its one structural
+  sensitivity being the **fence exclusion** (§4, M3's row) (*told* — the cycle-15
   directive's B1, which retires the region scoping of the cycle-11 disposition,
   the whole-file fallback of the cycle-12 disposition, and the locatability
   predicate of the cycle-14 disposition; §4, M3's row) — the governed rule is
   committed (`skills/directive-authoring.md` @ `b4a0fa58`), so this criterion is
-  live now and its fixtures are written now.
+  **live now and its fixtures are specified now**. They become **instantiable as
+  files** once the TRD fixes the label's lexical form (*told* — the cycle-17
+  directive's N2, disposing the cycle-16 gate's N2). Every M3 fixture below
+  states the **shape** a file must have — one labelled statement, two, none,
+  this admitted form or that, fenced or unfenced — and none states literal label
+  text, because M3's contract at this level is label-presence and
+  form-membership and the label's form is delegated to the TRD by the governed
+  rule itself (M3's row). A release gate reading §6 as an implementer checklist
+  should read the M3 fixtures the way AC-DT-16 asks its own entry to be read:
+  waiting on a decision session rather than red. **§8 Q9 tracks that decision**
+  and names what resolves it, so the dependency is scheduled rather than
+  dangling.
   **The M3 fixtures are stated over the labelled statement, and the verdicts
   below are applications of M3's row rather than a second statement of its
   check** (*told* — the cycle-15 directive's N1, which requires every M3 site to
@@ -1705,9 +1897,10 @@ fixture repository" is not read as covering every entry.
   **one labelled disposition statement carrying one admitted form** exits 0 on
   that element, and there is one such fixture for each of the two forms — the
   sole-tree one included, which under this criterion must pass M3 rather than be
-  exempt from it. A fixture carrying **no labelled disposition statement** exits
-  non-zero. A fixture carrying **two** labelled disposition statements exits
-  non-zero. A fixture whose single labelled statement carries **neither** admitted
+  exempt from it. A fixture carrying **no unfenced labelled disposition
+  statement** exits non-zero — which reaches both the file that carries none at
+  all and the file whose only labelled statement is fenced. A fixture carrying **two unfenced** labelled disposition statements
+  exits non-zero. A fixture whose single labelled statement carries **neither** admitted
   form exits non-zero, and so does one whose single labelled statement carries
   **both** — the both-forms fixture the previous revision stated over a searched
   extent, restated here over the statement.
@@ -1735,8 +1928,8 @@ fixture repository" is not read as covering every entry.
   incident requires in both cases.
   **Every fixture in this set has a decidable M3 verdict, and that follows from
   the check rather than being asserted of the set**: every file either carries
-  exactly one labelled disposition statement carrying an admitted form or does
-  not. No M3 fixture is therefore an undecidable element, none falls to
+  exactly one **unfenced** labelled disposition statement carrying an admitted
+  form or does not. No M3 fixture is therefore an undecidable element, none falls to
   AC-DT-10, and the two criteria agree on every one of them — a derived
   consequence, not a property this criterion claims for its own fixtures alone.
   **Two generated-skeleton fixtures remain, and what they assert is the prompt's
@@ -1744,16 +1937,36 @@ fixture repository" is not read as covering every entry.
   pair originates in the cycle-11 directive's B1). Both are **generated
   skeletons**, so both carry the prompt region and its naming of the two admitted
   forms, and they differ only in the author region.
-  **(iv) Correctly filled** — author region carrying one labelled disposition
-  statement with one form: exits **0**, the prompt not being a labelled statement
-  and so not counting.
-  **(v) Unfilled** — author region **empty**: exits **non-zero**, the file
-  carrying no labelled disposition statement at all — or, if the TRD's label form
-  is emitted with the empty slot, one carrying neither admitted form. Both
-  readings fail it, so the fixture is decidable either way.
+  **(iv) Correctly filled** — the author region's **content slot** filled, so
+  the region carries one labelled disposition statement with one admitted form:
+  exits **0**, the prompt not being a labelled statement and so not counting.
+  This is the ordinary generated path, and it passes **by construction** rather
+  than by the author's care (J1, J2; §4, "The two generated cases").
+  **(v) Unfilled** — the author region as emitted, carrying the label over a
+  **blank content slot**: exits **non-zero**, the file carrying exactly one
+  labelled disposition statement whose content carries **neither** admitted form,
+  so it fails on **form-membership** (*told* — the cycle-17 directive's B1, which
+  reconciles this fixture with AC-DT-03). The previous wording offered two
+  readings — no labelled statement at all, or a label with neither form — and
+  AC-DT-03 asserted the first while this fixture contemplated the second, so two
+  implementations conforming to §6 produced different files. There is now one
+  reading, it is AC-DT-03's, and both criteria state the same file.
   An implementation that matched the prompt's quoted forms would pass (v) and
   fail (iv), so the pair still pins the behaviour in both directions. What it no
-  longer asserts is any claim about where in the file M3 looks.
+  longer asserts is any claim about which region of the file M3 looks in.
+  **(vi) One unfenced labelled statement plus fenced labelled statements** — a
+  directive carrying its own labelled disposition statement in running text and,
+  elsewhere in the file, one or more **fenced** labelled disposition statements,
+  as a directive originating another directive's wording carries it inline under
+  the carry-as-pointer rule's origin exception: exits **0** (*told* — the
+  cycle-17 directive's N1; §4, "The count is exactly one"). This fixture pins the
+  fence exclusion in the direction the count would otherwise break: without it,
+  the ordinary directive of this effort — one dictating AC-DT-06's own fixtures
+  (i)–(v) — states exactly one disposition and exits non-zero. Its complement is
+  already covered: a directive whose **only** labelled statement is fenced
+  carries zero unfenced statements and exits non-zero, which is the no-labelled-
+  statement verdict above applied to a fenced file, and it is the false positive
+  §7 accepts rather than a shape this criterion excuses.
   For M8 the check is a **form-set membership
   test over three patterns**, with eight fixtures, matched against the lint's
   path argument **as resolved** to a repository-relative path and not as given
@@ -1895,15 +2108,31 @@ fixture repository" is not read as covering every entry.
 - **AC-DT-13** — The lint enforces no requirement absent from its cited governed
   sources. Verifiable by review of the requirement table against those files, and
   mechanically to the extent each requirement carries the citation AC-DT-06
-  demands. Every element M1–M8 satisfies this as written — M3 included
+  demands. Every element M1–M8 satisfies this as written **for every
+  requirement it carries but one** — M3 included for label-presence and
+  form-membership
   (`skills/directive-authoring.md` @ `48ad7fd1` for the two-form requirement and
   the same file @ `b4a0fa58` for the labelled-statement requirement, whose
   delegation of the label's fixed lexical form to tooling is what licenses a TRD
   to fix one without the lint enforcing an unsourced requirement) and M8's
   timestamp rule included
   (the same file @ `6179221a`, which states the date-and-time requirement M8
-  enforces). No element is held back, none carries a sequencing qualification, and
-  **no element carries a carve-out from this criterion**: an element has outrun its
+  enforces). **The one exception at this revision is M3's exactly-one count**, and it is
+  named at the criterion rather than left to §7 (*told* — the cycle-17
+  directive's N1, disposing the cycle-16 gate's N1). The governed sentence states
+  no count; the clause is dictated by the cycle-17 directive @ `7010e8ff` and
+  rests on a reading of "the disposition" as a definite singular (§4, "The count
+  is exactly one"). A criterion asserting universal satisfaction while one
+  element is known not to satisfy it would be untestable as written, and this
+  document does not carry such a claim. The exposure is disclosed in the same
+  terms in §7's "Not accepted", and closing it takes an expedited amendment to
+  the governed skill or deletion of the clause — neither taken here. The **fence
+  exclusion** is not a second exception: it narrows what the lint matches rather
+  than adding a requirement the lint enforces, and this criterion is about
+  enforcement.
+  No element is held back, none carries a sequencing qualification, and
+  **no element carries a silent carve-out from this criterion** — the one
+  exception above is stated at both sites rather than absorbed at either: an element has outrun its
   source in this effort three times, and the resolution was an expedited amendment
   to the governed file twice (M3 at `48ad7fd1`, M8's timestamp rule at `6179221a`)
   and **deletion of the requirement** once (M8's `<SLUG>` character class, cycle 7's
@@ -2140,22 +2369,52 @@ no mitigation inside the lint and none is claimed: the generator's adoption does
 not reach it either, because the generator emits the **prompt** and the author
 writes the **statement**.
 
-**Residual two — a labelled statement under quotation.** A directive that
-**quotes another directive's labelled disposition statement** — in a provenance
-note, a carried constraint, a citation of a prior cycle — carries **two**
-labelled statements and exits non-zero, though it states exactly one disposition
-of its own. A label quoted is a label present, and distinguishing an asserted
-statement from a quoted one is not a property this document fixes. The governed
-rule does not draw that line either: it distinguishes the labelled statement from
-**incidental mention of trees or commands**, not from a labelled statement under
-quotation, so a lint that tried to draw it would be enforcing a requirement no
-governed file states (G6). Its direction is the **false positive** — a false stop
-on a well-formed directive, at a cost of one invocation, which is the direction
-this section's next item accepts in general. The mitigation available to the
-other residuals is not available here, the generator emitting the prompt rather
-than policing what an author quotes. What would close it is a TRD-stage label
-form a quotation cannot reproduce, or a governed rule about quoting directives;
-neither is decided here, and the residual is accepted at this width.
+**Residual two — a labelled statement carried outside a fence.** A directive
+that carries **another directive's labelled disposition statement in running
+text, outside a fenced code block**, carries **two** unfenced labelled statements
+and exits non-zero, though it states exactly one disposition of its own. A label
+carried is a label present, and distinguishing an asserted statement from a
+carried one is not a property this document fixes. The governed rule does not
+draw that line either: it distinguishes the labelled statement from **incidental
+mention of trees or commands**, not from a labelled statement under carriage, so
+a lint that tried to draw it would be enforcing a requirement no governed file
+states (G6).
+
+**This residual is stated over the shapes the governed authoring rules actually
+produce, and the previous revision stated it over shapes they forbid** (*told* —
+the cycle-17 directive's N1, disposing the cycle-16 gate's N1). That revision
+named a provenance note, a carried constraint, and a citation of a prior cycle.
+All three are **carried-forward** wording, and
+`skills/directive-authoring.md`'s fifth authoring rule directs an author to
+carry such wording **as a pointer** — path, SHA, and section, never restated — so
+a conforming author does not produce any of the three, and the residual as
+stated was over shapes that do not occur. The shape that **does** occur is that
+rule's own exception: a directive that is itself the wording's origin carries it
+**inline**, and this effort's own directives are the standing instance, one
+dictating AC-DT-06's fixtures (i)–(v) originating several labelled statements at
+once. The **fence exclusion** is what keeps that instance passing (§4, "The
+count is exactly one"; AC-DT-06 fixture (vi)), so what is left of the residual is
+the author who carries such wording inline and **unfenced** — a false positive of
+authoring style, not of the check's reach. This is the governing rule §4's
+judgment-only table already carries as its carry-as-pointer entry, and the
+cross-reference is made here so the two are read together.
+
+**A second shape runs the same direction**: an author whose only disposition is
+written **inside** a fence carries zero unfenced labelled statements and fails.
+Neither shape is produced by the generated path, which emits the label unfenced
+(G3, AC-DT-03). Both are **false positives** — a false stop on a well-formed
+directive, at a cost of one invocation, which is the direction this section's
+next item accepts in general. The mitigation available to the other residuals is
+not available here, the generator emitting the prompt and the label rather than
+policing what an author carries. What would close them is a TRD-stage label form
+a carried statement cannot reproduce, or a governed rule about carrying
+directives; neither is decided here, and the residual is accepted at this width.
+
+**Whether M3's match is sensitive to any further markdown context is not left
+open**: the fence exclusion is its only such sensitivity at this level, and
+indentation, list nesting, block quotes, and HTML blocks are TRD concerns (M3's
+row). Cycle 15's N1 asked the question and the previous revision carried no
+answer; this revision answers it at PRD level rather than parking it.
 
 **The accepted set changed in extension again this cycle, and the change is
 stated rather than characterized** (*told* — the cycle-15 directive's N2; the
@@ -2180,6 +2439,20 @@ kind — the residual this section carried at cycles 12 and 14 was false-positiv
 only, and this one is not. That is stated plainly because a false stop costs one
 invocation and a false pass costs whatever the wrong tree costs, and the two are
 not interchangeable in an accepted-risk list.
+
+**The set changed again in cycle 17, in extension and in one direction only**
+(*told* — the cycle-17 directive's N1). Residual one is unchanged. Residual two
+**shrank**: under the fence exclusion it no longer reaches the carried wording a
+conforming author writes as a pointer, nor the originating wording a conforming
+author fences, and what remains is unfenced inline carriage plus the
+fenced-only-disposition shape. **One shape is new in kind and it is named
+rather than folded in**: the fenced-only disposition did not exist as a residual
+before this cycle, the fence exclusion being what creates it, and it is a
+**false positive** like the carriage shape beside it. The **false-negative**
+member of the set is still residual one and still the only one, so the direction
+mix is unchanged, and the set's extension is narrower on balance — the point of
+the restatement being that it is now stated in shapes an author can recognize
+rather than in shapes the authoring rules forbid.
 
 Two bounds on the acceptance, so it is auditable. It is **not** an acceptance of
 the motivating incident going uncaught: that case fails mechanically now, and
@@ -2217,8 +2490,22 @@ writes" to "only these writes," and what is not accepted is a write outside it �
 the narrowing is of the claim, not of the protection. Any refusal by either mode
 that turns on the *content* of a directive rather than on a precondition, which
 would put refusal in two places and make the generator a second gate. Any lint
-enforcement of a requirement no governed file states (G6, AC-DT-13). **Three**
-elements have stood in that position in this effort and **none does now**. Two were
+enforcement of a requirement no governed file states (G6, AC-DT-13). **Four**
+elements have stood in that position in this effort; three are closed, and **the
+fourth stands at this revision and is disclosed rather than closed** (*told* —
+the cycle-17 directive's N1, disposing the cycle-16 gate's N1). The fourth is
+M3's **exactly-one count**: the governed sentence states no count, the clause is
+dictated by the cycle-17 directive @ `7010e8ff`, and it rests on a reading of
+"the disposition" as a definite singular rather than on a read-off (§4, "The
+count is exactly one"; AC-DT-13). It is named here because this is the section
+Dave signs, and a reader of it should be able to audit the claim the section
+makes about itself: at this revision the claim is "**one stands**", not "none
+does". Closing it takes one of the two admissible routes this item already
+names — an expedited amendment to `skills/directive-authoring.md` fixing the
+count, or **deletion** of the clause, which would narrow M3 to at-least-one and
+drop residual two with it — and neither is taken here. The **fence exclusion**
+does not stand in this position: it narrows what the lint matches rather than
+adding a requirement the lint enforces. The three that are closed: two were
 closed by amending the governed source, not by taking an exception here: M3's
 unconditional two-form rule is governed text at `skills/directive-authoring.md` @
 `48ad7fd1` — and its labelled-statement requirement in the same file @
@@ -2234,7 +2521,7 @@ that file, `b4a0fa58`, is not a fourth instance of an element outrunning its
 source: it tightened the governed rule and M3 follows it, rather than M3 having
 enforced the label before the rule stated it (§1; AC-DT-13). The prohibition
 stands undiminished for every element
-added after all three. **Cycle 9's single-component boundary on pattern 3 is not
+added after any of them. **Cycle 9's single-component boundary on pattern 3 is not
 a fourth instance and does not stand in that position** (*told* — the cycle-9
 directive's B2; *observed* for the source): it is stated by AC-CO-1's own
 destination clause at `docs/packages/package-a-spec.md` §3.6 @ `768bbe3b`, so it
@@ -2359,3 +2646,21 @@ acceptable is Dave's judgment, never the tool's.
   anywhere in AC-CO-1 through AC-CO-12 (§3.6 and §8.2 @ `768bbe3b`). Under the
   conflict rule in §4's "Mode
   scoping", finding one is a blocking finding, not a fourth widening of M8.
+- **Q9 (raised by the cycle-16 gate; open).** The label's **lexical form** — the
+  fixed text that marks a working-tree disposition statement, which M3 matches
+  on and which `bin/directive` emits into the disposition author region. The
+  governed rule delegates it in its own words ("the label's fixed form is a
+  tooling concern, not this document's"), and this document states M3's contract
+  at label-presence and form-membership and goes no further (§4, M3's row).
+  **What waits on the answer, and what does not.** M3's contract does not wait
+  on it, nor does AC-DT-03's structure, nor AC-DT-06's fixture **shapes**; what
+  waits is instantiating those fixtures as **files**, since none can be written
+  without the literal text (AC-DT-06). Until it is fixed, an implementer reading
+  §6 as a checklist should read the M3 fixtures as waiting on a decision session
+  rather than as red, on AC-DT-16's model. **B1's reconciliation is the other
+  half of the same decision** (*told* — the cycle-17 directive's B1 and N2): the
+  generator emits the label, so whatever the TRD fixes is what the lint matches
+  and what a faithful author sees, and the two cannot drift apart. Recorded as a
+  question because leaving it untracked is what let the generator and the lint
+  disagree about it for two cycles. Resolved by: the **TRD stage**, which fixes
+  the form; nothing in this document is held back by it.
