@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/expedited-log.md @ 6179221a013e8006e573d6a35a4dca75dd966ccb
+last-reviewed: reviews/expedited-log.md @ b4a0fa581ba5c64ac5a0e5374b5604e979a73653
 audience: [chief-of-staff, human]
 ---
 
@@ -14,7 +14,10 @@ One self-contained directive per session.
 
 - **Every directive states its working-tree disposition** — either an
   exclusive assignment (a named directory plus the command creating it) or an
-  explicit sole-tree declaration. A prohibition is not a disposition. Two
+  explicit sole-tree declaration. A prohibition is not a disposition. The
+  disposition is stated as its own labelled statement, mechanically
+  distinguishable from incidental mention of trees or commands elsewhere in the
+  file; the label's fixed form is a tooling concern, not this document's. Two
   sessions sharing a tree mutate each other's preconditions; prefer not
   splitting work across trees.
 - **Pin STOP conditions to the reviewed ref**, not the head of the branch the

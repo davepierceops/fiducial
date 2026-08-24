@@ -53,3 +53,4 @@ derived facts are allowed to live.
 - 2026-08-23 — skills/directive-authoring.md @ 48ad7fd1e827a7c92660fd2cd9ebc5871c1dbc21 — working-tree disposition made mandatory for every directive
 - 2026-08-23 — skills/directive-authoring.md @ 83b60511f4cc6e0346b08e4e111a7c17a14bc0d9 — numbered cycle-directive form licensed alongside the timestamp form
 - 2026-08-23 — skills/directive-authoring.md @ 6179221a013e8006e573d6a35a4dca75dd966ccb — timestamp form requires date and time components both present
+- 2026-08-23 — skills/directive-authoring.md @ b4a0fa581ba5c64ac5a0e5374b5604e979a73653 — disposition must be its own labelled statement, mechanically distinguishable from incidental mention of trees or commands
