@@ -32,7 +32,9 @@ origin of the cycle-9 dispositions, and
 `docs/cycles/directive-tooling-spec-10-20260823T235811Z.md` @ `eeaa06cb` is the
 origin of the cycle-10 dispositions, and
 `docs/cycles/directive-tooling-spec-11-20260824T002031Z.md` @ `c93eaba3` is the
-origin of the cycle-11 dispositions this revision carries. Cycle 8 contributes no
+origin of the cycle-11 dispositions, and
+`docs/cycles/directive-tooling-spec-12-20260824T003835Z.md` @ `a580deb7` is the
+origin of the cycle-12 dispositions this revision carries. Cycle 8 contributes no
 dispositions and has no directive in this series: it was the **independent
 gate** on the cycle-7 revision — the first cycle whose review was not written by
 the session that authored the revision — run under
@@ -108,9 +110,9 @@ not, and neither is approximate. The figure above is the **research document's**
 markdown files in `docs/cycles/` as the directory stood at `49bd6ff4` — 91
 present, 90 in the measured corpus — and it says nothing about how many of them
 are directives. §4's recount is **this document's own**, taken at this revision
-against M8's three patterns: **103** markdown files, of which 3 match no
+against M8's three patterns: **104** markdown files, of which 3 match no
 licensed pattern and 2 of those 3 are not directives at all. The two figures
-differ because the directory has grown by twelve files since the research was
+differ because the directory has grown by thirteen files since the research was
 written and because one counts files while the other classifies them. Neither
 supersedes the other, and **neither is a count of directives as a class**. One
 figure in this document is class-scoped — §4's "exactly one" non-conforming
@@ -264,8 +266,12 @@ Top K = 3.
   it can be supplied. This is the journey the motivating incident would have
   taken: the directive in that incident stated a prohibition and no disposition of
   either admitted form, which M3 — unconditional, and mechanically checkable as a
-  presence test over two named forms, **run over the disposition author region**
-  (§4, "M3's search is scoped to the author region") — fails. A skeleton generated
+  presence test over two named forms, **run over the disposition author region
+  where a G11 manifest locates one and over the whole file where none does**
+  (§4, "M3's search is scoped to the author region, with the whole file as the
+  fallback") — fails. It fails under either extent here: the incident's directive
+  was hand-written and carries no manifest, so the fallback searches the whole
+  file and finds a prohibition and no disposition of either form. A skeleton generated
   for that directive would have carried the prompt region naming both forms, and
   that region is outside M3's search: an author region left empty fails M3 exactly
   as a prohibition-only one does, which is the whole point of scoping the search.
@@ -536,15 +542,21 @@ exercises.
     neither writes it nor edits it, and the manifest entry for it names a
     committed path. **M3's search does not reach this region** (*told* — the
     cycle-11 directive's B1): the two forms it names are governed text this
-    region quotes, not a disposition this directive states (§4, "M3's search is
-    scoped to the author region").
+    region quotes, not a disposition this directive states. That exclusion is
+    what the manifest buys, and it is also why M3's whole-file fallback is safe
+    on a directive carrying no manifest — a file with no prompt region has no
+    such text to exclude (§4, "M3's search is scoped to the author region, with
+    the whole file as the fallback").
   - **The disposition author region** — the **author's**, and empty as emitted.
     It carries the actual exclusive assignment or sole-tree declaration for this
     directive. It is one of the two freehand regions G2 names, it is the only
     part of the slot J1 hands to the author, it is the region AC-DT-03 requires
     to be present and empty and AC-DT-18 counts as author-marked, it is the
-    **extent M3's search is scoped to** (*told* — the cycle-11 directive's B1),
-    and the manifest entry for it is author-marked.
+    **extent M3's search is scoped to** in a directive that carries a manifest,
+    which is every directive `bin/directive` emits (*told* — the cycle-11
+    directive's B1; the whole-file fallback that applies where no manifest is
+    present is the cycle-12 directive's B1), and the manifest entry for it is
+    author-marked.
 
   **The split is what makes the slot classifiable, and the dual classification it
   replaces was a real defect rather than a wording infelicity.** Before it, G1
@@ -661,28 +673,31 @@ exercises.
 | --- | --- | --- | --- |
 | M1 | A reviewed-ref pin is present and resolves to a commit | `skills/directive-authoring.md`, "Pin STOP conditions to the reviewed ref" | none |
 | M2 | Each companion citation `<path> @ <sha>` names a path present at the reviewed ref, and a SHA that resolves to a **commit touching that path**. Neither fullness nor lastness is checked — see the narrowing note below the table | Core Vocabulary, "Companion document ... Cited with its own path and SHA" and "Directive file ... thereafter cited by path and the SHA of the commit that landed it"; `bin/cycle-open`'s docstring principle, "never invented" | none |
-| M3 | A working-tree disposition is present, in **exactly one** of two forms: an exclusive assignment (a named directory plus the command creating it), or a literal sole-tree declaration. Unconditional — every directive, no parallelism test. **Scoped: the search runs over the disposition author region as G11's manifest locates it, not over the whole file** (*told* — the cycle-11 directive's B1). Text in the disposition **prompt** region is not a disposition for M3's purposes, and neither is text in any other region the manifest classifies as generator-supplied. The prompt names both admitted forms, because the governed sentence it is read from names them; a whole-file reading of M3 would therefore find both forms in **every** generated skeleton and exit non-zero on a well-formed directive, and would find them in an **unfilled** one too and could not tell the two apart. See "M3's search is scoped to the author region" below the table | `skills/directive-authoring.md` @ `48ad7fd1`, "Writing the directive file", first rule: "Every directive states its working-tree disposition — either an exclusive assignment (a named directory plus the command creating it) or an explicit sole-tree declaration. A prohibition is not a disposition." | none |
+| M3 | A working-tree disposition is present, in **exactly one** of two forms: an exclusive assignment (a named directory plus the command creating it), or a literal sole-tree declaration. Unconditional — every directive, no parallelism test. **Scoped, with a whole-file fallback: where the directive carries a G11 manifest the search runs over the disposition author region as the manifest locates it and not over the whole file; where it carries no manifest the search runs over the whole file** (*told* — the cycle-11 directive's B1 for the region scoping, the cycle-12 directive's B1 for the fallback). In the manifest case, text in the disposition **prompt** region is not a disposition for M3's purposes, and neither is text in any other region the manifest classifies as generator-supplied. In the fallback case there is no such text to exclude: a directive carrying no manifest carries no generator-written prompt region, so every form-naming line in it is one its author wrote and a whole-file search cannot false-positive on sourced text naming both forms — with the one residual §7 accepts, a hand-written directive that pastes the generated prompt text without the manifest. M3 is therefore decidable on **every** directive, and no directive makes it an element the lint cannot decide (AC-DT-10). The prompt names both admitted forms, because the governed sentence it is read from names them; a whole-file reading of M3 applied to a **generated** skeleton would therefore find both forms in **every** such skeleton and exit non-zero on a well-formed directive, and would find them in an **unfilled** one too and could not tell the two apart — which is exactly why the fallback is confined to directives carrying no manifest. See "M3's search is scoped to the author region, with the whole file as the fallback" below the table | `skills/directive-authoring.md` @ `48ad7fd1`, "Writing the directive file", first rule: "Every directive states its working-tree disposition — either an exclusive assignment (a named directory plus the command creating it) or an explicit sole-tree declaration. A prohibition is not a disposition." | none |
 | M4 | The stop conditions are present: cannot-execute-as-written, and concurrent tree mutation | Core rules 11 and 15 | none |
 | M5 | The first instruction is write-the-directive-file, commit, push, report the SHA | Core Vocabulary, "Execution block" | DEC-000160 fixes this for **every** directive class, so no class exemption exists for the lint to carry |
 | M6 | A report section is present and enumerates its required fields | Decision Layer rule 14, "Write it so the returned report is triageable by the next decision session" | none |
 | M7 | The claim-label instruction is present | Core rule 6 | none |
 | M8 | The directive filename is a member of the **licensed form set**: it matches **exactly one of three patterns** — `docs/cycles/<descriptor>-<timestamp>.md`, the timestamp in ISO 8601 basic format with date and time components **both present**, `YYYYMMDDThhmmss`, optionally `Z`-suffixed; or `docs/cycles/cycle-<N>-directive.md`; or `docs/cycles/<SLUG>-directive.md`, `<SLUG>` being **any** slug the preserved contract **licenses** — that is, any **single-component basename**: the pattern states **no character class**, and it admits **no path separator**, because AC-CO-1's destination clause states that the output is written at `docs/cycles/<name>-directive.md` and a separator-bearing name produces a path that is not that destination. A trailing date with no time component is **not** a timestamp for this check. Membership is the **whole** claim: no fourth pattern passes, and M8 asserts nothing about whether the pattern a filename matches is the one that directive's mode should have produced — see "What M8 claims" below the table | pattern 1 from `skills/directive-authoring.md` @ `6179221a`, "Naming": "A directive file is `docs/cycles/<descriptor>-<timestamp>.md`, the timestamp in ISO 8601 basic format with date and time components both present (as `20260820T161541`) — except a reviewer-gated cycle directive, which is `docs/cycles/cycle-<n>-directive.md` per its stated convention." Patterns 2 and 3 anchor **directly** on the stated convention that sentence defers to: `docs/packages/package-a-spec.md` §3.6 AC-CO-1 @ `768bbe3b`, quoted whole — "Writes `docs/cycles/cycle-<N>-directive.md` for `--cycle N`, or `docs/cycles/<SLUG>-directive.md` for `--name SLUG`; exactly one of the two is required (exit 2)." Corroborated for pattern 1 by Core rule 14, whose yield clause is what licenses 2 and 3 | none — pattern 3 states **no character class** and **one path component**, and both halves are read off the same cited text: AC-CO-1 states no class, so under G6 a class here would be a requirement the lint enforces and no governed file states (*told* — the cycle-7 directive's B1); and AC-CO-1's destination clause states where the output lands, which is what bounds the name to a single component (*told* — the cycle-9 directive's B2). See "Pattern 3 is bounded by AC-CO-1's destination clause, and by nothing else" below the table |
 
-**M3's search is scoped to the author region, and the slot split is what made the
-scoping necessary** (*told* — the cycle-11 directive's B1 is the origin of the
-scoping; the defect it disposes is the cycle-10 gate's B1). G3 splits the
+**M3's search is scoped to the author region, with the whole file as the
+fallback, and the slot split is what made the scoping necessary** (*told* — the
+cycle-11 directive's B1 is the origin of the scoping and the cycle-12 directive's
+B1 of the fallback; the defect the scoping disposes is the cycle-10 gate's B1,
+and the defect the fallback disposes is the cycle-11 gate's B1). G3 splits the
 working-tree disposition slot into a sourced **prompt** region and an **author**
 region, and the prompt region carries, from `skills/directive-authoring.md` @
 `48ad7fd1`, the sentence naming both admitted forms — "either an exclusive
 assignment (a named directory plus the command creating it) or an explicit
 sole-tree declaration. A prohibition is not a disposition." That text is
-generator-supplied and lands in every directive the generator produces. So M3's
-"exactly one of two forms" is evaluated over the extent of the disposition
-**author region**, as G11's manifest locates it — marker to next marker or to end
-of file — and text outside that extent is not a disposition for M3's purposes
-however closely it resembles one.
+generator-supplied and lands in every directive the generator produces. So on a
+directive that carries a G11 manifest, M3's "exactly one of two forms" is
+evaluated over the extent of the disposition **author region**, as the manifest
+locates it — marker to next marker or to end of file — and text outside that
+extent is not a disposition for M3's purposes however closely it resembles one.
 
-Two cases turn on this and neither is decidable without it. A **correctly-filled**
+Two cases turn on this and neither is decidable without it, and both are cases
+of a **generated** directive — the only kind that carries a prompt region. A **correctly-filled**
 directive carries the prompt's naming of both forms plus one instance of one form
 the author wrote; read over the whole file, M3 counts two forms and exits non-zero
 on a well-formed directive. An **unfilled** one carries the prompt and nothing
@@ -693,20 +708,51 @@ catch. Scoping decides both in the direction the incident requires, and it
 introduces no new mechanism: G11 already requires every region to carry a marker
 and the manifest to name it, so the author region's extent is computable from the
 landed file alone (G11, AC-DT-05). AC-DT-06 fixtures both cases. The alternative
-considered and not taken — M3 reads the whole file and relies on the prompt's
+considered and not taken — M3 reads the whole file **unconditionally**, prompt
+region present or not, and relies on the prompt's
 wording not to instantiate either form — was declined because it makes the lint's
 correctness a property of a governed file this document does not control, which is
 the dependency G6 exists to keep out of the tool. Before the split this could not
 arise, the file carrying no form-naming text the author had not written; the split
-is what makes a lint that reads the whole file wrong.
+is what makes a lint that reads the whole file of a **generated** directive
+wrong.
 
-**One precondition of the scoping is stated rather than assumed.** M3 as scoped
-takes its search extent from the manifest, so it is decidable on any directive
+**Where there is no manifest, M3 searches the whole file, and the fallback is
+stated here rather than left open** (*told* — the cycle-12 directive
+`docs/cycles/directive-tooling-spec-12-20260824T003835Z.md` @ `a580deb7`, B1; the
+defect it disposes is the cycle-11 gate's B1). M3 as region-scoped takes its
+search extent from the manifest, so it is decidable that way on any directive
 whose manifest names the disposition author region — which is every directive
-`bin/directive` emits (G11, AC-DT-05). What M3 does on a directive carrying **no**
-manifest is not stated here and this document does not decide it. The bound is
-recorded because "as the manifest locates it" is a dependency of the check, and an
-undeclared dependency is exactly the shape G9 exists to make visible.
+`bin/directive` emits (G11, AC-DT-05). A directive carrying **no** manifest is
+searched **whole-file**, and the ground is the same invariant the scoping rests
+on, read in the other direction: a manifest-less directive carries no
+generator-written prompt region, so every form-naming line in it is one its
+author wrote, and a whole-file search cannot false-positive on sourced text
+naming both forms. The ground is stated with its bound rather than
+categorically: it holds of a manifest-less directive that was **written**, and
+not of one that **pastes** generator output while dropping the manifest, which
+is the single residual §7 accepts. The two cases above are the cases the prompt
+region creates; where there is no prompt region there is no such ambiguity, and the whole file
+*is* the extent the author wrote into. The dependency the previous revision
+recorded here — that "as the manifest locates it" presupposes a manifest — is
+therefore discharged rather than declared: the check has a stated extent on
+every directive, which is what G9 asks a dependency of this shape to reach.
+
+**Two consequences, stated because a fallback not carried to the criteria is not
+a fallback.** First, AC-DT-06's hand-written M3 fixtures — the neither-form one,
+the both-forms one, the two single-form ones, and the prohibition one — are
+**decidable under the fallback and keep the exits AC-DT-06
+dictates for them**, because a whole-file reading and a region-scoped reading
+agree on every directive that carries no prompt region, which is the invariant
+AC-DT-06 already asserts about those fixtures. Second, **AC-DT-10's
+undecidability rule no longer reaches M3**: there is no directive on which M3
+has no extent to search, so M3 is never an element the lint cannot decide, and
+the two criteria agree on every fixture rather than requiring opposite exits for
+the same one. Without the fallback they did not — a hand-written single-form
+fixture was required to exit **0** by AC-DT-06 and **non-zero** by AC-DT-10,
+which is the contradiction the cycle-11 gate filed
+(`reviews/directive-tooling-cycle-11.md`, B1). What the fallback leaves is one
+residual, and §7 carries it as accepted.
 
 **M8 admits three patterns because AC-CO-1 names two filename branches, and G0
 puts both inside one tool** (*told* — the cycle-5 directive's B1 is the origin of
@@ -855,8 +901,11 @@ directive file itself declares — and is not decided here.
 whole file** (*told* — the cycle-11 directive's B1). The paragraph above is about
 the **inputs** the lint has — one file, no mode, no selector — and says nothing
 about the extent any single element ranges over inside that file. M3 is scoped to
-the disposition author region as G11's manifest locates it (above, "M3's search is
-scoped to the author region"), and no statement in this document about the lint's
+the disposition author region as G11's manifest locates it where a manifest is
+present, and runs over the whole file where none is (above, "M3's search is
+scoped to the author region, with the whole file as the fallback") — an extent
+that turns on what the file carries, which is precisely what a statement about
+the lint's inputs cannot fix. No statement in this document about the lint's
 inputs may be read as fixing any element's search extent.
 
 **Mode-appropriateness is guaranteed by the generator, by construction.** The
@@ -1009,11 +1058,12 @@ and N1). **Scope of this count**, stated with it because §1 carries a different
 count of the same directory: this is every `*.md` entry in `docs/cycles/` **as
 the directory stands at this revision**, classified against M8's three patterns —
 not the research document's 91/90 measured at `49bd6ff4` (§1), and not a count
-of directives as a class. `docs/cycles/` holds **103** markdown files, of which
-**67** match pattern 1, **7** match pattern 2 `cycle-<N>-directive.md`, **26**
+of directives as a class. `docs/cycles/` holds **104** markdown files, of which
+**68** match pattern 1, **7** match pattern 2 `cycle-<N>-directive.md`, **26**
 match pattern 3 `<SLUG>-directive.md`, and **3 match none**. The total and the
-pattern-1 count each rise by **one** against cycle 10's 102/66, which is the
-per-cycle rise every cycle but one has shown: cycle 10's 102/66 rose by one from
+pattern-1 count each rise by **one** against cycle 11's 103/67, which is the
+per-cycle rise every cycle but one has shown: cycle 11's 103/67 rose by one from
+cycle 10's 102/66 and that from
 cycle 9's 101/65, cycle 6's 98/62 rose by one from
 cycle 5's 97/61 and that from cycle 4's 96/60, because each cycle's own
 directive file is in the directory by the time its revision recounts. The one
@@ -1021,17 +1071,19 @@ exception was cycle 9, which rose by **two** against cycle 7's 99/63 because two
 files landed rather than one —
 `docs/cycles/directive-tooling-gate-20260823T231530Z.md`, the independent gate's
 directive at cycle 8, and cycle 9's own. This cycle's single new file is
-`docs/cycles/directive-tooling-spec-11-20260824T002031Z.md`, and it matches
+`docs/cycles/directive-tooling-spec-12-20260824T003835Z.md`, and it matches
 pattern 1 (*observed*). This paragraph's figures are a **consequential update
-under Core rule 13**, not a dictated disposition: the cycle-11 directive
+under Core rule 13**, not a dictated disposition: the cycle-12 directive
 dispositions no figure, and the recount is restated because it is stated "at
-this revision" and this revision's own directive file is in the directory. **This cycle's pattern-3 disposition moves none of these figures,
+this revision" and this revision's own directive file is in the directory. **Cycle 9's pattern-3 disposition moves none of these figures,
 and nor did cycle 7's** (*told* — the cycle-7 directive's B1 and the cycle-9
-directive's B2 each direct this be stated; *observed* for the verification). The classification run with cycle 6's character class and run
+directive's B2 each direct this be stated; *observed* for the verification; the
+cycle-12 directive's N2 is the origin of naming cycle 9 explicitly here, the
+deictics it replaces having named cycle 9 implicitly since cycle 9). The classification run with cycle 6's character class and run
 without it agrees on every file in the corpus — which cycle 6's gate verified at
 98 files (`reviews/directive-tooling-cycle-6.md` @ `d8f8d7a6`, O4) and which
-reproduces at 103 at this revision — and the single-component boundary added this
-cycle is likewise inert over the corpus, because `docs/cycles/` **contains no
+reproduces at 104 at this revision — and the single-component boundary added in
+cycle 9 is likewise inert over the corpus, because `docs/cycles/` **contains no
 subdirectory**: `git ls-tree` at this revision returns blobs only, so no
 committed name carries a path separator to be admitted or rejected (*observed*).
 The only figures that moved are the +2 the paragraph above accounts for, and
@@ -1292,7 +1344,7 @@ it cannot check that it can be *carried out*, and G9 requires it to say so.
   from the filename recount. So the filename recount does not re-baseline this
   outcome, because it is not evidence for it in either direction. Where the
   filename number does belong is stated where it is measured: M8's yield against
-  the pre-adoption corpus is **1 non-conforming directive file of 103 markdown
+  the pre-adoption corpus is **1 non-conforming directive file of 104 markdown
   files in `docs/cycles/` at this revision** — the scope §4 states with the
   recount — with the
   classification and its provenance in §4, and it is a property of the lint's
@@ -1442,8 +1494,11 @@ fixture repository" is not read as covering every entry.
   **The author region** is present and **empty**, is structurally
   distinguishable from an author region that has been filled, is the only
   part of the slot the author writes into, and is the **extent M3's search is
-  scoped to** (*told* — the cycle-11 directive's B1; §4, "M3's search is scoped to
-  the author region"). Present-and-empty is therefore exactly the state AC-DT-06's
+  scoped to** in a generated skeleton, which carries a manifest by construction
+  (*told* — the cycle-11 directive's B1; the whole-file fallback that applies
+  where no manifest is present is the cycle-12 directive's B1; §4, "M3's search
+  is scoped to the author region, with the whole file as the fallback").
+  Present-and-empty is therefore exactly the state AC-DT-06's
   unfilled-skeleton fixture requires M3 to fail on, and structural
   distinguishability from a filled region is what makes that fixture decidable.
   Verifiable by generating a skeleton
@@ -1486,14 +1541,19 @@ fixture repository" is not read as covering every entry.
   output names that element and cites the governed text it derives from. For M3
   the check is an **unconditional presence test** over two named forms, with no
   parallelism precondition and no sequencing precondition, **run over the
-  disposition author region as G11's manifest locates it and not over the whole
-  file** (*told* — the cycle-11 directive's B1; §4, "M3's search is scoped to the
-  author region") — the governed rule is
+  disposition author region as G11's manifest locates it where the directive
+  carries a manifest, and over the whole file where it carries none** (*told* —
+  the cycle-11 directive's B1 for the region scoping, the cycle-12 directive's B1
+  for the fallback; §4, "M3's search is scoped to the author region, with the
+  whole file as the fallback") — the governed rule is
   committed (`skills/directive-authoring.md` @ `48ad7fd1`), so this criterion is
   live now and its fixtures are written now: a fixture with neither an exclusive
-  assignment nor a sole-tree declaration **in that region** exits non-zero, a
-  fixture carrying both **in that region**
+  assignment nor a sole-tree declaration **in the searched extent** exits
+  non-zero, a fixture carrying both **in the searched extent**
   exits non-zero, and each of the two single-form fixtures exits 0 on that element.
+  **The searched extent is defined on every fixture in this set**, hand-written or
+  generated, so no M3 fixture is an undecidable element, none falls to AC-DT-10,
+  and the two criteria agree on every one of them.
   The fixture set includes a sole-tree directive, which under this criterion must
   pass M3 rather than be exempt from it, and a fixture whose only working-tree
   statement is a **prohibition**, which must exit non-zero — that is the motivating
@@ -1515,7 +1575,11 @@ fixture repository" is not read as covering every entry.
   cannot, and this criterion fixes why rather than leaving it to fixture
   construction: they are hand-written fixture directives carrying **no prompt
   region**, so every form-naming line in them is one the fixture author wrote, and
-  a whole-file implementation and a region-scoped one agree on all of them. Only a
+  a whole-file implementation and a region-scoped one agree on all of them. That
+  agreement is also what makes them **decidable under the whole-file fallback and
+  keeps the exits dictated for them above**: a fixture carrying no manifest is
+  searched whole-file, and its whole file contains exactly the forms its author
+  put there and no others (*told* — the cycle-12 directive's B1). Only a
   fixture carrying a prompt region the author did not write separates the two
   readings, which is why both fixtures here are generated skeletons.
   For M8 the check is a **form-set membership
@@ -1555,14 +1619,18 @@ fixture repository" is not read as covering every entry.
   directive file). The cycle-9 gate's O2 held that `docs/escaped-directive.md`
   is subsumed by the pre-existing failing fixture "a name that is neither
   timestamped nor `-directive.md`-suffixed". **That subsumption does not hold as
-  stated** (*observed*, by reading the three fixtures against M8's row): all
-  three patterns carry the literal prefix `docs/cycles/`, and the three failing
-  fixtures fail on three **different** clauses — the pre-existing one on the
+  stated** (*observed*, by reading the failing fixtures against M8's row): all
+  three patterns carry the literal prefix `docs/cycles/`, and **four** of this
+  criterion's seven fixtures fail, on four **different** clauses (*told* — the
+  cycle-12 directive's N1, which corrects an enumeration reading "the three
+  failing fixtures" where four fail): the pre-existing no-pattern one on the
   **suffix**, not being `-directive.md`-suffixed; `docs/escaped-directive.md` on
   the **directory anchor**, since it *is* `-directive.md`-suffixed and fails only
-  for carrying `docs/` where every pattern requires `docs/cycles/`; and
+  for carrying `docs/` where every pattern requires `docs/cycles/`;
   `docs/cycles/sub/nested-directive.md` on the **single-component boundary**,
-  carrying the right prefix and a separator inside the slug. They are
+  carrying the right prefix and a separator inside the slug; and the
+  **date-with-no-time** fixture on the **time component**, matching pattern 1 in
+  every respect but the `T<time>` field M8 requires. They are
   complements, not duplicates. Dropping the escape fixture would leave M8's
   directory anchor with no fixture exercising it in the escape direction, and it
   would drop the case §4's step 3 shows has the shorter ground. The fixture count
@@ -1812,6 +1880,32 @@ one and only that: a hand-written `<slug>-directive.md` in one path component
 still passes M8. What would close it is a mode or class marker in the directive
 file for the lint to read, which is Q5's open question and not a change this
 document makes.
+
+**Accepted, as a minor residual with the same named mitigation** (*told* — the
+cycle-12 directive's O4, resolved under that directive's B1). M3's **whole-file
+fallback** leaves one residual, and it is stated here rather than left to be
+found: a **hand-written** directive that pastes the generated disposition
+**prompt** text into itself without also carrying a G11 manifest is searched
+whole-file, and the pasted text names both admitted forms, so M3 may count two
+forms and exit non-zero on a directive that states exactly one form of its own.
+The fallback's ground — a manifest-less directive carries no generator-written
+prompt region, so every form-naming line in it is one its author wrote (§4, "M3's
+search is scoped to the author region, with the whole file as the fallback") —
+holds for a directive that was written, and does not hold for one that copies
+generator output while dropping the manifest that classifies it. The residual is
+**minor in three respects, each stated so the acceptance is auditable**. Its
+direction is the **false positive**, not the false negative: it stops an executor
+on a well-formed directive, which is the direction the next item accepts in
+general and which costs one invocation. It **does not reach generated directives
+at all** — `bin/directive` emits the manifest together with the prompt (G11,
+AC-DT-05) — so, exactly as with M8's hand-written residual above, the mitigation
+is the **generator's adoption**, which removes the class by construction, and G4
+keeps the general mode ungated so it can be adopted before the lint is trusted.
+And it requires a deliberate paste of generator-supplied text into a file that
+carries no manifest, which is not the shape of a hand-written directive as the
+motivating incident's was. What would close it is requiring a manifest on every
+directive — the reading of the cycle-11 gate's B1 this document declined, because
+it puts every hand-written directive outside M3's range rather than deciding it.
 
 **Accepted.** A lint that stops an executor on a well-formed directive it
 mis-parses. A false stop costs one invocation and returns the question to a
