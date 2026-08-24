@@ -145,11 +145,11 @@ One invocation runs these steps in order, and stops at the first that fails.
    read: `git ls-remote --heads origin <branch> main`. Its output answers both
    questions at once — whether `<branch>` exists at the remote, which decides
    which of G1's two arms applies, and `main`'s head, which is the base in the
-   branch-absent arm. Where `<branch>` is present, its head is the base and the
-   report's prior-head field carries that SHA; where it is absent, `main`'s head
-   is the base and the prior-head field reads `created` (PRD G1, first arm).
-   Either way the base SHA comes from this read, not from
-   `refs/remotes/origin/<branch>`.
+   branch-absent arm. Where `<branch>` is present, its head is the base; where it
+   is absent, `main`'s head is the base and the step has established that
+   `<branch>` did not exist at the remote, which is G1's first arm. Either way
+   the base SHA comes from this read, not from `refs/remotes/origin/<branch>`.
+   What the report carries on either outcome is §5.3's table.
 
    One read rather than one per arm, so §8's stated count of remote reads before
    the write is true on both arms rather than only on the branch-present one.
@@ -211,11 +211,11 @@ One invocation runs these steps in order, and stops at the first that fails.
      §7 puts under "Not accepted".
 
    Either check failing produces one refusal in one shape — FM-3 (§6), not two
-   failure modes: the tool names the divergence, the base SHA, the local HEAD
-   SHA, and, where it was the second check that failed, the local head of
-   `<branch>`; then exits non-zero (PRD G1, AC-LAND-01c). Where `<branch>` does
-   not exist locally the second check has no subject and is skipped, which is
-   not a pass being assumed: there is no ref to orphan.
+   failure modes: the tool refuses before any ref has moved and exits non-zero
+   (PRD G1, AC-LAND-01c). What that refusal's report carries, including which of
+   the two checks refused, is §5.3's table. Where `<branch>` does not exist
+   locally the second check has no subject and is skipped, which is not a pass
+   being assumed: there is no ref to orphan.
 
    The guard runs **before** step 6 because step 6 moves a ref. Ordering is
    load-bearing: AC-LAND-01c requires every local-only commit to remain
@@ -270,9 +270,9 @@ One invocation runs these steps in order, and stops at the first that fails.
       diagnostics on stderr, stdout reserved for machine-consumable output — and
       with §7's mapping of 2 to a usage error. Nothing is intercepted and no
       failure mode is added for it: an invocation that never named a branch has
-      established no fact for a report to carry, and `branch` is precisely the
-      field every other failure path does carry. §3.1's division of
-      responsibility is unchanged by this.
+      established no fact for a report to carry — not even `branch`, which
+      §5.3's table gives every terminal path the sequence does reach. §3.1's
+      division of responsibility is unchanged by this.
     - **FM-10**, an invocation killed mid-sequence, which emits nothing because
       no code of the tool's runs to emit it (§6).
 
@@ -340,10 +340,9 @@ Two consequences are stated rather than left to be discovered:
   opening state, since the first invocation is the one that creates the branch —
   so the refusal would cost the journey the tool exists to serve. What it costs
   instead is that the session's checked-out branch changes under it, and that is
-  reported rather than left silent: where HEAD was on a branch other than
-  `<branch>` before this step, the report carries `detail.prior_branch` naming it
-  (§5.3). OQ-5 asked this question; §9 records the answer and retires the
-  identifier.
+  reported rather than left silent: the report names the branch HEAD was moved
+  off, on the paths §5.3's table states. OQ-5 asked this question; §9 records the
+  answer and retires the identifier.
 
 `checkout -B` fails when a locally-modified file's committed content differs
 between the old HEAD and the base (*observed* — run against `git` 2.55.0 in a
@@ -446,68 +445,48 @@ facts it established or a stop:
 
     StepResult(ok: bool, facts: dict, stage: str, git_status: int | None)
 
-`facts` carries only what that step established, keyed as §5.2 and §5.3 name the
-fields — step 3 returns `base` and `prior_head`; step 5 returns `local_head`, and
-also `branch_head` where the local `<branch>` existed and was the ref its second
-check ran against, which is the field §5.3 requires on that refusal; step 6
-returns `prior_branch` where HEAD was on some branch other than `<branch>` when
-it ran; step 8 returns `head` and the paths the commit contains; step 10 returns
-the head `ls-remote` reported for `<branch>` as `remote_head`, and then the
-per-file results. `stage` is that step's token from §5.3's enumeration, carried
-on the stop so the report can report where the sequence halted. `git_status` is
-the failing invocation's exit status, or `None` where the stop was a comparison
-rather than a subprocess. The sequence accumulates `facts` across steps and
-halts at the first `ok: False`. No step reads another step's git output; a step
-consumes established facts, never text.
-
-Step 8's paths are what `files` is built from on the two failure paths where a
-commit exists and step 10 produced no per-file result of its own: on FM-7 the
-push failed before step 10 ran, and on FM-8 the head comparison failed before the
-per-file comparison was reached. Step 10 is therefore not the source of those
-entries, and naming step 8 as their source is what keeps `build` from having to
-invent them or omit them — on both modes it emits one entry per committed path,
-with the match unknown, as §5.2 states the shape.
+`facts` carries what that step established, keyed as §5.2 and §5.3 name the
+fields. **Which fact each step establishes is §5.3's key table**, whose middle
+column names the establishing step for every field and key the report can carry.
+This section does not restate it and carries no parallel account of it: an
+implementer writing `land.py` reads that table. `stage` is the step's token from
+§5.3's enumeration, carried on the stop so the report can say where the sequence
+halted. `git_status` is the failing invocation's exit status, or `None` where the
+stop was a comparison rather than a subprocess. The sequence accumulates `facts`
+across steps and halts at the first `ok: False`. No step reads another step's git
+output; a step consumes established facts, never text.
 
 **`land.py` → `report.py`.** `land.py` never formats:
 
     Report.build(branch: str, facts: dict, stop: StepResult | None) -> Report
 
-`build` is where §5.2's rules are applied: a contract field that §5.2 gives a leaf
-form and that is absent from `facts` is emitted with `class: "unknown"` and
-`value: null`. `detail` is populated from the same accumulated `facts` under
-§5.3's key table: each key that table names is emitted where `facts` carries it
-and absent where it does not. Unknown-ness is therefore a property of what was
-established, computed in one place, rather than something each of ten failure
-paths has to remember to say — which is what makes the failure paths correct by
-construction and makes B4's class of defect structurally hard to reintroduce.
+`build` assembles the report from the accumulated `facts` and from nothing else,
+under §5.3's key table: for each field and key that table names, `build` emits
+what `facts` carries, in the shape and the value domain §5.2 fixes. That is one
+rule, read from one place, rather than a rule each failure path has to remember
+— and it is the whole of the separation §3.1 claims between establishing a fact
+and reporting one. What a field or key carries where `facts` does not hold it —
+a contract field still present but `unknown`, a `detail` key absent — is §5.3's
+to state, and §5.3 states it once; `build` implements that rule and this section
+does not restate it.
 
-Three of the five contract fields do not take their value from that rule, and the
-exceptions belong to §5.2 and §6 rather than to this section. Stating them here is
-what keeps `build` from being written to a rule those sections contradict:
+Two properties of `build` are seams between the two modules rather than entries
+in §5.3's table, and are stated here for that reason:
 
-- **`branch` comes from the parameter**, not from `facts`. It is therefore
-  `observed` on every path the sequence reaches, including the ones on which
-  nothing else was established — which is why §6's last column names it in every
-  row of the failure table, FM-1's included, where no other contract field is
-  established at all.
-- **`files` is exempt.** §5.2 gives it no leaf form: it is a list on every path,
-  and `build` emits it as one. Where entries exist each carries its own `class`;
-  where no commit was made there are no entries and the list is empty; and where
-  a commit was made but no comparison result exists for it, the entries are
-  present and each of them is `unknown`. Its unknown-ness is carried per entry,
-  or by the absence of entries together with the stage token, never by a `class`
-  on the list — so no union type enters the parse contract, which is the property
-  AC-LAND-T01 tests.
+- **`branch` comes from the parameter**, not from `facts`. No step establishes
+  it; `bin/land` passes it in. That is what makes it available even on a path
+  where the sequence established nothing else at all.
 - **`verification` is computed, not carried.** No step returns it. `build`
-  derives it from what `facts` holds, under §5.2's biconditional: `"complete"`
-  where `ls-remote` confirmed the head and every per-file comparison matched;
-  `"incomplete"` where a step after the commit established that it was not — the
-  push failing, or a comparison mismatching — so the local commit is reported
-  `observed` while the landing is not; and `null` with `class: "unknown"` where
-  nothing about the landing was established, which is every path on which no
-  commit was made. Deriving it in one place from the same biconditional §7's
-  exit mapping reads is what stops the report and the exit code from drifting
-  apart, which is AC-LAND-T02.
+  derives it from what `facts` holds, under the biconditional §5.2 states — the
+  same biconditional §7's exit mapping reads. Deriving both from it in one place
+  is what stops the report and the exit code from drifting apart, which is
+  AC-LAND-T02.
+
+`files` is the one contract field that is a list rather than a leaf, so its
+unknown-ness is carried per entry, or by the absence of entries, never by a
+`class` on the list — no union type enters the parse contract, which is the
+property AC-LAND-T01 tests. Its shape is §5.2's; what it carries on a given path
+is §5.3's.
 
 **What `report.py` exposes.** A `Report` carries the five contract fields and the
 `detail` object of §5.3, and offers:
@@ -746,7 +725,9 @@ Shape:
 Rules the format holds on every path:
 
 - The five contract keys — `branch`, `head`, `prior_head`, `files`,
-  `verification` — are **always present**, in success and in every failure.
+  `verification` — and the `detail` object of §5.3 are **always present**, in
+  success and in every failure. This rule fixes the key set and nothing more:
+  what each key carries on a given path is §5.3's table.
 - Every leaf object carries `class`, whose value is `"observed"` or
   `"unknown"` and nothing else. These are the two of Core's four classes PRD G6
   permits the tool to emit, stated there as a subset rather than a redefinition
@@ -768,47 +749,43 @@ Rules the format holds on every path:
 
 The three value-domain rules are written to one shape on purpose. Each admits
 `null`, and each admits it only under `class: "unknown"`, so none of them
-contradicts the null-on-unknown rule above it on the failure paths where §6 says
-the contract fields are unestablished. A rule list that permitted only
+contradicts the null-on-unknown rule above it on the paths where §5.3's table
+does not establish the contract fields. A rule list that permitted only
 `"complete"` or `"incomplete"` would force an implementer to emit
 `verification: {"value": "incomplete", "class": "observed"}` on a fetch failure —
 asserting the tool observed an incomplete verification it never attempted, which
 inverts exactly the distinction PRD G6 exists to draw.
 
-**An empty `files` list where no commit was made.** On FM-1 through FM-6, and on
-FM-11, no commit exists, so there are no per-file entries and `files` is `[]`.
-That `[]` is **not** a claim that the commit contained no files — there is no
-commit for it to be a claim about. It is the absence of entries. `detail.stage` is what
-distinguishes it from FM-5, where an empty staged set is the established answer
-and the same `[]` means something different; §5.3 closes that field's value set,
-which is what makes the distinction firm enough to rest this on. No union type is
-introduced: giving `files` a leaf form of `{"value": null, "class": "unknown"}` in
-place of the list would put a type switch into a parse contract whose whole
-burden is that a failed landing stays mechanically readable, and it would buy
-nothing the stage token does not already carry. Where §6's rows say the contract
-fields are `unknown`, `files` is read accordingly — its unknown-ness is carried
-by the stage token and by having no entries, not by a `class` on the list.
+**What an empty `files` list means.** Where no commit was made there are no
+per-file entries and `files` is `[]`. That `[]` is **not** a claim that the
+commit contained no files — there is no commit for it to be a claim about. It is
+the absence of entries. `detail.stage` is what distinguishes it from the stop at
+which an empty staged set is itself the established answer and the same `[]`
+means something different; §5.3 closes that field's value set, which is what
+makes the distinction firm enough to rest this on. No union type is introduced:
+giving `files` a leaf form of `{"value": null, "class": "unknown"}` in place of
+the list would put a type switch into a parse contract whose whole burden is that
+a failed landing stays mechanically readable, and it would buy nothing the stage
+token does not already carry. Its unknown-ness is carried by the stage token and
+by having no entries, never by a `class` on the list.
 
-**Where a commit exists and the comparison did not produce a result.** FM-7 and
-FM-8 are the complement of that set among the detected modes: on both a commit
-was made, and on neither did step 10 produce a per-file result — the push failed
-before step 10 ran on one, the head comparison failed before the per-file
-comparison was reached on the other. On those two paths `files` is **not** empty.
-It carries one entry per path in the commit, each of the form
-`{"path": "<path>", "match": null, "class": "unknown"}`, sourced from the paths
-step 8 returns (§3.7). The rules above already admit that shape and no new type
-is introduced: `match` is `null` under `class: "unknown"`, which is the per-entry
-unknown-ness the list was given in place of a leaf form.
+**What an entry with no match means.** Where a commit was made and no per-file
+comparison result exists for it, `files` is **not** empty. It carries one entry
+per path in the commit, each of the form
+`{"path": "<path>", "match": null, "class": "unknown"}`. The rules above already
+admit that shape and no new type is introduced: `match` is `null` under
+`class: "unknown"`, which is the per-entry unknown-ness the list was given in
+place of a leaf form.
 
 The paths themselves were established — the tool staged them at step 7 and
 committed them at step 8 — and the match was not, so the entry claims the first
 and declines the second. That is what AC-LAND-07's per-file requirement and
 AC-LAND-09's split between what was established and what was not both ask for on
-a commit that exists; an empty list on those two paths would claim neither, and
-would be indistinguishable in shape from FM-5's `[]`, where an empty staged set
-is the established answer. FM-7 is the state PRD §7 accepts, so its report is the
-artifact a session is handed when the accepted risk fires; it has to be able to
-name the files sitting in the local commit that session must now resolve.
+a commit that exists; an empty list there would claim neither, and would be
+indistinguishable in shape from the empty list a stop before the commit produces.
+A session handed such a report has to be able to name the files sitting in the
+local commit it must now resolve. **Which paths carry entries, and of which of
+the two shapes, is §5.3's table.**
 
 ### 5.3 The failure path and the five-field contract
 
@@ -821,35 +798,57 @@ leave room for it" (*observed*).
 **Resolution: a sixth top-level key, `detail`, which is an object and is always
 present.** The five contract keys keep their exact meanings and are never
 overloaded to carry something else. `detail` holds path-specific established
-facts, each an object with the same `value`/`class` shape:
+facts, each an object with the same `value`/`class` shape.
 
-| Key in `detail` | Emitted on | Meaning |
+**The key table — this document's single statement of which path carries what.**
+For every contract field and every `detail` key, the table below names the fact,
+the step of §3.2 that establishes it, and the paths on which the report carries
+it as established. Nothing else in this document states any of that, and no other
+passage may: §3.2 states what each step does, §3.7 states that `build` assembles
+the report from the accumulated facts, §5.2 states the shape and the value
+domains, and §6's cells are derived from this table for the path each row is
+about. Where any of those and this table disagree, this table is normative and
+the other passage is wrong.
+
+**Established** means the report carries the fact with `class: "observed"`. What
+follows from a path not being named is the one absence rule, stated below the
+table.
+
+| Key | The fact, and the step of §3.2 that establishes it | Established on |
 | --- | --- | --- |
-| `local_head` | The divergence refusal, and any failure after step 5 | Local `HEAD` SHA at the guard |
-| `branch_head` | The divergence refusal, where the local `<branch>` was the failing check (§3.2 step 5) | Local SHA of `<branch>` before step 6 would have rewritten it |
-| `base` | Any failure after step 3 | The SHA resolved as the landing base |
-| `stage` | Every failure | Which step of §3.2 stopped the sequence |
-| `git_status` | Any failure at a git invocation | That invocation's exit status |
-| `remote_head` | FM-8 | The head `ls-remote` returned for `<branch>` after the push |
-| `prior_branch` | The success path, and any failure after step 6, where HEAD was on a branch other than `<branch>` when step 6 ran | The branch HEAD was on before step 6 moved it onto `<branch>` (§3.3) |
+| `branch` | The branch the invocation named. Taken from the argument; no step establishes it (§3.7) | Every path on which a report is emitted |
+| `head` | The SHA of the commit step 8 made | FM-7, FM-8, FM-9, and the success path |
+| `prior_head` | The head `<branch>` held at the remote as step 3 read it, or the literal `created` where that read found `<branch>` absent there | Every path on which step 3's read succeeded: FM-2 through FM-9, FM-11, and the success path |
+| `files` | One entry per path in the commit, each naming the path and, where step 10 compared it, whether the remote blob matched | Entries with `class: "observed"` on FM-9 and the success path. On FM-7 and FM-8 — a commit exists and step 10 produced no comparison — one entry per committed path with `match: null` and `class: "unknown"`, taken from the paths step 8 committed. On every other path, no entries |
+| `verification` | Whether the landing was verified end to end, under §5.2's biconditional. Computed by `build`; returned by no step | `"complete"` on the success path; `"incomplete"` on FM-7, FM-8, and FM-9 |
+| `detail.stage` | Which step of §3.2 stopped the sequence. Its value set is closed by the token table below | Every detected failure mode: FM-1 through FM-9, and FM-11 |
+| `detail.base` | The SHA step 3 resolved as the landing base | Every path on which step 3 resolved one: FM-2 through FM-9, and the success path |
+| `detail.local_head` | The local `HEAD` SHA step 5's guard read | Every path on which step 5 ran: FM-3 through FM-9, and the success path |
+| `detail.branch_head` | The local SHA of `<branch>` that step 5's second check read, before step 6 would rewrite that ref (§3.2 step 5) | FM-3, and there only where the local `<branch>` is the ref whose check refused |
+| `detail.prior_branch` | The branch HEAD was on before step 6 moved it onto `<branch>` (§3.3) | FM-5 through FM-9, and the success path — the paths on which step 6 completed — and there only where it found HEAD on some branch other than `<branch>` |
+| `detail.git_status` | The exit status of the git invocation that failed | FM-1 through FM-7: the modes whose stop is a failed subprocess rather than a comparison |
+| `detail.remote_head` | The head `ls-remote` returned for `<branch>` after the push | FM-8, FM-9, and the success path; on the latter two it equals `head`, and is redundant rather than wrong |
 
-`prior_branch` is the one key in this table that can appear on a landing that
-succeeded. Every other key records where the sequence stopped; this one records a
-mutation of the session's own working tree, which happens on the success path
-too, and which §3.3 decides the tool is permitted to make. The table carries no
-"and no others" clause — unlike `stage`'s value set below, it is a definition of
-the keys the design emits rather than a closed domain a reader branches on.
+**The one absence rule, stated here and nowhere else in this document.** It
+governs contract fields and `detail` keys alike. Off the paths a row names, a
+contract field is still present, with `value: null` and `class: "unknown"` —
+`files`, being a list rather than a leaf, instead carries no entries — and a
+`detail` key is absent. That absence is not a claim, because the "Established on"
+column is a **floor, not a ceiling**: a fact the accumulated `facts` carries on a
+path the column does not name is **emitted** there, not dropped. Dropping it to
+match a column would be the report declining to claim a fact the tool observed,
+which is the direction PRD G6 exists to rule out. So a reader may not treat a
+key's absence from a path as a claim, and no test written to this document may
+assert one — a test asserts that what a row names is present and carries what the
+row says, never that anything beyond it is missing.
 
-The "Emitted on" column is open in the same direction. It states where each key
-is expected, not a ceiling on where it may appear: a key `facts` carries on a
-path this column does not name is **emitted** there, not dropped. `remote_head`
-is the case that arises — §3.7 has step 10 return it on every path that reaches
-the `ls-remote` read, so it is carried on FM-9 and on the success path as well as
-on FM-8, and on those two it equals `head` and is redundant rather than wrong.
-Dropping it to match a column would be the report declining to claim a fact the
-tool observed, which is the direction PRD G6 exists to rule out. A reader may
-therefore not treat a key's absence from a path as a claim, and no test written
-to this document may assert one.
+`stage`, `branch_head`, and `git_status` are the keys that record where the
+sequence stopped, so none of them appears on a landing that succeeded. The other
+four `detail` keys do: `base` and `local_head` because the steps that establish
+them run on every path that gets past them, `remote_head` because step 10's read
+runs on the success path too, and `prior_branch` because it records a mutation of
+the session's own working tree that happens on the success path and that §3.3
+decides the tool is permitted to make.
 
 **The permitted `detail.stage` values.** `stage` is the one field a machine
 reader branches on to interpret a failure report, so its value set is closed
@@ -908,15 +907,15 @@ to PRD §6.
   has `value` of `null`, or, in a `files` entry, `match` of `null`, that being
   the one leaf shape whose established value is not named `value` (§5.2); the
   three value-domain rules of §5.2 hold; and stdout carries no text outside that
-  object. On FM-7 and FM-8 — the two cases in the enumeration where a commit
-  exists and no comparison result does — `files` carries one entry per path in
-  the commit, each with `match` of `null` and `class` of `"unknown"`, so the
-  shape §5.2 states for those two paths is tested rather than only written down.
-  On every failure case, `detail.stage` is present and its value is one of the
-  nine tokens §5.3 enumerates — the token §5.3 assigns to the step that stopped
-  the sequence, so the set is tested rather than merely documented. Enumerating the failure modes is what makes this a real
-  test rather than a test of the success path: the format's whole burden is that
-  a failed landing is still machine-readable.
+  object. For each case the report also carries every field and `detail` key
+  §5.3's table establishes on that path, each with the class and the value shape
+  that table states for it — `detail.stage` with the token §5.3 assigns to the
+  step that stopped the sequence, and `files` with the entries the table gives
+  that path, so what §5.3 states is tested rather than only written down. The
+  criterion asserts presence and content only: §5.3's column is a floor, so no
+  case asserts that a field or key is absent. Enumerating the failure modes is
+  what makes this a real test rather than a test of the success path: the
+  format's whole burden is that a failed landing is still machine-readable.
 
 - **AC-LAND-T01a — the usage-error path emits no report.** Given an invocation
   `argparse` rejects, stdout is empty, stderr is non-empty, and the exit status
@@ -959,32 +958,30 @@ of §5 on stdout with the established fields labelled `observed` and the
 unestablished ones labelled `unknown`, a bracket-coded diagnostic on stderr,
 and a non-zero exit.
 
-**The last column, one rule.** Each cell names — exhaustively — the contract
-fields and `detail` keys the report carries as **established** at that point: a
-contract field emitted with `class: "observed"`, or a `detail` key present with
-an observed value. What a cell does not name is not established there. Nothing is
-thereby missing from the report: §5.2 keeps the five contract keys and `detail`
-present on every path, so a contract field a cell omits is emitted
-`{"value": null, "class": "unknown"}` — or, for `files`, as a list with no
-entries — and a `detail` key a cell omits is simply absent. `detail.stage` is
-established on every detected mode and has its own column above, so it is not
-repeated cell by cell.
+**The last column, one rule.** The cells are **derived from §5.3's key table**,
+not authored beside it. Each names, for the path its failure mode reaches, the
+contract fields and `detail` keys §5.3's table establishes there — exhaustively,
+so the row can be read whole — and it names them because that table does. The
+`detail.stage` column is derived the same way, from §5.3's token assignment.
+§5.3 is normative: where a cell and that table disagree, the cell is wrong. No
+cell states an emission rule of its own, and what a key's absence from a cell
+means is §5.3's to state and not this section's.
 
-The cells are derived, not independent: §3.2's sequence, §3.7's step returns and
-`build` rules, and §5.2's and §5.3's field semantics are what establish a fact,
-and each of them is stated as a rule. Where a cell and those sections disagree,
-those sections are normative and the cell is wrong.
+Nothing is thereby missing from the report: §5.2 fixes the key set on every path,
+and §5.3 states what a field or key a cell does not name carries, or whether it
+is present at all. `detail.stage` is established on every detected mode and has
+its own column, so it is not repeated in the last one.
 
 | # | Failure mode | Detected by | `detail.stage` | Established at that point |
 | --- | --- | --- | --- | --- |
 | FM-1 | A remote read fails — no network, no such remote, auth refused | `git fetch` or step 3's `git ls-remote` exit status | `fetch` / `resolve` | `branch`, and no other contract field: the read that would have established them is the one that failed. `detail.git_status`. |
 | FM-2 | The base object is not present locally (§3.2 step 4 names the candidate causes; the tool asserts none of them) | `git cat-file -e` | `base-object` | `branch`, `prior_head`. `detail.base`, `detail.git_status`. |
-| FM-3 | **Divergence refusal, before staging** — local HEAD, or the local `<branch>` the sequence would rewrite, carries a commit the base does not | either `merge-base --is-ancestor` non-zero (§3.2 step 5) | `guard` | `branch`, `prior_head`. `detail.base`, `detail.local_head`, `detail.git_status`, and `detail.branch_head` where the local `<branch>` was the failing check. Nothing staged, no ref moved, no commit made. |
-| FM-4 | Base establishment fails — a locally-modified file differs between old HEAD and base | `git checkout -B` exit status | `base` | `branch`, `prior_head`. `detail.base`, `detail.local_head`, `detail.git_status`. No `detail.prior_branch`: step 6 is the step that failed, so HEAD never moved. |
+| FM-3 | **Divergence refusal, before staging** — local HEAD, or the local `<branch>` the sequence would rewrite, carries a commit the base does not | either `merge-base --is-ancestor` non-zero (§3.2 step 5) | `guard` | `branch`, `prior_head`. `detail.base`, `detail.local_head`, `detail.git_status`, and `detail.branch_head` where the local `<branch>` is the ref whose check refused. Nothing staged, no ref moved, no commit made. |
+| FM-4 | Base establishment fails — a locally-modified file differs between old HEAD and base | `git checkout -B` exit status | `base` | `branch`, `prior_head`. `detail.base`, `detail.local_head`, `detail.git_status`. Step 6 is the step that failed, so no ref moved and HEAD stayed where it was. |
 | FM-5 | Nothing to commit — a named path does not exist, or the staged set is empty | `git add` / `git commit` exit status | `stage` or `commit` — one field, one value (§5.3) | `branch`, `prior_head`. `detail.base`, `detail.local_head`, `detail.git_status`, and `detail.prior_branch` where HEAD was on a branch other than `<branch>` when step 6 ran. No commit exists. |
 | FM-6 | A repository hook refuses the commit | `git commit` exit status | `commit` | `branch`, `prior_head`. `detail.base`, `detail.local_head`, `detail.git_status`, and `detail.prior_branch` where HEAD was on a branch other than `<branch>` when step 6 ran. No commit exists. |
-| FM-7 | Push fails | `git push` exit status | `push` | `branch`, `prior_head`, `head` — the **local** commit's SHA, `observed` — `verification`, the value `incomplete`, and `files`, carrying one entry per path in the commit with `match: null` and `class: "unknown"` (§5.2). `detail.base`, `detail.local_head`, `detail.git_status`, and `detail.prior_branch` where HEAD was on a branch other than `<branch>` when step 6 ran. |
-| FM-8 | `ls-remote` disagrees with the pushed head | Comparison at step 10 | `verify` | `branch`, `prior_head`, `head`, `verification` — the value `incomplete` — and `files`, carrying one entry per path in the commit with `match: null` and `class: "unknown"` (§5.2). `detail.base`, `detail.local_head`, `detail.remote_head`, and `detail.prior_branch` where HEAD was on a branch other than `<branch>` when step 6 ran. |
+| FM-7 | Push fails | `git push` exit status | `push` | `branch`, `prior_head`, `head` — the **local** commit's SHA, `observed` — `verification`, the value `incomplete`, and `files`, carrying one entry per path in the commit with `match: null` and `class: "unknown"` (§5.3). `detail.base`, `detail.local_head`, `detail.git_status`, and `detail.prior_branch` where HEAD was on a branch other than `<branch>` when step 6 ran. |
+| FM-8 | `ls-remote` disagrees with the pushed head | Comparison at step 10 | `verify` | `branch`, `prior_head`, `head`, `verification` — the value `incomplete` — and `files`, carrying one entry per path in the commit with `match: null` and `class: "unknown"` (§5.3). `detail.base`, `detail.local_head`, `detail.remote_head`, and `detail.prior_branch` where HEAD was on a branch other than `<branch>` when step 6 ran. |
 | FM-9 | A per-file blob comparison mismatches | Comparison at step 10 | `verify` | `branch`, `prior_head`, `head`, `verification` — the value `incomplete` — and `files`, carrying the per-file results themselves, each `observed`, the mismatching path with `match: false`. `detail.base`, `detail.local_head`, `detail.remote_head`, and `detail.prior_branch` where HEAD was on a branch other than `<branch>` when step 6 ran. |
 | FM-10 | The invocation is killed mid-sequence | Not detected by the tool | — | Nothing: no report is emitted, so there is no field for the column to be about. See §3.2 step 11's second bullet and OQ-4. |
 | FM-11 | **The remote read succeeds and names no base** — neither `<branch>` nor `main` is present at the remote, so the branch-absent arm has nothing to resolve a base from | Step 3's `ls-remote` exits 0 having returned no line for either ref | `resolve` | `branch`, and `prior_head` — the literal `created`, step 3 having observed that `<branch>` is absent at the remote (§3.2 step 3). Nothing further: no base was resolved, no ref moved, nothing was staged, no commit was made. |
@@ -1029,10 +1026,11 @@ exists, it is reachable from local HEAD, and a human or a later session
 resolves it. Reporting `head` as `observed` while `verification` is
 `incomplete` is exactly the distinction the report format exists to carry — the
 commit was observed, the landing was not. `files` carries the same distinction
-one level down: the paths are named because the tool staged and committed them,
-and each `match` is `unknown` because step 10 never ran (§5.2). That is what lets
-the session handed this report see which files sit in the local commit it is now
-obliged to resolve, rather than reconstruct them from the invocation it made.
+one level down, in the shape §5.3's table gives this path: the paths are named
+because the tool staged and committed them, and each `match` is `unknown`
+because step 10 never ran. That is what lets the session handed this report see
+which files sit in the local commit it is now obliged to resolve, rather than
+reconstruct them from the invocation it made.
 
 ### 6.1 Detection outside the tool
 
@@ -1268,10 +1266,10 @@ closing move, OQ-5 because it has been answered.
   invocation is the one that creates the branch — so the refusal would cost the
   journey the tool exists to serve in order to avoid a mutation the session can
   simply be told about. The residue the question named is real and is now carried
-  in the output rather than only in this document: `detail.prior_branch` names
-  the branch HEAD was on where that was not `<branch>` (§5.3, §3.3). That the
-  move loses no commit remains a property of §3.2 step 5's second check and never
-  was one of `checkout -B`.
+  in the output rather than only in this document: the report names the branch
+  HEAD was moved off, on the paths §5.3's table states (§3.3). That the move
+  loses no commit remains a property of §3.2 step 5's second check and never was
+  one of `checkout -B`.
 
   The identifier is retired rather than reused, on the same footing as OQ-8, so a
   reader arriving from a review artifact that cites OQ-5 by number can still find
