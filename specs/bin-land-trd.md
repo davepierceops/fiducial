@@ -616,12 +616,21 @@ and buys nothing `file://` does not; **mocking the git subprocess layer** —
 forbidden by the suite's own constraint above, and it would make the whole
 suite prove nothing about the operations that matter.
 
-New helpers required: a bare-remote factory, a remote-head reader, and a way to
-mutate the bare repository between push and verification. The third is what
-induces FM-8, the `ls-remote` disagreement (§6), and it is therefore also how the
-content-verification test PRD §5 names produces its mismatch: under git transport
-a mutation of the pushed content moves the branch's head at the remote, so it is
-the head check that mutation trips.
+New helpers required: a bare-remote factory, a remote-head reader, a way to
+mutate the bare repository between push and verification, and a way to install a
+`pre-receive` hook into the bare repository that refuses a push. The third is
+what induces FM-8, the `ls-remote` disagreement (§6), and it is therefore also
+how the content-verification test PRD §5 names produces its mismatch: under git
+transport a mutation of the pushed content moves the branch's head at the remote,
+so it is the head check that mutation trips. The fourth is what induces FM-7: a
+bare repository accepts what it is given, so a push git rejects has to come from
+the remote refusing it, and the refusal happens during the push rather than after
+receive-pack has answered, which is what distinguishes it from the third
+(*inferred* — `pre-receive`'s place in receive-pack is git's documented
+behaviour, not something run in this session). The two
+inducement helpers are named here because the substrate as decided produces
+neither state on its own; what each stands in for, and what it therefore does not
+prove, is §5.4's and §4.2's.
 
 ### 4.2 Standing boundaries
 
@@ -881,6 +890,12 @@ The two that admit no `null` are the two that cannot need one, and each rule say
 why in its own words: `branch` is established wherever a report exists at all,
 and an unestablished `detail` key is absent rather than unknown.
 
+**One question about these values is open and is not settled here.** The rules
+above fix what each field may carry; they do not fix whether a non-ASCII
+character *in* one of those values is written as UTF-8 or as a `\uXXXX` escape,
+and both satisfy every rule in this section. That is OQ-11, and a reader of §5.2
+alone should not take the list above as having closed it.
+
 **What an empty `files` list means.** Where no commit was made there are no
 per-file entries and `files` is `[]`. That `[]` is **not** a claim that the
 commit contained no files — there is no commit for it to be a claim about. It is
@@ -1111,15 +1126,29 @@ to PRD §6.
   buys — that every report shape is constructible from synthetic facts without a
   landing — as an architectural one, and it is not this criterion's boundary.
   With the per-file mismatch mode struck (§6), every one of the nineteen is
-  reachable end to end; two need something the plain substrate does not supply,
-  and neither is left implicit. FM-6's two cases need a `pre-commit` hook
+  reachable end to end; reaching all of them needs three things the plain
+  substrate does not supply, and none of the three is left implicit. FM-6's two
+  cases need a `pre-commit` hook
   installed into the substrate repository that refuses the commit, and that hook
   is a stand-in rather than this repository's own, which §4.2's B5 leaves
   **assumed** and which this criterion does not upgrade. FM-1's `resolve` case
   needs a remote read that fails after a fetch that succeeded, which one bare
   repository cannot produce on its own; it is induced with a `git` shim on a
   temporary `PATH`, in the manner §4.2's B2 already uses `fake_path_dir`, so that
-  one case is mock-verified rather than exercised against the transport.
+  one case is mock-verified rather than exercised against the transport. FM-7's
+  two cases need a push git rejects, and the §4.1 substrate is a bare repository
+  that accepts the pushes it is given; the rejection is induced with a
+  `pre-receive` hook installed into that bare repository, which refuses **during**
+  the push. That is a different helper from the mutation between push and
+  verification §4.1 also provides: the mutation is FM-8's inducement and lands
+  after receive-pack has already answered. What the induced rejection carries is
+  the same limit the hook stand-in carries at FM-6, on the other boundary: §4.2's
+  B1 lists provider-side ref policies — protected branches, push rules — among
+  what the `file://` substrate does not prove, and a `pre-receive` hook the suite
+  itself owns is a stand-in for exactly that class. It exercises git's
+  push-refusal contract and the tool's conduct on that path, and represents
+  nothing about how a real provider refuses a push, so B1's evidence class is
+  what it was and this criterion does not upgrade it either.
 
   **What each case asserts.** The tool's **stdout** parses with `json.loads`
   without error; the parsed value is an object; its keys are exactly `branch`,
@@ -1498,7 +1527,7 @@ Stated so no implementer has to infer them.
 
 ## 9. Open technical questions
 
-Seven open, and three retired. Each open question names what would resolve it;
+Nine open, and three retired. Each open question names what would resolve it;
 none is settled here. A retired identifier is kept in place rather than reused,
 so a reader arriving from a review artifact that cites it by number can still
 find what it referred to — the precedent PRD §8 sets for its own Q1–Q4
@@ -1630,3 +1659,50 @@ have been answered.
   The identifier is retired rather than reused, on the same footing as OQ-5 and
   OQ-8, so a reader arriving from a review artifact that cites OQ-10 by number
   can still find what it referred to.
+
+- **OQ-11 — Whether a non-ASCII character in a report value is serialized as
+  UTF-8 or as a `\uXXXX` escape.** This is the one value domain §5.2 leaves open.
+  §5.2 fixes the format as one JSON object, two-space indentation, sorted keys,
+  UTF-8, one trailing newline, and closes what each field may carry; it does not
+  say which of the two encodings of a non-ASCII character inside such a value the
+  tool emits. Both candidates satisfy every commitment §5.2 currently makes, and
+  both round-trip through `json.loads` to the same Python string, so no criterion
+  written to this document can tell them apart — which is what makes this a
+  question about what the tool does rather than about how this document says it.
+  `ensure_ascii=False` writes such a character as UTF-8 bytes, which §5.2's
+  stated UTF-8 and its stated reason for pretty-printing — readability for the
+  agent session that pastes the report onward — both pull toward.
+  `ensure_ascii=True` writes it as a `\uXXXX` escape, leaving stdout pure ASCII
+  whatever the ambient locale, which is the more robust of the two for a consumer
+  reading the stream as bytes. The state is reachable rather than hypothetical:
+  the branch name, the commit message, and the paths are all caller-supplied text
+  — §5.2's own framing rationale reasons about them on exactly that footing — and
+  two of them are carried in report values, `branch` and each `files` entry's
+  `path`, so a real invocation can put a non-ASCII character into the object this
+  question is about. Until it closes, the encoding is unasserted, and a criterion
+  written to this document may assert only what `json.loads` returns.
+  *Resolved by*: Dave deciding which of the two the tool emits; §5.2 then carries
+  it as a rule beside the other value-domain rules, and a criterion can assert
+  stdout's bytes rather than only its parse.
+
+- **OQ-12 — Whether §7 fixes the bracketed diagnostic codes, or leaves the code
+  strings to the implementer.** §7 requires each stderr diagnostic to carry "a
+  stable bracketed code", citing the convention `bin/tests/helpers.py` already
+  relies on, where "tests assert on codes, never on English wording" (*observed*).
+  But §7 names no code, and no passage of this document assigns one per failure
+  mode or per stop. So a criterion written to this document can assert that *a*
+  bracketed code is present on stderr and cannot assert *which*: two
+  implementations emitting different codes for the same stop both satisfy this
+  document. Two readings are open, and nothing here chooses between them. Either
+  presence is the whole of the contract and the code strings are the
+  implementer's, the convention buying the suite stability against rewording and
+  nothing more; or §7 assigns one code per stop, the way §5.3 assigns one
+  `detail.stage` token per stop, so that a session can branch on stderr as it can
+  on stdout. The consequence of leaving it open is stated plainly rather than
+  left to be discovered: until this closes, the codes are unasserted beyond their
+  presence, and a session that has to tell one stop from another reads
+  `detail.stage` on stdout, whose value set §5.3 does close. *Resolved by*: Dave
+  deciding whether the codes are part of this document's contract — if they are,
+  §7 gains a code per stop and a criterion asserts it on each terminal path; if
+  they are not, §7 says so in as many words, so that a later reader does not read
+  the silence as an oversight.
