@@ -223,8 +223,12 @@ One invocation runs these steps in order, and stops at the first that fails.
 
    Either check failing produces one refusal in one shape — FM-3 (§6), not two
    failure modes: the tool refuses before any ref has moved and exits non-zero
-   (PRD G1, AC-LAND-01c). What that refusal's report carries, including which of
-   the two checks refused, is §5.3's table. Where `<branch>` does not exist
+   (PRD G1, AC-LAND-01c). What that refusal's report carries is §5.3's table, and
+   under it the report says which of the two checks refused: `detail.branch_head`
+   present, the second check refused; absent, the first did, the guard having
+   stopped before `<branch>`'s SHA was read. That absence is a claim and not a
+   silence — §5.3's emission rule makes it one — so a session may act on the
+   discrimination and a criterion may assert it. Where `<branch>` does not exist
    locally the second check has no subject and is skipped, which is not a pass
    being assumed: there is no ref to orphan.
 
@@ -478,14 +482,19 @@ facts, never text.
     Report.build(branch: str, facts: dict, stop: StepResult | None) -> Report
 
 `build` assembles the report from the accumulated `facts` and from nothing else,
-under §5.3's key table: for each field and key that table names, `build` emits
-what `facts` carries, in the shape and the value domain §5.2 fixes. That is one
-rule, read from one place, rather than a rule each failure path has to remember
-— and it is the whole of the separation §3.1 claims between establishing a fact
-and reporting one. What a field or key carries where `facts` does not hold it —
-a contract field still present but `unknown`, a `detail` key absent — is §5.3's
-to state, and §5.3 states it once; `build` implements that rule and this section
-does not restate it.
+under §5.3's key table. What `facts` holds is not what decides emission: §5.3's
+"Established on" column decides it, for the terminal path the sequence reached.
+For each field and key that table establishes on that path, `build` emits what
+`facts` carries, in the shape and the value domain §5.2 fixes. Where the table
+does not establish one there, `build` does not emit it as established, whatever
+`facts` happens to hold; what stands in its place — a contract field still
+present but `unknown`, a `detail` key absent — is §5.3's to state, and §5.3
+states it once. Accumulation and emission are two questions and only the second
+is this seam's: `facts` records what the sequence established, and the table
+decides what the report carries. That is one rule, read from one place, rather
+than a rule each failure path has to remember — and it is the whole of the
+separation §3.1 claims between establishing a fact and reporting one. `build`
+implements that rule and this section does not restate it.
 
 Two properties of `build` are seams between the two modules rather than entries
 in §5.3's table, and are stated here for that reason:
@@ -831,12 +840,24 @@ facts, each an object with the same `value`/`class` shape.
 **The key table — this document's single statement of which path carries what.**
 For every contract field and every `detail` key, the table below names the fact,
 the step of §3.2 that establishes it, and the paths on which the report carries
-it as established. Nothing else in this document states any of that, and no other
-passage may: §3.2 states what each step does, §3.7 states that `build` assembles
-the report from the accumulated facts, §5.2 states the shape and the value
-domains, and §6's cells are derived from this table for the path each row is
-about. Where any of those and this table disagree, this table is normative and
-the other passage is wrong.
+it as established. No other passage in this document states any of that on its
+own authority, and none may: §3.2 states what each step does, and reads an FM-3
+refusal's report off this table rather than stating a rule of its own for it;
+§3.7 states that `build` emits under this table rather than from whatever `facts`
+holds; §5.2 states the shape and the value domains; and §6's cells are derived
+from this table for the path each row is about. Where any of those and this table
+disagree, this table is normative and the other passage is wrong.
+
+**This section's prose is not a second voice.** That rule holds within §5.3 as
+well as outside it. The key table's rows are where this document states which
+path carries which key, and the one emission rule below them states what follows
+where a row does not name a path; between them that is the whole of what this
+section asserts. No other passage here states or implies that a given path
+carries a given key, and none may. The paragraphs around the table explain it —
+why the column is exact, what a row's condition turns on, what the table's
+success-path entries reflect — and assert nothing of their own about scope. Where
+such a passage and the table would disagree there is nothing to weigh: the
+passage was explaining, and it is wrong.
 
 **Established** means the report carries the fact with `class: "observed"`. What
 follows from a path not being named is the one emission rule, stated below the
@@ -887,13 +908,17 @@ stated as a constraint on the table: **no row's column may under-name the paths
 on which its fact is established.** A column that does is a defect here, to be
 fixed here, and never a permission to emit past it.
 
-`stage`, `branch_head`, and `git_status` are the keys that record where the
-sequence stopped, so none of them appears on a landing that succeeded. The other
-four `detail` keys do: `base` and `local_head` because the steps that establish
-them run on every path that gets past them, `remote_head` because step 10's read
-runs on the success path too, and `prior_branch` because it records a mutation of
-the session's own working tree that happens on the success path and that §3.3
-decides the tool is permitted to make.
+**Why the success-path entries read as they do.** `stage`, `branch_head`, and
+`git_status` record where the sequence stopped, which is why no row names the
+success path for them. Three of the remaining four rows name it without a
+condition: `base` and `local_head` because the steps that establish them run on
+every path that gets past them, and `remote_head` because step 10's read runs on
+the success path too. The fourth, `prior_branch`, names it under one, because the
+mutation it records — one §3.3 decides the tool is permitted to make — is not one
+every successful landing performs: where step 6 found HEAD already on `<branch>`
+it moved HEAD off nothing and there is no prior branch to name. That is the
+ordinary second landing of a session that used the tool for its first, which §3.3
+designs for, and the row's condition is what excludes it.
 
 **The permitted `detail.stage` values.** `stage` is the one field a machine
 reader branches on to interpret a failure report, so its value set is closed
