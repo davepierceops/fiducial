@@ -120,6 +120,12 @@ ZEROS = "0" * 40
 
 BRANCH = "feat"
 
+#: The throwaway `land` stub's relocated home — see
+#: `docs/cycles/bin-land-stub-relocate-20260824T091500Z.md`. Not `BIN_DIR`
+#: itself: the stub is deliberately not an invocable tool under `bin/` top
+#: level, so `run_cli` is pointed at it explicitly rather than by default.
+STUB_DIR = pathlib.Path(__file__).resolve().parent / "fixtures" / "stub"
+
 #: Every value any case puts into a report is ASCII. See the module docstring:
 #: whether non-ASCII is escaped is open in §5.2 and is not tested here.
 MESSAGE = "land the work"
@@ -302,7 +308,9 @@ class Substrate:
         )[1].strip()
 
     def land(self, *args, env=None):
-        return run_cli("land", *args, cwd=self.repo, env=env or self.env)
+        return run_cli(
+            "land", *args, cwd=self.repo, env=env or self.env, script_dir=STUB_DIR
+        )
 
 
 class Landing:
