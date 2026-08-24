@@ -681,10 +681,11 @@ exercises.
   directive's N2 stated here). `bin/check-directive` reads no manifest at all:
   M3 matches labelled disposition statements and consults no region, no marker,
   and no manifest entry (§4, M3's row), and no other element consumed one. The
-  manifest's dependents are therefore the two named just above and no others —
-  AC-DT-02's static check over the generator's own source, and §5's first
-  measurement by way of AC-DT-05's partition — both of which are properties of
-  the **generator**. The PRD-level obligation that both binaries read one
+  manifest's dependents are therefore **three, and all three are properties of
+  the generator** — AC-DT-02's static check over the generator's own source,
+  §5's first measurement by way of AC-DT-05's partition, and AC-DT-18's count of
+  author-marked entries in a freshly generated skeleton. None of them is a check
+  the lint performs. The PRD-level obligation that both binaries read one
   manifest form is **withdrawn with the element that needed it**, and that is
   stated here rather than left to a diff, because a prior cycle's dictated
   disposition is being vacated by this one.
@@ -846,12 +847,13 @@ The cycle-14 directive's N2 made the manifest a machine-readable **input** to
 binaries to read the same form. That clause was a clause of the retired
 predicate and is retired with it: the lint reads no manifest, because the only
 element that consumed one no longer does. What the manifest is still for is the
-**measurement apparatus** and nothing else — §5's first outcome, which needs the
-generator-supplied region of a landed directive identifiable as a byte range,
-and AC-DT-05, which fixes the partition making it computable — together with
-AC-DT-02's static check over the generator's own source, which ranges over the
-manifest the generator declares. All three are properties of the generator. The
-statement is made at G11 as well, so a reader arriving from either side finds
+**measurement and generator-side apparatus**: §5's first outcome, which needs
+the generator-supplied region of a landed directive identifiable as a byte
+range, by way of AC-DT-05's partition; AC-DT-02's static check over the
+generator's own source, which ranges over the manifest the generator declares;
+and AC-DT-18's count of author-marked entries in a freshly generated skeleton.
+All three are properties of the **generator**, and none is a check the lint
+performs. G11 states the same list, so a reader arriving from either side finds
 it.
 
 **M8 admits three patterns because AC-CO-1 names two filename branches, and G0
