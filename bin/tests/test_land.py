@@ -127,6 +127,7 @@ import subprocess
 import unittest
 
 from tests.helpers import (
+    BIN_DIR,
     DOCUMENTED_EXIT_CODES,
     base_env,
     bracket_codes,
@@ -193,11 +194,10 @@ ZEROS = "0" * 40
 
 BRANCH = "feat"
 
-#: The throwaway `land` stub's relocated home — see
-#: `docs/cycles/bin-land-stub-relocate-20260824T091500Z.md`. Not `BIN_DIR`
-#: itself: the stub is deliberately not an invocable tool under `bin/` top
-#: level, so `run_cli` is pointed at it explicitly rather than by default.
-STUB_DIR = pathlib.Path(__file__).resolve().parent / "fixtures" / "stub"
+#: The real tool's home: `bin/`, where `land` sits beside the other CLIs and
+#: where `run_cli` finds it by default. Named and passed explicitly all the
+#: same, because `land_raw` below builds its own argv and needs the same path.
+SCRIPT_DIR = BIN_DIR
 
 #: Every value the nineteen cases put into a report is ASCII. That is a fact
 #: about the enumeration, not a limit on the suite: §5.2's escape rule is
@@ -283,7 +283,7 @@ def land_raw(sub, *args, env=None, timeout=90):
     edits. Moving it is stated work for the Coder.
     """
     proc = subprocess.run(
-        [str(STUB_DIR / "land"), *[str(a) for a in args]],
+        [str(SCRIPT_DIR / "land"), *[str(a) for a in args]],
         cwd=str(sub.repo),
         env=env if env is not None else sub.env,
         capture_output=True,
@@ -426,7 +426,7 @@ class Substrate:
 
     def land(self, *args, env=None):
         return run_cli(
-            "land", *args, cwd=self.repo, env=env or self.env, script_dir=STUB_DIR
+            "land", *args, cwd=self.repo, env=env or self.env, script_dir=SCRIPT_DIR
         )
 
 
