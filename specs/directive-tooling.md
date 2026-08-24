@@ -577,10 +577,16 @@ exercises.
 
   - **The disposition prompt** — **invariant**, read from committed text at
     generation time exactly as every other invariant section is (G1). It carries
-    the requirement that a disposition be stated, and the two legal forms
-    `skills/directive-authoring.md` @ `b4a0fa58` names: "either an exclusive
+    the requirement that a disposition be stated, the two legal forms
+    `skills/directive-authoring.md` @ `b4a0fa58` names — "either an exclusive
     assignment (a named directory plus the command creating it) or an explicit
-    sole-tree declaration. A prohibition is not a disposition." The author
+    sole-tree declaration. A prohibition is not a disposition." — **and the
+    requirement that the disposition be written as its own labelled statement**,
+    which is the property M3 checks (*told* — the cycle-15 directive's B1). That
+    last part is not optional decoration: a prompt that named the forms and not
+    the label would guide an author into a directive the same binary's lint
+    fails, which is the generator/lint conflict §4's "Mode scoping" rule exists
+    to surface rather than absorb. The author
     neither writes it nor edits it, and the manifest entry for it names a
     committed path. **M3 does not match this region, in any file** (*told* — the
     cycle-15 directive's B1, which retires the region scoping this bullet
@@ -1628,7 +1634,12 @@ fixture repository" is not read as covering every entry.
   slot as one region the author fills, which is the half of the dual
   classification that sat opposite G1). **The prompt region** is present and
   **non-empty**: it is read from committed text (G1), it states that a
-  working-tree disposition is required, and it names both admitted forms.
+  working-tree disposition is required, it names both admitted forms, and it
+  states that the disposition is written as its own **labelled statement**
+  (*told* — the cycle-15 directive's B1; §4 G3). The last clause is what keeps
+  the generator and the lint in agreement: M3 checks label-presence, so a prompt
+  omitting the labelling requirement would produce skeletons whose faithful
+  completion fails M3.
   **The author region** is present and **empty**, is structurally
   distinguishable from an author region that has been filled, and is the only
   part of the slot the author writes into — the region into which the author
