@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/expedited-log.md @ b4a0fa581ba5c64ac5a0e5374b5604e979a73653
+last-reviewed: reviews/expedited-log.md @ 7853525aedf831bcc07da3264c3af7a91825b048
 audience: [chief-of-staff, human]
 ---
 
@@ -15,11 +15,11 @@ One self-contained directive per session.
 - **Every directive states its working-tree disposition** — either an
   exclusive assignment (a named directory plus the command creating it) or an
   explicit sole-tree declaration. A prohibition is not a disposition. The
-  disposition is stated as its own labelled statement, mechanically
-  distinguishable from incidental mention of trees or commands elsewhere in the
-  file; the label's fixed form is a tooling concern, not this document's. Two
-  sessions sharing a tree mutate each other's preconditions; prefer not
-  splitting work across trees.
+  disposition is stated as its own labelled statement, exactly one per
+  directive, mechanically distinguishable from incidental mention of trees or
+  commands elsewhere in the file; the label's fixed form is a tooling concern,
+  not this document's. Two sessions sharing a tree mutate each other's
+  preconditions; prefer not splitting work across trees.
 - **Pin STOP conditions to the reviewed ref**, not the head of the branch the
   directive lands on — the directive's own commit moves that head.
 - **No blanket constraint may contradict an explicit instruction in the same
