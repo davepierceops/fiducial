@@ -15,8 +15,13 @@ How it is deliberately wrong, stated so nobody mistakes a defect for a bug:
   happened. `prior_head` is always the literal `created`, `verification` is
   always `complete`, every named file always `match: true`, and every SHA is
   the constant `deadbeef...`.
-- It **never emits `detail.stage` or `detail.git_status`**, so no failure
-  report says where the sequence stopped.
+- It **never emits `detail.stage`**, so no failure report says where the
+  sequence stopped.
+- It emits `detail.git_status` **as a string, on every path**, where §5.2
+  closes that value at a JSON number and §5.3 establishes the key on no
+  success path at all. Both halves are wrong on purpose: it is the one value
+  domain this stub violates, so the red-gate shows the domain assertions can
+  fail rather than only that they run.
 - Its `exit_code` is derived from *how many paths were named*, which is not a
   rule anywhere in the TRD, so `verification` and the exit status disagree
   whenever no path was named (AC-LAND-T02).
@@ -59,6 +64,8 @@ class Report:
             "verification": {"value": "complete", "class": "observed"},
             "detail": {
                 "base": {"value": FAKE_SHA, "class": "observed"},
+                # DELIBERATE DEFECT: a string, and on every path (§5.2, §5.3).
+                "git_status": {"value": "128", "class": "observed"},
                 "local_head": {"value": FAKE_SHA, "class": "observed"},
                 "prior_branch": {"value": "main", "class": "observed"},
                 "remote_head": {"value": FAKE_SHA, "class": "observed"},

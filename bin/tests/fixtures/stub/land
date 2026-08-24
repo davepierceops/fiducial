@@ -30,9 +30,19 @@ import argparse
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# Relocation plumbing, not stub content: this file moved out of `bin/` (see
+# `docs/cycles/bin-land-stub-relocate-20260824T091500Z.md`), so it now needs
+# two entries on `sys.path` instead of one — its own new directory, for the
+# `stub_aimeta` package holding this stub's two submodules, and the real
+# `bin/` directory, for the real `aimeta.cli` the other seven executables
+# also use.
+_STUB_DIR = os.path.dirname(os.path.abspath(__file__))
+_REAL_BIN_DIR = os.path.dirname(os.path.dirname(os.path.dirname(_STUB_DIR)))
+sys.path.insert(0, _STUB_DIR)
+sys.path.insert(0, _REAL_BIN_DIR)
 
-from aimeta import cli, land as land_module  # noqa: E402
+from aimeta import cli  # noqa: E402
+from stub_aimeta import land as land_module  # noqa: E402
 
 
 def build_parser():
