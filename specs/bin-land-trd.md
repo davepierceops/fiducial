@@ -305,7 +305,7 @@ One invocation runs these steps in order, and stops at the first that fails.
       established no fact for a report to carry — not even `branch`, which
       §5.3's table gives every terminal path the sequence does reach. §3.1's
       division of responsibility is unchanged by this.
-    - **FM-9**, an invocation killed mid-sequence, which emits nothing because
+    - **FM-10**, an invocation killed mid-sequence, which emits nothing because
       no code of the tool's runs to emit it (§6).
 
 Steps 2, 3, 9, and 10 are the only network operations, and there is exactly one
@@ -524,9 +524,9 @@ None` is the success path; the sequence has no other way to finish. Otherwise
 every token but one — `fetch` FM-1, `base-object` FM-2, `guard` FM-3, `base`
 FM-4, `stage` and `nothing-staged` FM-5, `commit` FM-6, `push` FM-7, `verify`
 FM-8. The exception is `resolve`, which two modes reach: FM-1 where step 3's read
-failed, FM-10 where it succeeded and named no base. `stop.git_status` separates
+failed, FM-11 where it succeeded and named no base. `stop.git_status` separates
 them — FM-1's stop is a failed subprocess and carries that invocation's exit
-status, FM-10's stop is a read that exited 0 and carries none — which is the
+status, FM-11's stop is a read that exited 0 and carries none — which is the
 same distinction §5.3's `detail.git_status` row draws between a stop that is a
 failed subprocess and a stop that is a comparison. Within a mode, the two rows
 §5.3 conditions are decided by whether `facts` carries that row's own key, and
@@ -955,10 +955,10 @@ table.
 | --- | --- | --- |
 | `branch` | The branch the invocation named. Taken from the argument; no step establishes it (§3.7) | Every path on which a report is emitted |
 | `head` | The SHA of the commit step 8 made | FM-7, FM-8, and the success path |
-| `prior_head` | The head `<branch>` held at the remote as step 3 read it, or the literal `created` where that read found `<branch>` absent there | Every path on which step 3's read succeeded: FM-2 through FM-8, FM-10, and the success path |
+| `prior_head` | The head `<branch>` held at the remote as step 3 read it, or the literal `created` where that read found `<branch>` absent there | Every path on which step 3's read succeeded: FM-2 through FM-8, FM-11, and the success path |
 | `files` | One entry per path in the commit, each naming the path and, where step 10 compared it, whether the remote blob matched | Entries with `class: "observed"` on the success path. On FM-7 and FM-8 — a commit exists and step 10 produced no comparison — one entry per committed path with `match: null` and `class: "unknown"`, taken from the paths step 8 committed. On every other path, no entries |
 | `verification` | Whether the landing was verified end to end, under §5.2's biconditional. Computed by `build`; returned by no step | `"complete"` on the success path; `"incomplete"` on FM-7 and FM-8 |
-| `detail.stage` | Which stop of §3.2 the sequence made. Its value set is closed by the token table below | Every detected failure mode: FM-1 through FM-8, and FM-10 |
+| `detail.stage` | Which stop of §3.2 the sequence made. Its value set is closed by the token table below | Every detected failure mode: FM-1 through FM-8, and FM-11 |
 | `detail.base` | The SHA step 3 resolved as the landing base | Every path on which step 3 resolved one: FM-2 through FM-8, and the success path |
 | `detail.local_head` | The local `HEAD` SHA step 5's first check read before evaluating (§3.2 step 5) | Every path on which step 5 ran: FM-3 through FM-8, and the success path |
 | `detail.branch_head` | The local SHA of `<branch>` read by step 5's second check, where that check is the one that refused, before step 6 would rewrite that ref (§3.2 step 5) | FM-3, and there only where the local `<branch>` is the ref whose check refused |
@@ -1016,7 +1016,7 @@ per step of §3.2 at which it can stop, except at step 8, which carries two:
 | Token | §3.2 step it names | Failure modes reaching it |
 | --- | --- | --- |
 | `fetch` | 2, fetch | FM-1 |
-| `resolve` | 3, resolve the base from the remote | FM-1's class, where the remote read is what failed; and FM-10, where it succeeded and named no base |
+| `resolve` | 3, resolve the base from the remote | FM-1's class, where the remote read is what failed; and FM-11, where it succeeded and named no base |
 | `base-object` | 4, confirm the base object is present locally | FM-2 |
 | `guard` | 5, divergence guard | FM-3 |
 | `base` | 6, establish the base | FM-4 |
@@ -1095,8 +1095,8 @@ to PRD §6.
   two on the success path, and two on each of FM-6, FM-7 and FM-8, on the
   `prior_branch` condition; two on FM-1, on its token; two on FM-3, on the
   `branch_head` condition; four on FM-5, which carries a token split and the
-  `prior_branch` condition both; and one each on FM-2, FM-4 and FM-10, which
-  carry neither. Two terminal paths are outside it. **FM-9** — an invocation
+  `prior_branch` condition both; and one each on FM-2, FM-4 and FM-11, which
+  carry neither. Two terminal paths are outside it. **FM-10** — an invocation
   killed mid-sequence — is not detected and emits nothing by construction, so it
   is not a case this criterion can be written against; and the usage-error path
   emits no report either, what it does emit being AC-LAND-T01a's.
@@ -1210,21 +1210,22 @@ its own column, so it is not repeated in the last one.
 | FM-6 | A repository hook refuses the commit | `git commit` exit status | `commit` | `branch`, `prior_head`. `detail.base`, `detail.local_head`, `detail.git_status`, and `detail.prior_branch` where HEAD was on a branch other than `<branch>` when step 6 ran. No commit exists. |
 | FM-7 | Push fails | `git push` exit status | `push` | `branch`, `prior_head`, `head` — the **local** commit's SHA, `observed` — `verification`, the value `incomplete`, and `files`, carrying one entry per path in the commit with `match: null` and `class: "unknown"` (§5.3). `detail.base`, `detail.local_head`, `detail.git_status`, and `detail.prior_branch` where HEAD was on a branch other than `<branch>` when step 6 ran. |
 | FM-8 | `ls-remote` disagrees with the pushed head | Comparison at step 10 | `verify` | `branch`, `prior_head`, `head`, `verification` — the value `incomplete` — and `files`, carrying one entry per path in the commit with `match: null` and `class: "unknown"` (§5.3). `detail.base`, `detail.local_head`, `detail.remote_head`, and `detail.prior_branch` where HEAD was on a branch other than `<branch>` when step 6 ran. |
-| FM-9 | The invocation is killed mid-sequence | Not detected by the tool | — | Nothing: no report is emitted, so there is no field for the column to be about. See §3.2 step 11's second bullet and OQ-4. |
-| FM-10 | **The remote read succeeds and names no base** — neither `<branch>` nor `main` is present at the remote, so the branch-absent arm has nothing to resolve a base from | Step 3's `ls-remote` exits 0 having returned no line for either ref | `resolve` | `branch`, and `prior_head` — the literal `created`, step 3 having observed that `<branch>` is absent at the remote (§3.2 step 3). Nothing further: no base was resolved, no ref moved, nothing was staged, no commit was made. |
+| FM-10 | The invocation is killed mid-sequence | Not detected by the tool | — | Nothing: no report is emitted, so there is no field for the column to be about. See §3.2 step 11's second bullet and OQ-4. |
+| FM-11 | **The remote read succeeds and names no base** — neither `<branch>` nor `main` is present at the remote, so the branch-absent arm has nothing to resolve a base from | Step 3's `ls-remote` exits 0 having returned no line for either ref | `resolve` | `branch`, and `prior_head` — the literal `created`, step 3 having observed that `<branch>` is absent at the remote (§3.2 step 3). Nothing further: no base was resolved, no ref moved, nothing was staged, no commit was made. |
 
-**A mode was struck, and this is the map.** An eleventh mode, numbered FM-9 under
-the previous numbering and reading "a per-file blob comparison mismatches", is
-struck as unreachable, and the two rows below it moved down so the numbering
-stays contiguous. Dave
-authorised that renumbering, once and for this change. FM-1 through FM-8 are
-unchanged; old FM-9 has no successor; old FM-10, an invocation killed
-mid-sequence, is FM-9; old FM-11, the remote read that succeeds and names no
-base, is FM-10. A reader arriving from a review artifact or a directive that
-cites FM-9, FM-10, or FM-11 by number reads it through that map, which is here
-for the reason §9 keeps a retired `OQ-n` in place rather than reusing it. Of the
-two contiguous schemes available, the one that moves two identifiers was
-preferred to the one that restores full sequence order and moves eight.
+**A mode was struck, and the numbering keeps its hole.** FM-9, which read "a
+per-file blob comparison mismatches", is struck as unreachable. The rows below it
+do **not** move up: FM-10 and FM-11 keep the numbers they have always had, and
+the sequence runs FM-1 through FM-8, then FM-10, then FM-11, with nothing at 9.
+Dave authorised a renumbering for this change; the authorisation was offered and
+is deliberately unused, because closing the gap would buy contiguity at the price
+of making two identifiers mean something they did not mean before, and a reader
+arriving from a review artifact or a directive that cites FM-10 or FM-11 by
+number would then read the wrong row without any signal that it had happened. The
+hole costs a reader one moment of "where is 9", which this paragraph answers, and
+it costs nothing else. It is the same instinct §9 follows in keeping a retired
+`OQ-n` in place rather than reusing the identifier: a number that has meant one
+thing does not get to mean another.
 
 **Why the struck mode was unreachable.** Step 10 runs the `ls-remote` head check
 before the per-file comparison and runs the comparison only where that check
@@ -1258,11 +1259,12 @@ failure mode of the struck kind would become reachable again and would have to b
 enumerated here.
 The strike removes an unreachable row; it does not stand in the way of that.
 
-FM-10 is appended rather than inserted at the step it belongs to. Its stage is
-step 3's, so by sequence it sits beside FM-1; the numbers are cited by number in
-this document's review artifacts and in the directives that produced them, and
-restoring sequence order would move eight of them where the renumbering above
-moves two. The out-of-order row is the cheaper of the two costs.
+FM-11 is appended rather than inserted at the step it belongs to. Its stage is
+step 3's, so by sequence it sits beside FM-1; the existing numbers are cited by
+number in this document's review artifacts and in the directives that produced
+them, and moving them to restore sequence order would strand those citations —
+the same cost the paragraph above declines to pay for contiguity, declined again
+here for the same reason. The out-of-order row is the cheaper of the two costs.
 
 It is a distinct mode rather than a case of FM-1: FM-1 is a read that failed, and
 this is a read that succeeded. Step 3's own text establishes that the state is
@@ -1333,7 +1335,7 @@ anywhere; there is no log file and no telemetry sink (§2).
 | --- | --- |
 | 0 | Full verification (AC-LAND-08) |
 | 2 | Usage error; also the outside-a-repo case AC-X-4 permits as 2 or 3 |
-| 3 | FM-1 through FM-6, and FM-10 — every precondition that stops the sequence before a write |
+| 3 | FM-1 through FM-6, and FM-11 — every precondition that stops the sequence before a write |
 | 1 | FM-7 — a write the tool attempted and git rejected |
 | 4 | FM-8 — the tool's own verification of its own write failed, which is exactly what `EXIT_SELF_VERIFY` already means for `bin/flip-agreed` |
 
@@ -1500,8 +1502,8 @@ Seven open, and three retired. Each open question names what would resolve it;
 none is settled here. A retired identifier is kept in place rather than reused,
 so a reader arriving from a review artifact that cites it by number can still
 find what it referred to — the precedent PRD §8 sets for its own Q1–Q4
-(*observed*), and the precedent §6's failure-mode map follows for the one
-renumbering this document has taken. The three retirements differ in kind: OQ-8
+(*observed*), and the precedent §6 follows in leaving a hole at the struck
+failure mode rather than closing it up. The three retirements differ in kind: OQ-8
 is retired because the question had no closing move, OQ-5 and OQ-10 because they
 have been answered.
 
@@ -1536,7 +1538,7 @@ have been answered.
   landing" requires incremental output.** §5.2 emits one report on every
   terminal path, which carries the prior head whenever a step after the branch
   was resolved fails — satisfying the purpose G1 states. The residual gap is
-  FM-9: a process killed mid-sequence emits nothing. Literal compliance would
+  FM-10: a process killed mid-sequence emits nothing. Literal compliance would
   need a JSON-Lines stream — an early partial object, a final complete one —
   at the cost of a more complex parse contract. *Resolved by*: Dave's reading
   of whether G1's clause states a purpose or a mechanism.
