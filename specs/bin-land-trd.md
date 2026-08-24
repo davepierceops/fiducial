@@ -210,6 +210,17 @@ One invocation runs these steps in order, and stops at the first that fails.
      between the ordinary post-checkout tree state and the destructive class PRD
      §7 puts under "Not accepted".
 
+   **Order is part of the guard.** The two checks run in the order written and
+   the guard stops at the first one that refuses; where the first check refuses,
+   the second is not evaluated at all and `<branch>`'s local SHA is never read.
+   Stopping costs nothing, because the tool refuses rather than acts: no ref has
+   moved, so the session resolves the divergence the refusal named and invokes
+   again, and the second check's answer would not make that repair cheaper. It
+   also keeps the refusal honest — a report naming both causes at once would have
+   to describe a state in which the tool went on reading refs after deciding not
+   to act, which is not something a report carrying only *observed* and *unknown*
+   can say. So at most one check refuses on any path that reaches FM-3.
+
    Either check failing produces one refusal in one shape — FM-3 (§6), not two
    failure modes: the tool refuses before any ref has moved and exits non-zero
    (PRD G1, AC-LAND-01c). What that refusal's report carries, including which of
@@ -331,8 +342,11 @@ Two consequences are stated rather than left to be discovered:
   HEAD was on, while the ref this step rewrites is `<branch>`. Run without a
   guard on `<branch>`, this step orphans whatever unpushed commits `<branch>`
   carried (*observed*, the probe recorded at §3.2 step 5). The claim holds only
-  because step 5's second check refuses in that state — the guard is what makes
-  it true, not the mechanism.
+  because step 5's guard refuses before this step runs: the second check refuses
+  in that state, or, where local HEAD has diverged as well and the guard stops
+  before reaching it, the first check does. Either way no ref has moved by the
+  time the tool exits. The guard is what makes the claim true, not the
+  mechanism.
 
   **In the cases the guard permits, the tool moves HEAD rather than refusing.**
   That is a settled decision, not an open question. Refusing would rule out J1 in
@@ -372,11 +386,13 @@ would move `<branch>` — which, in the branch-absent arm, may be the very local
 branch carrying those commits — and abandon them to the reflog. Refusing costs
 a stall; proceeding costs commits.
 
-Step 5's second check makes this mechanical rather than merely intended: where
-the local `<branch>` is the ref carrying the commits, that check refuses; where
-some other branch carries them, the first check does. So the refusal in this arm
-now falls out of the guard on both routes, and the proposal below is a question
-about whether the PRD should *say* so, not about what the tool would do.
+Step 5's guard makes this mechanical rather than merely intended: where some
+other branch carries the commits, the first check refuses; where the local
+`<branch>` carries them and local HEAD is at or behind the base, the second does;
+and where both carry them, the guard stops at the first, which is the same
+refusal in the same shape. So the refusal in this arm falls out of the guard on
+every route, and the proposal below is a question about whether the PRD should
+*say* so, not about what the tool would do.
 
 This is a proposal, not a decision. No PRD goal or criterion decides it, and
 Dave has held cycle-5 O1 out of scope. Recorded as OQ-2.
@@ -451,10 +467,11 @@ column names the establishing step for every field and key the report can carry.
 This section does not restate it and carries no parallel account of it: an
 implementer writing `land.py` reads that table. `stage` is the step's token from
 §5.3's enumeration, carried on the stop so the report can say where the sequence
-halted. `git_status` is the failing invocation's exit status, or `None` where the
-stop was a comparison rather than a subprocess. The sequence accumulates `facts`
-across steps and halts at the first `ok: False`. No step reads another step's git
-output; a step consumes established facts, never text.
+halted. `git_status` is the failing invocation's exit status; the signature
+admits `None` because not every stop is a subprocess, and §5.3's row for that key
+names which. The sequence accumulates `facts` across steps and halts at the first
+`ok: False`. No step reads another step's git output; a step consumes established
+facts, never text.
 
 **`land.py` → `report.py`.** `land.py` never formats:
 
@@ -707,7 +724,8 @@ Rationale, against the obvious alternative of one `key: value` line per field:
 - Pretty-printing keeps it readable by the actual consumer, an agent session
   that will paste it into a report, without costing parseability.
 
-Shape:
+Shape, shown on one path — a first landing that created `<branch>`, invoked from
+a worktree standing on `main`:
 
 ```json
 {
@@ -718,16 +736,26 @@ Shape:
     {"path": "specs/bin-land-trd.md", "match": true, "class": "observed"}
   ],
   "verification": {"value": "complete", "class": "observed"},
-  "detail": {}
+  "detail": {
+    "base":         {"value": "<40-hex>", "class": "observed"},
+    "local_head":   {"value": "<40-hex>", "class": "observed"},
+    "prior_branch": {"value": "main", "class": "observed"},
+    "remote_head":  {"value": "<40-hex>", "class": "observed"}
+  }
 }
 ```
+
+The `detail` object above is this path's, not a template for the others: which
+keys it carries on a given path is §5.3's table, and this section states only the
+shape they all share.
 
 Rules the format holds on every path:
 
 - The five contract keys — `branch`, `head`, `prior_head`, `files`,
   `verification` — and the `detail` object of §5.3 are **always present**, in
-  success and in every failure. This rule fixes the key set and nothing more:
-  what each key carries on a given path is §5.3's table.
+  success and in every failure. This rule fixes the top-level key set and
+  nothing more: what each key carries on a given path, and which keys `detail`
+  itself carries there, are §5.3's table.
 - Every leaf object carries `class`, whose value is `"observed"` or
   `"unknown"` and nothing else. These are the two of Core's four classes PRD G6
   permits the tool to emit, stated there as a subset rather than a redefinition
@@ -737,8 +765,8 @@ Rules the format holds on every path:
   is the one leaf that names its established value `match` rather than `value`,
   and carries no `value` key at all, so on such an entry this rule reads over
   `match` — which the `files` rule below states directly.
-- `prior_head.value` is a 40-character SHA, the literal string `"created"`, or
-  `null`; `null` only with `class: "unknown"` (PRD G1, first arm).
+- `prior_head.value` is a 40-character SHA, the literal string `"created"`
+  (PRD G1, first arm), or `null`; `null` only with `class: "unknown"`.
 - `files` is a list, possibly empty. Each entry carries `path`, `match`, and
   `class`. `match` is `true`, `false`, or `null`; `null` only with
   `class: "unknown"`.
@@ -811,7 +839,7 @@ about. Where any of those and this table disagree, this table is normative and
 the other passage is wrong.
 
 **Established** means the report carries the fact with `class: "observed"`. What
-follows from a path not being named is the one absence rule, stated below the
+follows from a path not being named is the one emission rule, stated below the
 table.
 
 | Key | The fact, and the step of §3.2 that establishes it | Established on |
@@ -824,23 +852,40 @@ table.
 | `detail.stage` | Which step of §3.2 stopped the sequence. Its value set is closed by the token table below | Every detected failure mode: FM-1 through FM-9, and FM-11 |
 | `detail.base` | The SHA step 3 resolved as the landing base | Every path on which step 3 resolved one: FM-2 through FM-9, and the success path |
 | `detail.local_head` | The local `HEAD` SHA step 5's guard read | Every path on which step 5 ran: FM-3 through FM-9, and the success path |
-| `detail.branch_head` | The local SHA of `<branch>` that step 5's second check read, before step 6 would rewrite that ref (§3.2 step 5) | FM-3, and there only where the local `<branch>` is the ref whose check refused |
+| `detail.branch_head` | The local SHA of `<branch>` read by step 5's second check, where that check is the one that refused, before step 6 would rewrite that ref (§3.2 step 5) | FM-3, and there only where the local `<branch>` is the ref whose check refused |
 | `detail.prior_branch` | The branch HEAD was on before step 6 moved it onto `<branch>` (§3.3) | FM-5 through FM-9, and the success path — the paths on which step 6 completed — and there only where it found HEAD on some branch other than `<branch>` |
 | `detail.git_status` | The exit status of the git invocation that failed | FM-1 through FM-7: the modes whose stop is a failed subprocess rather than a comparison |
 | `detail.remote_head` | The head `ls-remote` returned for `<branch>` after the push | FM-8, FM-9, and the success path; on the latter two it equals `head`, and is redundant rather than wrong |
 
-**The one absence rule, stated here and nowhere else in this document.** It
-governs contract fields and `detail` keys alike. Off the paths a row names, a
-contract field is still present, with `value: null` and `class: "unknown"` —
-`files`, being a list rather than a leaf, instead carries no entries — and a
-`detail` key is absent. That absence is not a claim, because the "Established on"
-column is a **floor, not a ceiling**: a fact the accumulated `facts` carries on a
-path the column does not name is **emitted** there, not dropped. Dropping it to
-match a column would be the report declining to claim a fact the tool observed,
-which is the direction PRD G6 exists to rule out. So a reader may not treat a
-key's absence from a path as a claim, and no test written to this document may
-assert one — a test asserts that what a row names is present and carries what the
-row says, never that anything beyond it is missing.
+**The one emission rule, stated here and nowhere else in this document.** It
+governs contract fields and `detail` keys alike. The "Established on" column is a
+**ceiling as well as a floor** — exact, not a minimum. On the paths a row names,
+the report carries that fact with `class: "observed"`. Off them it does not,
+whatever the accumulated `facts` happen to hold: a contract field is still
+present, with `value: null` and `class: "unknown"` — `files`, being a list rather
+than a leaf, instead carries no entries — and a `detail` key is **absent**. Both
+of those are claims, and both are assertable. The report is saying that the tool
+did not establish that fact on that path, and a test written to this document may
+assert it.
+
+**Why exact and not a minimum.** A rule that let a fact the accumulated `facts`
+happened to carry on an unnamed path be emitted there anyway would guard one
+direction only. It rules out a report dropping a fact the tool observed — but so
+does this table, once every column names every path on which its fact is
+established, which is what the columns above do. What it would still permit is a
+report carrying `class: "observed"` for a fact the tool never established, on a
+path no column names. That is the more damaging direction for a tool whose whole
+product is a provenance-labelled report, it is the direction PRD G6 exists to
+rule out, and no criterion written to this document could catch it: a test
+allowed to assert only what is present can never catch what should not be there.
+Exactness makes both directions testable, and the way exactness itself fails is
+the recoverable one — a row that under-names its paths is a one-line correction
+here, and it is the correction the test exactness licenses will demand.
+
+What that costs falls on this table rather than on the implementation, and is
+stated as a constraint on the table: **no row's column may under-name the paths
+on which its fact is established.** A column that does is a defect here, to be
+fixed here, and never a permission to emit past it.
 
 `stage`, `branch_head`, and `git_status` are the keys that record where the
 sequence stopped, so none of them appears on a landing that succeeded. The other
@@ -912,10 +957,14 @@ to PRD §6.
   that table states for it — `detail.stage` with the token §5.3 assigns to the
   step that stopped the sequence, and `files` with the entries the table gives
   that path, so what §5.3 states is tested rather than only written down. The
-  criterion asserts presence and content only: §5.3's column is a floor, so no
-  case asserts that a field or key is absent. Enumerating the failure modes is
-  what makes this a real test rather than a test of the success path: the
-  format's whole burden is that a failed landing is still machine-readable.
+  criterion asserts the exact set rather than a minimum, because §5.3's column is
+  exact: each case also asserts that every contract field the table does not
+  establish on that path carries `value: null` with `class: "unknown"` — or, for
+  `files`, no entries — and that the keys of `detail` are exactly the `detail`
+  keys the table establishes there, with none beyond them. Enumerating the
+  failure modes is what makes this a real test rather than a test of the success
+  path: the format's whole burden is that a failed landing is still
+  machine-readable.
 
 - **AC-LAND-T01a — the usage-error path emits no report.** Given an invocation
   `argparse` rejects, stdout is empty, stderr is non-empty, and the exit status
@@ -961,7 +1010,9 @@ and a non-zero exit.
 **The last column, one rule.** The cells are **derived from §5.3's key table**,
 not authored beside it. Each names, for the path its failure mode reaches, the
 contract fields and `detail` keys §5.3's table establishes there — exhaustively,
-so the row can be read whole — and it names them because that table does. The
+so the row can be read whole — and it names them because that table does. That
+table's column is exact rather than a minimum, so the derived set is exact too: a
+cell names every field and key established on its path and no others. The
 `detail.stage` column is derived the same way, from §5.3's token assignment.
 §5.3 is normative: where a cell and that table disagree, the cell is wrong. No
 cell states an emission rule of its own, and what a key's absence from a cell
@@ -1231,9 +1282,10 @@ closing move, OQ-5 because it has been answered.
   reading execution reports, which is PRD §5's mechanism rather than an SLO.
 
 - **OQ-2 — Whether the PRD should govern the branch-absent diverged case.** What
-  the tool does in that state is no longer what is open. §3.2 step 5's two checks
-  refuse on both routes — the first where some branch other than `<branch>`
-  carries the commits, the second where the local `<branch>` does — so §3.4's
+  the tool does in that state is no longer what is open. §3.2 step 5's guard
+  refuses on every route — the first check where some branch other than
+  `<branch>` carries the commits, the second where the local `<branch>` does, and
+  the first again where both do, the guard stopping there — so §3.4's
   uniform refusal falls out of the guard rather than resting on this document's
   proposal, and an implementer needs no disposition of this question to write the
   tool correctly. What remains open is the PRD side: G1 states its refusal inside
@@ -1268,8 +1320,8 @@ closing move, OQ-5 because it has been answered.
   simply be told about. The residue the question named is real and is now carried
   in the output rather than only in this document: the report names the branch
   HEAD was moved off, on the paths §5.3's table states (§3.3). That the move
-  loses no commit remains a property of §3.2 step 5's second check and never was
-  one of `checkout -B`.
+  loses no commit remains a property of §3.2 step 5's guard and never was one of
+  `checkout -B`.
 
   The identifier is retired rather than reused, on the same footing as OQ-8, so a
   reader arriving from a review artifact that cites OQ-5 by number can still find
