@@ -49,7 +49,15 @@ routes to the TRD stage (§4, "Scope split with the TRD") — and
 origin of the cycle-19 dispositions this revision carries, including **Dave's
 ruling** on the cycle mode's disposition statement (§4, "The cycle mode emits the
 disposition statement too") and the **reading** that reconciles the governed
-exactly-one count with M3's unfenced count (§4, "The count is exactly one"). Cycle 8 contributes no
+exactly-one count with M3's unfenced count (§4, "The count is exactly one"). And
+`docs/cycles/directive-tooling-spec-19-fix-20260824T081022Z.md` @ `5ea201e6` is
+the origin of the two dispositions **this** revision carries, both ruled against
+`reviews/directive-tooling-cycle-19.md`: the **scoping** of that reading to
+**carried** wording, which returns the fenced-only shape to §7's residual set as
+an accepted false positive (§4, "The count is exactly one"; §7), and the
+**restoration** of the fourth sentence of the governed bullet M3's Derived-from
+cell quotes, which that gate found dropped from a cell claiming the rule was
+quoted whole (§4, M3's row). Cycle 8 contributes no
 dispositions and has no directive in this series: it was the **independent
 gate** on the cycle-7 revision — the first cycle whose review was not written by
 the session that authored the revision — run under
@@ -179,9 +187,9 @@ not, and neither is approximate. The figure above is the **research document's**
 markdown files in `docs/cycles/` as the directory stood at `49bd6ff4` — 91
 present, 90 in the measured corpus — and it says nothing about how many of them
 are directives. §4's recount is **this document's own**, taken at this revision
-against M8's three patterns: **111** markdown files, of which 3 match no
+against M8's three patterns: **112** markdown files, of which 3 match no
 licensed pattern and 2 of those 3 are not directives at all. The two figures
-differ because the directory has grown by twenty files since the research was
+differ because the directory has grown by twenty-one files since the research was
 written and because one counts files while the other classifies them. Neither
 supersedes the other, and **neither is a count of directives as a class**. One
 figure in this document is class-scoped — §4's "exactly one" non-conforming
@@ -296,9 +304,11 @@ one"). The **fence exclusion** is untouched by the amendment and remains this
 document's, which §4 states where the check is grounded rather than leaving it
 to be inferred from the amendment's arrival. **The gap the cycle-18 gate then
 read between the governed count and M3's is closed by reading rather than by a
-sixth amendment** (*told* — the cycle-19 directive's N1): only an unfenced
-instance is a **statement**, so the two counts return the same number (§4, "The
-count is exactly one").
+sixth amendment** (*told* — the cycle-19 directive's N1, scoped to **carried**
+wording by `docs/cycles/directive-tooling-spec-19-fix-20260824T081022Z.md` @
+`5ea201e6`, N2): a fenced instance of carried wording is a **mention** rather
+than a statement, so for the shape that gate described the two counts return the
+same number (§4, "The count is exactly one").
 
 Two citation notes, stated because M2 below is about exactly this discipline.
 First, `48ad7fd1` is the **content commit** — the commit that introduced the rule
@@ -1202,7 +1212,7 @@ the test for that class.
 | --- | --- | --- | --- |
 | M1 | A reviewed-ref pin is present and resolves to a commit | `skills/directive-authoring.md`, "Pin STOP conditions to the reviewed ref" | none |
 | M2 | Each companion citation `<path> @ <sha>` names a path present at the reviewed ref, and a SHA that resolves to a **commit touching that path**. Neither fullness nor lastness is checked — see the narrowing note below the table | Core Vocabulary, "Companion document ... Cited with its own path and SHA" and "Directive file ... thereafter cited by path and the SHA of the commit that landed it"; `bin/cycle-open`'s docstring principle, "never invented" | none |
-| M3 | A working-tree disposition is present as **its own labelled statement**, and that statement carries **exactly one** of two forms: an exclusive assignment (a named directory plus the command creating it), or a literal sole-tree declaration. Unconditional — every directive, no parallelism test. **The check is over labelled disposition statements, and this row is where it is fixed: exactly one labelled disposition statement is present in the file outside fenced code blocks, and it carries exactly one of the two admitted forms. Zero such statements fails, whatever else the file mentions. Two or more fails. Text inside a fenced code block is outside M3's match entirely, labelled or not. A labelled statement carrying neither admitted form — a prohibition, for instance — fails on form-membership, and so does one carrying both.** The **exactly-one count is governed text** and is anchored on it: `skills/directive-authoring.md` @ `7853525a`, whose fifth expedited amendment inserts "exactly one per directive" into the labelled-statement clause (*observed* for the text; *told* — the cycle-18 directive `docs/cycles/directive-tooling-spec-18-20260824T042409Z.md` @ `5ffe9ed6`, N1, disposing the cycle-17 gate's N1, which found the count ungoverned while it was dictated by the cycle-17 directive @ `7010e8ff`; §1). The **fence exclusion** is **not** governed text: it remains this document's, dictated by the cycle-17 directive @ `7010e8ff` (N1, its origin), and it **narrows** what the lint matches rather than adding a requirement the lint enforces, so it creates no exposure against G6 and none is carried (§4, "The count is exactly one"; §7, "Not accepted"; AC-DT-13). It is nonetheless the **mechanical form of a line the governed rule draws**, a fenced instance being a **mention** rather than a statement, which is why this row's unfenced count and the governed "exactly one per directive" return the same number (*told* — the cycle-19 directive's N1; §4, "The count is exactly one"). **The fence exclusion is M3's only markdown sensitivity at this level**; any finer markdown-awareness — indentation, list nesting, block quotes, HTML blocks — is a **TRD** concern and is not fixed here. Text instantiating an admitted form **without** the label is not a disposition for M3's purposes and is outside M3's match; that exclusion is the governed rule's own rather than this document's normalization of it, the rule requiring the disposition to be stated "as its own labelled statement, mechanically distinguishable from incidental mention of trees or commands elsewhere in the file". **M3's contract at this level is label-presence and form-membership, and nothing else**; the label's fixed **lexical form** is a **TRD decision**, and the delegation is the governed rule's, which states that "the label's fixed form is a tooling concern, not this document's" — so a TRD fixing one discharges a delegation a governed file makes rather than inventing a requirement (G6, AC-DT-13). Because the match is over labelled statements, **no part of M3 turns on which region of the file the statement sits in**: M3 has no region extent, no manifest scoping, and no whole-file fallback, and the locatability predicate, the region-scoped branch, and the whole-file branch the three prior dispositions built are **retired** (*told* — the cycle-15 directive `docs/cycles/directive-tooling-spec-15-20260824T021751Z.md` @ `438fa4f5`, B1, which is the origin of this check; the retired region scoping originates in the cycle-11 directive's B1, the whole-file fallback in the cycle-12 directive's B1, and the predicate joining them in the cycle-14 directive's B1, and the defect the labelled-statement anchor closes is the cycle-14 gate's B1). **M3 remains total by construction**: every file either carries exactly one unfenced labelled disposition statement carrying an admitted form or does not, with no third outcome, so M3 is never an element the lint cannot decide (AC-DT-10). Every other mention of M3 in this document is a **reference to this row** and states no test of its own; where any of them appears to say something different, this row governs, and the difference is a defect in that site rather than a second rule. See "M3's check is over the labelled statement" below the table | `skills/directive-authoring.md` @ `7853525a`, "Writing the directive file", first rule, quoted whole at its current form: "Every directive states its working-tree disposition — either an exclusive assignment (a named directory plus the command creating it) or an explicit sole-tree declaration. A prohibition is not a disposition. The disposition is stated as its own labelled statement, exactly one per directive, mechanically distinguishable from incidental mention of trees or commands elsewhere in the file; the label's fixed form is a tooling concern, not this document's." Three content commits build that sentence and this document cites each where it states its requirement: `48ad7fd1` the two-form rule, `b4a0fa58` the labelled-statement rule, `7853525a` the exactly-one count (§1) | **none.** Label-presence, form-membership, the exclusivity of the two forms, and the **exactly-one count** all read off the cited governed sentence, the count as of `skills/directive-authoring.md` @ `7853525a` (*told* — the cycle-18 directive's N1; the qualification this cell carried at the previous revision is removed with the exposure it disclosed). The **fence exclusion** is this document's and is dictated by the cycle-17 directive @ `7010e8ff` (N1), but it narrows M3's match rather than adding a requirement the lint enforces, so it is not a qualification of this kind — see "The count is exactly one" below the table. **The two counts agree** and this cell's "none" holds without a reading gap: only an **unfenced** instance is a statement, a fenced one being a **mention** in the governed rule's own sense, so the governed "exactly one per directive" and this row's unfenced count return the same number (*told* — the cycle-19 directive `docs/cycles/directive-tooling-spec-19-20260824T061718Z.md` @ `c05efadd`, N1, disposing the cycle-18 gate's N1, **by reading and with no amendment**; §4, "The count is exactly one") |
+| M3 | A working-tree disposition is present as **its own labelled statement**, and that statement carries **exactly one** of two forms: an exclusive assignment (a named directory plus the command creating it), or a literal sole-tree declaration. Unconditional — every directive, no parallelism test. **The check is over labelled disposition statements, and this row is where it is fixed: exactly one labelled disposition statement is present in the file outside fenced code blocks, and it carries exactly one of the two admitted forms. Zero such statements fails, whatever else the file mentions. Two or more fails. Text inside a fenced code block is outside M3's match entirely, labelled or not. A labelled statement carrying neither admitted form — a prohibition, for instance — fails on form-membership, and so does one carrying both.** The **exactly-one count is governed text** and is anchored on it: `skills/directive-authoring.md` @ `7853525a`, whose fifth expedited amendment inserts "exactly one per directive" into the labelled-statement clause (*observed* for the text; *told* — the cycle-18 directive `docs/cycles/directive-tooling-spec-18-20260824T042409Z.md` @ `5ffe9ed6`, N1, disposing the cycle-17 gate's N1, which found the count ungoverned while it was dictated by the cycle-17 directive @ `7010e8ff`; §1). The **fence exclusion** is **not** governed text: it remains this document's, dictated by the cycle-17 directive @ `7010e8ff` (N1, its origin), and it **narrows** what the lint matches rather than adding a requirement the lint enforces, so it creates no exposure against G6 and none is carried (§4, "The count is exactly one"; §7, "Not accepted"; AC-DT-13). It is nonetheless the **mechanical form of a line the governed rule draws** where the fenced text is **carried** wording, such an instance being a **mention** rather than a statement, which is why this row's unfenced count and the governed "exactly one per directive" return the same number over the shapes carriage produces; where an author fences their **own** sole statement the two counts differ, this row counting zero against the governed one, and that difference runs in the **false-positive** direction and is §7's accepted residual rather than an exposure (*told* — the cycle-19 directive's N1 for the reading and `docs/cycles/directive-tooling-spec-19-fix-20260824T081022Z.md` @ `5ea201e6`, N2, for its scoping — a **consequential update under Core rule 13** at a site that directive did not name, this row governing every other mention of M3; §4, "The count is exactly one"; §7). **The fence exclusion is M3's only markdown sensitivity at this level**; any finer markdown-awareness — indentation, list nesting, block quotes, HTML blocks — is a **TRD** concern and is not fixed here. Text instantiating an admitted form **without** the label is not a disposition for M3's purposes and is outside M3's match; that exclusion is the governed rule's own rather than this document's normalization of it, the rule requiring the disposition to be stated "as its own labelled statement, mechanically distinguishable from incidental mention of trees or commands elsewhere in the file". **M3's contract at this level is label-presence and form-membership, and nothing else**; the label's fixed **lexical form** is a **TRD decision**, and the delegation is the governed rule's, which states that "the label's fixed form is a tooling concern, not this document's" — so a TRD fixing one discharges a delegation a governed file makes rather than inventing a requirement (G6, AC-DT-13). Because the match is over labelled statements, **no part of M3 turns on which region of the file the statement sits in**: M3 has no region extent, no manifest scoping, and no whole-file fallback, and the locatability predicate, the region-scoped branch, and the whole-file branch the three prior dispositions built are **retired** (*told* — the cycle-15 directive `docs/cycles/directive-tooling-spec-15-20260824T021751Z.md` @ `438fa4f5`, B1, which is the origin of this check; the retired region scoping originates in the cycle-11 directive's B1, the whole-file fallback in the cycle-12 directive's B1, and the predicate joining them in the cycle-14 directive's B1, and the defect the labelled-statement anchor closes is the cycle-14 gate's B1). **M3 remains total by construction**: every file either carries exactly one unfenced labelled disposition statement carrying an admitted form or does not, with no third outcome, so M3 is never an element the lint cannot decide (AC-DT-10). Every other mention of M3 in this document is a **reference to this row** and states no test of its own; where any of them appears to say something different, this row governs, and the difference is a defect in that site rather than a second rule. See "M3's check is over the labelled statement" below the table | `skills/directive-authoring.md` @ `7853525a`, "Writing the directive file", first rule, quoted whole at its current form: "Every directive states its working-tree disposition — either an exclusive assignment (a named directory plus the command creating it) or an explicit sole-tree declaration. A prohibition is not a disposition. The disposition is stated as its own labelled statement, exactly one per directive, mechanically distinguishable from incidental mention of trees or commands elsewhere in the file; the label's fixed form is a tooling concern, not this document's. Two sessions sharing a tree mutate each other's preconditions; prefer not splitting work across trees." Three content commits build that sentence and this document cites each where it states its requirement: `48ad7fd1` the two-form rule, `b4a0fa58` the labelled-statement rule, `7853525a` the exactly-one count (§1). **The quotation reaches the end of the governed bullet as of this revision**, the previous form having stopped three sentences in while claiming wholeness (*told* — `docs/cycles/directive-tooling-spec-19-fix-20260824T081022Z.md` @ `5ea201e6`, N1, disposing the cycle-19 gate's N1; *observed*, matched by running against `skills/directive-authoring.md` at `origin/main`, whose body differs from `7853525a`'s in nothing but the frontmatter lifecycle fields). The restored sentence states a rationale and a preference, not a requirement, so nothing M3 enforces, nothing G6 tests, and nothing AC-DT-13 asserts moves with it | **none.** Label-presence, form-membership, the exclusivity of the two forms, and the **exactly-one count** all read off the cited governed sentence, the count as of `skills/directive-authoring.md` @ `7853525a` (*told* — the cycle-18 directive's N1; the qualification this cell carried at the previous revision is removed with the exposure it disclosed). The **fence exclusion** is this document's and is dictated by the cycle-17 directive @ `7010e8ff` (N1), but it narrows M3's match rather than adding a requirement the lint enforces, so it is not a qualification of this kind — see "The count is exactly one" below the table. **The two counts agree over carriage** and this cell's "none" holds without a reading gap: a fenced instance of **carried** wording is a **mention** in the governed rule's own sense rather than a statement, so for the shape the cycle-18 gate described the governed "exactly one per directive" and this row's unfenced count return the same number and no false negative hides behind the exclusion (*told* — the cycle-19 directive `docs/cycles/directive-tooling-spec-19-20260824T061718Z.md` @ `c05efadd`, N1, disposing the cycle-18 gate's N1, **by reading and with no amendment**, scoped to carried wording by `docs/cycles/directive-tooling-spec-19-fix-20260824T081022Z.md` @ `5ea201e6`, N2 — a **consequential update under Core rule 13** at a site that directive did not name; §4, "The count is exactly one"). Where an author fences their **own** sole statement the counts differ in the **false-positive** direction, which narrows what the lint matches rather than adding a requirement it enforces, so this cell's "none" is unqualified in that direction too (§7) |
 | M4 | The stop conditions are present: cannot-execute-as-written, and concurrent tree mutation | Core rules 11 and 15 | none |
 | M5 | The first instruction is write-the-directive-file, commit, push, report the SHA | Core Vocabulary, "Execution block" | DEC-000160 fixes this for **every** directive class, so no class exemption exists for the lint to carry |
 | M6 | A report section is present and enumerates its required fields | Decision Layer rule 14, "Write it so the returned report is triageable by the next decision session" | none |
@@ -1342,8 +1352,9 @@ agreed`, the expedited log's entry naming the amendment, and merge commit
 **form-membership**, the exclusivity of the two forms, **at-least-one**, and now
 **at-most-one** all read straight off it.
 
-**The governed count and M3's count agree, and they agree because only an
-unfenced instance is a statement** (*told* — the cycle-19 directive's N1,
+**The governed count and M3's count agree over carried wording, and they agree
+because a fenced instance of it is a mention rather than a statement** (*told* —
+the cycle-19 directive's N1,
 disposing the cycle-18 gate's N1; the disposition is **resolved by reading, no
 amendment**). That gate read the two counts as differing: the governed sentence
 qualifies "exactly one per directive" by nothing, while M3 counts labelled
@@ -1351,10 +1362,27 @@ statements **outside fenced code blocks**, so a directive carrying one unfenced
 labelled disposition statement **and a fenced copy of one** appeared to violate
 the governed rule while exiting **0** on M3 — a false negative §7's residual set
 did not disclose. **The reading that resolves it**: a labelled disposition
-statement reproduced inside a fence is a **mention**, not a statement. Fenced
-text in this corpus is **exhibited** wording — a copy of a statement belonging to
-another directive, or a duplicate of one this file states unfenced — and
-exhibiting a statement is not making it. The distinction is not imported: the
+statement **reproduced** inside a fence — a copy rather than an original — is a
+**mention**, not a statement. Fenced text of that kind is **exhibited** wording —
+a copy of a statement belonging to another directive, or a duplicate of one this
+file states unfenced — and exhibiting a statement is not making it.
+
+**The reading scopes to carried wording, and the scoping is stated here because
+this is where the reading is stated** (*told* —
+`docs/cycles/directive-tooling-spec-19-fix-20260824T081022Z.md` @ `5ea201e6`,
+N2, disposing the cycle-19 gate's N2; the alternative on the record there was to
+confirm the reading's reach unscoped, and it was not taken). A fenced **copy of
+another directive's statement**, and a fenced **duplicate** of one this file
+states unfenced, are **mentions**: both are wording under carriage, and carriage
+is what the ground below is about. An author's **own** fenced statement — the
+only labelled instance in the file, carried from nowhere — is **a statement they
+formatted badly**, not a mention. Nothing is being exhibited there, so the
+carriage frame does not reach it, and the reading says nothing about it. The two
+shapes therefore part company at §7 rather than sharing one verdict here, and
+what the scoping costs is stated at both sites rather than left to be inferred
+from the reading's wording.
+
+The distinction is not imported: the
 governed rule **draws it itself**, requiring the disposition to be stated "as its
 own labelled statement, **mechanically distinguishable from incidental mention**
 of trees or commands elsewhere in the file", and the same skill's
@@ -1362,14 +1390,16 @@ carry-as-pointer rule frames quoted wording as **carriage** — an origin
 directive "carries it inline and downstream artifacts point at it" — which is
 carriage of a statement, not a second making of it. So "exactly one per
 directive" counts what a directive **states**, M3 counts unfenced labelled
-instances, and the two are the same number. The shape the gate described carries
+instances, and the two are the same number **wherever the fenced text is
+carriage** — which is the shape the gate described. That shape carries
 exactly **one** statement, is not a violation of the governed rule, and M3's
 exit **0** on it applies the rule rather than falling short of it — which is
 what AC-DT-06 fixture (vi) pins. **No false negative arises and none is
 recorded**; §7's residual set gains no member on this account, and its claim
 that residual one is the only false-negative member is true as written. What the
-reading does move at §7 is stated two paragraphs below and is a **removal**, not
-an addition.
+reading does **not** move at §7 is stated two paragraphs below: under the
+scoping the fenced-only shape stays in §7's set as an accepted **false
+positive**, so the set gains no member and loses none.
 
 **What the reading changes about the fence exclusion, and what it does not.**
 It does not move the exclusion's **provenance**: the exclusion is still this
@@ -1377,24 +1407,39 @@ document's, dictated by the cycle-17 directive @ `7010e8ff`, and no governed
 sentence states it. What the reading supplies is its **ground** — the exclusion
 is the mechanical form of a line the governed rule draws in judgment terms, so
 it is neither an arbitrary narrowing nor a requirement smuggled in beside the
-governed one. It still narrows what the lint **matches** rather than adding a
+governed one. **That ground reaches the exclusion where the fenced text is
+carriage, and no further** (*told* —
+`docs/cycles/directive-tooling-spec-19-fix-20260824T081022Z.md` @ `5ea201e6`,
+N2): where an author fences their own sole statement, no governed line stands
+behind the exclusion and it is a plain narrowing, whose product is §7's accepted
+false positive rather than an exposure (§7). It still narrows what the lint
+**matches** rather than adding a
 requirement the lint **enforces**, so no G6 exposure appears and none is
 recorded at §7 or AC-DT-13 (below; AC-DT-13).
 
-**One consequence of the reading reaches §7 and is followed rather than left
-standing** (*told* — the cycle-19 directive's N1 for the reading; the
-consequence is a **consequential update under Core rule 13**, labelled here and
-at its site, and it is **not** itself a dictated disposition). If a fenced
-instance is a mention, then a directive whose **only** labelled instance is
-fenced states **no** disposition, so M3's non-zero exit on it is the governed
-rule applied rather than a false stop on a well-formed directive. That shape —
-§7's residual two, second shape — is therefore reclassified at §7 from an
-accepted false positive to correct behaviour. AC-DT-06 fixture **(vii)**'s
-verdict is unchanged by this: it exits non-zero either way, and what moves is
-the characterization, not the test. The reading's reach is bounded there and
-stated so it can be audited: it says a fenced instance is a mention, and it says
-nothing about indentation, block quotes, or any other markdown context, all of
-which remain TRD concerns (M3's row).
+**The consequence the previous revision drew at §7 does not follow from the
+scoped reading, and it is withdrawn rather than left standing** (*told* —
+`docs/cycles/directive-tooling-spec-19-fix-20260824T081022Z.md` @ `5ea201e6`,
+N2; the previous revision's reclassification was a **consequential update under
+Core rule 13** taken from the reading unscoped, and its reversal is one too,
+labelled here and at its site). That revision reasoned: if a fenced instance is
+a mention, then a directive whose **only** labelled instance is fenced states
+**no** disposition, so M3's non-zero exit on it is the governed rule applied
+rather than a false stop on a well-formed directive — and it reclassified §7's
+residual two, second shape, from an accepted false positive to correct
+behaviour. **Under the scoping the antecedent does not hold**: that author's
+fenced statement is not carried wording, so it is a statement badly formatted
+rather than a mention, the directive **has** stated its disposition, and M3's
+non-zero exit on it is a false stop on a well-formed directive after all. The
+shape **returns to §7's residual set as an accepted false positive**, which is
+where the cycle-17 and cycle-18 revisions carried it (§7). AC-DT-06 fixture
+**(vii)** is untouched by either movement: its verdict is **non-zero under both
+scopings**, so no test, no criterion, and no fixture moved in either direction,
+and what moved twice is the characterization alone. The reading's reach is
+bounded and stated so it can be audited: it says a fenced instance of
+**carried** wording is a mention, it says an author's own fenced statement is a
+badly formatted statement, and it says nothing about indentation, block quotes,
+or any other markdown context, all of which remain TRD concerns (M3's row).
 
 **What that closes, stated rather than left to a diff.** Until the amendment,
 at-most-one did **not** read off the sentence: it stated no count, and its only
@@ -1768,10 +1813,11 @@ and N1). **Scope of this count**, stated with it because §1 carries a different
 count of the same directory: this is every `*.md` entry in `docs/cycles/` **as
 the directory stands at this revision**, classified against M8's three patterns —
 not the research document's 91/90 measured at `49bd6ff4` (§1), and not a count
-of directives as a class. `docs/cycles/` holds **111** markdown files, of which
-**75** match pattern 1, **7** match pattern 2 `cycle-<N>-directive.md`, **26**
+of directives as a class. `docs/cycles/` holds **112** markdown files, of which
+**76** match pattern 1, **7** match pattern 2 `cycle-<N>-directive.md`, **26**
 match pattern 3 `<SLUG>-directive.md`, and **3 match none**. The total and the
-pattern-1 count each rise by **one** against cycle 18's 110/74: cycle 18's
+pattern-1 count each rise by **one** against the cycle-19 revision's 111/75,
+which rose by one from cycle 18's 110/74: cycle 18's
 110/74 rose by one from cycle 17's 109/73, that by two from cycle 15's 107/71,
 that by one from cycle 14's 106/70,
 that by two from cycle 12's 104/68,
@@ -1783,31 +1829,33 @@ is **two** only when an independent gate's directive lands in the same interval,
 which has now happened three times — cycle 9 (against cycle 7's 99/63), cycle 14
 (cycle 13 having been the second independent gate), and cycle 17 (against cycle
 15's 107/71, the third independent gate's directive landing with it) — and **it
-has not happened in either of the two intervals since**: cycle 17's review and
-cycle 18's are both **self-gates** and neither landed a directive of its own
-(§1), so the one file this interval added is
-`docs/cycles/directive-tooling-spec-19-20260824T061718Z.md`, this cycle's own,
-which matches pattern 1 (*observed*, by running). This paragraph's figures are a **consequential update
-under Core rule 13**, not a dictated disposition: the cycle-19 directive
-dispositions no figure, and the recount is restated because it is stated "at
-this revision" and the file this interval added is in the directory. **Cycle 9's pattern-3 disposition moves none of these figures,
+has not happened in any of the three intervals since**: cycle 17's review, cycle
+18's, and cycle 19's are all **self-gates** and none landed a directive of its
+own (§1), so the one file this interval added is
+`docs/cycles/directive-tooling-spec-19-fix-20260824T081022Z.md`, the directive
+this revision executes, which matches pattern 1 (*observed*, by running). This paragraph's figures are a **consequential update
+under Core rule 13**, not a dictated disposition: neither the cycle-19 directive
+nor `docs/cycles/directive-tooling-spec-19-fix-20260824T081022Z.md` @
+`5ea201e6` dispositions a figure, and the recount is restated because it is
+stated "at this revision" and the file this interval added — that directive
+itself — is in the directory. **Cycle 9's pattern-3 disposition moves none of these figures,
 and nor did cycle 7's** (*told* — the cycle-7 directive's B1 and the cycle-9
 directive's B2 each direct this be stated; *observed* for the verification; the
 cycle-12 directive's N2 is the origin of naming cycle 9 explicitly here, the
 deictics it replaces having named cycle 9 implicitly since cycle 9). The classification run with cycle 6's character class and run
 without it agrees on every file in the corpus — which cycle 6's gate verified at
 98 files (`reviews/directive-tooling-cycle-6.md` @ `d8f8d7a6`, O4) and which
-reproduces at 111 at this revision — and the single-component boundary added in
+reproduces at 112 at this revision — and the single-component boundary added in
 cycle 9 is likewise inert over the corpus, because `docs/cycles/` **contains no
 subdirectory**: `git ls-tree` at this revision returns blobs only, so no
 committed name carries a path separator to be admitted or rejected (*observed*).
 The only figures that moved are the total and the pattern-1 count, by the +1 the
-paragraph above accounts for — **this figure was stale at the previous revision
-and is corrected here rather than left to a diff**: it read "+2", which was
-right at cycle 17 where the rise was two and wrong at cycle 18 where the
-paragraph above it already said "rise by **one**", a Core rule 13 miss inside a
-paragraph that labels itself a Core rule 13 update (*observed*, by diff against
-`6d29a4ab` and `de0cc683`) — and neither movement is an effect of a
+paragraph above accounts for — **that figure was stale at the cycle-18 revision
+and was corrected at the cycle-19 one rather than left to a diff**: it read
+"+2", which was right at cycle 17 where the rise was two and wrong at cycle 18
+where the paragraph above it already said "rise by **one**", a Core rule 13 miss
+inside a paragraph that labels itself a Core rule 13 update (*observed*, by diff
+against `6d29a4ab` and `de0cc683`) — and neither movement is an effect of a
 disposition. The three that match none are
 `metadata-scope-fix-20260823.md`
 (N1's date-only case) and two files that are not directives at all —
@@ -2079,7 +2127,7 @@ it cannot check that it can be *carried out*, and G9 requires it to say so.
   from the filename recount. So the filename recount does not re-baseline this
   outcome, because it is not evidence for it in either direction. Where the
   filename number does belong is stated where it is measured: M8's yield against
-  the pre-adoption corpus is **1 non-conforming directive file of 111 markdown
+  the pre-adoption corpus is **1 non-conforming directive file of 112 markdown
   files in `docs/cycles/` at this revision** — the scope §4 states with the
   recount — with the
   classification and its provenance in §4, and it is a property of the lint's
@@ -2456,10 +2504,15 @@ fixture repository" is not read as covering every entry.
   the ordinary directive of this effort — one dictating AC-DT-06's own fixtures
   (i)–(v) — states exactly one disposition and exits non-zero. **This fixture's
   exit is the governed rule applied rather than a narrowing of it** (*told* —
-  the cycle-19 directive's N1): the fenced statements are **mentions**, so the
-  file states exactly one disposition and the governed "exactly one per
-  directive" and M3's unfenced count return the same number (§4, "The count is
-  exactly one"). **Its complement
+  the cycle-19 directive's N1): the fenced statements here are **carried**
+  wording — another directive's, under the origin exception — so they are
+  **mentions**, the file states exactly one disposition, and the governed
+  "exactly one per directive" and M3's unfenced count return the same number
+  (§4, "The count is exactly one"). The scoping of that reading to carried
+  wording leaves this fixture exactly where it was, carriage being what it
+  exhibits (*told* —
+  `docs/cycles/directive-tooling-spec-19-fix-20260824T081022Z.md` @ `5ea201e6`,
+  N2). **Its complement
   is fixtured beside it rather than left as an application of another fixture's
   verdict** (*told* — the cycle-18 directive's N3, disposing the cycle-17 gate's
   N3).
@@ -2473,14 +2526,20 @@ fixture repository" is not read as covering every entry.
   direction of M3's behaviour: each of them exists because a prior cycle's
   reversal needed a test rather than prose, and the fence exclusion is this
   cycle's predecessor's reversal. **What this fixture's non-zero exit is called
-  changed in cycle 19 and its verdict did not** (*told* — the cycle-19
-  directive's N1 for the reading; the reclassification is a **consequential
-  update under Core rule 13**): under that reading a fenced instance is a
-  **mention**, so a directive whose only labelled instance is fenced states no
-  disposition and this exit is the governed rule applied, not the false positive
-  §7 previously accepted (§7; §4, "The count is exactly one"). The fixture is
-  unchanged, which is the point of having pinned it: pinning it here is what
-  would make a later narrowing of the fence exclusion **fail a test** rather
+  moved twice inside cycle 19 and its verdict moved neither time** (*told* — the
+  cycle-19 directive's N1 for the reading and
+  `docs/cycles/directive-tooling-spec-19-fix-20260824T081022Z.md` @ `5ea201e6`,
+  N2, for its scoping; both characterizations are **consequential updates under
+  Core rule 13** and neither is a change to this fixture). The previous revision
+  read a fenced instance as a **mention** without qualification, so a directive
+  whose only labelled instance is fenced stated no disposition and this exit was
+  the governed rule applied. The reading is scoped to **carried** wording, and
+  such an author's fenced statement is their own rather than carried, so this
+  exit is again the **false positive** §7 accepts (§7; §4, "The count is exactly
+  one"). **The fixture is untouched by either movement** — the shape and the
+  non-zero verdict are what cycle 18 pinned, and the verdict is non-zero under
+  both scopings — which is the point of having pinned it: pinning it here is
+  what would make a later narrowing of the fence exclusion **fail a test** rather
   than pass silently, and it is what lets the characterization move without the
   behaviour moving with it.
   For M8 the check is a **form-set membership
@@ -2647,12 +2706,19 @@ fixture repository" is not read as covering every entry.
   The **fence
   exclusion** is not an exception either: it narrows what the lint matches rather
   than adding a requirement the lint enforces, and this criterion is about
-  enforcement. **Nor does it leave the count short of the governed sentence**
-  (*told* — the cycle-19 directive's N1): a fenced instance is a **mention**, not
-  a statement, so M3's unfenced count and the governed "exactly one per
-  directive" return the same number, and this criterion's universal claim is not
-  qualified by the exclusion in either direction (§4, "The count is exactly
-  one").
+  enforcement. **Nor does it leave the count short of the governed sentence in
+  the direction that would matter here** (*told* — the cycle-19 directive's N1
+  for the reading and
+  `docs/cycles/directive-tooling-spec-19-fix-20260824T081022Z.md` @ `5ea201e6`,
+  N2, for its scoping): a fenced instance of **carried** wording is a
+  **mention**, not a statement, so over the shapes carriage produces M3's
+  unfenced count and the governed "exactly one per directive" return the same
+  number and no **false negative** hides behind the exclusion. Where an author
+  fences their **own** sole statement the two counts do differ, M3 counting zero
+  against the governed one, and that difference runs in the **false-positive**
+  direction — a narrower match, not a requirement the lint enforces — which is
+  why it is §7's accepted residual and not a qualification of this criterion
+  (§7; §4, "The count is exactly one").
   No element is held back, none carries a sequencing qualification, and
   **no element carries a silent carve-out from this criterion**, and at this
   revision none carries a stated one either: an element has outrun its
@@ -2932,34 +2998,35 @@ authoring style, not of the check's reach. This is the governing rule §4's
 judgment-only table already carries as its carry-as-pointer entry, and the
 cross-reference is made here so the two are read together.
 
-**A second shape ran the same direction until this cycle and no longer does**:
-an author whose only disposition is written **inside** a fence carries zero
-unfenced labelled statements and fails. It is pinned by a fixture of its own —
-AC-DT-06's **(vii)** — rather than by an inference from another fixture's
-verdict, so a later cycle narrowing or dropping the fence exclusion moves a test
-rather than only this paragraph (*told* — the cycle-18 directive's N3, disposing
-the cycle-17 gate's N3). **That shape is no longer a residual of this check**
-(this is a **consequential update under Core rule 13**, following the cycle-19
-reading of the count, and it is **not** a dictated disposition of its own; §4,
-"The count is exactly one"). Under that reading a fenced instance is a
-**mention**, so a directive whose only labelled instance is fenced states **no**
-disposition, and M3's non-zero exit on it is the governed rule applied rather
-than a false stop on a well-formed directive. Fixture (vii)'s **verdict is
-unchanged** — it exits non-zero either way — and what moves is this section's
-characterization of why. The shape is recorded here rather than deleted, because
-this section states its set in extension and a member leaving it is a change a
-reader of the previous revision has to be able to see. **Whether the reading is
-right is a judgment on the record**, taken in the cycle-19 directive and open to
-reversal there; if it is reversed, this shape returns to the set as a false
-positive and fixture (vii) is unaffected either way.
-The remaining shape is not produced by the generated path, which emits the label
+**A second shape runs the same direction**: an author whose only disposition is
+written **inside** a fence carries zero unfenced labelled statements and fails.
+It is pinned by a fixture of its own — AC-DT-06's **(vii)** — rather than by an
+inference from another fixture's verdict, so a later cycle narrowing or dropping
+the fence exclusion moves a test rather than only this paragraph (*told* — the
+cycle-18 directive's N3, disposing the cycle-17 gate's N3). **The previous
+revision removed this shape from the set, and it is restored here** (*told* —
+`docs/cycles/directive-tooling-spec-19-fix-20260824T081022Z.md` @ `5ea201e6`,
+N2, disposing the cycle-19 gate's N2; the removal was a **consequential update
+under Core rule 13** drawn from the cycle-19 reading of the count taken
+unscoped, and its reversal is one too). That reading is scoped to **carried**
+wording: a fenced copy or duplicate is a mention, but an author's **own** fenced
+sole statement is a statement they formatted badly, so such a directive **has**
+stated its disposition and M3's non-zero exit on it is a false stop on a
+well-formed directive (§4, "The count is exactly one"). Fixture (vii)'s
+**verdict is unchanged by either reading** — it exits non-zero under both
+scopings — so nothing executable moved in either direction, and what moved twice
+is this section's characterization of why. The movement is stated at both ends
+rather than left to a diff, because this section states its set in extension and
+a member leaving it and returning is a change a reader of either revision has to
+be able to see.
+Neither shape is produced by the generated path, which emits the label
 unfenced (G3, AC-DT-03) into a skeleton carrying exactly one unfenced labelled
 disposition statement (G3's generated-skeleton invariant, which holds in **both**
-modes as of this cycle). It is a **false positive** — a false stop on a
+modes as of this cycle). Both are **false positives** — a false stop on a
 well-formed directive, at a cost of one invocation, which is the direction this
 section's next item accepts in general. The mitigation available to the other
 residuals is not available here, the generator emitting the prompt and the label
-rather than policing what an author carries. What would close it is a TRD-stage
+rather than policing what an author carries. What would close them is a TRD-stage
 label form a carried statement cannot reproduce, or a governed rule about
 carrying directives; neither is decided here, and the residual is accepted at
 this width.
@@ -3020,26 +3087,33 @@ two's shapes — is untouched by that amendment and remains this document's, so
 what an author can trip on is what it was. The only change at these two residuals
 is that the fenced-only shape is now pinned by AC-DT-06 fixture (vii).
 
-**The set changes in cycle 19, in extension and in one direction only, and the
-false-negative the cycle-18 gate reported is not among the changes** (*told* —
-the cycle-19 directive's N1 for the reading; the extension change is a
-**consequential update under Core rule 13**). Two things happen here and they
-should not be confused. **First, nothing is added.** The cycle-18 gate read the
+**The set does not change in cycle 19 — neither in extension nor in direction —
+and the movement the previous revision stated is reversed here** (*told* — the
+cycle-19 directive's N1 for the reading and
+`docs/cycles/directive-tooling-spec-19-fix-20260824T081022Z.md` @ `5ea201e6`,
+N2, for its scoping; the movement stated at the previous revision and its
+reversal here are both **consequential updates under Core rule 13**, neither a
+dictated disposition of its own). Two things happen here and they should not be
+confused. **First, nothing is added.** The cycle-18 gate read the
 newly-governed "exactly one per directive" as flat and M3's count as
 fence-scoped, and reported that the difference was an undisclosed **false
 negative** of this set. The cycle-19 disposition resolves that **by reading, not
-by amendment**: only an **unfenced** instance is a statement, so the two counts
-are the same number and the shape the gate described violates nothing (§4, "The
-count is exactly one"). Residual one is therefore still the **only**
-false-negative member of this set, and the claims above are true as written.
-**Second, one shape leaves.** Residual two's fenced-only shape is reclassified
-as correct behaviour by the same reading, so residual two now has **one** shape —
-unfenced inline carriage — where it had two. The **count of residuals is still
-two** and both members stand; what shrank is residual two's extension, and the
-direction mix is unchanged, residual one remaining the only false negative and
-residual two remaining a false positive. **Nothing else about the check moves**:
-the fence exclusion is still this document's, its provenance untouched by the
-reading (§4), and AC-DT-06's fixtures (vi) and (vii) keep their verdicts.
+by amendment**: a fenced instance of **carried** wording is a mention, so for
+the shape the gate described the two counts are the same number and it violates
+nothing (§4, "The count is exactly one"). Residual one is therefore still the
+**only** false-negative member of this set, and the claims above are true as
+written. **Second, nothing leaves either.** The previous revision reclassified
+residual two's fenced-only shape as correct behaviour and left residual two with
+**one** shape where it had two. The reading is scoped to carried wording, and an
+author's own fenced sole statement is not carried, so that shape is a **false
+positive** and it stands: residual two carries **two** shapes — unfenced inline
+carriage and the fenced-only disposition — as it did at cycles 17 and 18. The
+**count of residuals is two**, the extension is what the cycle-17 revision left
+it, and the direction mix is unchanged, residual one remaining the only false
+negative and residual two remaining a false positive. **Nothing else about the
+check moves**: the fence exclusion is still this document's, its provenance
+untouched by the reading (§4), and AC-DT-06's fixtures (vi) and (vii) keep their
+verdicts, which they do under both scopings.
 
 Two bounds on the acceptance, so it is auditable. It is **not** an acceptance of
 the motivating incident going uncaught: that case fails mechanically now, and
