@@ -42,9 +42,14 @@ origin of the cycle-15 dispositions, and
 `docs/cycles/directive-tooling-spec-17-20260824T033019Z.md` @ `7010e8ff` is the
 origin of the cycle-17 dispositions, and
 `docs/cycles/directive-tooling-spec-18-20260824T042409Z.md` @ `5ffe9ed6` is the
-origin of the cycle-18 dispositions this revision carries — including the
-**descope** that governs them, which fixes what this document decides and what it
-routes to the TRD stage (§4, "Scope split with the TRD"). Cycle 8 contributes no
+origin of the cycle-18 dispositions — including the
+**descope** that still governs, which fixes what this document decides and what it
+routes to the TRD stage (§4, "Scope split with the TRD") — and
+`docs/cycles/directive-tooling-spec-19-20260824T061718Z.md` @ `c05efadd` is the
+origin of the cycle-19 dispositions this revision carries, including **Dave's
+ruling** on the cycle mode's disposition statement (§4, "The cycle mode emits the
+disposition statement too") and the **reading** that reconciles the governed
+exactly-one count with M3's unfenced count (§4, "The count is exactly one"). Cycle 8 contributes no
 dispositions and has no directive in this series: it was the **independent
 gate** on the cycle-7 revision — the first cycle whose review was not written by
 the session that authored the revision — run under
@@ -91,9 +96,19 @@ from one source), and N3 (the fenced-only shape pinned by an inference rather
 than by a fixture), with O1–O5 taking no action (*observed*, by reading
 `reviews/directive-tooling-cycle-17.md` and the cycle-18 directive). **Cycle 18
 is a self-gate on the same pattern**, its review artifact
-`reviews/directive-tooling-cycle-18.md` produced under this cycle's directive by
-the session that authored this revision, with a confirmation-scoped independent
-gate to follow it (*told* — the cycle-18 directive). This document
+`reviews/directive-tooling-cycle-18.md` produced under the cycle-18 directive by
+the session that authored the cycle-18 revision, and its findings are what the
+cycle-19 directive dispositions — B1 (G3's generated-skeleton invariant binding
+"in either mode" against a cycle-mode skeleton that preserves AC-CO-3's structure
+and carries no disposition region at all), N1 (the governed count reading
+"exactly one per directive" flat while M3 counts only unfenced statements), and
+N2 (three PRD-level properties gated on §8 Q9 at once), with O1–O6 taking no
+action (*observed*, by reading `reviews/directive-tooling-cycle-18.md` and the
+cycle-19 directive). **Cycle 19's review is a self-gate on the same pattern**,
+its review artifact `reviews/directive-tooling-cycle-19.md` produced under this
+cycle's directive by the session that authored this revision, with a
+confirmation-scoped independent gate to follow it (*told* — the cycle-19
+directive). This document
 does not restate any of them as if it were derived from somewhere else. Assertions
 about this repository carry a provenance class: *observed*, *inferred*, *told*,
 *unknown*.
@@ -164,9 +179,9 @@ not, and neither is approximate. The figure above is the **research document's**
 markdown files in `docs/cycles/` as the directory stood at `49bd6ff4` — 91
 present, 90 in the measured corpus — and it says nothing about how many of them
 are directives. §4's recount is **this document's own**, taken at this revision
-against M8's three patterns: **110** markdown files, of which 3 match no
+against M8's three patterns: **111** markdown files, of which 3 match no
 licensed pattern and 2 of those 3 are not directives at all. The two figures
-differ because the directory has grown by nineteen files since the research was
+differ because the directory has grown by twenty files since the research was
 written and because one counts files while the other classifies them. Neither
 supersedes the other, and **neither is a count of directives as a class**. One
 figure in this document is class-scoped — §4's "exactly one" non-conforming
@@ -279,7 +294,11 @@ sites rather than softened, and the every-element-governed claims at §7's "Not
 accepted" and at AC-DT-13 are true as written again (§4, "The count is exactly
 one"). The **fence exclusion** is untouched by the amendment and remains this
 document's, which §4 states where the check is grounded rather than leaving it
-to be inferred from the amendment's arrival.
+to be inferred from the amendment's arrival. **The gap the cycle-18 gate then
+read between the governed count and M3's is closed by reading rather than by a
+sixth amendment** (*told* — the cycle-19 directive's N1): only an unfenced
+instance is a **statement**, so the two counts return the same number (§4, "The
+count is exactly one").
 
 Two citation notes, stated because M2 below is about exactly this discipline.
 First, `48ad7fd1` is the **content commit** — the commit that introduced the rule
@@ -332,7 +351,10 @@ disposition was generator-supplied end to end — the G1-side half of the dual
 classification cycle 9 filed as blocking, still standing in the one section that
 was not on that finding's location list. Where the
 directive is a reviewer-gated spec-review cycle, it runs the same tool in the mode
-that replaces today's `bin/cycle-open` (§4). It is the actor whose error rate the
+that replaces today's `bin/cycle-open` — which emits the **same disposition
+slot**, so the actor's two freehand regions are the same in both modes (*told* —
+the cycle-19 directive's B1; §4, "The cycle mode emits the disposition statement
+too"). It is the actor whose error rate the
 problem statement names, and it is *inferred* that it is least able to self-check,
 because the degradation the problem statement describes is degradation of exactly
 the faculty a self-check would use.
@@ -527,13 +549,145 @@ twelfth, at `768bbe3b` — are neither superseded nor split. Those two sections
 together remain the authoritative acceptance-criteria
 artifact for the behaviour they specify, and the cycle mode of `bin/directive`
 satisfies it unchanged: the same filename contract (AC-CO-1, both of its
-branches — which is why M8 admits three patterns), the same skeleton structure (AC-CO-3), the same SHA rule
+branches — which is why M8 admits three patterns), the same skeleton structure
+(AC-CO-3) — which the cycle mode emits **and extends**, by the disposition slot
+and the source manifest, without amending or narrowing the criterion (below,
+"The cycle mode emits the disposition statement too") — the same SHA rule
 (AC-CO-4), the same refusals, and the same `--out` and bundle behaviour wherever
 the TRD lands those. `bin/tests/test_cycle_open.py` is the **named test surface
 that must stay green through the migration**: it is the executable statement of the
 contract, and a migration that reds it has changed the contract rather than moved
 it (AC-DT-15). What the TRD may decide is where those criteria are *invoked* from —
 which binary, which mode — not what they require.
+
+**The cycle mode emits the disposition statement too, and the preserved criteria
+are untouched by it** (*told* — the cycle-19 directive
+`docs/cycles/directive-tooling-spec-19-20260824T061718Z.md` @ `c05efadd`, B1,
+disposing the cycle-18 gate's B1; **Dave's ruling**, taken in that directive
+because §4's conflict rule reserves the resolution to a dictated disposition
+rather than to a reviewer). The **cycle mode** emits the working-tree
+disposition slot — the prompt region, and the author region carrying the
+**label over an empty content slot** — exactly as the general mode does (G3;
+AC-DT-03). The cycle-mode skeleton is therefore AC-CO-3's structure **plus**
+that slot, and every criterion AC-CO-1 through AC-CO-12 states is satisfied
+unchanged.
+
+**The conflict this resolves, recorded where it was filed.** The cycle-18 gate
+found three commitments of which at most two could hold: that the cycle mode
+preserves AC-CO-3's structure whole; that a generated skeleton carries exactly
+one unfenced labelled disposition statement, **in either mode** (G3's
+generated-skeleton invariant); and that M3 is unconditional over every directive
+while DEC-000160 puts `bin/check-directive` inside the first act for every
+directive class, **reviewer-gated cycle directives included** (§2). Read with
+AC-CO-3's enumeration as exhaustive, a conforming cycle-mode skeleton carries
+**zero** labelled disposition statements and fails M3 at the executor's first
+act — the same generator/lint defect class the cycle-16 and cycle-17 gates each
+filed as blocking, in the other mode. The invariant did not create that
+conflict; it made a latent one unignorable.
+
+**The ground of the ruling.** The governed requirement reaches this class in
+fact, not only in form: reviewer-gated cycle directives **demonstrably use
+working trees**. This effort's own cycle directives are the standing instance —
+the cycle-15, cycle-17, cycle-18, and cycle-19 directives each carry an
+exclusive working-tree assignment naming a directory and the `git worktree add`
+that creates it (*observed*, by reading them at this revision). Those files are
+hand-authored and carry pattern-1 names; they are reviewer-gated cycle
+directives by **class** — the class `skills/spec-review-cycle.md` governs — not
+by filename, and the class is what the governed rule and DEC-000160 both range
+over. The seven `cycle-<N>-directive.md` files in `docs/cycles/` that
+`bin/cycle-open` actually produced carry **no** working-tree disposition at all,
+only incidental mentions of a tree in two of them (*observed*, by running over
+the corpus at this revision) — which is not a counter-instance but the reason
+the mode has to move: those are exactly the files a conforming M3 would fail,
+and §4's no-retrofit disposition is why the existing ones are not reopened. A
+class that uses working trees is a class `skills/directive-authoring.md`'s first
+rule binds
+— it says "**every** directive states its working-tree disposition" and states no
+class exemption — and DEC-000160 says the same of the lint that checks it. So
+the requirement reaches the cycle mode, and the mode that cannot express it is
+the one that has to move.
+
+**Which of the two moved: neither preserved criterion did.** The resolution is
+that this is an **extension of the emitted structure**, not an amendment of a
+preserved criterion. AC-CO-1 through AC-CO-12 constrain what the skeleton
+**must contain**; none of them constrains what it **may additionally** contain.
+That reading was **verified against all twelve before it was written**, as the
+cycle-19 directive requires, and the verification is recorded here rather than
+asserted (*observed*, at `docs/packages/package-a-spec.md` @ `768bbe3b` for
+§3.6's eleven and §8.2's twelfth): AC-CO-1, -2, -5, -6 govern the filename and
+the refusals and say nothing about the skeleton; AC-CO-7, -8, -9, and -12 govern
+the bundle and `--out`; AC-CO-11 bounds which **files** the tool writes — "only
+the directive and the bundle directory" — not what the directive contains. Two
+reach the skeleton's **content** without reaching its **membership**: AC-CO-4
+fixes the value of each SHA in the `Documents in scope:` list and AC-CO-10 fixes
+the value of the `Date:` line, each constraining an element AC-CO-3 already
+enumerates rather than bounding the set of elements. **AC-CO-3 is the only one
+that reaches the skeleton's structure — which elements it carries** — and it
+states that the skeleton "matches the format in `skills/spec-review-cycle.md`"
+followed by an enumeration of what that format carries. It contains **no exhaustiveness clause** — no "and nothing else"
+— and the skill it defers to carries **no skeleton format at all**, so AC-CO-3's
+own enumeration is the whole of the stated format and there is no second text
+that could supply the missing clause (*observed*, at both paths; that the
+deferral resolves to nothing is a defect in
+`docs/packages/package-a-spec.md` §3.6 rather than in this document, and no
+reading here repairs it). Had any criterion forbidden additions, the cycle-19 directive's stop
+condition would have fired and this ruling would not have been written; it did
+not fire, and that is stated so a later reader can audit the check rather than
+trust it.
+
+**The floor reading is corroborated by an addition this document has required
+since cycle 2, which no cycle has ever filed as a conflict** (*observed*, at
+`decisions/log.md` and `bin/cycle-open`). DEC-000180 states as its consequence
+for tooling that the cycle skeleton "emits Route and Model and no Track", and
+**AC-DT-14** carries that obligation onto `bin/directive`'s cycle mode. Neither
+`Route` nor `Model` appears in AC-CO-3's enumeration, and `render_directive`
+(`bin/cycle-open:115`) emits neither today. So a cycle-mode skeleton that is
+AC-CO-3's structure **plus** two lines the criterion does not name has been this
+document's standing requirement since the **cycle-2** revision, where AC-DT-14
+first entered (*observed*, `git log -S 'AC-DT-14'` resolving to `dcfd966`), and
+every gate from cycle 3 to cycle 18 — the three independent ones among them —
+has read AC-CO-3 beside it without anyone reading the two as in conflict. That is not proof of the floor reading, but it is the
+same reading already applied, in the same criterion, at a site nobody contested:
+the disposition slot is a second instance, not a first.
+
+**The executable statement of AC-CO-3 agrees, which is what makes this
+auditable rather than interpretive** (*observed*, by reading
+`bin/tests/test_cycle_open.py` at this revision). The three cases implementing
+AC-CO-3 — `test_co3_heading_date_and_scope_list`,
+`test_co3_required_sections_are_present`, and
+`test_co3_decisions_section_carries_a_commented_placeholder` — are
+**presence** assertions: `assertIn` and `assertRegex` over the emitted text,
+with no equality assertion over the whole skeleton and no absence assertion
+anywhere in the file that reaches skeleton structure. A skeleton carrying the
+enumerated elements **and** a disposition slot passes all three. So the
+extension does not red the suite AC-DT-15 names, and AC-DT-15 is satisfied by
+the same reading rather than by an exception to it.
+
+**What follows for the invariant.** G3's generated-skeleton invariant holds
+**uniformly in both modes**, which is what it already said and what it may now
+say with a ground: the cycle-mode skeleton carries the emitted label, so it
+carries exactly one unfenced labelled disposition statement, and a cycle
+directive whose content slot is filled faithfully passes M3 by construction —
+the same property J1 and J2 state for the general mode. The **mechanism** by
+which either mode holds to the invariant is unchanged and still routed to the
+TRD by §8 Q10. **This is not a widening of the migration's scope**: what moves
+is still `cycle-open`'s skeleton emission (above), and what the cycle mode emits
+beyond it is this document's own goal G3, which the migration carries into the
+mode rather than inheriting from `cycle-open`.
+
+**The ruling's reach is stated, because the disposition slot is not the only
+region this document's goals add to a generated skeleton.** G11's **source
+manifest** is emitted per region, names no mode, and is therefore likewise an
+addition AC-CO-3's enumeration does not name — and it stands on the same reading
+for the same reason: the enumeration constrains what the skeleton must contain.
+So a cycle-mode skeleton is AC-CO-3's structure plus the disposition slot plus
+the manifest that names every region of it, and AC-DT-05, AC-DT-18, and AC-DT-03
+each bind it in both modes as they already read. What the reading does **not**
+license is subtraction: no region AC-CO-3 enumerates may be dropped, reordered
+out of the format `skills/spec-review-cycle.md` states, or emitted in a form
+`bin/tests/test_cycle_open.py` fails, and a proposal to do any of those is a
+change to `docs/packages/package-a-spec.md` §3.6 made there, exactly as §4's
+conflict rule already requires.
 
 Two committed decisions bind the cycle mode and are carried, not re-decided
 (*observed*, `decisions/log.md`):
@@ -604,7 +758,11 @@ convention this document adopts, and applies from here on:
   AC-CO-11 and §8.2's AC-CO-12, at `docs/packages/package-a-spec.md` @
   `768bbe3b` — including their refusals
   (AC-CO-1, -2, -5, -6, -12) and their writes (AC-CO-1 and AC-CO-7, bounded by
-  AC-CO-11).
+  AC-CO-11). **Preserving the contract whole is a claim about the criteria, not
+  a claim that the cycle-mode skeleton carries nothing beyond what AC-CO-3
+  enumerates**: it also carries the disposition slot and the source manifest, as
+  an extension none of the twelve forbids (above, "The cycle mode emits the
+  disposition statement too"; *told* — the cycle-19 directive's B1).
 - **General mode** — every other invocation. This is the mode G4 and AC-DT-04
   describe, and the mode AC-DT-12(c)'s mutation bound binds.
 
@@ -647,7 +805,11 @@ have been absorbed without anyone seeing it. The rule that replaces it:
   here.
 - Where a conflict has been dispositioned, the resolution is stated at the goal or
   criterion it reaches, so precedence is a decision on the record rather than a
-  default. The **five** found so far are stated where they land: refusals at G4,
+  default. The **six** found so far **between this document and a preserved
+  AC-CO criterion** are stated where they land — the enumeration is scoped to
+  that class, the widened rule's internal conflicts being recorded at the goals
+  they reach rather than counted here (*told* — the cycle-19 directive's B1,
+  which adds the sixth and requires the count be readable): refusals at G4,
   writes at AC-DT-12, and filenames at M8 **three times** — the pattern set in
   cycle 5, where M8 moved to admit AC-CO-1's second branch; the `<SLUG>` character
   class in cycle 7, where M8 moved again to stop rejecting a legal invocation of
@@ -657,6 +819,19 @@ have been absorbed without anyone seeing it. The rule that replaces it:
   component (§4, "Pattern 3 is bounded by AC-CO-1's destination clause"). The
   third is the first of the three in which M8 moved **inward**, and it is stated
   here so the rule is not read as one that only ever widens this document.
+  **The sixth is the first resolved with neither side moving**, and it is stated
+  above under "The cycle mode emits the disposition statement too" (*told* — the
+  cycle-19 directive's B1, disposing the cycle-18 gate's B1). G3's
+  generated-skeleton invariant and AC-CO-3 appeared to conflict only under a
+  reading of AC-CO-3's enumeration as **exhaustive**; the ruling is that the
+  enumeration states what the skeleton must contain and not what it may
+  additionally contain, so the invariant reaches the cycle mode and no preserved
+  criterion is amended, narrowed, or excepted. That the rule admits this outcome
+  is not a loophole in it: the rule requires the disposition to state **which of
+  the two moved and why**, and "neither, because the conflict rested on a reading
+  the criterion does not state" is such a statement — provided the reading is
+  verified against every preserved criterion rather than assumed, which is why
+  the verification is recorded there in extension rather than asserted.
 
 **Reading either mode's claims.** Two claims here were previously written as
 though they were global, and both now name their mode: **G4 / AC-DT-04** (no
@@ -672,7 +847,10 @@ exercises.
 
 **What this document decides, and what the TRD decides** (*told* — the cycle-18
 directive `docs/cycles/directive-tooling-spec-18-20260824T042409Z.md` @
-`5ffe9ed6`, whose **descope** governs this revision). This PRD carries goals,
+`5ffe9ed6`, whose **descope** governs this revision as it did the last — the
+cycle-19 directive dispositions no change to it, and its N2 records that the
+questions the split leaves open are the split's design rather than a gap in it
+(§8 Q9)). This PRD carries goals,
 journeys, risk posture, and the criteria decidable at PRD level. Three classes of
 generator/lint interaction mechanic are **not** decided here, and each carries a
 **named route** to the TRD stage: the label's **lexical form**, routed by **§8
@@ -840,6 +1018,20 @@ the test for that class.
   **generator**, stated at goal level because it is a property of what the tool
   emits rather than of any one region of it, and **AC-DT-03** is where it is
   checked.
+
+  **"In either mode" now has a ground, and the cycle mode is where it was
+  missing** (*told* — the cycle-19 directive's B1, disposing the cycle-18 gate's
+  B1; **Dave's ruling**). The invariant is a count of labelled statements in the
+  emitted file, so it presupposes that the emitted file has one — and the cycle
+  mode preserves AC-CO-3's structure, which enumerates no disposition region.
+  Read with that enumeration as exhaustive, the cycle-mode skeleton carried
+  **zero** and the invariant could not hold of it. The ruling is that the
+  **cycle mode emits the slot too**, as an extension of the emitted structure
+  with every preserved AC-CO criterion untouched, and §4's "The cycle mode emits
+  the disposition statement too" states it, its ground, and the verification
+  against AC-CO-1 through AC-CO-12 that the ruling was checked against before
+  being written. This goal states the invariant uniformly for both modes because
+  it now holds uniformly in both.
 
   **The passes-by-construction property rests on this invariant.** J1 and J2
   state that a skeleton whose content slot is filled faithfully passes the lint,
@@ -1010,7 +1202,7 @@ the test for that class.
 | --- | --- | --- | --- |
 | M1 | A reviewed-ref pin is present and resolves to a commit | `skills/directive-authoring.md`, "Pin STOP conditions to the reviewed ref" | none |
 | M2 | Each companion citation `<path> @ <sha>` names a path present at the reviewed ref, and a SHA that resolves to a **commit touching that path**. Neither fullness nor lastness is checked — see the narrowing note below the table | Core Vocabulary, "Companion document ... Cited with its own path and SHA" and "Directive file ... thereafter cited by path and the SHA of the commit that landed it"; `bin/cycle-open`'s docstring principle, "never invented" | none |
-| M3 | A working-tree disposition is present as **its own labelled statement**, and that statement carries **exactly one** of two forms: an exclusive assignment (a named directory plus the command creating it), or a literal sole-tree declaration. Unconditional — every directive, no parallelism test. **The check is over labelled disposition statements, and this row is where it is fixed: exactly one labelled disposition statement is present in the file outside fenced code blocks, and it carries exactly one of the two admitted forms. Zero such statements fails, whatever else the file mentions. Two or more fails. Text inside a fenced code block is outside M3's match entirely, labelled or not. A labelled statement carrying neither admitted form — a prohibition, for instance — fails on form-membership, and so does one carrying both.** The **exactly-one count is governed text** and is anchored on it: `skills/directive-authoring.md` @ `7853525a`, whose fifth expedited amendment inserts "exactly one per directive" into the labelled-statement clause (*observed* for the text; *told* — the cycle-18 directive `docs/cycles/directive-tooling-spec-18-20260824T042409Z.md` @ `5ffe9ed6`, N1, disposing the cycle-17 gate's N1, which found the count ungoverned while it was dictated by the cycle-17 directive @ `7010e8ff`; §1). The **fence exclusion** is **not** governed text: it remains this document's, dictated by the cycle-17 directive @ `7010e8ff` (N1, its origin), and it **narrows** what the lint matches rather than adding a requirement the lint enforces, so it creates no exposure against G6 and none is carried (§4, "The count is exactly one"; §7, "Not accepted"; AC-DT-13). **The fence exclusion is M3's only markdown sensitivity at this level**; any finer markdown-awareness — indentation, list nesting, block quotes, HTML blocks — is a **TRD** concern and is not fixed here. Text instantiating an admitted form **without** the label is not a disposition for M3's purposes and is outside M3's match; that exclusion is the governed rule's own rather than this document's normalization of it, the rule requiring the disposition to be stated "as its own labelled statement, mechanically distinguishable from incidental mention of trees or commands elsewhere in the file". **M3's contract at this level is label-presence and form-membership, and nothing else**; the label's fixed **lexical form** is a **TRD decision**, and the delegation is the governed rule's, which states that "the label's fixed form is a tooling concern, not this document's" — so a TRD fixing one discharges a delegation a governed file makes rather than inventing a requirement (G6, AC-DT-13). Because the match is over labelled statements, **no part of M3 turns on which region of the file the statement sits in**: M3 has no region extent, no manifest scoping, and no whole-file fallback, and the locatability predicate, the region-scoped branch, and the whole-file branch the three prior dispositions built are **retired** (*told* — the cycle-15 directive `docs/cycles/directive-tooling-spec-15-20260824T021751Z.md` @ `438fa4f5`, B1, which is the origin of this check; the retired region scoping originates in the cycle-11 directive's B1, the whole-file fallback in the cycle-12 directive's B1, and the predicate joining them in the cycle-14 directive's B1, and the defect the labelled-statement anchor closes is the cycle-14 gate's B1). **M3 remains total by construction**: every file either carries exactly one unfenced labelled disposition statement carrying an admitted form or does not, with no third outcome, so M3 is never an element the lint cannot decide (AC-DT-10). Every other mention of M3 in this document is a **reference to this row** and states no test of its own; where any of them appears to say something different, this row governs, and the difference is a defect in that site rather than a second rule. See "M3's check is over the labelled statement" below the table | `skills/directive-authoring.md` @ `7853525a`, "Writing the directive file", first rule, quoted whole at its current form: "Every directive states its working-tree disposition — either an exclusive assignment (a named directory plus the command creating it) or an explicit sole-tree declaration. A prohibition is not a disposition. The disposition is stated as its own labelled statement, exactly one per directive, mechanically distinguishable from incidental mention of trees or commands elsewhere in the file; the label's fixed form is a tooling concern, not this document's." Three content commits build that sentence and this document cites each where it states its requirement: `48ad7fd1` the two-form rule, `b4a0fa58` the labelled-statement rule, `7853525a` the exactly-one count (§1) | **none.** Label-presence, form-membership, the exclusivity of the two forms, and the **exactly-one count** all read off the cited governed sentence, the count as of `skills/directive-authoring.md` @ `7853525a` (*told* — the cycle-18 directive's N1; the qualification this cell carried at the previous revision is removed with the exposure it disclosed). The **fence exclusion** is this document's and is dictated by the cycle-17 directive @ `7010e8ff` (N1), but it narrows M3's match rather than adding a requirement the lint enforces, so it is not a qualification of this kind — see "The count is exactly one" below the table |
+| M3 | A working-tree disposition is present as **its own labelled statement**, and that statement carries **exactly one** of two forms: an exclusive assignment (a named directory plus the command creating it), or a literal sole-tree declaration. Unconditional — every directive, no parallelism test. **The check is over labelled disposition statements, and this row is where it is fixed: exactly one labelled disposition statement is present in the file outside fenced code blocks, and it carries exactly one of the two admitted forms. Zero such statements fails, whatever else the file mentions. Two or more fails. Text inside a fenced code block is outside M3's match entirely, labelled or not. A labelled statement carrying neither admitted form — a prohibition, for instance — fails on form-membership, and so does one carrying both.** The **exactly-one count is governed text** and is anchored on it: `skills/directive-authoring.md` @ `7853525a`, whose fifth expedited amendment inserts "exactly one per directive" into the labelled-statement clause (*observed* for the text; *told* — the cycle-18 directive `docs/cycles/directive-tooling-spec-18-20260824T042409Z.md` @ `5ffe9ed6`, N1, disposing the cycle-17 gate's N1, which found the count ungoverned while it was dictated by the cycle-17 directive @ `7010e8ff`; §1). The **fence exclusion** is **not** governed text: it remains this document's, dictated by the cycle-17 directive @ `7010e8ff` (N1, its origin), and it **narrows** what the lint matches rather than adding a requirement the lint enforces, so it creates no exposure against G6 and none is carried (§4, "The count is exactly one"; §7, "Not accepted"; AC-DT-13). It is nonetheless the **mechanical form of a line the governed rule draws**, a fenced instance being a **mention** rather than a statement, which is why this row's unfenced count and the governed "exactly one per directive" return the same number (*told* — the cycle-19 directive's N1; §4, "The count is exactly one"). **The fence exclusion is M3's only markdown sensitivity at this level**; any finer markdown-awareness — indentation, list nesting, block quotes, HTML blocks — is a **TRD** concern and is not fixed here. Text instantiating an admitted form **without** the label is not a disposition for M3's purposes and is outside M3's match; that exclusion is the governed rule's own rather than this document's normalization of it, the rule requiring the disposition to be stated "as its own labelled statement, mechanically distinguishable from incidental mention of trees or commands elsewhere in the file". **M3's contract at this level is label-presence and form-membership, and nothing else**; the label's fixed **lexical form** is a **TRD decision**, and the delegation is the governed rule's, which states that "the label's fixed form is a tooling concern, not this document's" — so a TRD fixing one discharges a delegation a governed file makes rather than inventing a requirement (G6, AC-DT-13). Because the match is over labelled statements, **no part of M3 turns on which region of the file the statement sits in**: M3 has no region extent, no manifest scoping, and no whole-file fallback, and the locatability predicate, the region-scoped branch, and the whole-file branch the three prior dispositions built are **retired** (*told* — the cycle-15 directive `docs/cycles/directive-tooling-spec-15-20260824T021751Z.md` @ `438fa4f5`, B1, which is the origin of this check; the retired region scoping originates in the cycle-11 directive's B1, the whole-file fallback in the cycle-12 directive's B1, and the predicate joining them in the cycle-14 directive's B1, and the defect the labelled-statement anchor closes is the cycle-14 gate's B1). **M3 remains total by construction**: every file either carries exactly one unfenced labelled disposition statement carrying an admitted form or does not, with no third outcome, so M3 is never an element the lint cannot decide (AC-DT-10). Every other mention of M3 in this document is a **reference to this row** and states no test of its own; where any of them appears to say something different, this row governs, and the difference is a defect in that site rather than a second rule. See "M3's check is over the labelled statement" below the table | `skills/directive-authoring.md` @ `7853525a`, "Writing the directive file", first rule, quoted whole at its current form: "Every directive states its working-tree disposition — either an exclusive assignment (a named directory plus the command creating it) or an explicit sole-tree declaration. A prohibition is not a disposition. The disposition is stated as its own labelled statement, exactly one per directive, mechanically distinguishable from incidental mention of trees or commands elsewhere in the file; the label's fixed form is a tooling concern, not this document's." Three content commits build that sentence and this document cites each where it states its requirement: `48ad7fd1` the two-form rule, `b4a0fa58` the labelled-statement rule, `7853525a` the exactly-one count (§1) | **none.** Label-presence, form-membership, the exclusivity of the two forms, and the **exactly-one count** all read off the cited governed sentence, the count as of `skills/directive-authoring.md` @ `7853525a` (*told* — the cycle-18 directive's N1; the qualification this cell carried at the previous revision is removed with the exposure it disclosed). The **fence exclusion** is this document's and is dictated by the cycle-17 directive @ `7010e8ff` (N1), but it narrows M3's match rather than adding a requirement the lint enforces, so it is not a qualification of this kind — see "The count is exactly one" below the table. **The two counts agree** and this cell's "none" holds without a reading gap: only an **unfenced** instance is a statement, a fenced one being a **mention** in the governed rule's own sense, so the governed "exactly one per directive" and this row's unfenced count return the same number (*told* — the cycle-19 directive `docs/cycles/directive-tooling-spec-19-20260824T061718Z.md` @ `c05efadd`, N1, disposing the cycle-18 gate's N1, **by reading and with no amendment**; §4, "The count is exactly one") |
 | M4 | The stop conditions are present: cannot-execute-as-written, and concurrent tree mutation | Core rules 11 and 15 | none |
 | M5 | The first instruction is write-the-directive-file, commit, push, report the SHA | Core Vocabulary, "Execution block" | DEC-000160 fixes this for **every** directive class, so no class exemption exists for the lint to carry |
 | M6 | A report section is present and enumerates its required fields | Decision Layer rule 14, "Write it so the returned report is triageable by the next decision session" | none |
@@ -1094,6 +1286,14 @@ faithfully is sufficient for M3 to pass** — the property J1 and J2 now state,
 and the property the cycle-16 gate's B1 found this document nowhere carried. An
 **unfilled** skeleton carries the prompt and the label over a blank content
 slot: count one, carrying **neither** admitted form, exit **non-zero**.
+**Both cases are cases of either mode** (*told* — the cycle-19 directive's B1;
+§4, "The cycle mode emits the disposition statement too"): the cycle mode emits
+the slot as the general mode does, so a reviewer-gated cycle directive whose
+content slot is filled faithfully passes M3 by construction on the same
+reasoning, and an unfilled cycle-mode skeleton fails on form-membership on the
+same reasoning. This is stated because until cycle 19 the cycle-mode skeleton
+carried no disposition region at all under the reading then in force, and these
+two cases silently had only one mode in range.
 
 **The unfilled case is decided on form-membership, not on the count, and that
 is what reconciles AC-DT-03 with AC-DT-06's fixture (v).** The previous revision
@@ -1141,6 +1341,60 @@ agreed`, the expedited log's entry naming the amendment, and merge commit
 `b5fc675c` carrying it to `origin/main` (§1). **Label-presence**,
 **form-membership**, the exclusivity of the two forms, **at-least-one**, and now
 **at-most-one** all read straight off it.
+
+**The governed count and M3's count agree, and they agree because only an
+unfenced instance is a statement** (*told* — the cycle-19 directive's N1,
+disposing the cycle-18 gate's N1; the disposition is **resolved by reading, no
+amendment**). That gate read the two counts as differing: the governed sentence
+qualifies "exactly one per directive" by nothing, while M3 counts labelled
+statements **outside fenced code blocks**, so a directive carrying one unfenced
+labelled disposition statement **and a fenced copy of one** appeared to violate
+the governed rule while exiting **0** on M3 — a false negative §7's residual set
+did not disclose. **The reading that resolves it**: a labelled disposition
+statement reproduced inside a fence is a **mention**, not a statement. Fenced
+text in this corpus is **exhibited** wording — a copy of a statement belonging to
+another directive, or a duplicate of one this file states unfenced — and
+exhibiting a statement is not making it. The distinction is not imported: the
+governed rule **draws it itself**, requiring the disposition to be stated "as its
+own labelled statement, **mechanically distinguishable from incidental mention**
+of trees or commands elsewhere in the file", and the same skill's
+carry-as-pointer rule frames quoted wording as **carriage** — an origin
+directive "carries it inline and downstream artifacts point at it" — which is
+carriage of a statement, not a second making of it. So "exactly one per
+directive" counts what a directive **states**, M3 counts unfenced labelled
+instances, and the two are the same number. The shape the gate described carries
+exactly **one** statement, is not a violation of the governed rule, and M3's
+exit **0** on it applies the rule rather than falling short of it — which is
+what AC-DT-06 fixture (vi) pins. **No false negative arises and none is
+recorded**; §7's residual set gains no member on this account, and its claim
+that residual one is the only false-negative member is true as written. What the
+reading does move at §7 is stated two paragraphs below and is a **removal**, not
+an addition.
+
+**What the reading changes about the fence exclusion, and what it does not.**
+It does not move the exclusion's **provenance**: the exclusion is still this
+document's, dictated by the cycle-17 directive @ `7010e8ff`, and no governed
+sentence states it. What the reading supplies is its **ground** — the exclusion
+is the mechanical form of a line the governed rule draws in judgment terms, so
+it is neither an arbitrary narrowing nor a requirement smuggled in beside the
+governed one. It still narrows what the lint **matches** rather than adding a
+requirement the lint **enforces**, so no G6 exposure appears and none is
+recorded at §7 or AC-DT-13 (below; AC-DT-13).
+
+**One consequence of the reading reaches §7 and is followed rather than left
+standing** (*told* — the cycle-19 directive's N1 for the reading; the
+consequence is a **consequential update under Core rule 13**, labelled here and
+at its site, and it is **not** itself a dictated disposition). If a fenced
+instance is a mention, then a directive whose **only** labelled instance is
+fenced states **no** disposition, so M3's non-zero exit on it is the governed
+rule applied rather than a false stop on a well-formed directive. That shape —
+§7's residual two, second shape — is therefore reclassified at §7 from an
+accepted false positive to correct behaviour. AC-DT-06 fixture **(vii)**'s
+verdict is unchanged by this: it exits non-zero either way, and what moves is
+the characterization, not the test. The reading's reach is bounded there and
+stated so it can be audited: it says a fenced instance is a mention, and it says
+nothing about indentation, block quotes, or any other markdown context, all of
+which remain TRD concerns (M3's row).
 
 **What that closes, stated rather than left to a diff.** Until the amendment,
 at-most-one did **not** read off the sentence: it stated no count, and its only
@@ -1514,11 +1768,12 @@ and N1). **Scope of this count**, stated with it because §1 carries a different
 count of the same directory: this is every `*.md` entry in `docs/cycles/` **as
 the directory stands at this revision**, classified against M8's three patterns —
 not the research document's 91/90 measured at `49bd6ff4` (§1), and not a count
-of directives as a class. `docs/cycles/` holds **110** markdown files, of which
-**74** match pattern 1, **7** match pattern 2 `cycle-<N>-directive.md`, **26**
+of directives as a class. `docs/cycles/` holds **111** markdown files, of which
+**75** match pattern 1, **7** match pattern 2 `cycle-<N>-directive.md`, **26**
 match pattern 3 `<SLUG>-directive.md`, and **3 match none**. The total and the
-pattern-1 count each rise by **one** against cycle 17's 109/73: cycle 17's
-109/73 rose by two from cycle 15's 107/71, that by one from cycle 14's 106/70,
+pattern-1 count each rise by **one** against cycle 18's 110/74: cycle 18's
+110/74 rose by one from cycle 17's 109/73, that by two from cycle 15's 107/71,
+that by one from cycle 14's 106/70,
 that by two from cycle 12's 104/68,
 that by one from cycle 11's 103/67, that from cycle 10's 102/66 and that from
 cycle 9's 101/65, and cycle 6's 98/62 rose by one from
@@ -1528,11 +1783,12 @@ is **two** only when an independent gate's directive lands in the same interval,
 which has now happened three times — cycle 9 (against cycle 7's 99/63), cycle 14
 (cycle 13 having been the second independent gate), and cycle 17 (against cycle
 15's 107/71, the third independent gate's directive landing with it) — and **it
-did not happen here**: cycle 17's review is a **self-gate** and landed no
-directive of its own (§1), so the one file this interval added is
-`docs/cycles/directive-tooling-spec-18-20260824T042409Z.md`, this cycle's own,
+has not happened in either of the two intervals since**: cycle 17's review and
+cycle 18's are both **self-gates** and neither landed a directive of its own
+(§1), so the one file this interval added is
+`docs/cycles/directive-tooling-spec-19-20260824T061718Z.md`, this cycle's own,
 which matches pattern 1 (*observed*, by running). This paragraph's figures are a **consequential update
-under Core rule 13**, not a dictated disposition: the cycle-18 directive
+under Core rule 13**, not a dictated disposition: the cycle-19 directive
 dispositions no figure, and the recount is restated because it is stated "at
 this revision" and the file this interval added is in the directory. **Cycle 9's pattern-3 disposition moves none of these figures,
 and nor did cycle 7's** (*told* — the cycle-7 directive's B1 and the cycle-9
@@ -1541,12 +1797,17 @@ cycle-12 directive's N2 is the origin of naming cycle 9 explicitly here, the
 deictics it replaces having named cycle 9 implicitly since cycle 9). The classification run with cycle 6's character class and run
 without it agrees on every file in the corpus — which cycle 6's gate verified at
 98 files (`reviews/directive-tooling-cycle-6.md` @ `d8f8d7a6`, O4) and which
-reproduces at 110 at this revision — and the single-component boundary added in
+reproduces at 111 at this revision — and the single-component boundary added in
 cycle 9 is likewise inert over the corpus, because `docs/cycles/` **contains no
 subdirectory**: `git ls-tree` at this revision returns blobs only, so no
 committed name carries a path separator to be admitted or rejected (*observed*).
-The only figures that moved are the total and the pattern-1 count, by the +2 the
-paragraph above accounts for, and neither movement is an effect of a
+The only figures that moved are the total and the pattern-1 count, by the +1 the
+paragraph above accounts for — **this figure was stale at the previous revision
+and is corrected here rather than left to a diff**: it read "+2", which was
+right at cycle 17 where the rise was two and wrong at cycle 18 where the
+paragraph above it already said "rise by **one**", a Core rule 13 miss inside a
+paragraph that labels itself a Core rule 13 update (*observed*, by diff against
+`6d29a4ab` and `de0cc683`) — and neither movement is an effect of a
 disposition. The three that match none are
 `metadata-scope-fix-20260823.md`
 (N1's date-only case) and two files that are not directives at all —
@@ -1818,7 +2079,7 @@ it cannot check that it can be *carried out*, and G9 requires it to say so.
   from the filename recount. So the filename recount does not re-baseline this
   outcome, because it is not evidence for it in either direction. Where the
   filename number does belong is stated where it is measured: M8's yield against
-  the pre-adoption corpus is **1 non-conforming directive file of 110 markdown
+  the pre-adoption corpus is **1 non-conforming directive file of 111 markdown
   files in `docs/cycles/` at this revision** — the scope §4 states with the
   recount — with the
   classification and its provenance in §4, and it is a property of the lint's
@@ -2011,6 +2272,17 @@ fixture repository" is not read as covering every entry.
   admitted form, and the prompt above it is not a labelled statement at all. The
   two criteria now state the **same file**, which the previous revision did not
   (§4, "The unfilled case is decided on form-membership").
+  **This criterion names no mode, and as of cycle 19 that reading is grounded
+  rather than merely conventional** (*told* — the cycle-19 directive's B1,
+  disposing the cycle-18 gate's B1; **Dave's ruling**). Under §4's Mode scoping
+  convention a claim naming no mode binds both, so this criterion has always
+  bound the **cycle mode** as well — which was unsatisfiable while AC-CO-3's
+  enumeration was read as exhaustive, since a cycle-mode skeleton then carried no
+  disposition region at all. The ruling is that the cycle mode **emits the slot
+  too**, as an extension of the emitted structure with every preserved AC-CO
+  criterion untouched (§4, "The cycle mode emits the disposition statement
+  too"). A skeleton generated in either mode is therefore in this criterion's
+  range, and the fixtures below are generated in either.
   **The criterion additionally binds the skeleton as a whole** (*told* — the
   cycle-18 directive's B1, disposing the cycle-17 gate's B1). A generated
   skeleton contains **exactly one unfenced labelled disposition statement** — the
@@ -2041,6 +2313,10 @@ fixture repository" is not read as covering every entry.
   and needs no manifest; like AC-DT-06's M3 fixtures it is **specified now** and
   becomes **executable** once the TRD fixes the label's lexical form (§8 Q9),
   and it should be read on AC-DT-16's model until then rather than as red.
+  **That it waits on Q9 is the descope's design and not a defect in this
+  criterion** (*told* — the cycle-19 directive's N2, disposing the cycle-18
+  gate's N2, **no action, recorded**): §8 Q9 names the three PRD-level
+  properties gated on it, in one place, and names what resolves them.
 - **AC-DT-04** — Scoped to the **general mode** (§4, "Mode scoping"). In the
   general mode the generator exits 0 for every invocation that produces a
   skeleton, rejects no content, and has no refusal path. In **both** modes it
@@ -2178,7 +2454,12 @@ fixture repository" is not read as covering every entry.
   cycle-17 directive's N1; §4, "The count is exactly one"). This fixture pins the
   fence exclusion in the direction the count would otherwise break: without it,
   the ordinary directive of this effort — one dictating AC-DT-06's own fixtures
-  (i)–(v) — states exactly one disposition and exits non-zero. **Its complement
+  (i)–(v) — states exactly one disposition and exits non-zero. **This fixture's
+  exit is the governed rule applied rather than a narrowing of it** (*told* —
+  the cycle-19 directive's N1): the fenced statements are **mentions**, so the
+  file states exactly one disposition and the governed "exactly one per
+  directive" and M3's unfenced count return the same number (§4, "The count is
+  exactly one"). **Its complement
   is fixtured beside it rather than left as an application of another fixture's
   verdict** (*told* — the cycle-18 directive's N3, disposing the cycle-17 gate's
   N3).
@@ -2191,10 +2472,17 @@ fixture repository" is not read as covering every entry.
   directions, which is the convention (i)–(v) already set for every other
   direction of M3's behaviour: each of them exists because a prior cycle's
   reversal needed a test rather than prose, and the fence exclusion is this
-  cycle's predecessor's reversal. This is the false positive §7 accepts rather
-  than a shape this criterion excuses, and pinning it here is what would make a
-  later narrowing of the fence exclusion **fail a test** rather than pass
-  silently.
+  cycle's predecessor's reversal. **What this fixture's non-zero exit is called
+  changed in cycle 19 and its verdict did not** (*told* — the cycle-19
+  directive's N1 for the reading; the reclassification is a **consequential
+  update under Core rule 13**): under that reading a fenced instance is a
+  **mention**, so a directive whose only labelled instance is fenced states no
+  disposition and this exit is the governed rule applied, not the false positive
+  §7 previously accepted (§7; §4, "The count is exactly one"). The fixture is
+  unchanged, which is the point of having pinned it: pinning it here is what
+  would make a later narrowing of the fence exclusion **fail a test** rather
+  than pass silently, and it is what lets the characterization move without the
+  behaviour moving with it.
   For M8 the check is a **form-set membership
   test over three patterns**, with eight fixtures, matched against the lint's
   path argument **as resolved** to a repository-relative path and not as given
@@ -2359,7 +2647,12 @@ fixture repository" is not read as covering every entry.
   The **fence
   exclusion** is not an exception either: it narrows what the lint matches rather
   than adding a requirement the lint enforces, and this criterion is about
-  enforcement.
+  enforcement. **Nor does it leave the count short of the governed sentence**
+  (*told* — the cycle-19 directive's N1): a fenced instance is a **mention**, not
+  a statement, so M3's unfenced count and the governed "exactly one per
+  directive" return the same number, and this criterion's universal claim is not
+  qualified by the exclusion in either direction (§4, "The count is exactly
+  one").
   No element is held back, none carries a sequencing qualification, and
   **no element carries a silent carve-out from this criterion**, and at this
   revision none carries a stated one either: an element has outrun its
@@ -2384,6 +2677,13 @@ fixture repository" is not read as covering every entry.
   invoked through, which is the TRD's question and not this criterion's. A red in
   that suite is a failed migration, not a superseded criterion. Verifiable by
   running the pre-existing suite.
+  **The cycle-mode disposition slot does not red it, and that is checked rather
+  than assumed** (*told* — the cycle-19 directive's B1; *observed* for the
+  suite): the three cases implementing AC-CO-3 are **presence** assertions over
+  the emitted text, so a skeleton carrying AC-CO-3's enumerated elements **and**
+  the disposition slot passes them (§4, "The cycle mode emits the disposition
+  statement too"). This criterion is satisfied by that reading rather than
+  excepted from it.
 - **AC-DT-16** — **Binds the decision session that lands the migration, not the
   implementer of either tool** (*told* — the cycle-4 directive's O3 fixes the
   wording; the substance is unchanged). The migration does not land until both
@@ -2632,21 +2932,37 @@ authoring style, not of the check's reach. This is the governing rule §4's
 judgment-only table already carries as its carry-as-pointer entry, and the
 cross-reference is made here so the two are read together.
 
-**A second shape runs the same direction**: an author whose only disposition is
-written **inside** a fence carries zero unfenced labelled statements and fails.
-It is pinned by a fixture of its own — AC-DT-06's **(vii)** — rather than by an
-inference from another fixture's verdict, so a later cycle narrowing or dropping
-the fence exclusion moves a test rather than only this paragraph (*told* — the
-cycle-18 directive's N3, disposing the cycle-17 gate's N3).
-Neither shape is produced by the generated path, which emits the label unfenced
-(G3, AC-DT-03) into a skeleton carrying exactly one unfenced labelled
-disposition statement (G3's generated-skeleton invariant). Both are **false positives** — a false stop on a well-formed
-directive, at a cost of one invocation, which is the direction this section's
-next item accepts in general. The mitigation available to the other residuals is
-not available here, the generator emitting the prompt and the label rather than
-policing what an author carries. What would close them is a TRD-stage label form
-a carried statement cannot reproduce, or a governed rule about carrying
-directives; neither is decided here, and the residual is accepted at this width.
+**A second shape ran the same direction until this cycle and no longer does**:
+an author whose only disposition is written **inside** a fence carries zero
+unfenced labelled statements and fails. It is pinned by a fixture of its own —
+AC-DT-06's **(vii)** — rather than by an inference from another fixture's
+verdict, so a later cycle narrowing or dropping the fence exclusion moves a test
+rather than only this paragraph (*told* — the cycle-18 directive's N3, disposing
+the cycle-17 gate's N3). **That shape is no longer a residual of this check**
+(this is a **consequential update under Core rule 13**, following the cycle-19
+reading of the count, and it is **not** a dictated disposition of its own; §4,
+"The count is exactly one"). Under that reading a fenced instance is a
+**mention**, so a directive whose only labelled instance is fenced states **no**
+disposition, and M3's non-zero exit on it is the governed rule applied rather
+than a false stop on a well-formed directive. Fixture (vii)'s **verdict is
+unchanged** — it exits non-zero either way — and what moves is this section's
+characterization of why. The shape is recorded here rather than deleted, because
+this section states its set in extension and a member leaving it is a change a
+reader of the previous revision has to be able to see. **Whether the reading is
+right is a judgment on the record**, taken in the cycle-19 directive and open to
+reversal there; if it is reversed, this shape returns to the set as a false
+positive and fixture (vii) is unaffected either way.
+The remaining shape is not produced by the generated path, which emits the label
+unfenced (G3, AC-DT-03) into a skeleton carrying exactly one unfenced labelled
+disposition statement (G3's generated-skeleton invariant, which holds in **both**
+modes as of this cycle). It is a **false positive** — a false stop on a
+well-formed directive, at a cost of one invocation, which is the direction this
+section's next item accepts in general. The mitigation available to the other
+residuals is not available here, the generator emitting the prompt and the label
+rather than policing what an author carries. What would close it is a TRD-stage
+label form a carried statement cannot reproduce, or a governed rule about
+carrying directives; neither is decided here, and the residual is accepted at
+this width.
 
 **Whether M3's match is sensitive to any further markdown context is not left
 open**: the fence exclusion is its only such sensitivity at this level, and
@@ -2692,7 +3008,7 @@ mix is unchanged, and the set's extension is narrower on balance — the point o
 the restatement being that it is now stated in shapes an author can recognize
 rather than in shapes the authoring rules forbid.
 
-**The set does not change in cycle 18, and that is stated rather than left to a
+**The set did not change in cycle 18, and that is stated rather than left to a
 diff** (*told* — the cycle-18 directive's N1 and N3; this document restates the
 extension whenever it moves, so a revision where it does not move says so).
 Residual one and residual two stand exactly as the previous revision states them,
@@ -2703,6 +3019,27 @@ closed there. The **fence exclusion** — which is what produces both of residua
 two's shapes — is untouched by that amendment and remains this document's, so
 what an author can trip on is what it was. The only change at these two residuals
 is that the fenced-only shape is now pinned by AC-DT-06 fixture (vii).
+
+**The set changes in cycle 19, in extension and in one direction only, and the
+false-negative the cycle-18 gate reported is not among the changes** (*told* —
+the cycle-19 directive's N1 for the reading; the extension change is a
+**consequential update under Core rule 13**). Two things happen here and they
+should not be confused. **First, nothing is added.** The cycle-18 gate read the
+newly-governed "exactly one per directive" as flat and M3's count as
+fence-scoped, and reported that the difference was an undisclosed **false
+negative** of this set. The cycle-19 disposition resolves that **by reading, not
+by amendment**: only an **unfenced** instance is a statement, so the two counts
+are the same number and the shape the gate described violates nothing (§4, "The
+count is exactly one"). Residual one is therefore still the **only**
+false-negative member of this set, and the claims above are true as written.
+**Second, one shape leaves.** Residual two's fenced-only shape is reclassified
+as correct behaviour by the same reading, so residual two now has **one** shape —
+unfenced inline carriage — where it had two. The **count of residuals is still
+two** and both members stand; what shrank is residual two's extension, and the
+direction mix is unchanged, residual one remaining the only false negative and
+residual two remaining a false positive. **Nothing else about the check moves**:
+the fence exclusion is still this document's, its provenance untouched by the
+reading (§4), and AC-DT-06's fixtures (vi) and (vii) keep their verdicts.
 
 Two bounds on the acceptance, so it is auditable. It is **not** an acceptance of
 the motivating incident going uncaught: that case fails mechanically now, and
@@ -2934,7 +3271,28 @@ acceptable is Dave's judgment, never the tool's.
   question gates. Stating the single-source property here keeps the divergence
   **scheduled** rather than accepted, and it is a property of the resolution
   rather than a mechanism, which is why it sits at PRD level (§4, "Scope split
-  with the TRD"). Resolved by: the **TRD stage**, which fixes
+  with the TRD").
+  **Three PRD-level properties are gated on this question, and that is the
+  descope's design rather than a defect** (*told* — the cycle-19 directive's N2,
+  disposing the cycle-18 gate's N2, whose disposition is **no action,
+  recorded**). They are named here, in one place, so a release gate reading §6
+  as a checklist can see the set rather than reconstruct it: **(a)** AC-DT-06's
+  M3 fixture set, which is specified as shapes and instantiable as files only
+  once the label's literal text exists; **(b)** the **single-source** property
+  stated immediately above, which AC-DT-06's fixture (iv) catches a violation of
+  only once the fixtures are instantiable; and **(c)** AC-DT-03's assertion that
+  a generated skeleton carries exactly **one** unfenced labelled disposition
+  statement, which is a count of labelled statements and so uncomputable without
+  the label (G3's generated-skeleton invariant). All three are **specified now**
+  and read on AC-DT-16's model until this question resolves. **That they queue
+  behind one question is a property of the split, not a shortfall in executing
+  it**: the descope routes mechanisms and fixes the properties they must secure
+  (§4, "Scope split with the TRD"), and a question naming its resolver is a
+  deferral this document intends. A TRD stage resolving Q9 discharges all three
+  at once; one deferring it again leaves the set where it is, which is a
+  **scheduling** item for the release gate rather than a defect in the text. No
+  criterion is amended for it and none is proposed.
+  Resolved by: the **TRD stage**, which fixes
   the form and the single source together; nothing in this document is held back
   by it.
 - **Q10 (raised by the cycle-17 gate, routed here by the cycle-18 descope;
