@@ -1523,7 +1523,8 @@ fixture repository" is not read as covering every entry.
   for the exclusion of blank lines and for the comparison, the cycle-10
   directive's N1 for the exclusion of structural lines, the cycle-11 directive's
   N1 for delimiting the set by enumeration, and the cycle-14 directive's N1 for
-  collapsing the exclusion to one rule). Taken in turn:
+  collapsing the exclusion to one rule). Taken in turn — the rule's two
+  sub-cases, then the comparison:
   *the blank sub-case* excludes the blank lines every governed file contains and
   every generator's source reproduces trivially — under a literal reading of "a
   line" the criterion failed for every correct implementation, since a generator
