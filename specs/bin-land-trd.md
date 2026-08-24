@@ -125,12 +125,15 @@ document does not restate them as such.
 | `aimeta/repo.py` | The git subprocess layer. Reused unchanged. |
 | `aimeta/cli.py` | Exit codes, stream encoding, diagnostic emission. Reused unchanged. |
 
-The split between `land.py` and `report.py` exists so that the mechanical-parse
-test (§5, AC-LAND-T01) can construct every report shape — including every
-failure shape — without performing a landing. What each exposes to the others is
-§3.7; it is stated at the end of this section rather than here so that §3.2's
-step numbering, which the rest of this document and its review artifacts cite by
-number, is not disturbed.
+The split between `land.py` and `report.py` exists so that the report format
+lives in a module that runs no subprocess: every report shape, failure shapes
+included, can be constructed from synthetic facts without performing a landing,
+and the format can be implemented and exercised on its own terms by an agent
+that never touches git. That is an architectural property rather than a test
+boundary — AC-LAND-T01 asserts the tool's own stdout on a real invocation, and
+§5.4 states why. What each exposes to the others is §3.7; it is stated at the end
+of this section rather than here so that §3.2's step numbering, which the rest of
+this document and its review artifacts cite by number, is not disturbed.
 
 ### 3.2 The sequence
 
@@ -190,18 +193,27 @@ One invocation runs these steps in order, and stops at the first that fails.
    reports the state it observed and names no cause — which is the only thing a
    report carrying just *observed* and *unknown* can honestly do here.
 5. **Divergence guard, before anything is staged.** Two checks, both against
-   the base step 3 resolved, both before any ref moves.
+   the base step 3 resolved, both before any ref moves. `merge-base
+   --is-ancestor` prints nothing and answers only in its exit status, so each
+   check carries the read that establishes the SHA §5.3's table attributes to
+   it; neither SHA falls out of the check itself.
 
-   - `git merge-base --is-ancestor HEAD <base>`. Exit 0 means local HEAD is at
-     or behind the base. Non-zero means the local tree carries at least one
-     commit the base does not.
-   - Where `<branch>` exists locally,
-     `git merge-base --is-ancestor <branch> <base>`. This is the ref step 6
-     rewrites, and local HEAD is not it. With HEAD on any other branch the first
-     check passes while `<branch>` carries unpushed commits the base does not,
-     and step 6 then resets `<branch>` and leaves those commits reachable from
-     no ref at all (*observed* — run against `git` 2.55.0 in a throwaway
-     repository: with `feature` two commits ahead of the base and HEAD on
+   - `git rev-parse HEAD`, then `git merge-base --is-ancestor HEAD <base>`. The
+     read comes first because `detail.local_head` is established on every path
+     this step runs, the one where this check refuses included (§5.3). Exit 0
+     means local HEAD is at or behind the base. Non-zero means the local tree
+     carries at least one commit the base does not.
+   - `git rev-parse --verify --quiet <branch>`, and, where that exits 0 — the
+     ref exists locally — `git merge-base --is-ancestor <branch> <base>`. The
+     one read answers both of this check's questions: whether `<branch>` exists
+     locally at all, and, where it does, the SHA `detail.branch_head` carries.
+     It belongs to this check rather than to the step, which is what keeps the
+     ordering guarantee below true of a command and not merely of a value. This
+     is the ref step 6 rewrites, and local HEAD is not it. With HEAD on any other
+     branch the first check passes while `<branch>` carries unpushed commits the
+     base does not, and step 6 then resets `<branch>` and leaves those commits
+     reachable from no ref at all (*observed* — run against `git` 2.55.0 in a
+     throwaway repository: with `feature` two commits ahead of the base and HEAD on
      `main`, `merge-base --is-ancestor HEAD <base>` exits 0,
      `git checkout -B feature <base>` reports "Switched to and reset branch
      'feature'", and the prior tip is thereafter absent from `git rev-list --all`
@@ -272,11 +284,16 @@ One invocation runs these steps in order, and stops at the first that fails.
 10. **Verify.** `git ls-remote --heads origin <branch>` must equal the new head
     SHA (AC-LAND-05); then `git fetch origin refs/heads/<branch>` and, for each
     path in the commit, compare the blob SHA at the fetched remote commit
-    against the blob SHA in the local commit (AC-LAND-06).
+    against the blob SHA in the local commit (AC-LAND-06). The head check runs
+    first and the comparison runs only where it passed. That order is why a
+    remote whose content was mutated between the push and this step stops at the
+    head check rather than at the comparison — §6 states what follows from it,
+    for AC-LAND-06's failure branch and for PRD §5's measurement alike.
 11. **Report and exit.** The report is serialized to stdout on every terminal
     path the sequence reaches — the success path and every failure mode §6
-    enumerates as detected (§5). Two terminal paths lie outside that rule, and
-    are stated here rather than left for an implementer to decide:
+    enumerates as detected, including each of the paths §5.4 individuates
+    within them (§5). Two terminal paths lie outside that rule, and are stated
+    here rather than left for an implementer to decide:
 
     - **A usage error.** Parsing belongs to `argparse`, in `bin/land`, and runs
       before the sequence begins (§3.1). `argparse` writes its own diagnostic to
@@ -288,7 +305,7 @@ One invocation runs these steps in order, and stops at the first that fails.
       established no fact for a report to carry — not even `branch`, which
       §5.3's table gives every terminal path the sequence does reach. §3.1's
       division of responsibility is unchanged by this.
-    - **FM-10**, an invocation killed mid-sequence, which emits nothing because
+    - **FM-9**, an invocation killed mid-sequence, which emits nothing because
       no code of the tool's runs to emit it (§6).
 
 Steps 2, 3, 9, and 10 are the only network operations, and there is exactly one
@@ -431,7 +448,8 @@ The points where the tool meets something it does not control:
 - **B3 — the sandbox network policy.** Whether the remote is reachable at all.
 - **B4 — `git` itself.** The plumbing this design relies on:
   `ls-remote --heads`, `merge-base --is-ancestor`, `cat-file -e <rev>^{commit}`,
-  `checkout -B`, `reset --mixed`, `rev-parse <rev>:<path>`.
+  `checkout -B`, `reset --mixed`, and `rev-parse` in three forms — `<rev>`,
+  `--verify --quiet <rev>`, and `<rev>:<path>`.
 - **B5 — this repository's own pre-commit hook.** Installed by
   `bin/install-hooks`, it runs inside step 8's `git commit` and can refuse it
   (§6, FM-6). Running in-process is what made it easy to miss as a boundary, and
@@ -469,13 +487,14 @@ facts it established or a stop:
 fields. **Which fact each step establishes is §5.3's key table**, whose middle
 column names the establishing step for every field and key the report can carry.
 This section does not restate it and carries no parallel account of it: an
-implementer writing `land.py` reads that table. `stage` is the step's token from
-§5.3's enumeration, carried on the stop so the report can say where the sequence
-halted. `git_status` is the failing invocation's exit status; the signature
-admits `None` because not every stop is a subprocess, and §5.3's row for that key
-names which. The sequence accumulates `facts` across steps and halts at the first
-`ok: False`. No step reads another step's git output; a step consumes established
-facts, never text.
+implementer writing `land.py` reads that table. `stage` is the token §5.3's token
+table assigns to that stop, carried on the stop so the report can say where the
+sequence halted; it is one token per stop rather than one per step, which is why
+the table and not the step number is what an implementer reads. `git_status` is
+the failing invocation's exit status; the signature admits `None` because not
+every stop is a subprocess, and §5.3's row for that key names which. The sequence
+accumulates `facts` across steps and halts at the first `ok: False`. No step
+reads another step's git output; a step consumes established facts, never text.
 
 **`land.py` → `report.py`.** `land.py` never formats:
 
@@ -483,9 +502,10 @@ facts, never text.
 
 `build` assembles the report from the accumulated `facts` and from nothing else,
 under §5.3's key table. What `facts` holds is not what decides emission: §5.3's
-"Established on" column decides it, for the terminal path the sequence reached.
-For each field and key that table establishes on that path, `build` emits what
-`facts` carries, in the shape and the value domain §5.2 fixes. Where the table
+"Established on" column decides it, for the terminal path the sequence reached —
+the unit §5.4 defines and individuates. For each field and key that table
+establishes on that path, `build` emits what `facts` carries, in the shape and
+the value domain §5.2 fixes. Where the table
 does not establish one there, `build` does not emit it as established, whatever
 `facts` happens to hold; what stands in its place — a contract field still
 present but `unknown`, a `detail` key absent — is §5.3's to state, and §5.3
@@ -495,6 +515,35 @@ decides what the report carries. That is one rule, read from one place, rather
 than a rule each failure path has to remember — and it is the whole of the
 separation §3.1 claims between establishing a fact and reporting one. `build`
 implements that rule and this section does not restate it.
+
+**How `build` knows which terminal path it is on.** That rule is keyed to the
+terminal path, so `build` has to determine the path from `branch`, `facts` and
+`stop` and from nothing else. It can, on every path, and this is how. `stop is
+None` is the success path; the sequence has no other way to finish. Otherwise
+`stop.stage` carries the token, and the token names the failure mode outright on
+every token but one — `fetch` FM-1, `base-object` FM-2, `guard` FM-3, `base`
+FM-4, `stage` and `nothing-staged` FM-5, `commit` FM-6, `push` FM-7, `verify`
+FM-8. The exception is `resolve`, which two modes reach: FM-1 where step 3's read
+failed, FM-10 where it succeeded and named no base. `stop.git_status` separates
+them — FM-1's stop is a failed subprocess and carries that invocation's exit
+status, FM-10's stop is a read that exited 0 and carries none — which is the
+same distinction §5.3's `detail.git_status` row draws between a stop that is a
+failed subprocess and a stop that is a comparison. Within a mode, the two rows
+§5.3 conditions are decided by whether `facts` carries that row's own key, and
+that is well defined because each condition is a state the establishing step
+observed and recorded: `facts` carries `detail.branch_head` exactly where step
+5's second check refused, the guard having short-circuited before the ref was
+read where the first check refused (§3.2 step 5), and carries
+`detail.prior_branch` exactly where step 6 found HEAD on a branch other than
+`<branch>` (§3.3).
+
+None of that reads an emission outcome, and none of it makes `facts` the
+discriminant of emission. The two questions stay apart, and `detail.branch_head`
+is where the difference is visible: step 5's second check reads `<branch>`'s SHA
+whenever it runs, so `facts` carries that key on every path past a guard that
+passed, and §5.3's table names it on none of them. `build` identifies the path
+first and emits under the table second, so on those paths the key is not
+emitted, whatever `facts` holds.
 
 Two properties of `build` are seams between the two modules rather than entries
 in §5.3's table, and are stated here for that reason:
@@ -522,10 +571,13 @@ is §5.3's.
     Report.exit_code(self) -> int    # §7's mapping
 
 `to_json` is a pure function of the `Report`: it touches no git, no filesystem,
-and no clock. That is what lets AC-LAND-T01 construct every report shape,
-failure shapes included, by calling `Report.build` with synthetic facts and never
-performing a landing — the property §3.1 claims for the split, which until now
-had no stated surface to rest on.
+and no clock, and `build` is handed facts rather than reading them. Together
+those are the surface §3.1's split rests on — every report shape, failure shapes
+included, is constructible by calling `Report.build` with synthetic facts and
+never performing a landing. That is not what AC-LAND-T01 does: that criterion
+asserts the tool's own stdout on a real invocation, for the reasons §5.4 gives.
+What the purity buys is the architectural half — the format is fixed by a module
+a second agent can implement and exercise with no git in front of it.
 
 **`report.py` → nothing.** It imports no `repo.py` and starts no subprocess. The
 dependency runs one way — `bin/land` → `land.py` → `report.py` — with `land.py`
@@ -565,8 +617,11 @@ forbidden by the suite's own constraint above, and it would make the whole
 suite prove nothing about the operations that matter.
 
 New helpers required: a bare-remote factory, a remote-head reader, and a way to
-mutate the bare repository between push and verification (which is how the
-content-verification test in PRD §5 induces its mismatch).
+mutate the bare repository between push and verification. The third is what
+induces FM-8, the `ls-remote` disagreement (§6), and it is therefore also how the
+content-verification test PRD §5 names produces its mismatch: under git transport
+a mutation of the pushed content moves the branch's head at the remote, so it is
+the head check that mutation trips.
 
 ### 4.2 Standing boundaries
 
@@ -627,13 +682,20 @@ content-verification test in PRD §5 induces its mismatch).
   (*observed*), and the suite's isolation constraint states that its subprocesses
   "never inherit the developer's `AI_METHODOLOGY_HOME`, global git config, or
   global hooks" (*observed*, that module's docstring). The substrate §4.1 decides
-  therefore cannot produce FM-6's trigger at all.
-- Evidence class: **assumed.**
-- Does not prove: that a hook refusal surfaces as a non-zero `git commit` exit
-  rather than some other outcome; that the report on that path carries the stage
-  and status §6 states; or that the hook's own diagnostics stay off stdout, which
-  AC-LAND-T01's "stdout carries no text outside that object" requires and which
-  nothing currently checks.
+  therefore produces FM-6's trigger only where a hook is installed into it
+  deliberately, and the hook §5.4's AC-LAND-T01 installs is a **stand-in that
+  refuses** rather than this repository's own.
+- Evidence class: **assumed**, and the stand-in does not raise it. What T01
+  installs it controls completely, and a boundary is the thing the tool does not
+  control; the stand-in exercises git's refusal contract and the tool's conduct
+  on that path, and represents nothing about the hook this boundary is about.
+- Does not prove: that this repository's `pre-commit` hook refuses the commits it
+  exists to refuse; that it refuses them by exiting non-zero rather than by some
+  other outcome; or that its own diagnostics stay off stdout, which AC-LAND-T01's
+  "stdout carries no text outside that object" requires and which is checked for
+  the stand-in and for nothing else. What T01's hook-refusal cases do establish is
+  the report's shape and status on that path, which is a property of the tool
+  rather than of the hook.
 - Deferred-verification path: a test that installs this repository's `pre-commit`
   hook into the substrate repo and induces FM-6 with a file the frontmatter check
   rejects.
@@ -642,10 +704,10 @@ Leaving B5 **assumed** is a permitted outcome; leaving it undeclared was not.
 §3.2 step 8 makes the hook load-bearing on purpose — a tool on the write path
 that bypassed governance would be landing work the governance never saw — so a
 dependency the design routes governance through, which produces an enumerated
-failure mode, and which the substrate provably does not exercise, is exactly what
-this section exists to name. The declaration is what puts the choice in front of
-Dave: buy the deferred path, or accept the class knowingly. What it removes is
-the third option, of shipping FM-6 on evidence nobody classified.
+failure mode, and which the substrate exercises only through a stand-in, is
+exactly what this section exists to name. The declaration is what puts the choice
+in front of Dave: buy the deferred path, or accept the class knowingly. What it
+removes is the third option, of shipping FM-6 on evidence nobody classified.
 
 ### 4.3 A note on what the per-file comparison proves
 
@@ -769,11 +831,25 @@ Rules the format holds on every path:
   `"unknown"` and nothing else. These are the two of Core's four classes PRD G6
   permits the tool to emit, stated there as a subset rather than a redefinition
   (*observed*).
+- A leaf object carries **exactly** `value` and `class`, and no other key; a
+  `files` entry, the one leaf whose established value is not named `value`,
+  carries exactly `path`, `match`, and `class`. The format's key sets are closed
+  at every level it has — the top level by the rule above, `detail`'s by §5.3's
+  table, and a leaf's by this rule — so a reader meeting a key it did not expect
+  has met a defect rather than an extension, and a criterion may say so.
 - `value` is `null` wherever `class` is `"unknown"`. An unestablished fact is
   never rendered as an empty string or a plausible placeholder. A `files` entry
   is the one leaf that names its established value `match` rather than `value`,
   and carries no `value` key at all, so on such an entry this rule reads over
   `match` — which the `files` rule below states directly.
+- `branch.value` is the branch name the invocation named, as a JSON string,
+  carried exactly as the argument gave it. Its `class` is always `"observed"`
+  and its `value` is never `null`: `branch` comes from the parameter rather than
+  from a step (§3.7), and §5.3's table establishes it on every path a report is
+  emitted at all, so there is no path on which it is a fact the tool failed to
+  establish.
+- `head.value` is a 40-character SHA or `null`; `null` only with
+  `class: "unknown"`.
 - `prior_head.value` is a 40-character SHA, the literal string `"created"`
   (PRD G1, first arm), or `null`; `null` only with `class: "unknown"`.
 - `files` is a list, possibly empty. Each entry carries `path`, `match`, and
@@ -783,15 +859,27 @@ Rules the format holds on every path:
   with `class: "unknown"`. `"complete"` if and only if `ls-remote` confirmed the
   head SHA and every per-file comparison matched — the same biconditional as
   AC-LAND-08's exit status, so the two can never disagree.
+- `detail.git_status.value` is git's exit status for the invocation that failed:
+  a JSON **number**, and an integer, never a string. It has no `null` branch,
+  because §5.3's emission rule leaves a `detail` key the table does not establish
+  on that path **absent** rather than present-and-unknown — so every `detail` key
+  a report carries, it carries with `class: "observed"`, and this rule is the
+  worked instance of that for the one `detail` key whose value is not a SHA or a
+  name.
 
-The three value-domain rules are written to one shape on purpose. Each admits
-`null`, and each admits it only under `class: "unknown"`, so none of them
+The four value-domain rules that admit `null` — `head`, `prior_head`, a `files`
+entry's `match`, and `verification` — are written to one shape on purpose. Each
+admits `null`, and each admits it only under `class: "unknown"`, so none of them
 contradicts the null-on-unknown rule above it on the paths where §5.3's table
 does not establish the contract fields. A rule list that permitted only
 `"complete"` or `"incomplete"` would force an implementer to emit
 `verification: {"value": "incomplete", "class": "observed"}` on a fetch failure —
 asserting the tool observed an incomplete verification it never attempted, which
 inverts exactly the distinction PRD G6 exists to draw.
+
+The two that admit no `null` are the two that cannot need one, and each rule says
+why in its own words: `branch` is established wherever a report exists at all,
+and an unestablished `detail` key is absent rather than unknown.
 
 **What an empty `files` list means.** Where no commit was made there are no
 per-file entries and `files` is `[]`. That `[]` is **not** a claim that the
@@ -866,17 +954,17 @@ table.
 | Key | The fact, and the step of §3.2 that establishes it | Established on |
 | --- | --- | --- |
 | `branch` | The branch the invocation named. Taken from the argument; no step establishes it (§3.7) | Every path on which a report is emitted |
-| `head` | The SHA of the commit step 8 made | FM-7, FM-8, FM-9, and the success path |
-| `prior_head` | The head `<branch>` held at the remote as step 3 read it, or the literal `created` where that read found `<branch>` absent there | Every path on which step 3's read succeeded: FM-2 through FM-9, FM-11, and the success path |
-| `files` | One entry per path in the commit, each naming the path and, where step 10 compared it, whether the remote blob matched | Entries with `class: "observed"` on FM-9 and the success path. On FM-7 and FM-8 — a commit exists and step 10 produced no comparison — one entry per committed path with `match: null` and `class: "unknown"`, taken from the paths step 8 committed. On every other path, no entries |
-| `verification` | Whether the landing was verified end to end, under §5.2's biconditional. Computed by `build`; returned by no step | `"complete"` on the success path; `"incomplete"` on FM-7, FM-8, and FM-9 |
-| `detail.stage` | Which step of §3.2 stopped the sequence. Its value set is closed by the token table below | Every detected failure mode: FM-1 through FM-9, and FM-11 |
-| `detail.base` | The SHA step 3 resolved as the landing base | Every path on which step 3 resolved one: FM-2 through FM-9, and the success path |
-| `detail.local_head` | The local `HEAD` SHA step 5's guard read | Every path on which step 5 ran: FM-3 through FM-9, and the success path |
+| `head` | The SHA of the commit step 8 made | FM-7, FM-8, and the success path |
+| `prior_head` | The head `<branch>` held at the remote as step 3 read it, or the literal `created` where that read found `<branch>` absent there | Every path on which step 3's read succeeded: FM-2 through FM-8, FM-10, and the success path |
+| `files` | One entry per path in the commit, each naming the path and, where step 10 compared it, whether the remote blob matched | Entries with `class: "observed"` on the success path. On FM-7 and FM-8 — a commit exists and step 10 produced no comparison — one entry per committed path with `match: null` and `class: "unknown"`, taken from the paths step 8 committed. On every other path, no entries |
+| `verification` | Whether the landing was verified end to end, under §5.2's biconditional. Computed by `build`; returned by no step | `"complete"` on the success path; `"incomplete"` on FM-7 and FM-8 |
+| `detail.stage` | Which stop of §3.2 the sequence made. Its value set is closed by the token table below | Every detected failure mode: FM-1 through FM-8, and FM-10 |
+| `detail.base` | The SHA step 3 resolved as the landing base | Every path on which step 3 resolved one: FM-2 through FM-8, and the success path |
+| `detail.local_head` | The local `HEAD` SHA step 5's first check read before evaluating (§3.2 step 5) | Every path on which step 5 ran: FM-3 through FM-8, and the success path |
 | `detail.branch_head` | The local SHA of `<branch>` read by step 5's second check, where that check is the one that refused, before step 6 would rewrite that ref (§3.2 step 5) | FM-3, and there only where the local `<branch>` is the ref whose check refused |
-| `detail.prior_branch` | The branch HEAD was on before step 6 moved it onto `<branch>` (§3.3) | FM-5 through FM-9, and the success path — the paths on which step 6 completed — and there only where it found HEAD on some branch other than `<branch>` |
+| `detail.prior_branch` | The branch HEAD was on before step 6 moved it onto `<branch>` (§3.3) | FM-5 through FM-8, and the success path — the paths on which step 6 completed — and there only where it found HEAD on some branch other than `<branch>` |
 | `detail.git_status` | The exit status of the git invocation that failed | FM-1 through FM-7: the modes whose stop is a failed subprocess rather than a comparison |
-| `detail.remote_head` | The head `ls-remote` returned for `<branch>` after the push | FM-8, FM-9, and the success path; on the latter two it equals `head`, and is redundant rather than wrong |
+| `detail.remote_head` | The head `ls-remote` returned for `<branch>` after the push | FM-8 and the success path; on the success path it equals `head` and is redundant rather than wrong, and on FM-8 it is the SHA that disagreed with it |
 
 **The one emission rule, stated here and nowhere else in this document.** It
 governs contract fields and `detail` keys alike. The "Established on" column is a
@@ -922,27 +1010,40 @@ designs for, and the row's condition is what excludes it.
 
 **The permitted `detail.stage` values.** `stage` is the one field a machine
 reader branches on to interpret a failure report, so its value set is closed
-rather than open text. One token per step of §3.2 at which the sequence can
-stop:
+rather than open text. One token per stop the sequence can make — which is one
+per step of §3.2 at which it can stop, except at step 8, which carries two:
 
 | Token | §3.2 step it names | Failure modes reaching it |
 | --- | --- | --- |
 | `fetch` | 2, fetch | FM-1 |
-| `resolve` | 3, resolve the base from the remote | FM-1's class, where the remote read is what failed; and FM-11, where it succeeded and named no base |
+| `resolve` | 3, resolve the base from the remote | FM-1's class, where the remote read is what failed; and FM-10, where it succeeded and named no base |
 | `base-object` | 4, confirm the base object is present locally | FM-2 |
 | `guard` | 5, divergence guard | FM-3 |
 | `base` | 6, establish the base | FM-4 |
-| `stage` | 7, stage | FM-5 |
-| `commit` | 8, commit | FM-5, FM-6 |
+| `stage` | 7, stage | FM-5, where a named path does not exist and `git add` refuses |
+| `nothing-staged` | 8, commit | FM-5, where the staged set is empty and there is nothing to commit |
+| `commit` | 8, commit | FM-6 |
 | `push` | 9, push | FM-7 |
-| `verify` | 10, verify | FM-8, FM-9 |
+| `verify` | 10, verify | FM-8 |
 
-Nine tokens and no others. Two readings the table is meant to foreclose: `stage`
-is one value of one field, not a second step alongside `commit`, which matters
-because §6's FM-5 row lists two tokens for one failure mode and because the token
-`stage` and the step named "Stage" are otherwise easy to conflate; and
+Ten tokens and no others. Two readings the table is meant to foreclose:
+`detail.stage` is one field carrying one value on any report, so FM-5's two
+tokens are two paths and not two steps one failure passed through — the token
+`stage` and the step named "Stage" being otherwise easy to conflate; and
 `base-object` is step 4's own token rather than step 3's, so a report from the
 step-4 refusal no longer says `resolve` and name a step that succeeded.
+
+**Why the set was reopened from nine to ten.** It closed at nine with `commit`
+serving both FM-5's empty staged set and FM-6's hook refusal, and it is reopened
+here deliberately rather than drifting. The reason is the consumer. This report is
+read by an agent session; attempting a landing with nothing staged is not a rare
+state for such a session to reach; and a hook refusing a commit and a commit with
+nothing in it are different situations that session must answer differently — one
+is a policy rejection to be repaired in the content, the other is an empty landing
+to be repaired in what was staged. `detail.stage` is the field that reader
+branches on, so a token serving both leaves the branch it exists for unmade. Step
+8 is therefore the one step with two tokens, and the token rather than the step
+number is what a reader keys on.
 
 Steps 1 and 11 have no token, deliberately. A usage error emits no report at all
 (§3.2 step 11), so there is nothing to label; step 11 is where the report is
@@ -965,31 +1066,82 @@ proposed for the derived acceptance-criteria artifact and are not an amendment
 to PRD §6.
 
 - **AC-LAND-T01 — the report parses mechanically, on every terminal path the
-  sequence reaches.** The enumeration is the success path and each failure mode
-  in §6 **except FM-10**, which the tool does not detect and which emits nothing
-  by construction, so it is not a case this criterion can be written against. The
-  usage-error path is likewise outside the enumeration: it emits no report, and
-  what it does emit is covered by the separate assertion below. For each case in
-  the enumeration, the tool's **stdout** parses with `json.loads` without error;
-  the parsed value is an object; its keys are exactly `branch`, `head`,
-  `prior_head`, `files`, `verification`, `detail`; every leaf object carries a
-  `class` in `{"observed", "unknown"}`; every leaf whose `class` is `"unknown"`
-  has `value` of `null`, or, in a `files` entry, `match` of `null`, that being
-  the one leaf shape whose established value is not named `value` (§5.2); the
-  three value-domain rules of §5.2 hold; and stdout carries no text outside that
-  object. For each case the report also carries every field and `detail` key
-  §5.3's table establishes on that path, each with the class and the value shape
-  that table states for it — `detail.stage` with the token §5.3 assigns to the
-  step that stopped the sequence, and `files` with the entries the table gives
-  that path, so what §5.3 states is tested rather than only written down. The
-  criterion asserts the exact set rather than a minimum, because §5.3's column is
-  exact: each case also asserts that every contract field the table does not
-  establish on that path carries `value: null` with `class: "unknown"` — or, for
-  `files`, no entries — and that the keys of `detail` are exactly the `detail`
-  keys the table establishes there, with none beyond them. Enumerating the
-  failure modes is what makes this a real test rather than a test of the success
-  path: the format's whole burden is that a failed landing is still
-  machine-readable.
+  sequence reaches.**
+
+  **The unit is the terminal path, not the failure mode.** A terminal path is one
+  end state of §3.2's sequence, individuated by the report §5.3 gives it. The
+  success path and each detected failure mode contribute one such path, and
+  contribute more than one wherever §5.3 makes the report depend on state
+  *within* the mode. Two things do that, and only two:
+
+  - a **conditional row** in §5.3's key table — `detail.branch_head`, established
+    on FM-3 "there only where the local `<branch>` is the ref whose check
+    refused", and `detail.prior_branch`, established "there only where it found
+    HEAD on some branch other than `<branch>`" — splits its mode into the path
+    where the row's condition holds and the path where it does not, and the two
+    carry different `detail` key sets;
+  - a **conditional token** — §5.3's token table giving one mode two tokens, as it
+    gives FM-1 `fetch` or `resolve` and FM-5 `stage` or `nothing-staged` — splits
+    its mode into one path per token, and the two carry different values of
+    `detail.stage`.
+
+  A mode carrying both is split by both, one path per combination. Nothing else
+  splits a mode: two states that differ only in the *value* of a field they both
+  establish — a `prior_head` reading `created` rather than a SHA — are one
+  terminal path, because the established set and the report's shape are the same
+  on each.
+
+  **The enumeration follows from those two tables and comes to nineteen cases**:
+  two on the success path, and two on each of FM-6, FM-7 and FM-8, on the
+  `prior_branch` condition; two on FM-1, on its token; two on FM-3, on the
+  `branch_head` condition; four on FM-5, which carries a token split and the
+  `prior_branch` condition both; and one each on FM-2, FM-4 and FM-10, which
+  carry neither. Two terminal paths are outside it. **FM-9** — an invocation
+  killed mid-sequence — is not detected and emits nothing by construction, so it
+  is not a case this criterion can be written against; and the usage-error path
+  emits no report either, what it does emit being AC-LAND-T01a's.
+
+  **The boundary is end to end.** Each case is a real invocation of `bin/land`
+  over the §4.1 substrate, and the stdout asserted on is the process's. Two of
+  the assertions below can be made no other way: that stdout carries no text
+  outside the object is a claim about what the tool writes, which no call to
+  `Report.build` can make; and AC-LAND-T02 binds exit status to `verification`
+  across this same enumeration, and an exit status exists only where a process
+  ran. §3.1 and §3.7 state the separate property the `land.py`/`report.py` split
+  buys — that every report shape is constructible from synthetic facts without a
+  landing — as an architectural one, and it is not this criterion's boundary.
+  With the per-file mismatch mode struck (§6), every one of the nineteen is
+  reachable end to end; two need something the plain substrate does not supply,
+  and neither is left implicit. FM-6's two cases need a `pre-commit` hook
+  installed into the substrate repository that refuses the commit, and that hook
+  is a stand-in rather than this repository's own, which §4.2's B5 leaves
+  **assumed** and which this criterion does not upgrade. FM-1's `resolve` case
+  needs a remote read that fails after a fetch that succeeded, which one bare
+  repository cannot produce on its own; it is induced with a `git` shim on a
+  temporary `PATH`, in the manner §4.2's B2 already uses `fake_path_dir`, so that
+  one case is mock-verified rather than exercised against the transport.
+
+  **What each case asserts.** The tool's **stdout** parses with `json.loads`
+  without error; the parsed value is an object; its keys are exactly `branch`,
+  `head`, `prior_head`, `files`, `verification`, `detail`; every leaf object
+  carries a `class` in `{"observed", "unknown"}` and exactly the keys §5.2 closes
+  it at — `value` and `class`, or, in a `files` entry, `path`, `match` and
+  `class`; every leaf whose `class` is `"unknown"` has `value` of `null`, or, in
+  a `files` entry, `match` of `null`, that being the one leaf shape whose
+  established value is not named `value` (§5.2); §5.2's value-domain rules hold;
+  and stdout carries no text outside that object. For each case the report also
+  carries every field and `detail` key §5.3's table establishes on that path,
+  each with the class and the value shape that table states for it —
+  `detail.stage` with the token §5.3's token table assigns to that terminal path,
+  and `files` with the entries the key table gives it, so what §5.3 states is
+  tested rather than only written down. The criterion asserts the exact set
+  rather than a minimum, because §5.3's column is exact: each case also asserts
+  that every contract field the table does not establish on that path carries
+  `value: null` with `class: "unknown"` — or, for `files`, no entries — and that
+  the keys of `detail` are exactly the `detail` keys the table establishes there,
+  with none beyond them. Enumerating the failure paths is what makes this a real
+  test rather than a test of the success path: the format's whole burden is that
+  a failed landing is still machine-readable.
 
 - **AC-LAND-T01a — the usage-error path emits no report.** Given an invocation
   `argparse` rejects, stdout is empty, stderr is non-empty, and the exit status
@@ -1054,19 +1206,63 @@ its own column, so it is not repeated in the last one.
 | FM-2 | The base object is not present locally (§3.2 step 4 names the candidate causes; the tool asserts none of them) | `git cat-file -e` | `base-object` | `branch`, `prior_head`. `detail.base`, `detail.git_status`. |
 | FM-3 | **Divergence refusal, before staging** — local HEAD, or the local `<branch>` the sequence would rewrite, carries a commit the base does not | either `merge-base --is-ancestor` non-zero (§3.2 step 5) | `guard` | `branch`, `prior_head`. `detail.base`, `detail.local_head`, `detail.git_status`, and `detail.branch_head` where the local `<branch>` is the ref whose check refused. Nothing staged, no ref moved, no commit made. |
 | FM-4 | Base establishment fails — a locally-modified file differs between old HEAD and base | `git checkout -B` exit status | `base` | `branch`, `prior_head`. `detail.base`, `detail.local_head`, `detail.git_status`. Step 6 is the step that failed, so no ref moved and HEAD stayed where it was. |
-| FM-5 | Nothing to commit — a named path does not exist, or the staged set is empty | `git add` / `git commit` exit status | `stage` or `commit` — one field, one value (§5.3) | `branch`, `prior_head`. `detail.base`, `detail.local_head`, `detail.git_status`, and `detail.prior_branch` where HEAD was on a branch other than `<branch>` when step 6 ran. No commit exists. |
+| FM-5 | Nothing to commit — a named path does not exist, or the staged set is empty | `git add` / `git commit` exit status | `stage` or `nothing-staged` — one field, one value (§5.3) | `branch`, `prior_head`. `detail.base`, `detail.local_head`, `detail.git_status`, and `detail.prior_branch` where HEAD was on a branch other than `<branch>` when step 6 ran. No commit exists. |
 | FM-6 | A repository hook refuses the commit | `git commit` exit status | `commit` | `branch`, `prior_head`. `detail.base`, `detail.local_head`, `detail.git_status`, and `detail.prior_branch` where HEAD was on a branch other than `<branch>` when step 6 ran. No commit exists. |
 | FM-7 | Push fails | `git push` exit status | `push` | `branch`, `prior_head`, `head` — the **local** commit's SHA, `observed` — `verification`, the value `incomplete`, and `files`, carrying one entry per path in the commit with `match: null` and `class: "unknown"` (§5.3). `detail.base`, `detail.local_head`, `detail.git_status`, and `detail.prior_branch` where HEAD was on a branch other than `<branch>` when step 6 ran. |
 | FM-8 | `ls-remote` disagrees with the pushed head | Comparison at step 10 | `verify` | `branch`, `prior_head`, `head`, `verification` — the value `incomplete` — and `files`, carrying one entry per path in the commit with `match: null` and `class: "unknown"` (§5.3). `detail.base`, `detail.local_head`, `detail.remote_head`, and `detail.prior_branch` where HEAD was on a branch other than `<branch>` when step 6 ran. |
-| FM-9 | A per-file blob comparison mismatches | Comparison at step 10 | `verify` | `branch`, `prior_head`, `head`, `verification` — the value `incomplete` — and `files`, carrying the per-file results themselves, each `observed`, the mismatching path with `match: false`. `detail.base`, `detail.local_head`, `detail.remote_head`, and `detail.prior_branch` where HEAD was on a branch other than `<branch>` when step 6 ran. |
-| FM-10 | The invocation is killed mid-sequence | Not detected by the tool | — | Nothing: no report is emitted, so there is no field for the column to be about. See §3.2 step 11's second bullet and OQ-4. |
-| FM-11 | **The remote read succeeds and names no base** — neither `<branch>` nor `main` is present at the remote, so the branch-absent arm has nothing to resolve a base from | Step 3's `ls-remote` exits 0 having returned no line for either ref | `resolve` | `branch`, and `prior_head` — the literal `created`, step 3 having observed that `<branch>` is absent at the remote (§3.2 step 3). Nothing further: no base was resolved, no ref moved, nothing was staged, no commit was made. |
+| FM-9 | The invocation is killed mid-sequence | Not detected by the tool | — | Nothing: no report is emitted, so there is no field for the column to be about. See §3.2 step 11's second bullet and OQ-4. |
+| FM-10 | **The remote read succeeds and names no base** — neither `<branch>` nor `main` is present at the remote, so the branch-absent arm has nothing to resolve a base from | Step 3's `ls-remote` exits 0 having returned no line for either ref | `resolve` | `branch`, and `prior_head` — the literal `created`, step 3 having observed that `<branch>` is absent at the remote (§3.2 step 3). Nothing further: no base was resolved, no ref moved, nothing was staged, no commit was made. |
 
-FM-11 is appended rather than inserted at the step it belongs to. Its stage is
-step 3's, so by sequence it sits beside FM-1; the existing numbers are cited by
-number in this document's review artifacts, and renumbering to restore sequence
-order would strand those citations. The out-of-order row is the cheaper of the
-two costs.
+**A mode was struck, and this is the map.** An eleventh mode, numbered FM-9 under
+the previous numbering and reading "a per-file blob comparison mismatches", is
+struck as unreachable, and the two rows below it moved down so the numbering
+stays contiguous. Dave
+authorised that renumbering, once and for this change. FM-1 through FM-8 are
+unchanged; old FM-9 has no successor; old FM-10, an invocation killed
+mid-sequence, is FM-9; old FM-11, the remote read that succeeds and names no
+base, is FM-10. A reader arriving from a review artifact or a directive that
+cites FM-9, FM-10, or FM-11 by number reads it through that map, which is here
+for the reason §9 keeps a retired `OQ-n` in place rather than reusing it. Of the
+two contiguous schemes available, the one that moves two identifiers was
+preferred to the one that restores full sequence order and moves eight.
+
+**Why the struck mode was unreachable.** Step 10 runs the `ls-remote` head check
+before the per-file comparison and runs the comparison only where that check
+passed (§3.2 step 10), and §4.3 gives the argument that under git's content
+addressing the comparison cannot fail where the check passed (*inferred*). A
+remote whose content is mutated between the push and the verification therefore
+answers the head check with a different SHA and stops there: it surfaces as FM-8,
+and never as a per-file mismatch.
+
+That is also what keeps two commitments from being orphaned by the strike. PRD §5
+measures the content-verification outcome by "a test that mutates the pushed
+content and asserts the tool exits non-zero" (*observed*); under git transport
+that mutation lands on the FM-8 path, which exits 4 (§7), so the mechanism still
+bites. AC-LAND-06 requires that "[w]here any file differs, the invocation exits
+non-zero and names that file" (*observed*); its exit branch is met exactly, and
+its naming branch is met in the only form a stop at the head check can produce —
+the report names every path in the commit, in the shape §5.3's table gives FM-8,
+rather than singling out one path as the differing one. The reason it can produce
+no stronger form is §4.3's and is recorded there rather than softened here: the
+comparison that would single a path out is arithmetically unreachable, not
+omitted.
+
+**The strike is scoped to the verification the tool performs today**, and settles
+nothing beyond it. The struck mode's unreachability follows from AC-LAND-06 as
+agreed — a blob-SHA comparison against the commit fetched back from the remote —
+and not from §4.3's fetched-bytes question being answered. OQ-6 stays open
+exactly as §9 states it. A resolution of OQ-6 that adopted the stronger
+comparison — the bytes fetched back against the bytes of the named file on disk —
+would give step 10 a check that does not reduce to commit-SHA equality, and a
+failure mode of the struck kind would become reachable again and would have to be
+enumerated here.
+The strike removes an unreachable row; it does not stand in the way of that.
+
+FM-10 is appended rather than inserted at the step it belongs to. Its stage is
+step 3's, so by sequence it sits beside FM-1; the numbers are cited by number in
+this document's review artifacts and in the directives that produced them, and
+restoring sequence order would move eight of them where the renumbering above
+moves two. The out-of-order row is the cheaper of the two costs.
 
 It is a distinct mode rather than a case of FM-1: FM-1 is a read that failed, and
 this is a read that succeeded. Step 3's own text establishes that the state is
@@ -1137,13 +1333,20 @@ anywhere; there is no log file and no telemetry sink (§2).
 | --- | --- |
 | 0 | Full verification (AC-LAND-08) |
 | 2 | Usage error; also the outside-a-repo case AC-X-4 permits as 2 or 3 |
-| 3 | FM-1 through FM-6, and FM-11 — every precondition that stops the sequence before a write |
+| 3 | FM-1 through FM-6, and FM-10 — every precondition that stops the sequence before a write |
 | 1 | FM-7 — a write the tool attempted and git rejected |
-| 4 | FM-8, FM-9 — the tool's own verification of its own write failed, which is exactly what `EXIT_SELF_VERIFY` already means for `bin/flip-agreed` |
+| 4 | FM-8 — the tool's own verification of its own write failed, which is exactly what `EXIT_SELF_VERIFY` already means for `bin/flip-agreed` |
 
 Code 1's constant is named `EXIT_POLICY`, which fits this tool's use of it
-poorly. Adding a code would change a cross-cutting constant every CLI's tests
-read. Recorded as OQ-10.
+poorly, and **the mapping stands anyway**. A distinct code for a failed remote
+write was considered and is not added: a caller that must tell that failure from
+the others has a better source than an integer, because the report on that path
+already says where the sequence stopped and what git returned, under §5.3's
+table, and says it in a form a machine reads. Giving one mode of ten a code of
+its own is an asymmetry besides, and an asymmetry wants a caller demanding it;
+none does, and adding one would change `DOCUMENTED_EXIT_CODES`, which every CLI's
+tests read. OQ-10 asked this question; §9 records the answer and retires the
+identifier.
 
 **Configuration and secrets.** None. The tool reads no configuration file and
 introduces no environment variable of its own. It sets `GIT_TERMINAL_PROMPT=0`
@@ -1195,10 +1398,11 @@ contract-verified class means the change package for the implementing change
 should record whether a live landing was performed (OQ-7). B2's mock
 representation means the static no-stderr-branching scan is the part that must
 never be deleted, because it is the only half of AC-LAND-04 that cannot go
-stale. And B5 is **assumed**: FM-6 ships on a hook the test substrate never
-installs, so either its deferred-verification path is bought or that class is
-accepted knowingly — and whichever it is, the boundary audit at the implementing
-change's release decision is where it is said out loud rather than inherited.
+stale. And B5 is **assumed**: FM-6's report shape is exercised against a stand-in
+hook and this repository's own hook is installed in no test, so either B5's
+deferred-verification path is bought or that class is accepted knowingly — and
+whichever it is, the boundary audit at the implementing change's release decision
+is where it is said out loud rather than inherited.
 
 ## 8. Constraints, NFRs, and non-goals
 
@@ -1292,12 +1496,14 @@ Stated so no implementer has to infer them.
 
 ## 9. Open technical questions
 
-Eight open, and two retired. Each open question names what would resolve it; none
-is settled here. A retired identifier is kept in place rather than reused, so a
-reader arriving from a review artifact that cites it by number can still find
-what it referred to — the precedent PRD §8 sets for its own Q1–Q4 (*observed*).
-The two retirements differ in kind: OQ-8 is retired because the question had no
-closing move, OQ-5 because it has been answered.
+Seven open, and three retired. Each open question names what would resolve it;
+none is settled here. A retired identifier is kept in place rather than reused,
+so a reader arriving from a review artifact that cites it by number can still
+find what it referred to — the precedent PRD §8 sets for its own Q1–Q4
+(*observed*), and the precedent §6's failure-mode map follows for the one
+renumbering this document has taken. The three retirements differ in kind: OQ-8
+is retired because the question had no closing move, OQ-5 and OQ-10 because they
+have been answered.
 
 - **OQ-1 — No SLO exists for J1, J2, or J3.** §2 states this explicitly, as the
   template requires, and gives the structural reason: no production surface, no
@@ -1330,7 +1536,7 @@ closing move, OQ-5 because it has been answered.
   landing" requires incremental output.** §5.2 emits one report on every
   terminal path, which carries the prior head whenever a step after the branch
   was resolved fails — satisfying the purpose G1 states. The residual gap is
-  FM-10: a process killed mid-sequence emits nothing. Literal compliance would
+  FM-9: a process killed mid-sequence emits nothing. Literal compliance would
   need a JSON-Lines stream — an early partial object, a final complete one —
   at the cost of a more complex parse contract. *Resolved by*: Dave's reading
   of whether G1's clause states a purpose or a mechanism.
@@ -1382,7 +1588,8 @@ closing move, OQ-5 because it has been answered.
   question had no closing move and would have stood open at every future cycle —
   which is a different thing from an open question. The plumbing §3.2 relies on —
   `ls-remote --heads`, `merge-base --is-ancestor`, `cat-file -e <rev>^{commit}`,
-  `checkout -B`, `reset --mixed`, and `rev-parse <rev>:<path>` — is long-stable,
+  `checkout -B`, `reset --mixed`, and `rev-parse` in its `<rev>`,
+  `--verify --quiet <rev>` and `<rev>:<path>` forms — is long-stable,
   and §4.2's B4 states the residual honestly: the suite is live-verified against
   one `git` version incidentally and proves nothing about another. If a floor
   ever becomes load-bearing, the evidence will be a failure observed on a real
@@ -1400,9 +1607,24 @@ closing move, OQ-5 because it has been answered.
   whether the scan's scope is amended to exempt a declared remote, or whether
   `bin/land` is excluded from that scan with the exclusion itself asserted.
 
-- **OQ-10 — The exit code for a failed remote write.** §7 maps FM-7 onto `1`,
-  whose constant is named `EXIT_POLICY`. Adding a code would change
-  `DOCUMENTED_EXIT_CODES`, which every CLI's tests read. *Resolved by*: a
-  decision on the cross-cutting exit-code contract in `bin/aimeta/cli.py` —
-  reuse `1` and accept the name, or add a code and update the constant and the
-  documented set.
+- **OQ-10 — retired, answered.** It asked whether a failed remote write should
+  get an exit code of its own, §7 mapping FM-7 onto `1`, whose constant is named
+  `EXIT_POLICY`. **The decision is that no code is added and FM-7 keeps `1`.**
+  Two reasons, and the first carries the weight: a caller that must distinguish a
+  failed remote write from the other failures has a better source than an
+  integer, because the report on that path already names the failure precisely —
+  where the sequence stopped and what git returned — and names it in the machine-
+  readable form the report exists to provide. One integer spanning the whole of
+  §7's mapping was never going to carry that discrimination; the report is the
+  channel that does. The second reason is proportion: giving one mode of
+  ten a code of its own is an asymmetry, an asymmetry wants a caller demanding
+  it, and no caller does. The name `EXIT_POLICY` still fits this use poorly, and
+  that is the cost being accepted rather than a defect being overlooked. If a
+  caller ever demands the distinction, adding a code then changes
+  `DOCUMENTED_EXIT_CODES` and the tests that read it and changes nothing about
+  the report — which is a cheaper thing to do late than to undo, and is why the
+  asymmetry is not bought in advance.
+
+  The identifier is retired rather than reused, on the same footing as OQ-5 and
+  OQ-8, so a reader arriving from a review artifact that cites OQ-10 by number
+  can still find what it referred to.
