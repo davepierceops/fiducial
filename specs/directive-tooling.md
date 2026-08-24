@@ -28,7 +28,9 @@ origin of the cycle-6 dispositions, and
 `docs/cycles/directive-tooling-spec-7-20260823T230004Z.md` @ `34a57ac7` is the
 origin of the cycle-7 dispositions, and
 `docs/cycles/directive-tooling-spec-9-20260823T233309Z.md` @ `b0f84690` is the
-origin of the cycle-9 dispositions this revision carries. Cycle 8 contributes no
+origin of the cycle-9 dispositions, and
+`docs/cycles/directive-tooling-spec-10-20260823T235811Z.md` @ `eeaa06cb` is the
+origin of the cycle-10 dispositions this revision carries. Cycle 8 contributes no
 dispositions and has no directive in this series: it was the **independent
 gate** on the cycle-7 revision — the first cycle whose review was not written by
 the session that authored the revision — run under
@@ -37,6 +39,18 @@ findings are what the cycle-9 directive dispositions (*observed*). This document
 does not restate any of them as if it were derived from somewhere else. Assertions
 about this repository carry a provenance class: *observed*, *inferred*, *told*,
 *unknown*.
+
+**One cycle-10 disposition was settled in the decision exchange rather than in
+the directive file, and is recorded here because Core rule 4 makes the artifact
+the record** (*told*). The cycle-10 directive's **N2** ends "keep both fixtures"
+and its **O2** reads "Drop the subsumed fixture", and the fixture the cycle-9
+gate's O2 identifies as subsumed — `docs/escaped-directive.md` — is one of the
+two N2 keeps. The execution session stopped and surfaced the conflict rather
+than reinterpreting either disposition, and Dave dictated that **N2 governs**:
+both fixtures are kept, O2's second clause is executed as a stated relation
+between the fixtures, and O2's first clause is overridden. AC-DT-06 carries the
+disposition and the reason it went that way; §7's accepted-risk list is
+unaffected. Nothing else in this cycle turned on the answer.
 
 ## 1. Problem and intent
 
@@ -92,9 +106,9 @@ not, and neither is approximate. The figure above is the **research document's**
 markdown files in `docs/cycles/` as the directory stood at `49bd6ff4` — 91
 present, 90 in the measured corpus — and it says nothing about how many of them
 are directives. §4's recount is **this document's own**, taken at this revision
-against M8's three patterns: **101** markdown files, of which 3 match no
+against M8's three patterns: **102** markdown files, of which 3 match no
 licensed pattern and 2 of those 3 are not directives at all. The two figures
-differ because the directory has grown by ten files since the research was
+differ because the directory has grown by eleven files since the research was
 written and because one counts files while the other classifies them. Neither
 supersedes the other, and **neither is a count of directives as a class**. One
 figure in this document is class-scoped — §4's "exactly one" non-conforming
@@ -204,10 +218,12 @@ Top K = 3.
 - **Actor**: decision session.
 - **Trigger**: Dave directs work that needs an execution session.
 - **Steps**: invokes `bin/directive`; receives a skeleton carrying the sandbox
-  constraints, stop conditions, a working-tree disposition slot, the verification
-  steps, the report format, and the claim-label instruction, each read from
-  committed repo text at generation time; fills the task-specific middle and the
-  disposition slot; hands the directive to an execution session.
+  constraints, stop conditions, the working-tree disposition **prompt**, the
+  verification steps, the report format, and the claim-label instruction, each
+  read from committed repo text at generation time, together with an empty
+  **disposition author region** beneath that prompt (§4 G3); fills the
+  task-specific middle and the disposition author region, and no other region;
+  hands the directive to an execution session.
 - **Expected outcome**: a directive whose invariant text matches the repository's
   current committed text, with the author's freehand contribution confined to the
   middle.
@@ -449,24 +465,82 @@ exercises.
 #### `bin/directive` — the generator
 
 - **G1 — Invariant text is read, never hardcoded.** Every invariant section the
-  skeleton carries — sandbox constraints, stop conditions, working-tree
-  disposition slot, verification steps, report format, claim labels — is read from
-  committed repo text at generation time (*told* — dictated). A string constant
+  skeleton carries — sandbox constraints, stop conditions, the working-tree
+  disposition **prompt**, verification steps, report format, claim labels — is
+  read from committed repo text at generation time (*told* — dictated). The
+  entry in that enumeration is the **prompt region** of the split slot G3 states
+  — the half that carries the requirement that a disposition be stated and the
+  two legal forms `skills/directive-authoring.md` names — and it is invariant
+  for the same reason every other entry is: its text is governed, and a tool
+  holding it as a constant drifts from the file that governs it. The
+  **disposition author region** beneath it is not an invariant section and this
+  enumeration does not reach it (*told* — the cycle-10 directive's B1). A string constant
   in the tool holding text that also lives in a governed file is the defect this
   goal exists to prevent; it recreates, one layer down, the drift the problem
   statement describes.
 - **G2 — The author writes only the middle.** The skeleton's task-specific region
   is the only region the decision session composes freehand, alongside the
-  disposition slot G3 requires (*told* — dictated). Until cycle 9 this goal
+  **author region** of the disposition slot G3 requires (*told* — dictated).
+  **This goal was narrowed in cycle 9, and the narrowing is recorded here rather
+  than left to a diff** (*told* — the cycle-9 directive's O5 licensed the
+  narrowing; the cycle-10 directive's O5 requires this line). Through cycle 8 the
+  goal read "is the only region the decision session composes freehand", full
+  stop, which contradicted J1 — where the author has always filled the
+  disposition as well — and the clause naming the disposition was added to
+  correct it. The narrowing widens the goal by exactly one region and says so,
+  which is this document's convention at every other scope change (M8, §5's
+  third outcome, AC-DT-13); recording it is also what made the dual
+  classification the cycle-9 gate raised as B1 visible, since the added clause
+  put a **goal** on the author-composed side of a slot G1 called invariant.
+  Until cycle 9 this goal
   carried no acceptance criterion of its own and was testable only through G1,
   G3, and G11; **AC-DT-18** now states it directly, by fixing how many freehand
   regions a generated skeleton has and which they are — which none of those
   three states (*told* — the cycle-9 directive's O5).
-- **G3 — The working-tree disposition is a slot, not prose.** It is emitted as a
-  named, empty, structurally-present field admitting exactly the two forms §1
+- **G3 — The working-tree disposition is a slot, not prose, and the slot is two
+  regions.** It is emitted as a
+  named, structurally-present field admitting exactly the two forms §1
   names, so that omitting it is visible rather than silent. This is the goal that
   addresses the motivating incident directly: an omission the author cannot see is
   the failure mode, and a slot makes the omission a blank rather than an absence.
+
+  **The slot divides into two regions, and each carries exactly one
+  classification in G11's manifest** (*told* — the cycle-10 directive's B1 is the
+  origin of the split; the defect it disposes is the cycle-9 gate's B1):
+
+  - **The disposition prompt** — **invariant**, read from committed text at
+    generation time exactly as every other invariant section is (G1). It carries
+    the requirement that a disposition be stated, and the two legal forms
+    `skills/directive-authoring.md` @ `48ad7fd1` names: "either an exclusive
+    assignment (a named directory plus the command creating it) or an explicit
+    sole-tree declaration. A prohibition is not a disposition." The author
+    neither writes it nor edits it, and the manifest entry for it names a
+    committed path.
+  - **The disposition author region** — the **author's**, and empty as emitted.
+    It carries the actual exclusive assignment or sole-tree declaration for this
+    directive. It is one of the two freehand regions G2 names, it is the only
+    part of the slot J1 hands to the author, it is the region AC-DT-03 requires
+    to be present and empty and AC-DT-18 counts as author-marked, and the
+    manifest entry for it is author-marked.
+
+  **The split is what makes the slot classifiable, and the dual classification it
+  replaces was a real defect rather than a wording infelicity.** Before it, G1
+  listed the slot among the invariant sections read from committed text while
+  G3, J1, and AC-DT-03 had the author fill it, and G11's manifest admits each
+  region as one or the other and not both. Two consequences followed and both
+  are closed by the split: §5's first measurement summed the author's own
+  disposition text into the generator-supplied share — biasing the signal
+  upward by exactly the bytes of the element this spec exists to make visible —
+  and AC-DT-05's partition yielded two different numbers for the same landed
+  file depending on which classification an implementer took (*told* — the
+  cycle-9 gate's B1, which raised this as blocking and declined to pick a
+  disposition because picking one is not a reviewer's call). The prompt is
+  invariant because its text is governed and drifts if hardcoded; the author
+  region is the author's because the disposition itself is a judgment no
+  committed file can supply. **Every site in this document that names the slot
+  names which region it means**, and no site retains the dual classification:
+  G1 and this goal, J1, G11, §5's first outcome, AC-DT-03, AC-DT-05, and
+  AC-DT-18.
 - **G4 — The generator gates no directive content; in its general mode it
   refuses nothing at all.** This goal is **scoped to the general mode** ("Mode
   scoping", above). In the general mode the generator refuses no directive and
@@ -484,15 +558,23 @@ exercises.
   The generator emits, as part of the skeleton it writes, a **source manifest**:
   one entry per emitted region, carrying that region's source **and its location in
   the emitted file**. Location is mechanical, not descriptive. The generator emits **every** region of the
-  skeleton — each invariant section and the task-specific author slot alike —
+  skeleton — each invariant section, the working-tree disposition **prompt**, the
+  **disposition author region**, and the task-specific author region alike —
   under a named, stable section marker of its own choosing, and the manifest names
   every region in emission order, each entry carrying either the committed path
-  that region was read from or an explicit marking that the region is the author's
-  slot. Because every region is marked and the manifest enumerates them all, the
+  that region was read from or an explicit marking that the region is an **author
+  region**. **Exactly one classification per entry, never both and never
+  neither** — which is well-defined at the working-tree disposition because G3
+  splits it: the disposition **prompt** is an entry naming a committed path, the
+  disposition **author region** is an author-marked entry, and no entry is both
+  (*told* — the cycle-10 directive's B1). The manifest therefore admits
+  **exactly two** author-marked regions, the task-specific region and the
+  disposition author region, which AC-DT-18 distinguishes by name so that the
+  count is checkable rather than implied. Because every region is marked and the manifest enumerates them all, the
   markers partition the whole file: a region's extent runs from its own marker to
   the next marker or to end of file, with nothing falling between two regions. The
   generator-supplied share is the sum of the extents whose entries name a committed
-  path. Marking the author slot is the part that makes this work, and it is
+  path. Marking the author regions is the part that makes this work, and it is
   required, not incidental: without it an invariant section's extent would run
   through whatever the author wrote after it, and the share would compute to
   everything. Extent is therefore computable by reading the landed file together
@@ -609,8 +691,9 @@ scoping" exists to surface rather than absorb. So pattern 3 accepts a slug of
 
 **Path structure: one component, no separators — and "what the preserved contract
 can emit" means what AC-CO-1 licenses, read through its destination clause**
-(*told* — the cycle-9 directive's B2 dictates both the boundary and the reading;
-*observed* for the sources). Cycle 7 left the phrase "any slug the preserved
+(*told* — the cycle-9 directive's B2 dictates the boundary and the reading; the
+cycle-10 directive's N2 dictates that the metavariable step below be stated as a
+step; *observed* for the sources). Cycle 7 left the phrase "any slug the preserved
 contract can emit" undecided in exactly one dimension, and cycle 8's B2 is where
 the cost of leaving it undecided was demonstrated. The phrase is now read one
 way and the reading is stated: **"what the contract can emit" means what AC-CO-1
@@ -618,12 +701,41 @@ licenses**, not what any implementation of it happens to produce. And AC-CO-1
 does not stop at naming a template — it states a destination. Quoted whole
 again, at `768bbe3b`: "Writes `docs/cycles/cycle-<N>-directive.md` for
 `--cycle N`, or `docs/cycles/<SLUG>-directive.md` for `--name SLUG`; exactly one
-of the two is required (exit 2)." The destination it states is
-`docs/cycles/<name>-directive.md` — a file whose parent is `docs/cycles/`. A
-`<SLUG>` carrying a path separator does not produce that destination: it
-produces a path *elsewhere*, either below `docs/cycles/` or, with `..`, outside
-it. So a separator-bearing name is **outside the set AC-CO-1 licenses**, and
-pattern 3 matches a **single-component basename**.
+of the two is required (exit 2)."
+
+The boundary follows in three steps, and the **second is a reading being taken**,
+stated as one rather than presented as a conclusion — because a metavariable read
+one way without saying so is the move this document's own record says "hid
+pattern 3 for two cycles" (*told* — the cycle-10 directive's N2):
+
+1. **The destination clause locates the output.** AC-CO-1 does not merely supply
+   a template to interpolate into; it states where the file is written:
+   `docs/cycles/<SLUG>-directive.md`. That is **a single directory level** —
+   `docs/cycles/`, and then a filename in it.
+2. **Therefore `<SLUG>` denotes one path component.** This is the reading, and it
+   is the step the rest rests on: the metavariable stands for a **filename
+   component**, not for an arbitrary string that may itself contain separators.
+   Read the other way — `<SLUG>` as a free string, which is exactly how
+   `bin/cycle-open:39` takes it — the clause still fixes the prefix but no
+   longer fixes the depth, and the "destination" it states would name a family
+   of paths at every level below `docs/cycles/` rather than one file in it. The
+   step is taken because a destination clause that does not fix the
+   destination's depth states nothing the word *destination* means; it is
+   **stated** because taking it silently is the failure this effort has already
+   paid for twice.
+3. **Both excluded cases follow from those two steps, in different
+   proportions.** `sub/nested` yields `docs/cycles/sub/nested-directive.md`,
+   which carries the licensed prefix but sits **one level too deep**, so its
+   parent is not `docs/cycles/` — excluded by step 2, and by step 2 alone, since
+   step 1 admits the prefix. `../escaped` yields `docs/escaped-directive.md`,
+   which resolves **outside** `docs/cycles/` altogether — excluded by step 1 on
+   its own, with no need for step 2 at all.
+
+So a separator-bearing name is **outside the set AC-CO-1 licenses**, and
+pattern 3 matches a **single-component basename**. The asymmetry in step 3 is
+load-bearing rather than incidental: the two cases are excluded by different
+clauses, which is why AC-DT-06 fixtures both, and why the `../escaped` case —
+the one resting on the shorter ground — is not the one to drop.
 
 This boundary is **derived from cited governed text, not invented**, which is
 what G6 requires of it and what distinguishes it from the character class cycle
@@ -826,21 +938,27 @@ and N1). **Scope of this count**, stated with it because §1 carries a different
 count of the same directory: this is every `*.md` entry in `docs/cycles/` **as
 the directory stands at this revision**, classified against M8's three patterns —
 not the research document's 91/90 measured at `49bd6ff4` (§1), and not a count
-of directives as a class. `docs/cycles/` holds **101** markdown files, of which
-**65** match pattern 1, **7** match pattern 2 `cycle-<N>-directive.md`, **26**
+of directives as a class. `docs/cycles/` holds **102** markdown files, of which
+**66** match pattern 1, **7** match pattern 2 `cycle-<N>-directive.md`, **26**
 match pattern 3 `<SLUG>-directive.md`, and **3 match none**. The total and the
-pattern-1 count each rise by **two** against cycle 7's 99/63, where every prior
-cycle's rose by one: cycle 6's 98/62 rose by one from cycle 5's 97/61 and that
-from cycle 4's 96/60, because each cycle's own directive file is in the directory
-by the time its revision recounts, and this cycle two files landed rather than
-one — `docs/cycles/directive-tooling-gate-20260823T231530Z.md`, the independent
-gate's directive at cycle 8, and this cycle's own. Both match pattern 1
-(*observed*). **This cycle's pattern-3 disposition moves none of these figures,
+pattern-1 count each rise by **one** against cycle 9's 101/65, which is the
+per-cycle rise every cycle but one has shown: cycle 6's 98/62 rose by one from
+cycle 5's 97/61 and that from cycle 4's 96/60, because each cycle's own
+directive file is in the directory by the time its revision recounts. The one
+exception was cycle 9, which rose by **two** against cycle 7's 99/63 because two
+files landed rather than one —
+`docs/cycles/directive-tooling-gate-20260823T231530Z.md`, the independent gate's
+directive at cycle 8, and cycle 9's own. This cycle's single new file is
+`docs/cycles/directive-tooling-spec-10-20260823T235811Z.md`, and it matches
+pattern 1 (*observed*). This paragraph's figures are a **consequential update
+under Core rule 13**, not a dictated disposition: the cycle-10 directive
+dispositions no figure, and the recount is restated because it is stated "at
+this revision" and this revision's own directive file is in the directory. **This cycle's pattern-3 disposition moves none of these figures,
 and nor did cycle 7's** (*told* — the cycle-7 directive's B1 and the cycle-9
 directive's B2 each direct this be stated; *observed* for the verification). The classification run with cycle 6's character class and run
 without it agrees on every file in the corpus — which cycle 6's gate verified at
 98 files (`reviews/directive-tooling-cycle-6.md` @ `d8f8d7a6`, O4) and which
-reproduces at 101 at this revision — and the single-component boundary added this
+reproduces at 102 at this revision — and the single-component boundary added this
 cycle is likewise inert over the corpus, because `docs/cycles/` **contains no
 subdirectory**: `git ls-tree` at this revision returns blobs only, so no
 committed name carries a path separator to be admitted or rejected (*observed*).
@@ -1031,7 +1149,9 @@ it cannot check that it can be *carried out*, and G9 requires it to say so.
   starts from it rather than from nothing.
   **Attribution mechanism**: G11's source manifest, carried in the landed file.
   The manifest names every region of the file in emission order — each invariant
-  section by its committed source, the task-specific region as the author's slot —
+  section by its committed source, the working-tree disposition **prompt** by its
+  committed source alongside them, and **two** regions as the author's: the
+  task-specific region and the disposition **author region** (§4 G3, G11) —
   and names the marker that begins each, so the markers partition the file and each
   region's extent runs from its marker to the next marker or to end of file. The
   byte share is therefore computable from the committed artifact alone — sum the
@@ -1044,6 +1164,18 @@ it cannot check that it can be *carried out*, and G9 requires it to say so.
   edit inside a generator-supplied section, and the manifest does not record that.
   The signal therefore measures the *region the generator supplied*, not the bytes
   that survived untouched.
+  **This measurement is well-defined only because the disposition slot is split**
+  (*told* — the cycle-10 directive's B1). Until the split, the slot's bytes were
+  the generator's under G1 and the author's under J1, so this first signal
+  counted an author-written disposition into the generator-supplied share, in
+  exactly the bytes of the element the motivating incident is about. The
+  cycle-9 gate's worked example sizes it: a 60-line directive carrying a
+  four-line exclusive assignment overstates the generator's share by four lines
+  in sixty, about seven points (*inferred*, arithmetic on that example's
+  figures; it is an illustration of the direction and magnitude, not a measured
+  corpus figure). With the prompt sourced and the author region marked, the
+  disposition contributes to whichever side actually wrote it, and the signal
+  measures what §5 says it measures.
   Sizing context: write mechanics run 13.9% to 43.3% of each recent `pass2`
   directive (*observed*, per the research findings). That those write-mechanic
   sentences are the same region a generator would fill is this spec's own reading
@@ -1088,7 +1220,7 @@ it cannot check that it can be *carried out*, and G9 requires it to say so.
   from the filename recount. So the filename recount does not re-baseline this
   outcome, because it is not evidence for it in either direction. Where the
   filename number does belong is stated where it is measured: M8's yield against
-  the pre-adoption corpus is **1 non-conforming directive file of 101 markdown
+  the pre-adoption corpus is **1 non-conforming directive file of 102 markdown
   files in `docs/cycles/` at this revision** — the scope §4 states with the
   recount — with the
   classification and its provenance in §4, and it is a property of the lint's
@@ -1153,14 +1285,41 @@ fixture repository" is not read as covering every entry.
   the generator. Verifiable by mutating a fixture source and regenerating.
 - **AC-DT-02** — For every entry in the source manifest the generator emits
   (G11, AC-DT-05), no string literal in the generator's source reproduces **a
-  non-blank line of that entry's committed content**, where reproduction means
-  the two are **exactly equal after whitespace normalization**.
-  Both clauses are **the criterion's own contract**, not an implementer's
-  normalization of it (*told* — the cycle-9 directive's N1). Taken in turn:
+  line of that entry's committed content that is neither blank nor
+  structural**, where reproduction means
+  the two are **exactly equal after whitespace normalization**. A line is
+  **blank** when it normalizes to the empty string, and **structural** when it
+  normalizes to a non-empty string every character of which is a markdown
+  structural delimiter or a punctuation mark.
+  All three clauses are **the criterion's own contract**, not an implementer's
+  normalization of it (*told* — the cycle-9 directive's N1 for the first and
+  third, the cycle-10 directive's N1 for the second). Taken in turn:
   *non-blank* excludes the blank lines every governed file contains and every
   generator's source reproduces trivially — under a literal reading of "a line"
   the criterion failed for every correct implementation, since a generator that
   emits `""` or `"\n"` reproduces a blank line of every source it names.
+  *Non-structural* excludes the line a governed file carries as a **marker**
+  rather than as content, and the criterion names its demonstrating exclusion:
+  **`---`**. Every governed file the manifest will name carries the frontmatter
+  fence — `grep -c '^---$'` returns **2** for each of
+  `docs/global-context/core.md`, `docs/global-context/decision-layer.md`, and
+  `skills/directive-authoring.md` (*observed*, at this revision) — so without
+  this clause a generator holding the literal `"---"` for any purpose, whether
+  emitting frontmatter into the skeleton, a horizontal rule, or a fence,
+  reproduces a non-blank line of every one of those entries exactly, and the
+  static check reds a correct generator. The same shape reaches every short
+  marker a generator legitimately holds: a lone `#`, `|`, `-`, `>`, a fence, a
+  table rule of hyphens and pipes. What the clause does **not** exclude is a
+  short line carrying a **word** — a heading such as `## Naming` normalizes to a
+  string containing letters, so it remains within the criterion's range and a
+  literal matching it is still reported, which is correct, because that is
+  invariant prose the generator is required to read rather than hold. The bound
+  is a property of the **line in the committed source**, not of the literal's
+  purpose in the generator, so it is decidable by the same static pass and needs
+  no knowledge of why the literal is there. Without it the criterion was
+  decidable but not satisfiable, which is the residual the cycle-9 gate's N1
+  named: the guard on G1 — this document's central prohibition — was the check
+  that reddened spuriously for most correct implementations.
   *Exactly equal after whitespace normalization* fixes the comparison rather than
   leaving it to be chosen: strip leading and trailing whitespace from each side
   and collapse internal runs of whitespace to one space, then compare for
@@ -1176,8 +1335,18 @@ fixture repository" is not read as covering every entry.
   Q1's resolution changes which paths the manifest names; it does not change what
   this criterion asserts or how it is checked.
 - **AC-DT-03** — A generated skeleton contains a working-tree disposition slot
-  that is present and empty, names both admitted forms, and is distinguishable
-  from a slot that has been filled.
+  in the **two regions** G3 states, and the criterion binds each separately
+  (*told* — the cycle-10 directive's B1; this criterion previously treated the
+  slot as one region the author fills, which is the half of the dual
+  classification that sat opposite G1). **The prompt region** is present and
+  **non-empty**: it is read from committed text (G1), it states that a
+  working-tree disposition is required, and it names both admitted forms.
+  **The author region** is present and **empty**, is structurally
+  distinguishable from an author region that has been filled, and is the only
+  part of the slot the author writes into. Verifiable by generating a skeleton
+  and asserting, from the file and its manifest alone, that the prompt region's
+  text matches the committed source its manifest entry names and that the author
+  region is present and blank.
 - **AC-DT-04** — Scoped to the **general mode** (§4, "Mode scoping"). In the
   general mode the generator exits 0 for every invocation that produces a
   skeleton, rejects no content, and has no refusal path. In **both** modes it
@@ -1190,15 +1359,25 @@ fixture repository" is not read as covering every entry.
   mode is what keeps the two testable without contradiction.
 - **AC-DT-05** — The generator emits a source manifest naming, per emitted
   region, **the marker that begins that region** and either the committed file the
-  region was read from or an explicit marking that the region is the author's slot;
+  region was read from or an explicit marking that the region is an **author
+  region**;
   and the manifest is part of the skeleton written to the directive file rather
-  than terminal-only output. Every marker the manifest names appears in the emitted
+  than terminal-only output. **Each entry carries exactly one of those two
+  classifications**, never both and never neither, which is well-defined at the
+  working-tree disposition because G3 splits it: the disposition **prompt** is
+  an entry naming a committed file, and the disposition **author region** is an
+  author-marked entry (*told* — the cycle-10 directive's B1). Every marker the manifest names appears in the emitted
   file exactly once, every region the generator emits carries one, and the manifest
   enumerates every region in emission order — so taking each entry's extent from
   its marker to the next marker or to end of file partitions the **whole file**
   with no overlap and no gap, and the generator-supplied share is the sum of the
   extents whose entries name a committed source. Verifiable by generating a
-  skeleton and computing that partition from the file alone.
+  skeleton and computing that partition from the file alone — which now yields
+  **one** share for a given skeleton rather than one per classification an
+  implementer might take of the disposition slot. That is the property this
+  criterion was written to pin and could not pin before the split: two
+  implementations, one reading the slot per G1 and one per J1, computed
+  different numbers for the same landed file.
 - **AC-DT-06** — For each element in the mechanically-checkable table M1–M8, a
   fixture directive missing exactly that element causes a non-zero exit, and the
   output names that element and cites the governed text it derives from. For M3
@@ -1239,7 +1418,28 @@ fixture repository" is not read as covering every entry.
   the implementation emits them does not put them in the licensed set, and these
   two fixtures are where that reading is pinned by a test rather than by prose:
   a lint that passes either has been built to what `bin/cycle-open` produces
-  rather than to what AC-CO-1 licenses. Failing: a fixture whose trailing field
+  rather than to what AC-CO-1 licenses.
+  **Both are kept, and the relation between `docs/escaped-directive.md` and the
+  pre-existing no-pattern fixture is stated rather than settled by dropping one**
+  (*told* — the cycle-10 directive's N2 and O2 give opposite instructions for
+  this fixture; the execution session stopped and surfaced rather than
+  reinterpreting either, and Dave dictated in the same decision exchange that
+  **N2 governs**, which the preamble records because the exchange is not in the
+  directive file). The cycle-9 gate's O2 held that `docs/escaped-directive.md`
+  is subsumed by the pre-existing failing fixture "a name that is neither
+  timestamped nor `-directive.md`-suffixed". **That subsumption does not hold as
+  stated** (*observed*, by reading the three fixtures against M8's row): all
+  three patterns carry the literal prefix `docs/cycles/`, and the three failing
+  fixtures fail on three **different** clauses — the pre-existing one on the
+  **suffix**, not being `-directive.md`-suffixed; `docs/escaped-directive.md` on
+  the **directory anchor**, since it *is* `-directive.md`-suffixed and fails only
+  for carrying `docs/` where every pattern requires `docs/cycles/`; and
+  `docs/cycles/sub/nested-directive.md` on the **single-component boundary**,
+  carrying the right prefix and a separator inside the slug. They are
+  complements, not duplicates. Dropping the escape fixture would leave M8's
+  directory anchor with no fixture exercising it in the escape direction, and it
+  would drop the case §4's step 3 shows has the shorter ground. The fixture count
+  therefore stands at **seven**. Failing: a fixture whose trailing field
   is a **date with no time** (`<descriptor>-YYYYMMDD.md`) exits non-zero, because M8 requires the full
   `<date>T<time>` form that `skills/directive-authoring.md` @ `6179221a` states and
   a calendar date alone is not a timestamp for this check
@@ -1377,14 +1577,17 @@ fixture repository" is not read as covering every entry.
 - **AC-DT-18** — **G2's criterion** (*told* — the cycle-9 directive's O5, which
   requires G2 to carry one). In a freshly generated skeleton, the source manifest
   (G11, AC-DT-05) marks **exactly one** region as the **task-specific author
-  slot**, and every other region it enumerates either names a **committed path**
-  it was read from or is the working-tree disposition slot G3 requires. So a
+  slot**, marks **exactly one** region as the **disposition author region** G3
+  requires, and every other region it enumerates names a **committed path** it
+  was read from. So a
   skeleton carries exactly one region for the directive's substance that the
-  decision session composes freehand, exactly one field for the disposition, and
+  decision session composes freehand, exactly one author region for the
+  disposition, and
   no third region that is the author's to write. Verifiable by generating a
   skeleton and reading its manifest alone: count the entries marked as the
-  task-specific slot — which must be one — and assert every remaining entry
-  either names a committed path or is the disposition slot. That is what makes G2
+  task-specific slot — which must be one — count the entries marked as the
+  disposition author region — which must also be one — and assert that every
+  remaining entry names a committed path. That is what makes G2
   decidable rather than a restatement of G1, G3, and G11: it fixes **how many**
   freehand regions a skeleton has and **which**, and none of those three states
   either.
@@ -1392,17 +1595,19 @@ fixture repository" is not read as covering every entry.
   the **emitted skeleton**, not of the landed file — an author may write inside a
   generator-supplied region afterwards, and neither the manifest nor this
   criterion records that; §5's first outcome carries the same bound.
-  **Second, this criterion does not decide how the disposition slot is
-  represented in the manifest**, and deliberately so: G1 lists the working-tree
-  disposition slot among the invariant sections **read from committed text**,
-  while G3, J1, and AC-DT-03 treat it as a field the **author** fills, and G11's
-  partition requires each region to be one or the other. Whether the slot is one
-  author-marked region, or a generator-supplied prompt naming the two admitted
-  forms followed by an empty author region, is not settled anywhere in this
-  document. This criterion is written to hold under either representation. The
-  question itself is live and is raised at this revision's gate rather than
-  answered here, because it reaches G11's partition and §5's first measurement,
-  not only this criterion.
+  **Second, the disposition slot's representation in the manifest is settled,
+  and this criterion states it rather than holding under either reading**
+  (*told* — the cycle-10 directive's B1; the bound this replaces recorded the
+  question as open, which is what the cycle-9 gate raised as blocking). G3 splits
+  the slot: the **prompt** is an entry naming a committed path, the **author
+  region** is an author-marked entry, and each carries exactly one
+  classification. So the manifest of a freshly generated skeleton carries
+  **exactly two** author-marked entries — the task-specific region and the
+  disposition author region — and this criterion is a count of two named things
+  rather than a count that varies with how an implementer classified the slot.
+  The question reached G11's partition and §5's first measurement and not only
+  this criterion, and both are now stated over the split at their own sites
+  (§4 G3, G11; §5, first outcome).
 
 - **AC-DT-19** — **G5's criterion, at the level a PRD carries it** (*told* — the
   cycle-9 directive's O5). The lint is invocable at the point in the executor's
