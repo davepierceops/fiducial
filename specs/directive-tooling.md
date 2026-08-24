@@ -1,6 +1,6 @@
 ---
-status: draft
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/directive-tooling-cycle-20.md @ 255eb65b95705551b1463ddf6a05be275c4323f8
 audience: [all-roles, human]
 ---
 
