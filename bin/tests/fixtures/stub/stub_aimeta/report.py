@@ -1,4 +1,4 @@
-"""THROWAWAY TEST STUB — NOT AN IMPLEMENTATION. DELETE AND REWRITE WHOLESALE.
+r"""THROWAWAY TEST STUB — NOT AN IMPLEMENTATION. DELETE AND REWRITE WHOLESALE.
 
 =============================================================================
  THIS FILE IS A TEST FIXTURE WRITTEN BY THE TEST DESIGNER, NOT PRODUCTION CODE.
@@ -25,10 +25,21 @@ How it is deliberately wrong, stated so nobody mistakes a defect for a bug:
 - Its `exit_code` is derived from *how many paths were named*, which is not a
   rule anywhere in the TRD, so `verification` and the exit status disagree
   whenever no path was named (AC-LAND-T02).
+- It serializes with **`ensure_ascii=False`**, so a non-ASCII character in a
+  value is written out as raw UTF-8 bytes where §5.2 requires a `\uXXXX`
+  escape and a stdout that is pure ASCII on every path. This one is here for a
+  reason worth stating in full: `json.dumps` **defaults** to
+  `ensure_ascii=True`, so a stub that simply called it would already satisfy
+  the escape rule, and `test_land.py`'s escape assertions would pass against a
+  stub that implements nothing. A passing assertion is not a red-gate. The
+  argument is written in explicitly, and written in *wrong*, so that
+  `TestT01NonAsciiValuesAreEscaped`'s three cases fail on behaviour — this
+  stub emitting the raw character — rather than on scaffolding.
 
-Its serialization *is* §5.2's — two-space indent, sorted keys, one trailing
-newline — on purpose: the format assertions must pass so that the behavioural
-assertions are what fail.
+Its serialization is otherwise §5.2's — two-space indent, sorted keys, one
+trailing newline — on purpose: the format assertions must pass so that the
+behavioural assertions are what fail. `ensure_ascii` is the single knob turned
+the wrong way, and nothing else about the format is.
 """
 
 from __future__ import annotations
@@ -73,8 +84,20 @@ class Report:
         }
 
     def to_json(self):
-        """§5.2's format, correctly — the one thing this stub gets right."""
-        return json.dumps(self.as_dict(), indent=2, sort_keys=True) + "\n"
+        r"""§5.2's format but for `ensure_ascii` — see the module docstring.
+
+        DELIBERATE DEFECT: `ensure_ascii=False`. §5.2 requires a non-ASCII
+        character in any value to be written as a `\uXXXX` escape, so that
+        stdout is pure ASCII on every path whatever a value carries (the
+        decision that retired OQ-11). `json.dumps` gives that for free by
+        default, which is exactly why the default is not used here: the
+        assertion has to be able to fail. Indent, key order and the single
+        trailing newline stay §5.2's.
+        """
+        return (
+            json.dumps(self.as_dict(), indent=2, sort_keys=True, ensure_ascii=False)
+            + "\n"
+        )
 
     def exit_code(self):
         """DELIBERATELY WRONG: a rule that appears nowhere in the TRD."""
