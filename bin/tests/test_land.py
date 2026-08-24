@@ -1,9 +1,11 @@
-"""AC-LAND-T*: `bin/land` — the report contract and the divergence guard.
+r"""AC-LAND-T*: `bin/land` — the report contract and the divergence guard.
 
 Contract: `specs/bin-land-trd.md` §5.2 (shape, serialization, and the value
 domains), §5.3 (the key table, the token table, and the one emission rule),
-§5.4 (AC-LAND-T01, T01a, T02, T03), §6 (the failure modes — FM-1 through FM-8,
-then FM-10, then FM-11, with nothing at 9), §7 (the exit mapping).
+§5.4 (AC-LAND-T01, T01a, T01b, T02, T03), §6 (the failure modes — FM-1 through
+FM-8, then FM-10, then FM-11, with nothing at 9), §7 (the exit mapping, and the
+diagnostic-code table that is this repository's single statement of which
+refusal carries which code).
 
 **The unit is the terminal path, not the failure mode** (§5.4). The nineteen
 cases below are derived from §5.3's two tables plus §5.4's splitting rule; the
@@ -53,10 +55,58 @@ Evidence classes, per §4.2, where they differ case by case:
   names that mutation as a required substrate helper, so it is substrate rather
   than a stand-in.
 
-Not tested, deliberately: whether a non-ASCII character in a report value is
-escaped in the serialization. §5.2 does not settle it and the question is open
-with Dave. Every value any case here puts into a report is ASCII, so no
-assertion in this module depends on which answer is right.
+**The diagnostic codes are asserted by identity, not by presence.** §7 now
+carries a twelve-row table and calls it "this document's single statement of
+which refusal carries which code", normative over every other passage. So
+`assert_diagnostic` asserts *which* code a refusal put on stderr, and
+`DIAGNOSTIC_CODES` below transcribes the table's twelve. That closed OQ-12, and
+what it bought is AC-LAND-T01b: before it, a criterion could have asserted only that
+*some* bracketed code was there, and would have passed two implementations whose
+codes disagreed.
+
+Two counts differ from the nineteen, and §7 states both rather than leaving them
+to be discovered. **Twelve codes over seventeen refusal paths**: the five
+`detail.prior_branch` pairs share a code apiece, because that condition records
+a side effect of a step that *succeeded* rather than a cause of the refusal, and
+the session's repair is the same on both members. **The two success paths carry
+no code at all**, there being no situation to answer. The tests here assert what
+§7 states and not a finer discrimination it declined: both members of a shared
+pair assert the *same* code, and no case asserts that a code appears on one path
+alone.
+
+The success-path assertion is deliberately the weaker of the two available.
+T01b says stderr "carries no bracketed code at all" — **not** that stderr is
+empty, and this module does not strengthen it. `git push` and `git fetch` write
+progress and can write a credential-helper line to stderr on a landing that
+worked perfectly, and a test demanding an empty stream would fail on the
+environment rather than on the tool.
+
+**The non-ASCII fixture, and why it stands beside the nineteen.** §5.2 now
+settles what it once left open, in the decision that retired OQ-11: a non-ASCII
+character in any value is written as a `\uXXXX` escape, the object being
+serialized with `ensure_ascii=True`, so stdout is pure ASCII on every path
+whatever a value carries. Every one of the nineteen cases above puts only ASCII
+into its report, so not one of them can witness that rule — a stream that is
+ASCII because nothing else went into it asserts nothing.
+`TestT01NonAsciiValuesAreEscaped` therefore runs the success path once more with
+a non-ASCII character in `branch`, and asserts the rule on the **process's raw
+stdout bytes**, which is the only place the rule lives: a decoded string cannot
+witness it, because the escaped form and the raw form decode to the same string.
+
+It is **not a twentieth terminal path.** §5.4's enumeration is a fixed
+nineteen, individuated by the report §5.3 gives each path; this is one of those
+same paths exercised with different input, and `CASES` is untouched by it.
+
+`branch` is the carrier, and a `files` path is deliberately **not** a second
+one. §5.2 names both as caller-supplied text that can put a non-ASCII character
+into the object, but macOS normalizes unicode filenames — NFD against NFC — so
+an assertion routed through a filename can fail for a reason that belongs to the
+platform rather than to the tool, and a red that means two things means neither.
+`branch` comes straight from the invocation's argument (§3.7), is established on
+every path a report is emitted at all (§5.3), and never touches the filesystem,
+so nothing normalizes it. The residue is named rather than papered over: the
+escape rule is asserted on one of the two carriers §5.2 names, and a defect that
+escaped `branch` correctly while writing a `files` path raw would pass here.
 
 TRD §8's "Required integration points" asks for the bare-remote helpers to live
 in `bin/tests/helpers.py` and for `land` to join `CLI_NAMES` and
@@ -73,6 +123,7 @@ import os
 import pathlib
 import re
 import shutil
+import subprocess
 import unittest
 
 from tests.helpers import (
@@ -114,6 +165,28 @@ STAGE_TOKENS = (
     "verify",
 )
 
+#: TRD §7's diagnostic-code table: "Twelve codes, and no others." Transcribed
+#: in the table's own row order, which is the sequence's order rather than
+#: alphabetical, so this list can be read against §7 line by line.
+#:
+#: The table is normative over every other passage of the TRD by its own words,
+#: so this is the only place in this module a code string is written down; each
+#: `Case` names one of these and never a literal of its own.
+DIAGNOSTIC_CODES = (
+    "fetch-failed",          # step 2's fetch did not complete        — FM-1
+    "remote-read-failed",    # step 3's read of the remote failed     — FM-1
+    "no-base-at-remote",     # read succeeded, named neither ref      — FM-11
+    "base-object-missing",   # resolved base absent from the odb      — FM-2
+    "head-diverged",         # local HEAD carries a commit the base does not
+    "branch-diverged",       # the local `<branch>` does, and step 6 would rewrite it
+    "base-checkout-failed",  # step 6 could not put `<branch>` at the base — FM-4
+    "path-not-found",        # a named path does not exist            — FM-5
+    "nothing-staged",        # the staged set is empty                — FM-5
+    "commit-refused",        # a repository hook refused the commit   — FM-6
+    "push-rejected",         # step 9's push was rejected             — FM-7
+    "remote-head-mismatch",  # `ls-remote` disagreed with the push    — FM-8
+)
+
 SHA_RE = re.compile(r"\A[0-9a-f]{40}\Z")
 
 ZEROS = "0" * 40
@@ -126,9 +199,28 @@ BRANCH = "feat"
 #: level, so `run_cli` is pointed at it explicitly rather than by default.
 STUB_DIR = pathlib.Path(__file__).resolve().parent / "fixtures" / "stub"
 
-#: Every value any case puts into a report is ASCII. See the module docstring:
-#: whether non-ASCII is escaped is open in §5.2 and is not tested here.
+#: Every value the nineteen cases put into a report is ASCII. That is a fact
+#: about the enumeration, not a limit on the suite: §5.2's escape rule is
+#: asserted by `TestT01NonAsciiValuesAreEscaped`, whose fixture carries a
+#: non-ASCII `branch`. See the module docstring.
 MESSAGE = "land the work"
+
+#: §5.2: "A non-ASCII character in any value is written as a `\uXXXX` escape."
+#: U+03C0 is the carrier for two reasons. It has no canonical decomposition, so
+#: no normalization form of it differs from any other and nothing in the
+#: platform can turn it into a different sequence of code points; and it is a
+#: legal character in a git ref name, so a branch argument carrying it is a
+#: branch the tool can really be asked to land on.
+NON_ASCII = "\u03c0"
+
+#: The six characters §5.2 requires in the stream in place of the character.
+#: Matched case-insensitively at the point of use: JSON admits either case in a
+#: `\uXXXX` escape, and §5.2 fixes the form and not the case, so asserting
+#: lowercase would be asserting something the document does not say.
+NON_ASCII_ESCAPE = "\\u03c0"
+
+#: The branch argument the non-ASCII fixture invokes with.
+NON_ASCII_BRANCH = "feat-" + NON_ASCII
 
 
 # ------------------------------------------------------------ substrate (§4.1)
@@ -173,6 +265,31 @@ def index_entries(repo, env=None):
     """
     rc, out, err = git(repo, "ls-files", "--stage", env=env, check=True)
     return out
+
+
+def land_raw(sub, *args, env=None, timeout=90):
+    r"""Invoke the stub `land` and return `(rc, stdout_bytes, stderr_bytes)`.
+
+    `helpers.run_cli` runs the process with `text=True`, which decodes stdout
+    before a test can look at it. §5.2's ASCII rule is a property of the
+    **bytes**, and a decoded string cannot witness it: `"feat-\u03c0"` is what
+    the escaped form and the raw form both decode to, so a test handed the
+    string has already lost the difference it exists to assert. This runs the
+    same script the same way, in the same working tree and environment, and
+    declines the decode.
+
+    Local rather than in `helpers.py`, for the reason the module docstring
+    gives about the other helpers here: this module's directive confines its
+    edits. Moving it is stated work for the Coder.
+    """
+    proc = subprocess.run(
+        [str(STUB_DIR / "land"), *[str(a) for a in args]],
+        cwd=str(sub.repo),
+        env=env if env is not None else sub.env,
+        capture_output=True,
+        timeout=timeout,
+    )
+    return proc.returncode, proc.stdout, proc.stderr
 
 
 def git_shim_path(case, failing):
@@ -626,6 +743,28 @@ def build_fm11(case):
     return Landing(sub, rc, out, err)
 
 
+def build_non_ascii_branch(case):
+    """The success path, invoked with a non-ASCII character in `branch`.
+
+    Not a twentieth terminal path (§5.4's enumeration is a fixed nineteen, and
+    `CASES` is untouched): it is `success-head-moved`'s path run again with
+    different input, so that §5.2's escape rule has something to bite on.
+
+    `branch` is the carrier because it comes straight from the invocation's
+    argument (§3.7) and §5.3's key table establishes it on every path a report
+    is emitted at all, so no stop can take the character back out of the
+    report. It also never touches the filesystem, which is what a `files` path
+    could not say on macOS — see the module docstring.
+
+    Returns the raw streams rather than a `Landing`: the decode is the caller's,
+    and which decode it uses is load-bearing here.
+    """
+    sub = Substrate(case)
+    write(sub.repo, "work.md", "landed\n")
+    rc, out, err = land_raw(sub, NON_ASCII_BRANCH, MESSAGE, "work.md")
+    return sub, rc, out, err
+
+
 class Case:
     """One terminal path, with what §5.3's tables and §7 state for it.
 
@@ -633,11 +772,19 @@ class Case:
     table establishes on this path; `detail_keys` is the **exact** key set of
     `detail` there, the column being a ceiling as well as a floor; `files` is
     the entry list the key table gives it; `stage` is the token, or None on the
-    success path, which no row names; `exit_code` is §7's mapping.
+    success path, which no row names; `exit_code` is §7's exit mapping; `code`
+    is the bracketed diagnostic code §7's table assigns this refusal, or None on
+    the two success paths, which §7 gives no row because a landing that worked
+    emits no diagnostic and so no code.
+
+    `code` is **keyword-only and has no default** on purpose. Every one of the
+    nineteen must name its row of §7's table explicitly, including the two that
+    name `None`, so that a case added or a row misread is a visible omission
+    rather than a silent inherited default.
     """
 
     def __init__(self, mode, builder, stage, exit_code, established, detail_keys,
-                 files=()):
+                 files=(), *, code):
         self.mode = mode
         self.builder = builder
         self.stage = stage
@@ -645,6 +792,7 @@ class Case:
         self.established = tuple(established)
         self.detail_keys = tuple(detail_keys)
         self.files = list(files)
+        self.code = code
 
 
 #: Contract fields established on a landing that reached the commit but not a
@@ -661,69 +809,102 @@ CASES = {
     "success-head-moved": Case(
         "success", build_success_head_moved, None, 0,
         ("branch", "head", "prior_head", "verification"),
-        ("base", "local_head", "prior_branch", "remote_head"), _MATCHED),
+        ("base", "local_head", "prior_branch", "remote_head"), _MATCHED,
+        code=None),  # §7: a successful landing emits no diagnostic, so no code
     "success-head-on-branch": Case(
         "success", build_success_head_on_branch, None, 0,
         ("branch", "head", "prior_head", "verification"),
-        ("base", "local_head", "remote_head"), _MATCHED),
+        ("base", "local_head", "remote_head"), _MATCHED,
+        code=None),  # §7: a successful landing emits no diagnostic, so no code
     "fm1-fetch": Case(
         "FM-1", build_fm1_fetch, "fetch", 3,
-        ("branch",), ("stage", "git_status")),
+        ("branch",), ("stage", "git_status"),
+        code="fetch-failed"),
     "fm1-resolve": Case(
         "FM-1", build_fm1_resolve, "resolve", 3,
-        ("branch",), ("stage", "git_status")),
+        ("branch",), ("stage", "git_status"),
+        # §7 is finer than §5.3 here: `resolve` serves FM-1 and FM-11 both, and
+        # a session answers "could not reach the remote" differently from
+        # "reached it and found neither ref".
+        code="remote-read-failed"),
     "fm2": Case(
         "FM-2", build_fm2, "base-object", 3,
-        _RESOLVED, ("stage", "base", "git_status")),
+        _RESOLVED, ("stage", "base", "git_status"),
+        code="base-object-missing"),
     "fm3-head-diverged": Case(
         "FM-3", build_fm3_head_diverged, "guard", 3,
-        _RESOLVED, ("stage", "base", "local_head", "git_status")),
+        _RESOLVED, ("stage", "base", "local_head", "git_status"),
+        # §7's second finer-than-the-token split: `guard` serves both of FM-3's
+        # checks, and `detail.branch_head` is what separates them on stdout.
+        # This is the first check, so no `branch_head`.
+        code="head-diverged"),
     "fm3-branch-diverged": Case(
         "FM-3", build_fm3_branch_diverged, "guard", 3,
-        _RESOLVED, ("stage", "base", "local_head", "git_status", "branch_head")),
+        _RESOLVED, ("stage", "base", "local_head", "git_status", "branch_head"),
+        # The second check — `branch_head` present, per §5.3's conditional row.
+        code="branch-diverged"),
     "fm4": Case(
         "FM-4", build_fm4, "base", 3,
-        _RESOLVED, ("stage", "base", "local_head", "git_status")),
+        _RESOLVED, ("stage", "base", "local_head", "git_status"),
+        code="base-checkout-failed"),
     "fm5-stage-head-moved": Case(
         "FM-5", build_fm5_stage_head_moved, "stage", 3,
         _RESOLVED,
-        ("stage", "base", "local_head", "git_status", "prior_branch")),
+        ("stage", "base", "local_head", "git_status", "prior_branch"),
+        # Shared pair 1 of 5: the same code as its `head-on-branch` twin. §7
+        # shares it because `prior_branch` is a side effect of a step that
+        # succeeded, not a cause of the refusal.
+        code="path-not-found"),
     "fm5-stage-head-on-branch": Case(
         "FM-5", build_fm5_stage_head_on_branch, "stage", 3,
-        _RESOLVED, ("stage", "base", "local_head", "git_status")),
+        _RESOLVED, ("stage", "base", "local_head", "git_status"),
+        code="path-not-found"),
     "fm5-nothing-staged-head-moved": Case(
         "FM-5", build_fm5_nothing_staged_head_moved, "nothing-staged", 3,
         _RESOLVED,
-        ("stage", "base", "local_head", "git_status", "prior_branch")),
+        ("stage", "base", "local_head", "git_status", "prior_branch"),
+        # Shared pair 2 of 5. The code and the token coincide in spelling here
+        # and nowhere else; they are still different channels.
+        code="nothing-staged"),
     "fm5-nothing-staged-head-on-branch": Case(
         "FM-5", build_fm5_nothing_staged_head_on_branch, "nothing-staged", 3,
-        _RESOLVED, ("stage", "base", "local_head", "git_status")),
+        _RESOLVED, ("stage", "base", "local_head", "git_status"),
+        code="nothing-staged"),
     "fm6-head-moved": Case(
         "FM-6", build_fm6_head_moved, "commit", 3,
         _RESOLVED,
-        ("stage", "base", "local_head", "git_status", "prior_branch")),
+        ("stage", "base", "local_head", "git_status", "prior_branch"),
+        code="commit-refused"),  # shared pair 3 of 5
     "fm6-head-on-branch": Case(
         "FM-6", build_fm6_head_on_branch, "commit", 3,
-        _RESOLVED, ("stage", "base", "local_head", "git_status")),
+        _RESOLVED, ("stage", "base", "local_head", "git_status"),
+        code="commit-refused"),
     "fm7-head-moved": Case(
         "FM-7", build_fm7_head_moved, "push", 1,
         _COMMITTED,
-        ("stage", "base", "local_head", "git_status", "prior_branch"), _UNMATCHED),
+        ("stage", "base", "local_head", "git_status", "prior_branch"), _UNMATCHED,
+        code="push-rejected"),  # shared pair 4 of 5
     "fm7-head-on-branch": Case(
         "FM-7", build_fm7_head_on_branch, "push", 1,
         _COMMITTED,
-        ("stage", "base", "local_head", "git_status"), _UNMATCHED),
+        ("stage", "base", "local_head", "git_status"), _UNMATCHED,
+        code="push-rejected"),
     "fm8-head-moved": Case(
         "FM-8", build_fm8_head_moved, "verify", 4,
         _COMMITTED,
-        ("stage", "base", "local_head", "remote_head", "prior_branch"), _UNMATCHED),
+        ("stage", "base", "local_head", "remote_head", "prior_branch"), _UNMATCHED,
+        code="remote-head-mismatch"),  # shared pair 5 of 5
     "fm8-head-on-branch": Case(
         "FM-8", build_fm8_head_on_branch, "verify", 4,
         _COMMITTED,
-        ("stage", "base", "local_head", "remote_head"), _UNMATCHED),
+        ("stage", "base", "local_head", "remote_head"), _UNMATCHED,
+        code="remote-head-mismatch"),
     "fm11": Case(
         "FM-11", build_fm11, "resolve", 3,
-        _RESOLVED, ("stage",)),
+        _RESOLVED, ("stage",),
+        # The other half of the `resolve` split: the read succeeded and named
+        # neither `<branch>` nor `main`.
+        code="no-base-at-remote"),
 }
 
 #: Deterministic order for the tests that run the whole enumeration.
@@ -907,18 +1088,93 @@ class ReportAssertions(unittest.TestCase):
         self.assertEqual(landing.rc, expected,
                          "%s exited %s; stderr=%r" % (name, landing.rc, landing.err))
 
-    def assert_diagnostic(self, landing):
-        """§7: a bracket-coded diagnostic on stderr on every failure path.
+    def assert_diagnostic(self, landing, code):
+        """AC-LAND-T01b: stderr carries the code §7's table assigns this refusal.
 
-        The code's identity is not asserted — §7 fixes the convention and names
-        no code per failure mode — only that one is there, which is the whole of
-        what the document states.
+        The identity, not merely the presence. §7's table is "this document's
+        single statement of which refusal carries which code" and is normative
+        over every other passage, so there is a right answer per path and this
+        asserts it. Presence alone was the old assertion and the state OQ-12
+        named: it passed two implementations whose codes disagreed, which is the
+        whole of what was wrong with it.
+
+        **No assertion that every bracketed token on the stream is one of §7's
+        twelve.** That stronger form was written first and removed, and the
+        reason is worth
+        keeping rather than leaving as a silent omission: `git push` writes
+        ` ! [rejected]  feat -> feat (fetch first)` on a non-fast-forward
+        refusal, and `bracket_codes` extracts `rejected` from it (*observed*,
+        run against this module's own substrate). `aimeta/repo.py`'s `run`
+        captures git's stderr rather than letting it through (*observed*), so
+        that line does not reach the tool's stream on its own — but nothing in
+        §7 forbids an implementation from quoting git's captured diagnostic into
+        its own, and one that did would fail a closed-set assertion here while
+        violating no word of the document. §7 states which code a refusal
+        carries; it does not close the stream. Asserting that it does would be
+        settling something the spec leaves open, which is not this module's to
+        settle. Reported as a finding.
+
+        What is asserted instead is the closed set read **through** §7's twelve:
+        of the codes on the stream, exactly one is from the table, and it is
+        this path's. A token the table does not name — git's `rejected`, or
+        anything a future diagnostic carries — is ignored, because §7 says
+        nothing about it. Two of the table's own codes on one refusal is a
+        different matter and does fail: §7's table gives each refusal one row,
+        so a tool naming two of the twelve for one stop contradicts the table
+        rather than merely adding to the stream.
         """
-        self.assertTrue(bracket_codes(landing.err),
-                        "no bracketed diagnostic code on stderr: %r" % landing.err)
+        found = bracket_codes(landing.err)
+        self.assertTrue(
+            found,
+            "no bracketed diagnostic code on stderr, expected [%s]: %r"
+            % (code, landing.err),
+        )
+        from_table = sorted({c for c in found if c in DIAGNOSTIC_CODES})
+        self.assertEqual(
+            from_table, [code],
+            "stderr names %r of §7's twelve; this refusal's row is [%s]. The "
+            "whole of what stderr carried was %r: %r"
+            % (from_table, code, found, landing.err),
+        )
+
+    def assert_no_diagnostic_code(self, landing):
+        """AC-LAND-T01b: a successful landing carries no bracketed code at all.
+
+        **Not** that stderr is empty, and this is the restraint T01b states
+        rather than a weakness in the assertion. §7's table is the seventeen
+        refusal paths' and carries no row for a landing that worked, so what is
+        asserted is that the tool emitted no diagnostic of its own. `git push`
+        and `git fetch` write progress, and a credential helper can write a line
+        of its own, on a landing that worked perfectly; a test demanding an empty
+        stream would fail on the environment rather than on the tool, and a red
+        that means the environment is not a red about the tool.
+
+        The bracket form is safe here where a closed-set assertion on the
+        refusal paths was not: the git commands a *successful* landing runs
+        write ` * [new branch]  feat -> feat` and `   <sha>..<sha>  feat -> feat`
+        to stderr, and `bracket_codes` extracts nothing from either — the space
+        in `new branch` puts it outside `BRACKET_CODE_RE` (*observed*, run
+        against this module's own substrate) — and `aimeta/repo.py`'s `run`
+        captures that output anyway (*observed*).
+        """
+        found = bracket_codes(landing.err)
+        self.assertEqual(
+            found, [],
+            "a successful landing put the bracketed code(s) %r on stderr; §7's "
+            "table is the refusal paths' and gives a landing that worked no row, "
+            "there being no situation to answer: %r" % (found, landing.err),
+        )
 
     def check(self, landing, name):
-        """The whole of AC-LAND-T01 for one case, plus §7's exit code."""
+        """AC-LAND-T01 for one case, plus §7's exit mapping and T01b's code.
+
+        T01b rides here as well as in its own sweep, which is how this module
+        already carries `detail.stage` and the exit status: the per-case test
+        asserts everything true of its own path, and the sweep states the
+        property over the enumeration. On the two success paths that means
+        asserting stderr carries no bracketed code, which is the only assertion
+        in this module that a tool doing nothing at all would satisfy.
+        """
         spec = CASES[name]
         report = self.parse(landing)
         self.assert_value_domains(report)
@@ -928,9 +1184,10 @@ class ReportAssertions(unittest.TestCase):
         if spec.stage is None:
             self.assertNotIn("stage", report["detail"],
                              "the success path carries a stage token")
+            self.assert_no_diagnostic_code(landing)
         else:
             self.assert_stage(report, spec.stage)
-            self.assert_diagnostic(landing)
+            self.assert_diagnostic(landing, spec.code)
         return report
 
     def assert_stage(self, report, token):
@@ -1172,19 +1429,22 @@ class TestT01AcrossEveryCase(ReportAssertions):
                 report = self.parse(landing)
                 self.assert_files(report, CASES[name].files)
 
-    def test_t01_exit_status_and_diagnostic_follow_section_7(self):
-        """§7's exit mapping, and a bracket-coded diagnostic on every failure.
+    def test_t01_exit_status_follows_section_7s_mapping(self):
+        """§7's exit mapping, over the whole enumeration.
 
-        The code's identity is not asserted: §7 fixes the convention and names
-        no code per failure mode.
+        The diagnostic is no longer asserted here. It was, back when the only
+        assertion available was that *some* bracketed code was present, and it
+        rode along with the exit status because both were §7's and neither had
+        much to say. §7 now fixes the codes and AC-LAND-T01b is a criterion of
+        its own, so the code assertions live in `TestT01bDiagnosticCodes` — a
+        different stream, a different criterion, and a red in one should not
+        name the other.
         """
         for name in CASE_NAMES:
             with self.subTest(case=name):
                 spec = CASES[name]
                 landing = spec.builder(self)
                 self.assert_exit(landing, spec.exit_code, name)
-                if spec.stage is not None:
-                    self.assert_diagnostic(landing)
 
     def test_t01_stage_tokens_are_the_ten_and_the_right_one(self):
         """§5.3's token table: closed at ten, and the token of the stop made."""
@@ -1199,6 +1459,140 @@ class TestT01AcrossEveryCase(ReportAssertions):
                                      "the success path carries a stage token")
                 else:
                     self.assert_stage(report, expected)
+
+
+class TestT01NonAsciiValuesAreEscaped(ReportAssertions):
+    r"""§5.2: a non-ASCII character in a value is written as a `\uXXXX` escape.
+
+    The rule, in full: "The object is serialized with `ensure_ascii=True`, so
+    stdout is pure ASCII on every path, whatever a value carries." It is the
+    decision that retired OQ-11, and §5.2's "Why the escaped form and not the
+    raw one" gives the reason it is worth asserting rather than left to a
+    serializer default: a script's stdout must not depend on the ambient locale
+    being UTF-8, and the raw form has failure modes — mangled bytes, or a write
+    that fails outright — that the escaped form has in no environment.
+
+    Three cases, because the rule has three separable halves and one case
+    asserting all of them would not say which half an implementation got wrong:
+    that the stream is ASCII, that the raw UTF-8 form is *not* in it, and that
+    the escape carries the character back losslessly. The third is what makes
+    the first cost nothing — "an escape and the raw character parse to the same
+    string" (§5.2).
+
+    The shape that would otherwise slip past all three — a report that reached
+    a pure-ASCII stdout by *dropping* or *replacing* the character rather than
+    escaping it — is caught by `fixture_report`, which every case runs first
+    and which asserts the character survived into `branch.value`. That is why
+    the guard is a method the cases call rather than a case of its own: it is
+    load-bearing for each of them, and a green here means nothing without it.
+
+    Boundary: this is the same end-to-end boundary §5.4 fixes for AC-LAND-T01.
+    The stdout asserted on is the process's own, and here it is asserted
+    **before** any decode, which no in-process call to `Report.build` could
+    reproduce — `to_json` returns a `str`, and the bytes are made by the write.
+    """
+
+    def setUp(self):
+        self.sub, self.rc, self.raw_out, self.raw_err = build_non_ascii_branch(self)
+        # latin-1 maps every byte to exactly one code point and can never fail,
+        # so a substring search over `self.stream` is a search of the bytes
+        # rather than of a decoded string that may have replaced something. On
+        # a conforming stream — pure ASCII — it is the same string a correct
+        # decode would give.
+        self.stream = self.raw_out.decode("latin-1")
+        self.landing = Landing(
+            self.sub,
+            self.rc,
+            self.raw_out.decode("utf-8", "replace"),
+            self.raw_err.decode("utf-8", "replace"),
+        )
+
+    def fixture_report(self):
+        """§5.2's format and value domains, plus the guard that makes this real.
+
+        Run at the head of each case rather than as a case of its own. An
+        assertion about escaping is worth nothing unless the character actually
+        reached a report value: a tool that dropped it, and a fixture that never
+        carried it, both leave a stdout that is pure ASCII for a reason that has
+        nothing to do with the rule, and the three cases below would then be
+        green over nothing. `assert_value_domains` is given the fixture's own
+        branch, so `branch.value` is checked against the argument this
+        invocation made rather than against the module's `BRANCH` constant.
+        """
+        report = self.parse(self.landing)
+        self.assertFalse(NON_ASCII_BRANCH.isascii(),
+                         "fixture: the branch argument is all-ASCII, so nothing "
+                         "here can witness §5.2's escape rule")
+        # Deliberately ahead of `assert_value_domains`, which asserts the same
+        # equality as one line of §5.2's rule list. Read here it is the
+        # discriminator the three cases below rest on, and it fails with a
+        # message saying so, which is worth the one duplicated assertion.
+        self.assertEqual(
+            report["branch"]["value"], NON_ASCII_BRANCH,
+            "the character did not survive into a report value: branch=%r. "
+            "Either the fixture never carried it, or the tool dropped or "
+            "replaced it — §5.2 requires `branch.value` to be the argument "
+            "\"carried exactly as the argument gave it\". Until this holds, an "
+            "ASCII stdout below would be ASCII for the wrong reason."
+            % report["branch"]["value"],
+        )
+        self.assert_value_domains(report, branch=NON_ASCII_BRANCH)
+        return report
+
+    def test_t01_stdout_is_pure_ascii_when_a_report_value_is_not(self):
+        """§5.2: "stdout is pure ASCII on every path, whatever a value carries"."""
+        self.fixture_report()
+        offending = sorted({byte for byte in self.raw_out if byte >= 0x80})
+        self.assertEqual(
+            offending, [],
+            "stdout carries %d byte value(s) at or above 0x80 (%s); §5.2 "
+            "requires %r to be written as a %s escape so that the stream is "
+            "pure ASCII: %r"
+            % (len(offending), ", ".join("0x%02x" % b for b in offending),
+               NON_ASCII, NON_ASCII_ESCAPE, self.raw_out[:160]),
+        )
+
+    def test_t01_the_raw_utf8_form_is_never_written_to_stdout(self):
+        """§5.2: `ensure_ascii=True` — the form the section weighed and refused.
+
+        The complement of the case above rather than a restatement of it: that
+        one fails on any high byte from any source, this one names the exact
+        bytes `ensure_ascii=False` would produce for this character, so a red
+        here says *which* form was written and not merely that the stream was
+        not ASCII.
+        """
+        self.fixture_report()
+        raw_bytes = NON_ASCII.encode("utf-8")
+        self.assertNotIn(
+            raw_bytes, self.raw_out,
+            "stdout carries the raw UTF-8 bytes %r of %r; §5.2 weighed exactly "
+            "this form against the escape and refused it, so that stdout has no "
+            "dependence on the ambient locale: %r"
+            % (raw_bytes, NON_ASCII, self.raw_out[:160]),
+        )
+
+    def test_t01_the_escape_carries_the_character_losslessly(self):
+        r"""§5.2: the `\uXXXX` escape is in the stream and parses back whole.
+
+        Both halves, in one case because neither is worth anything alone. The
+        escape being present is the property the decision fixed; the round-trip
+        is what makes choosing it cost nothing, §5.2 resting the whole decision
+        on "both parse to the identical string". The parse is of the **raw**
+        stream, so what is shown lossless is the bytes the tool wrote.
+        """
+        self.fixture_report()
+        self.assertIn(
+            NON_ASCII_ESCAPE, self.stream.lower(),
+            "stdout carries no %s escape for %r; §5.2 requires the escaped form "
+            "on every path: %r"
+            % (NON_ASCII_ESCAPE, NON_ASCII, self.stream[:200]),
+        )
+        report = json.loads(self.stream)
+        self.assertEqual(
+            report["branch"]["value"], NON_ASCII_BRANCH,
+            "the escape did not parse back to the character: branch=%r"
+            % report["branch"]["value"],
+        )
 
 
 class TestT01aUsageError(ReportAssertions):
@@ -1226,6 +1620,127 @@ class TestT01aUsageError(ReportAssertions):
         self.assertTrue(err.strip(), "the usage error was silent on stderr")
         self.assertTrue(no_traceback(out, err), "traceback: %s" % err)
         self.assertEqual(rc, 2, "stdout=%r stderr=%r" % (out, err))
+
+
+class TestT01bDiagnosticCodes(ReportAssertions):
+    """AC-LAND-T01b — every refusal carries §7's code, and success carries none.
+
+    Two cases, because T01b states two properties over two disjoint halves of
+    T01's enumeration and they fail for opposite reasons: a refusal that says
+    the wrong thing, and a success that says anything at all. Folding them would
+    give a criterion satisfied by either, which is the shape §5.4 refuses at
+    T01a for the same reason.
+
+    Both are sweeps rather than nineteen more per-case tests, which is how this
+    module already handles `detail.stage` and the exit mapping: the per-case
+    assertion rides in `check` — so each of the nineteen named cases asserts its
+    own code — and the sweep is where the property is stated over the whole
+    enumeration at once. §7's shape is asserted at the head of the first sweep,
+    exactly as `len(STAGE_TOKENS) == 10` sits at the head of the token sweep.
+
+    Boundary: `bracket_codes` reads stderr as the process wrote it, and stderr
+    on these paths is not the tool's alone — git writes to it too. That is why
+    the refusal assertion is `in` rather than an equality on the whole list, and
+    why the success assertion is about bracketed codes rather than about the
+    stream being empty. Neither is a weakening of T01b; both are what T01b says.
+    """
+
+    def test_t01b_section_7s_table_is_twelve_codes_over_seventeen_refusals(self):
+        """§7: "Twelve codes, and no others", and the five deliberate pairs.
+
+        The transcription guard, and the one case here that is about `CASES`
+        rather than about a process. It is the counterpart of
+        `test_t01_the_enumeration_is_the_nineteen_terminal_paths`: that one
+        pins §5.4's count, this one pins §7's, and both exist so a
+        mistranscribed table fails as itself instead of surfacing as nineteen
+        confusing behavioural reds.
+        """
+        self.assertEqual(len(DIAGNOSTIC_CODES), 12,
+                         "§7 names twelve codes; this module lists %d"
+                         % len(DIAGNOSTIC_CODES))
+        self.assertEqual(len(set(DIAGNOSTIC_CODES)), 12, "a code is listed twice")
+
+        refusals = [n for n in CASE_NAMES if CASES[n].code is not None]
+        successes = [n for n in CASE_NAMES if CASES[n].code is None]
+        self.assertEqual(len(refusals), 17,
+                         "§7's table is the seventeen refusal paths'; %d cases "
+                         "name a code" % len(refusals))
+        self.assertEqual(
+            sorted(successes), ["success-head-moved", "success-head-on-branch"],
+            "the paths carrying no code are %r; §7 gives no row to exactly the "
+            "two success paths" % sorted(successes),
+        )
+        self.assertEqual(
+            sorted({CASES[n].code for n in refusals}), sorted(DIAGNOSTIC_CODES),
+            "the codes the cases name are not §7's twelve",
+        )
+
+        # "Five pairs of refusal paths share a code, and the coarseness is
+        # deliberate" (§7). Asserted as a property of the pairs rather than by
+        # listing them: each shared code must be shared by exactly two cases,
+        # and those two must differ in nothing but `detail.prior_branch` — which
+        # is §5.4's splitting condition and §7's stated reason for sharing.
+        by_code = {}
+        for name in refusals:
+            by_code.setdefault(CASES[name].code, []).append(name)
+        shared = {code: names for code, names in by_code.items() if len(names) > 1}
+        self.assertEqual(
+            len(shared), 5,
+            "§7 shares a code across five pairs; %d codes are shared here: %r"
+            % (len(shared), sorted(shared)),
+        )
+        for code, names in sorted(shared.items()):
+            with self.subTest(code=code):
+                self.assertEqual(len(names), 2,
+                                 "[%s] is carried by %r, not by a pair"
+                                 % (code, names))
+                first, second = (set(CASES[n].detail_keys) for n in sorted(names))
+                self.assertEqual(
+                    first ^ second, {"prior_branch"},
+                    "[%s]'s two paths differ by %r; §7 shares a code only across "
+                    "the `detail.prior_branch` condition, which records a side "
+                    "effect of a step that succeeded rather than a cause"
+                    % (code, sorted(first ^ second)),
+                )
+
+    def test_t01b_every_refusal_carries_the_code_section_7_assigns_it(self):
+        """AC-LAND-T01b, first half: the seventeen refusal terminal paths.
+
+        Each asserts the code its **own** row names, never that a code appears
+        on one path alone — T01b says so in as many words, because five of the
+        codes are carried by two paths apiece and an assertion of uniqueness
+        would contradict the table it is testing.
+        """
+        for name in CASE_NAMES:
+            spec = CASES[name]
+            if spec.code is None:
+                continue
+            with self.subTest(case=name, code=spec.code):
+                landing = spec.builder(self)
+                self.assert_diagnostic(landing, spec.code)
+
+    def test_t01b_a_successful_landing_carries_no_bracketed_code(self):
+        """AC-LAND-T01b, second half: the two success terminal paths.
+
+        Its own case and not a branch of the sweep above, because the property
+        is the opposite one and the way it fails is the opposite too: there, a
+        code that is wrong; here, a code at all. A criterion asserting both at
+        once would be satisfied by either, which is the reason §5.4 gives for
+        splitting T01a off from T01 and it holds here unchanged.
+
+        Nothing precedes the assertion in this case — no report parse, no
+        emission check — so that its red is the stderr claim and cannot be
+        pre-empted by an unrelated one. That matters more here than anywhere
+        else in the module: this is the assertion that would pass against a tool
+        writing nothing at all, so it has to be reached to mean anything.
+        """
+        for name in CASE_NAMES:
+            spec = CASES[name]
+            if spec.code is not None:
+                continue
+            with self.subTest(case=name):
+                landing = spec.builder(self)
+                self.assert_no_diagnostic_code(landing)
 
 
 class TestT02VerificationAndExitAgree(ReportAssertions):

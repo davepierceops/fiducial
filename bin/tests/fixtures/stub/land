@@ -19,11 +19,34 @@ How it is deliberately wrong:
 - The argv it reports on is a crude positional peek, not `argparse`'s answer.
 - The exit code comes from `report.py`'s fabricated rule, not from §7's
   mapping, so nothing here maps a failure mode onto an exit status.
+- **It writes one invented bracketed code to stderr, the same one on every
+  path, unconditionally.** §7's table assigns one of twelve codes per refusal
+  and assigns none to a successful landing, so a constant is wrong twice over
+  and is wrong on all nineteen terminal paths at once. It is here **on purpose**,
+  and for a reason that has two opposite halves — a stub silent on stderr would
+  make AC-LAND-T01b's refusal assertions fail on *absence*, which reads as
+  scaffolding rather than behaviour, and would make its success assertion
+  **pass**, since "no bracketed code" is trivially true of a stream with nothing
+  in it. A passing assertion is not a red-gate. This one line turns both halves
+  behavioural at once: the seventeen refusal paths fail on a *mismatch* against
+  the code §7 names, and the two success paths fail because a code appears where
+  §7 says none should.
+
+    The code is `stub-not-a-real-code`, which is not among §7's twelve and could
+    not be mistaken for one, while still matching the `BRACKET_CODE_RE` in
+    `bin/tests/helpers.py` so that `bracket_codes` finds it. It is **constant
+    and path-independent on purpose**: giving this stub a per-mode code would be
+    a step toward implementing §7's mapping, which is the Coder's work. The
+    wrongness is licensed; the correctness is not.
 - `aimeta/land.py` runs no git, so there is no landing to report on.
 
 What it deliberately gets right, so the tests fail on behaviour rather than on
 scaffolding: the `argparse` surface of §3.2 step 1, the `sys.path.insert`
-idiom the other seven executables use, and §5.2's serialization.
+idiom the other seven executables use, and §5.2's serialization but for the one
+knob `stub_aimeta/report.py` documents. It also gets the *streams* right — the
+report on stdout, the diagnostic on stderr — because a stub that crossed them
+would make every assertion here fail for that one reason and nothing else would
+be testable.
 """
 
 import argparse
@@ -43,6 +66,11 @@ sys.path.insert(0, _REAL_BIN_DIR)
 
 from aimeta import cli  # noqa: E402
 from stub_aimeta import land as land_module  # noqa: E402
+
+#: DELIBERATELY NOT ONE OF §7's TWELVE. Matches `helpers.BRACKET_CODE_RE` so
+#: `bracket_codes` extracts it, and names nothing, so no reader mistakes it for
+#: a code the TRD assigns.
+STUB_DIAGNOSTIC_CODE = "stub-not-a-real-code"
 
 
 def build_parser():
@@ -73,6 +101,15 @@ def main(argv=None):
         cwd=os.getcwd(),
     )
     sys.stdout.write(report.to_json())
+
+    # DELIBERATE DEFECT (AC-LAND-T01b) — see the module docstring. One invented
+    # code, the same on every path, where §7's table assigns one of twelve per
+    # refusal and none at all to a successful landing. stderr only: stdout stays
+    # the report and nothing else (§7's first paragraph).
+    sys.stderr.write(
+        "ERROR stub: [%s] this stub emits one constant code on every path\n"
+        % STUB_DIAGNOSTIC_CODE
+    )
 
     build_parser().parse_args(argv)
     return report.exit_code()

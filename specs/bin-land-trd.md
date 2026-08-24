@@ -851,6 +851,15 @@ Rules the format holds on every path:
   is the one leaf that names its established value `match` rather than `value`,
   and carries no `value` key at all, so on such an entry this rule reads over
   `match` — which the `files` rule below states directly.
+- **A non-ASCII character in any value is written as a `\uXXXX` escape.** The
+  object is serialized with `ensure_ascii=True`, so stdout is pure ASCII on every
+  path, whatever a value carries. This does not contradict the UTF-8 the decision
+  above names: ASCII is a subset of it, so the stream is UTF-8 and happens to use
+  none of it past the first 128 code points. Nor does it narrow any value domain
+  stated here — an escape and the raw character parse to the same string, so a
+  rule about what a field may carry is indifferent to which of the two forms
+  carried it. The rule belongs to the serialization rather than to any one field,
+  and reaches every string the report emits.
 - `branch.value` is the branch name the invocation named, as a JSON string,
   carried exactly as the argument gave it. Its `class` is always `"observed"`
   and its `value` is never `null`: `branch` comes from the parameter rather than
@@ -890,11 +899,23 @@ The two that admit no `null` are the two that cannot need one, and each rule say
 why in its own words: `branch` is established wherever a report exists at all,
 and an unestablished `detail` key is absent rather than unknown.
 
-**One question about these values is open and is not settled here.** The rules
-above fix what each field may carry; they do not fix whether a non-ASCII
-character *in* one of those values is written as UTF-8 or as a `\uXXXX` escape,
-and both satisfy every rule in this section. That is OQ-11, and a reader of §5.2
-alone should not take the list above as having closed it.
+**Why the escaped form and not the raw one.** Both forms satisfy every other
+rule in this section, and both parse to the identical string, so what separates
+them is not what the report means but what the stream survives.
+`ensure_ascii=False` would write such a character as UTF-8 bytes, and the
+readability this section chose pretty-printing for pulls that way. It is
+outweighed by a kind of argument readability does not answer: a script's stdout
+must not depend on the ambient locale being UTF-8. The raw form has failure
+modes the escaped form does not — a locale that is not UTF-8 can mangle the
+bytes on the way out, or the write can fail outright — and the escaped form has
+no failure mode of its own to set against them, in any environment. Nothing is
+given up for that, because the two parse to identical data. The state is
+reachable rather than hypothetical: the branch name and the paths are
+caller-supplied text, which this section's own framing rationale already reasons
+about on exactly that footing, and both are carried in report values — `branch`
+and each `files` entry's `path` — so a real invocation can put a non-ASCII
+character into the object this rule is about. OQ-11 asked this question; §9
+records the answer and retires the identifier.
 
 **What an empty `files` list means.** Where no commit was made there are no
 per-file entries and `files` is `[]`. That `[]` is **not** a claim that the
@@ -1179,6 +1200,29 @@ to PRD §6.
   to stdout — and a criterion asserting both shapes at once would be satisfied by
   either.
 
+- **AC-LAND-T01b — every refusal carries the code §7 names, and a successful
+  landing carries none.** Across T01's enumeration: on each of the seventeen
+  refusal terminal paths, stderr carries the bracketed code §7's table assigns to
+  that refusal, extracted with `bin/tests/helpers.py`'s existing `bracket_codes`
+  (*observed*) — the helper whose form §7 pins the codes to — and on
+  the two success paths the tool emits no diagnostic of its own and stderr
+  carries no bracketed code at all.
+
+  Where §7's table is coarser than this enumeration — the five
+  `detail.prior_branch` pairs, which §7 states and gives its reason for — both
+  members of a pair assert the same code. So what a case asserts is that stderr
+  carries the code its own row names, never that a code appears on one path
+  alone.
+
+  Stated as its own criterion rather than folded into T01 because the stream is
+  the other one: T01's assertions are about stdout throughout, and its boundary
+  paragraph is written about what the process writes there. What makes this
+  assertable at all is §7 fixing the codes. Before that a criterion could have
+  asserted only that *some* bracketed code was present, which is the state OQ-12
+  named and §9 records as closed — and a criterion asserting presence alone would
+  have passed two implementations whose codes disagreed, which is the whole of
+  what was wrong with it.
+
 - **AC-LAND-T02 — `verification` and exit status agree.** Across T01's
   enumeration, exit status is 0 if and only if `verification.value` is
   `"complete"`. This is AC-LAND-08 read through the serialization, and it is
@@ -1210,8 +1254,9 @@ surfaces. This is PRD G7 and PRD §7's escalation clause (*observed*).
 
 What the user — an execution session — sees on every one of these: the report
 of §5 on stdout with the established fields labelled `observed` and the
-unestablished ones labelled `unknown`, a bracket-coded diagnostic on stderr,
-and a non-zero exit.
+unestablished ones labelled `unknown`, a bracket-coded diagnostic on stderr
+carrying the code §7's table assigns to that refusal, and a non-zero exit. Which
+code that is, is §7's to state and not this section's; no cell below names one.
 
 **The last column, one rule.** The cells are **derived from §5.3's key table**,
 not authored beside it. Each names, for the path its failure mode reaches, the
@@ -1352,8 +1397,91 @@ rather than within one (*observed*, PRD §4).
 human-readable diagnostics, each with a stable bracketed code — the convention
 `bin/tests/helpers.py` already relies on, where "tests assert on codes, never on
 English wording, so that rewording a message does not break the suite"
-(*observed*). Exit status is the third channel. Nothing else is emitted
-anywhere; there is no log file and no telemetry sink (§2).
+(*observed*). Which code a given refusal carries is the table below. Exit status
+is the third channel. Nothing else is emitted anywhere; there is no log file and
+no telemetry sink (§2).
+
+**The diagnostic codes — this document's single statement of which refusal
+carries which code.** No other passage in this document assigns a code, and none
+may: §6 says that a refusal puts a bracket-coded diagnostic on stderr and reads
+which code off this table, and §5.4's AC-LAND-T01b asserts the code this table
+names. Where any other passage and this table disagree, this table is normative
+and the other passage is wrong. Every code matches the form
+`bin/tests/helpers.py` already pins — a lowercase letter, then lowercase
+alphanumerics and hyphens, inside square brackets (*observed*, its
+`BRACKET_CODE_RE`) — so the `bracket_codes` helper the suite already has reads
+them without amendment. Fixing them here rather than leaving the strings to the
+implementer is OQ-12's answer; §9 records the reasoning and retires the
+identifier.
+
+| Code | The situation it names | `detail.stage` | Failure mode |
+| --- | --- | --- | --- |
+| `fetch-failed` | Step 2's fetch did not complete | `fetch` | FM-1 |
+| `remote-read-failed` | Step 3's read of the remote failed | `resolve` | FM-1 |
+| `no-base-at-remote` | Step 3's read succeeded and named neither `<branch>` nor `main` | `resolve` | FM-11 |
+| `base-object-missing` | The resolved base is not present in the local object database | `base-object` | FM-2 |
+| `head-diverged` | Local HEAD carries a commit the base does not | `guard` | FM-3, first check |
+| `branch-diverged` | The local `<branch>` carries a commit the base does not, and it is the ref step 6 would have rewritten | `guard` | FM-3, second check |
+| `base-checkout-failed` | Step 6 could not put `<branch>` at the base | `base` | FM-4 |
+| `path-not-found` | A named path does not exist and `git add` refused it | `stage` | FM-5 |
+| `nothing-staged` | The staged set is empty and there is nothing to commit | `nothing-staged` | FM-5 |
+| `commit-refused` | A repository hook refused the commit | `commit` | FM-6 |
+| `push-rejected` | Step 9's push was rejected | `push` | FM-7 |
+| `remote-head-mismatch` | `ls-remote` disagreed with the head the push wrote | `verify` | FM-8 |
+
+Twelve codes, and no others. A reader counting them against §5.4's nineteen
+terminal paths meets two differences, and both are decisions stated here rather
+than gaps to be discovered.
+
+**The rule the set follows.** One code per situation a session must answer
+differently — which is what makes a code worth matching on rather than a second
+spelling of `detail.stage`. A situation is what caused the refusal. Facts about
+the state the refusal left behind are the report's to carry, under §5.3's table,
+and are not codes. That one rule makes the set finer than §5.3's token table in
+two places and coarser than §5.4's enumeration in five.
+
+**A successful landing emits no diagnostic and therefore no code.** Two of
+§5.4's nineteen terminal paths are the success path's, and the diagnostic §6
+describes is stated for refusals. So the table above is the seventeen refusal
+paths', and carries no row for a landing that worked: there is no situation to
+answer.
+
+**Five pairs of refusal paths share a code, and the coarseness is deliberate.**
+Ten of the seventeen fall into five pairs under §5.4's `detail.prior_branch`
+condition — FM-5 on each of its two tokens, and FM-6, FM-7 and FM-8 — each pair
+being one path on which step 6 moved HEAD off another branch and one on which it
+found HEAD already on `<branch>`. Those ten yield five codes, the remaining seven
+paths one each, and that is the twelve. The
+two members of each pair carry the same code, because that condition is not a
+cause. It records a side effect of a step that **succeeded**: step 6 moved HEAD,
+and then something else failed. It is the same move a successful landing makes,
+on a path that emits no code at all, so a code splitting on it would speak
+loudest exactly where the tool is silent. `detail.stage` does not split on it
+either — §5.3's token table gives one token per stop, and no conditional row
+produces one — so a code that did would be finer than its stdout peer on an axis
+that is not about where the sequence stopped. And the repair is the same on both
+members of every pair: fix the path argument, stage something, repair what the
+hook rejected, or stop and surface the local commit. Nothing is lost by the
+sharing, because the fact itself is carried: §5.3's table puts
+`detail.prior_branch` on exactly those paths, and its emission rule makes the
+key's absence as much a claim as its presence. The report carries the fact; the
+code names the situation.
+
+**Two codes are finer than the token that serves them, by the same rule.** Both
+splits discriminate a cause. `resolve` serves two modes: FM-1, where step 3's
+read of the remote failed, and FM-11, where it succeeded and named neither ref. A
+session answers those differently — a remote it could not reach, against a remote
+it reached and found empty of both — and `detail.stage` alone does not separate
+them. `guard` serves FM-3's two checks: local HEAD carrying a commit the base
+does not, against the local `<branch>` carrying one, which §3.3 calls the only
+thing standing between the ordinary post-checkout tree state and the destructive
+class PRD §7 puts under "Not accepted". Two different refs, two different
+repairs. In both cases the report can separate the pair already — by whether
+`detail.git_status` is present at `resolve`, and whether `detail.branch_head` is
+present at `guard` — and the code says outright what would otherwise be inferred
+from a key's absence. That is the difference from the five shared pairs, and it
+is not that one fact is in the report and the other is not: both are. It is that
+these two are causes and `prior_branch` is not.
 
 **Exit codes.** `aimeta/cli.py` defines `EXIT_OK=0`, `EXIT_POLICY=1`,
 `EXIT_USAGE=2`, `EXIT_PRECONDITION=3`, `EXIT_SELF_VERIFY=4`, and
@@ -1527,14 +1655,14 @@ Stated so no implementer has to infer them.
 
 ## 9. Open technical questions
 
-Nine open, and three retired. Each open question names what would resolve it;
+Seven open, and five retired. Each open question names what would resolve it;
 none is settled here. A retired identifier is kept in place rather than reused,
 so a reader arriving from a review artifact that cites it by number can still
 find what it referred to — the precedent PRD §8 sets for its own Q1–Q4
 (*observed*), and the precedent §6 follows in leaving a hole at the struck
-failure mode rather than closing it up. The three retirements differ in kind: OQ-8
-is retired because the question had no closing move, OQ-5 and OQ-10 because they
-have been answered.
+failure mode rather than closing it up. The five retirements differ in kind: OQ-8
+is retired because the question had no closing move, and OQ-5, OQ-10, OQ-11 and
+OQ-12 because they have been answered.
 
 - **OQ-1 — No SLO exists for J1, J2, or J3.** §2 states this explicitly, as the
   template requires, and gives the structural reason: no production surface, no
@@ -1660,49 +1788,69 @@ have been answered.
   OQ-8, so a reader arriving from a review artifact that cites OQ-10 by number
   can still find what it referred to.
 
-- **OQ-11 — Whether a non-ASCII character in a report value is serialized as
-  UTF-8 or as a `\uXXXX` escape.** This is the one value domain §5.2 leaves open.
-  §5.2 fixes the format as one JSON object, two-space indentation, sorted keys,
-  UTF-8, one trailing newline, and closes what each field may carry; it does not
-  say which of the two encodings of a non-ASCII character inside such a value the
-  tool emits. Both candidates satisfy every commitment §5.2 currently makes, and
-  both round-trip through `json.loads` to the same Python string, so no criterion
-  written to this document can tell them apart — which is what makes this a
-  question about what the tool does rather than about how this document says it.
-  `ensure_ascii=False` writes such a character as UTF-8 bytes, which §5.2's
-  stated UTF-8 and its stated reason for pretty-printing — readability for the
-  agent session that pastes the report onward — both pull toward.
-  `ensure_ascii=True` writes it as a `\uXXXX` escape, leaving stdout pure ASCII
-  whatever the ambient locale, which is the more robust of the two for a consumer
-  reading the stream as bytes. The state is reachable rather than hypothetical:
-  the branch name, the commit message, and the paths are all caller-supplied text
-  — §5.2's own framing rationale reasons about them on exactly that footing — and
-  two of them are carried in report values, `branch` and each `files` entry's
-  `path`, so a real invocation can put a non-ASCII character into the object this
-  question is about. Until it closes, the encoding is unasserted, and a criterion
-  written to this document may assert only what `json.loads` returns.
-  *Resolved by*: Dave deciding which of the two the tool emits; §5.2 then carries
-  it as a rule beside the other value-domain rules, and a criterion can assert
-  stdout's bytes rather than only its parse.
+- **OQ-11 — retired, answered.** It asked whether a non-ASCII character in a
+  report value is serialized as UTF-8 or as a `\uXXXX` escape. **The decision is
+  that it is escaped**: the report is serialized with `ensure_ascii=True`, so
+  stdout is pure ASCII whatever any value carries, and §5.2 now states that as a
+  rule beside its other value-domain rules. The reason is not readability — that
+  is the one thing pulling the other way, and the raw form wins it. It is that a
+  script's stdout must not depend on the ambient locale being UTF-8. The raw form
+  has failure modes the escaped form does not: a locale that is not UTF-8 can
+  mangle the bytes on the way out, or the write can fail outright. The escaped
+  form has no such branch in any environment and no failure mode of its own to
+  set against them, and nothing is given up for it, because both forms parse to
+  identical data. What it costs is a reader meeting a six-character escape where
+  the raw form would have shown the character itself, in a value that is
+  caller-supplied text either way; what it buys is a stdout with no environmental
+  branch in it at all.
 
-- **OQ-12 — Whether §7 fixes the bracketed diagnostic codes, or leaves the code
-  strings to the implementer.** §7 requires each stderr diagnostic to carry "a
-  stable bracketed code", citing the convention `bin/tests/helpers.py` already
-  relies on, where "tests assert on codes, never on English wording" (*observed*).
-  But §7 names no code, and no passage of this document assigns one per failure
-  mode or per stop. So a criterion written to this document can assert that *a*
-  bracketed code is present on stderr and cannot assert *which*: two
-  implementations emitting different codes for the same stop both satisfy this
-  document. Two readings are open, and nothing here chooses between them. Either
-  presence is the whole of the contract and the code strings are the
-  implementer's, the convention buying the suite stability against rewording and
-  nothing more; or §7 assigns one code per stop, the way §5.3 assigns one
-  `detail.stage` token per stop, so that a session can branch on stderr as it can
-  on stdout. The consequence of leaving it open is stated plainly rather than
-  left to be discovered: until this closes, the codes are unasserted beyond their
-  presence, and a session that has to tell one stop from another reads
-  `detail.stage` on stdout, whose value set §5.3 does close. *Resolved by*: Dave
-  deciding whether the codes are part of this document's contract — if they are,
-  §7 gains a code per stop and a criterion asserts it on each terminal path; if
-  they are not, §7 says so in as many words, so that a later reader does not read
-  the silence as an oversight.
+  The state the question named is reachable rather than hypothetical — `branch`
+  and each `files` entry's `path` are caller-supplied text — which is why the
+  encoding is fixed here rather than left to whichever default an implementer's
+  serializer happens to carry. And closing it buys what the question said it
+  would: the encoding is now asserted, so a criterion written to this document
+  may assert stdout's bytes and not only what `json.loads` returns.
+
+  The identifier is retired rather than reused, on the same footing as OQ-5,
+  OQ-8 and OQ-10, so a reader arriving from a review artifact that cites OQ-11 by
+  number can still find what it referred to.
+
+- **OQ-12 — retired, answered.** It asked whether §7 fixes the bracketed
+  diagnostic codes or leaves the strings to the implementer. **The decision is
+  that §7 fixes them**, and it now carries the table as this document's single
+  statement of which refusal carries which code. The reason is who reads them.
+  This report's consumer is an agent session, and the bracketed code is the most
+  prominent thing on stderr it can match on — the one token in a human-readable
+  line that is not English wording, which is why the suite's own convention keys
+  on it. A code set invented by whoever writes the tool and written down
+  afterwards is an interface nobody agreed to: it would be load-bearing for every
+  session that read it and settled by no one, and the first change to it would
+  break callers who had no way to know they were callers. §7 requiring "a stable
+  bracketed code" while naming none left exactly that — stability promised over
+  content nobody had fixed — which is what made this a question rather than a
+  refinement. Two implementations could have satisfied every word of this
+  document while emitting different codes for the same stop, and no criterion
+  written to it could have told them apart.
+
+  **The set is twelve codes over seventeen refusal paths, and the coarseness is
+  part of the answer rather than a shortfall against it.** Two of §5.4's nineteen
+  terminal paths are the success path's and carry no code, there being no
+  situation to answer. Ten of the seventeen refusals fall into five pairs under
+  the `detail.prior_branch` condition, and the members of each pair share a code:
+  that condition records a side effect of a step that succeeded rather than a
+  cause of the refusal, the session's repair is the same on both members, and the
+  fact itself is carried on stdout by `detail.prior_branch`, whose absence
+  §5.3's emission rule makes as much a claim as its presence. The set is finer
+  than §5.3's token table in the two places where one token serves two causes —
+  `resolve` for FM-1 and FM-11, `guard` for FM-3's two checks — which is the same
+  rule read the other way round: one code per situation a session must answer
+  differently, and none per fact the report already carries. §7 states the rule
+  and the table; this entry records that the fineness and the coarseness were
+  both decided, so that a later reader counting nineteen paths against twelve
+  codes finds an answer rather than a defect. What closing this buys a criterion
+  is AC-LAND-T01b, which asserts the code on each refusal path and asserts that
+  the success paths carry none.
+
+  The identifier is retired rather than reused, on the same footing as OQ-5,
+  OQ-8, OQ-10 and OQ-11, so a reader arriving from a review artifact that cites
+  OQ-12 by number can still find what it referred to.
