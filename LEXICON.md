@@ -66,8 +66,10 @@ mechanism.
 The labels a known gap is marked with at the release decision. Every material
 boundary gap carries one.
 
-**`blocking`** — must be resolved before release. A gap awaiting Dave's
-judgment is blocking; "requires Dave decision" is not a label.
+**`blocking`** — a gap the governing policies prohibit releasing with; must be
+resolved before release. A gap awaiting Dave's judgment is not blocking by that
+fact alone — it reaches him through the release package; "requires Dave
+decision" is not a label.
 
 **`deferred`** — intentionally postponed with a named mechanism.
 
