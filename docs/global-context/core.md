@@ -29,7 +29,7 @@ Rules for every agent session, in any domain. Load first. Layers loaded after it
 
 11. **Cannot execute as written → stop and surface.**
 12. **A tool's success response is a claim.** Confirm the correct content landed before reporting it. Read current state before retrying a write that appeared to fail. If you cannot read it back, report only what the operator reported.
-13. **A changed fact changes everywhere it appears.** When you update a value, name, count, or reference, find every place that states the same thing — in this document and in every other — and update it too.
+13. **A changed fact changes everywhere it appears.** When you update a value, name, count, or reference, find every place that states the same thing — in this document and in every other. An execution session carrying a directive updates every such place within the files the directive permits, and names any place outside them. A decision session names every place and edits none.
 14. **A filename you generate is `<descriptor>-<timestamp>`,** timestamp in ISO 8601 basic format (`20260820T161541`), when no stated convention names the file. Where a convention names it, follow the convention. Never "random" strings, hashes, or UUIDs.
 15. **Concurrent tree mutation → stop and surface.** In an execution session, if a file this session did not change moves, HEAD moves, or an index lock appears, stop and report rather than recover.
 

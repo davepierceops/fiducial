@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/source-of-truth-policy-cycle-2.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 ---
 
@@ -62,8 +62,9 @@ Do not silently reconcile. Do not pick the version that is easier to implement.
 ## Keeping derived artifacts honest
 
 When a canonical document changes, derived artifacts downstream of it may go
-stale. The agent making the change flags which derived artifacts now need
-updating.
+stale. An execution session carrying a directive updates the stale derived
+artifacts within the files its directive permits, and names any outside them; a
+decision session names the derived artifacts that need updating and edits none.
 
 ## Proactive drift detection
 
