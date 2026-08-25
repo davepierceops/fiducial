@@ -108,6 +108,21 @@ so nothing normalizes it. The residue is named rather than papered over: the
 escape rule is asserted on one of the two carriers §5.2 names, and a defect that
 escaped `branch` correctly while writing a `files` path raw would pass here.
 
+**The pre-staged-index fixture, and why it stands beside the nineteen.**
+AC-LAND-02's first arm — "Given named files, only those paths appear in the
+resulting commit" — has a half no case above can witness. Every one of the
+nineteen begins the invocation with an index carrying nothing but what HEAD
+already holds, and §3.2 step 7's `git reset --mixed <base>` exists for the
+invocation that does not: `git checkout -B` leaves a pre-populated index alone,
+so without the reset a file staged beforehand is committed alongside the named
+paths and defeats AC-LAND-02 (*observed*, recorded at §3.2 step 7).
+`TestLand02StagingIsAuthoritativeOverTheIndex` stages a file the caller never
+names, invokes with a different path, and asserts the commit carries only the
+path that was asked for. Like the non-ASCII fixture it is **not a twentieth
+terminal path**: it is `success-head-moved`'s path run with a different
+starting index, which changes what the tool must exclude rather than where the
+sequence ends, and `CASES` is untouched by it.
+
 TRD §8's "Required integration points" asks for the bare-remote helpers to live
 in `bin/tests/helpers.py` and for `land` to join `CLI_NAMES` and
 `CLI_MINIMAL_ARGS`. Neither is done here: this module is written under a
@@ -127,6 +142,7 @@ import subprocess
 import unittest
 
 from tests.helpers import (
+    BIN_DIR,
     DOCUMENTED_EXIT_CODES,
     base_env,
     bracket_codes,
@@ -193,11 +209,10 @@ ZEROS = "0" * 40
 
 BRANCH = "feat"
 
-#: The throwaway `land` stub's relocated home — see
-#: `docs/cycles/bin-land-stub-relocate-20260824T091500Z.md`. Not `BIN_DIR`
-#: itself: the stub is deliberately not an invocable tool under `bin/` top
-#: level, so `run_cli` is pointed at it explicitly rather than by default.
-STUB_DIR = pathlib.Path(__file__).resolve().parent / "fixtures" / "stub"
+#: The real tool's home: `bin/`, where `land` sits beside the other CLIs and
+#: where `run_cli` finds it by default. Named and passed explicitly all the
+#: same, because `land_raw` below builds its own argv and needs the same path.
+SCRIPT_DIR = BIN_DIR
 
 #: Every value the nineteen cases put into a report is ASCII. That is a fact
 #: about the enumeration, not a limit on the suite: §5.2's escape rule is
@@ -283,7 +298,7 @@ def land_raw(sub, *args, env=None, timeout=90):
     edits. Moving it is stated work for the Coder.
     """
     proc = subprocess.run(
-        [str(STUB_DIR / "land"), *[str(a) for a in args]],
+        [str(SCRIPT_DIR / "land"), *[str(a) for a in args]],
         cwd=str(sub.repo),
         env=env if env is not None else sub.env,
         capture_output=True,
@@ -426,7 +441,7 @@ class Substrate:
 
     def land(self, *args, env=None):
         return run_cli(
-            "land", *args, cwd=self.repo, env=env or self.env, script_dir=STUB_DIR
+            "land", *args, cwd=self.repo, env=env or self.env, script_dir=SCRIPT_DIR
         )
 
 
@@ -1836,6 +1851,112 @@ class TestT03GuardRefusesOnTheNamedBranch(ReportAssertions):
         self.assertEqual(after, self.index_before,
                          "the index was rewritten: %r -> %r"
                          % (self.index_before, after))
+
+
+class TestLand02StagingIsAuthoritativeOverTheIndex(ReportAssertions):
+    """AC-LAND-02 — a file staged before the invocation stays out of the commit.
+
+    The criterion's first arm: "Given named files, only those paths appear in
+    the resulting commit." Every one of the nineteen begins with an index
+    carrying nothing but what HEAD already holds, so not one of them can
+    witness it. §3.2 step 7 resets the index to the base before staging and
+    states what the reset is for: `git checkout -B` does not clear a
+    pre-populated index, so without it "content staged before the invocation
+    survives into the commit alongside the named paths and defeats AC-LAND-02"
+    (*observed*, recorded there against `git` 2.55.0). This is the case that
+    puts something in the index for the reset to have to clear.
+
+    It is **not a twentieth terminal path.** §5.4's enumeration is a fixed
+    nineteen, individuated by the report §5.3 gives each path, and `CASES` is
+    untouched: this is `success-head-moved`'s path run again with the index
+    pre-populated, which changes what the tool must exclude and not where the
+    sequence ends.
+
+    One assertion method, because the halves are not separable here — the
+    committed set is a single fact, and a red naming half of it would send a
+    session to the same line. What the method does separate is the fixture from
+    the claim: the guards run first, so a red meaning "the fixture staged
+    nothing" is distinguishable from one meaning "the tool committed it".
+
+    The exit status is asserted **before** the committed set, and that order is
+    the case rather than housekeeping. The defect this exists to catch leaves a
+    tool that lands successfully and commits one file too many, so a red here
+    has to be the extra file and not a refusal: an assertion on the committed
+    set read after a stop would fail for a reason that has nothing to do with
+    AC-LAND-02.
+
+    Boundary: the same end-to-end boundary §5.4 fixes for AC-LAND-T01 — a real
+    invocation against the real `file://` substrate. Two oracles, and neither is
+    the index: `git diff-tree` over the **commit object** the tool made, which
+    is what "the resulting commit" names, and `files` in the tool's own report,
+    which §5.3 gives the success path as the paths it committed. A tool that
+    reported one set and committed another fails on the disagreement.
+
+    The last assertion is §3.2 step 7's rather than AC-LAND-02's, and stands
+    here because it is what makes the first one mean the right thing. `git reset
+    --hard` would also keep the pre-staged file out of the commit — by
+    destroying it. Step 7 admits `--mixed` and `read-tree` precisely because
+    neither "touches the working tree, which is the property that rules them in
+    — the tool must never discard what it exists to land". So the file is
+    asserted to still be in the tree, with its content, after the landing.
+    """
+
+    def setUp(self):
+        self.sub = Substrate(self)
+        write(self.sub.repo, "unrelated.md", "not the caller's\n")
+        git(self.sub.repo, "add", "--", "unrelated.md", env=self.sub.env, check=True)
+        write(self.sub.repo, "work.md", "landed\n")
+        self.index_before = index_entries(self.sub.repo, self.sub.env)
+        self.rc, self.out, self.err = self.sub.land(BRANCH, MESSAGE, "work.md")
+        self.landing = Landing(self.sub, self.rc, self.out, self.err)
+
+    def test_land02_a_path_staged_beforehand_is_not_in_the_commit(self):
+        """AC-LAND-02: "only those paths appear in the resulting commit"."""
+        self.assertIn(
+            "unrelated.md", self.index_before,
+            "fixture: unrelated.md was never staged, so the invocation began "
+            "with the empty index every other case here begins with and §3.2 "
+            "step 7's reset has nothing to clear. A green below would be green "
+            "for the wrong reason: %r" % self.index_before,
+        )
+        self.assertNotIn(
+            "work.md", self.index_before,
+            "fixture: the named path was already staged, so the commit "
+            "carrying it says nothing about what the tool staged: %r"
+            % self.index_before,
+        )
+        self.assertEqual(
+            self.rc, 0,
+            "the landing did not succeed, so what it committed is not this "
+            "criterion's subject: stdout=%r stderr=%r" % (self.out, self.err),
+        )
+        report = self.parse(self.landing)
+        self.assert_value_domains(report)
+
+        rc, listing, _ = git(
+            self.sub.repo, "diff-tree", "--no-commit-id", "--name-only", "-r",
+            "-z", "HEAD", env=self.sub.env, check=True,
+        )
+        committed = sorted(path for path in listing.split("\0") if path)
+        self.assertEqual(
+            committed, ["work.md"],
+            "AC-LAND-02: the commit carries %r, and only the named path may be "
+            "there. §3.2 step 7 resets the index to the base before staging, "
+            "for exactly the state this fixture builds." % committed,
+        )
+        self.assert_files(report, _MATCHED)
+
+        # §3.2 step 7: the reset "touches the index only". `git reset --hard`
+        # would satisfy the assertion above by discarding the file instead.
+        self.assertTrue(
+            (self.sub.repo / "unrelated.md").exists(),
+            "the tool discarded a working-tree file it was never asked to land",
+        )
+        self.assertEqual(
+            (self.sub.repo / "unrelated.md").read_text(encoding="utf-8"),
+            "not the caller's\n",
+            "the tool rewrote a working-tree file it was never asked to land",
+        )
 
 
 class TestUnreachableCases(unittest.TestCase):
