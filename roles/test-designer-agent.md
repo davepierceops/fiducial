@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/test-designer-agent-cycle-2.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [test-designer-agent, chief-of-staff, human]
 session: execution
 ---
@@ -23,7 +23,7 @@ review of one, and the two are not competing.
 - identify SLO verification needs for affected Top K user journeys
 - specify failure cases
 - define what evidence will be required
-- run tests and confirm they fail (red-gate) before handing off to the Coder
+- run tests and confirm they fail on bad logic — not just on an absent import — (red-gate) before handing off to the Coder
 - mark each gap the test plan leaves open with its release impact label
 
 ## Non-goals

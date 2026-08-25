@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/operating-model-cycle-8.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 order: 3
 ---
@@ -17,7 +17,7 @@ Dave acts as PM, EM, owner, and operator. Agents perform implementation, testing
 
 Dave does not rely on routine line-by-line code review. The primary control is evidence: specifications, tests, reviews, verification boundaries, operational signals, and known gaps.
 
-Work is **spec-first** and **test-driven**: nothing is built that is not specified with written acceptance criteria, and tests are written and confirmed failing before implementation. Spec-first is a requirement that the spec be *true* at handoff and at rest — not that every sentence was agreed before it was written; agreement lands at reconciliation.
+Work is **spec-first** and **test-driven**: nothing is built that is not specified with written acceptance criteria, and tests are written and confirmed failing — demonstrably on bad logic, not just on an absent import — before implementation. Spec-first is a requirement that the spec be *true* at handoff and at rest — not that every sentence was agreed before it was written; agreement lands at reconciliation.
 
 ## Working thesis
 
@@ -127,14 +127,15 @@ before the next begins; no skipping or working ahead.
    While a tranche is executing, spec edits may land ungated on its spec branch and are gated together at reconciliation; the default branch never carries unreviewed spec text.
 2. **Acceptance criteria** — explicit, written ACs for the unit of work. *(PM/EM/Owner)*
 3. **Architecture summary** — per-change design derived from the TRD; the tracker issue is cut from this. *(Architect)*
-4. **Test plan, confirmed red** — ACs translated into test code, run, and confirmed to fail before any implementation. *(Test Designer)*
+4. **Test plan, confirmed red** — ACs translated into test code, run, and confirmed to fail on bad logic — not just on an absent import — before any implementation. *(Test Designer)*
 5. **Implement to green** — minimum code to turn the failing tests green; mechanical checks (lint, types, static analysis) pass as part of "green." *(Coder — a different agent from the Test Designer for this unit)*
 6. **Quality review** — judgment on maintainability, correctness, consistency, and test adequacy, over the diff and the mechanical results. *(Reviewer — hard gate)*
 7. **Skeptic/risk review** — judgment on false confidence, mocked-boundary and live-integration gaps, config/deploy risk, and release overclaims, over the whole evidence chain. *(Skeptic/Risk)*
 8. **Release package** — assemble evidence and a ship recommendation. *(Release Manager)*
 9. **Release gate** — routine changes flow to release on evidence; the consequential class requires the human's explicit go/no-go at the release decision (see below). *(Dave)*
 
-The red-gate at step 4 is mandatory. Quality review (6) and skeptic/risk review
+The red-gate at step 4 is mandatory and behavioral: the tests demonstrably fail
+on bad logic, not just on an absent import. Quality review (6) and skeptic/risk review
 (7) are deliberately separate — quality review asks "is this good?"; skeptic/risk
 asks "where is this lying to us?" — and a change can pass one and fail the other.
 Mechanical checks (lint/types/static analysis) are deterministic evidence folded

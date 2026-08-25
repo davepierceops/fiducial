@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/test-plan-review-cycle-2.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [reviewer-agent, human]
 ---
 
@@ -34,7 +34,7 @@ Evaluate whether a test plan is sufficient for the intended change and risk.
 2. Identify untested criteria.
 3. Identify mocks and fixtures.
 4. Identify live/browser verification needs.
-5. Check that the plan includes a red-gate step; flag if absent.
+5. Check that the plan includes a red-gate step whose tests can demonstrably fail on bad logic, not just on an absent import; flag if absent or import-only.
 6. Check negative/failure cases.
 7. Identify over-testing or unnecessary complexity.
 8. Recommend changes.
