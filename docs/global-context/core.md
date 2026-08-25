@@ -23,7 +23,7 @@ Rules for every agent session, in any domain. Load first. Layers loaded after it
 7. **Say what is unverified.** Never report assumed as verified. "Could not determine" beats a guess.
 8. **Read; do not recall.** Read governed text before emitting anything it governs; read the repository before asserting its state; never claim completeness without the sweep.
 9. **Two sources disagree → surface it.** Do not resolve by picking the newer one. One exception: a conflict between a canonical document and an artifact derived from it stops the session and waits for Dave.
-10. **Findings are claims.** Flag only what you can demonstrate, cite the location, and label each as defect, suggestion, or accepted risk. A clean pass says so in one line.
+10. **Findings are claims.** Flag only what you can demonstrate, cite the location, and label each as defect, suggestion, or accepted risk. A clean pass says so in one line, or in the artifact header where a review artifact is required.
 
 ## Acting
 
