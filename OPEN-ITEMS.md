@@ -4,7 +4,7 @@ This file tracks open questions, deferred decisions, and outstanding fixes
 for the AI operating model. Updated at defined checkpoints per
 `context-sets/spec-and-change-discipline.md`.
 
-Last updated: 2026-08-23
+Last updated: 2026-08-24
 
 ---
 
@@ -1105,6 +1105,8 @@ is overtaken by the retirement above. Still live at that point: the skeleton is
 a directive *file* template, and the executor now writes that file from a paste
 block, so what the tool produces is the thing chat pastes rather than the thing
 chat commits.
+
+**Landing precondition, recorded 2026-08-24:** `specs/directive-tooling.md` AC-DT-16 (agreed at `06e5d110`) makes two acts preconditions on the landing that migrates the cycle mode from `bin/cycle-open` to `bin/directive`: a new `decisions/log.md` entry superseding DEC-000180 and re-anchoring its tooling consequence on `bin/directive`'s cycle mode, and the rewrite of this section's guard to name that binary. Both fall to the decision session that lands the migration, not to the implementer, and neither is done before it.
 
 ## `bin/bundle`'s path-following closure mode is retired, replaced in Pass 2 by audience selection
 

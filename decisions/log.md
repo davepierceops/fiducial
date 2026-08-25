@@ -399,3 +399,53 @@ machine, and a standing instruction line stating it is a line that is wrong
 whenever it matters. A field nobody can fill correctly in advance is worse than
 no field, because a stated value is what a report gets measured against.
 Supersedes: DEC-000150
+
+## DEC-000190 — methodology-context-bundle: docs/global-context/*.md lead the file set; retired spine files removed
+Date: 2026-08-24
+Decision: Supersedes DEC-000140 whole. The bundle's file set is, in order: every `docs/global-context/*.md`, sorted by its `order:` frontmatter ascending with files lacking `order:` last; then the fixed decision-layer spine — `context-sets/spec-and-change-discipline.md`, `operating-model.md`, `roles/chief-of-staff.md`, `policies/commit-and-change-control-policy.md`; then every `skills/*.md` whose `audience:` contains `all-roles` or `chief-of-staff`. `context-sets/base.md` and `context-sets/collab-workflow.md` are no longer in the spine. The filename `methodology-context-bundle-<YYYY-MM-DD-HHMM>.md`, the `Source: @ <repo HEAD>` line, the per-file blob short-SHA, the `<!-- FILE n/N: path @ sha -->` separators, the upload-per-project instruction, and the deferral of `bin/bundle-methodology` to the tooling tranche are carried forward unchanged. The repository named is `davepierceops/fiducial`. The interim generation procedure is restated below with the amended spine; it is run from the fiducial clone root on a synced `main`, uses no heredoc, and writes to `~/code/`.
+Context: The bundle in the fiducial project context was generated 2026-08-09 and predated the 2026-08-22 rename of `skills/directive-dispatch.md` to `skills/directive-authoring.md`; a 2026-08-24 gate directive cited the stale path from it (`reviews/directive-authoring-cycle-3.md`, S-1). The first regeneration under DEC-000140's procedure, at `b31b75a`, reported both retired spine files missing and omitted `docs/global-context/core.md` and `docs/global-context/decision-layer.md`, the two files every session loads first. Dave amended the spine 2026-08-24; the bundle at `48aa1b5` (12 files) was generated under the amended rule with its header naming this entry as pending.
+
+Interim generation procedure:
+
+```
+cd /Users/dave/code/fiducial && git fetch origin main && git checkout -q main && git merge -q --ff-only origin/main
+if [ $? -ne 0 ]; then
+  echo "STOP: could not sync main from origin — bundle not generated"
+else
+python3 -c '
+import subprocess, glob, re, os, datetime
+sh=lambda *a: subprocess.check_output(a).decode()
+repo=sh("git","rev-parse","HEAD").strip()
+blob=lambda p: sh("git","rev-parse","--short","HEAD:%s"%p).strip()
+stamp=datetime.datetime.now().strftime("%Y-%m-%d-%H%M")
+def fm(p,key):
+    m=re.search(r"^%s:\s*(.*)$"%key,open(p,encoding="utf-8").read(),re.M)
+    return m.group(1).strip() if m else None
+gc=glob.glob("docs/global-context/*.md")
+gc=sorted(gc,key=lambda p:(int(fm(p,"order")) if (fm(p,"order") or "").isdigit() else 10**6,p))
+fixed=["context-sets/spec-and-change-discipline.md","operating-model.md",
+ "roles/chief-of-staff.md","policies/commit-and-change-control-policy.md"]
+missing=[p for p in fixed if not os.path.exists(p)]
+for p in missing: print("MISSING spine file:",p)
+fixed=[p for p in fixed if os.path.exists(p)]
+def aud(p):
+    v=fm(p,"audience") or ""
+    return {x.strip() for x in v.strip("[]").split(",")}
+skills=sorted(p for p in glob.glob("skills/*.md") if aud(p)&{"all-roles","chief-of-staff"})
+files=gc+fixed+skills; N=len(files); bar="<!-- "+"="*60+" -->"
+o=["# methodology-context-bundle\n",
+ "**Derived artifact — do not edit.** Regenerate from davepierceops/fiducial; the repo is canonical.\n",
+ "- Source: davepierceops/fiducial @ %s"%repo, "- Generated: %s"%stamp,
+ "- File set: docs/global-context/*.md by order, then the fixed decision-layer spine, then every skills/*.md whose audience includes all-roles or chief-of-staff (rule; DEC-000190).\n"]
+o+=["  %d. %s (blob %s)"%(i,p,blob(p)) for i,p in enumerate(files,1)]; o.append("")
+for i,p in enumerate(files,1):
+    o+=["",bar,"<!-- FILE %d/%d: %s @ %s -->"%(i,N,p,blob(p)),bar,"",open(p,encoding="utf-8").read().rstrip("\n"),""]
+dest=os.path.expanduser("~/code/methodology-context-bundle-%s.md"%stamp)
+open(dest,"w",encoding="utf-8").write("\n".join(o)+"\n")
+print("WROTE",dest,"| source",repo[:7],"| files",N)
+'
+fi
+```
+
+Then upload the written file to each project's Context and delete the prior bundle.
+Supersedes: DEC-000140
