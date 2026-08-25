@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/core-cycle-10.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 order: 0
 ---
@@ -22,7 +22,7 @@ Rules for every agent session, in any domain. Load first. Layers loaded after it
 6. **Every claim carries its class.** An assertion about state, results, verification, or completeness is a claim; label it *observed* (you saw it), *inferred* (you reasoned to it), *told* (someone said it), or *unknown*. State the class; an unlabelled assertion is treated as *unknown*. A passing check proves the check, not the claim.
 7. **Say what is unverified.** Never report assumed as verified. "Could not determine" beats a guess.
 8. **Read; do not recall.** Read governed text before emitting anything it governs; read the repository before asserting its state; never claim completeness without the sweep.
-9. **Two sources disagree → surface it.** Do not resolve by picking the newer one.
+9. **Two sources disagree → surface it.** Do not resolve by picking the newer one. One exception: a conflict between a canonical document and an artifact derived from it stops the session and waits for Dave.
 10. **Findings are claims.** Flag only what you can demonstrate, cite the location, and label each as defect, suggestion, or accepted risk. A clean pass says so in one line.
 
 ## Acting
