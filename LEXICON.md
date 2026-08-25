@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/LEXICON-cycle-15.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 order: 2
 ---
@@ -128,8 +128,8 @@ session," or "direct."
 **Sync block** — retired 2026-08-21. Nothing precedes the execution block; the
 executor fetches as its first act.
 
-**Track** — retired 2026-08-21. A directive states route and model tier; there
-is no third part.
+**Track** — retired 2026-08-21. A directive's parts are route, model tier, and
+the execution block; "track" is not one of them.
 
 *Not covered by this retirement:* **track**, **tracking**, and **tracker** in
 the ordinary sense of keeping or consulting a record — a loose-end tracker, a
