@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/rule-divergence-rulings-cycle-2.md @ 3e064f6
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 order: 3
 ---
@@ -17,7 +17,7 @@ Dave acts as PM, EM, owner, and operator. Agents perform implementation, testing
 
 Dave does not rely on routine line-by-line code review. The primary control is evidence: specifications, tests, reviews, verification boundaries, operational signals, and known gaps.
 
-Work is **spec-first** and **test-driven**: nothing is built that is not specified with written acceptance criteria, and tests are written and confirmed failing — demonstrably on bad logic, not just on an absent import — before implementation. Spec-first is a requirement that the spec be *true* at handoff and at rest — not that every sentence was agreed before it was written; agreement lands at reconciliation.
+Work is **spec-first** and **test-driven**: nothing is built that is not specified with written acceptance criteria, and tests are written and confirmed failing — demonstrably on bad logic, not just on an absent import — before implementation. Spec-first is a requirement that the spec be *true* at handoff and at rest — not that every sentence was agreed before it was written.
 
 ## Working thesis
 
@@ -31,9 +31,7 @@ Code matters, but trust comes from evidence that the change behaves as intended 
 
 ## Source of truth
 
-Specifications are canonical. Everything downstream of them — acceptance
-criteria, architecture summaries, tracker issues (currently GitHub Issues) — is
-a derived artifact: a view onto the specs, never an independent source of truth.
+Specifications are canonical.
 
 A conflict between a derived artifact and a canonical one is handled per the
 Source of Truth policy.
@@ -54,7 +52,6 @@ Owns:
 - product direction
 - user value
 - prioritization
-- acceptance criteria
 - risk tolerance
 - release decisions
 - operational learning
@@ -62,8 +59,6 @@ Owns:
 
 Does not default to:
 
-- reading every implementation line
-- acting as the primary code reviewer
 - manually verifying every low-level design choice
 - replacing missing evidence with intuition
 
@@ -123,7 +118,7 @@ substance. Trivial changes — typo fixes, comment edits, mechanical formatting 
 are not meaningful in this sense, and use a lighter shape. Each stage completes
 before the next begins; no skipping or working ahead.
 
-1. **Specs agreed** — PRD/TRD written, reviewed by the Spec Reviewer Agent (hard gate), and agreed by Dave. Methodology and other governed context documents are gated by the Context Quality Reviewer. *(PM/EM/Owner + Architect + Spec Reviewer for specs; Context Quality Reviewer for governed context documents)*
+1. **Specs agreed** — PRD/TRD and the acceptance criteria derived from them written, reviewed by the Spec Reviewer Agent (hard gate), and agreed by Dave; the Spec Reviewer's gate reaches nothing else. Methodology and other governed context documents are gated by the Context Quality Reviewer. *(PM/EM/Owner + Architect + Spec Reviewer for specs; Context Quality Reviewer for governed context documents)*
    While a tranche is executing, spec edits may land ungated on its spec branch and are gated together at reconciliation; the default branch never carries unreviewed spec text.
 2. **Acceptance criteria** — explicit, written ACs for the unit of work. *(PM/EM/Owner)*
 3. **Architecture summary** — per-change design derived from the TRD; the tracker issue is cut from this. *(Architect)*
@@ -132,7 +127,7 @@ before the next begins; no skipping or working ahead.
 6. **Quality review** — judgment on maintainability, correctness, consistency, and test adequacy, over the diff and the mechanical results. *(Reviewer — hard gate)*
 7. **Skeptic/risk review** — judgment on false confidence, mocked-boundary and live-integration gaps, config/deploy risk, and release overclaims, over the whole evidence chain. *(Skeptic/Risk)*
 8. **Release package** — assemble evidence and a ship recommendation. *(Release Manager)*
-9. **Release gate** — routine changes flow to release on evidence; the consequential class requires the human's explicit go/no-go at the release decision (see below). *(Dave)*
+9. **Release gate** *(Dave)*
 
 The red-gate at step 4 is mandatory and behavioral: the tests demonstrably fail
 on bad logic, not just on an absent import. Quality review (6) and skeptic/risk review
@@ -144,15 +139,7 @@ do not omit necessary evidence and do not skip the red-gate.
 
 ## Release gate
 
-The human gate is the **release decision**, not a code decision and not the
-commit (see "Source of truth"). A **two-tier** release gate governs exposing
-changes to users:
-
-- **Routine changes** flow to release on evidence, without an explicit human
-  go/no-go.
-- **Consequential changes** require the human's explicit go/no-go at the release
-  decision. The consequential class is the list the commit and change control
-  policy states.
+The consequential class is the list the commit and change control policy states.
 
 *Deploy* (code on prod) and *release* (functionality exposed to users) may be
 separate events; where the release decision sits relative to commit and deploy
@@ -161,10 +148,8 @@ is recorded in the project's TRD, not here.
 When deploy and release are separated, the usual mechanism is **feature flags**
 (or canaries). Depend on a **vendor-neutral flag interface** (e.g. OpenFeature)
 so the flag backend stays a swappable per-project TRD choice rather than a
-lock-in. The release gate attaches to the **exposure event**: flipping a flag
-that exposes a consequential change *is* the gated release; adding a dark (off)
-flag is routine. Every flag has an owner and a removal trigger, and stale flags
-are tracked as debt and cleaned up.
+lock-in. Every flag has an owner and a removal trigger, and stale flags are
+tracked as debt and cleaned up.
 
 ## Change package
 
@@ -227,7 +212,10 @@ Escalate when:
 - a product tradeoff exists
 - security, privacy, or operational concerns arise
 - reviewers disagree materially
-- human code inspection is warranted
+- human code inspection is warranted — the change is security-sensitive, the
+  system handles private data, release risk is high, agents disagree, evidence
+  is weak, behavior is surprising, the change affects core architecture, or
+  production impact would be hard to reverse
 - the role for the current session has not been specified
 
 When in doubt whether to escalate, escalate.
