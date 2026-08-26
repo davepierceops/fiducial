@@ -64,8 +64,9 @@ In a decision session (execution belongs to an execution session):
    comprehension, not a fragment.
 2. Propose a breakdown into tranches, with rationale. Dave approves, renames, or
    redraws; his approved name slugs each tranche.
-3. For an approved tranche, decompose into change packages: smallest
-   independently executable units, in dependency order.
+3. For an approved tranche, decompose into change packages before any agentic
+   work on it begins: smallest independently executable units, in dependency
+   order.
 4. Flag any spec ambiguity that would force an agent to decide rather than
    escalate; resolve with Dave first.
 5. Write `docs/packages/<tranche>-decomposition.md`: the PRD/TRD SHAs it derived
