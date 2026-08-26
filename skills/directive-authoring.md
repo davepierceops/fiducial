@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/expedited-log.md @ 7853525aedf831bcc07da3264c3af7a91825b048
+status: in-review
+last-reviewed: null
 audience: [chief-of-staff, human]
 ---
 
@@ -9,8 +9,6 @@ audience: [chief-of-staff, human]
 This procedure runs in a decision session.
 
 ## Writing the directive file
-
-One self-contained directive per session.
 
 - **Every directive states its working-tree disposition** — either an
   exclusive assignment (a named directory plus the command creating it) or an

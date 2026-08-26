@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/spec-review-cycle-cycle-10.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [spec-reviewer-agent, context-quality-reviewer, architect-agent, chief-of-staff, human]
 ---
 
@@ -11,9 +11,7 @@ run in an execution session.
 
 ## Purpose
 
-Execute one external-gate review cycle over a governed document. The Spec
-Reviewer gates the PRD, the TRD, and their acceptance criteria; the Context
-Quality Reviewer gates every other governed document.
+Execute one external-gate review cycle over a governed document.
 
 ## Use when
 
@@ -29,7 +27,6 @@ interactive co-authoring or artifact-pane review.
 - **One conversation per cycle.** Each cycle starts a fresh conversation. Carry
   forward only reviewer findings and prior cycle directives — the directives
   are the decision record (rejections, dictated wording, deferred items).
-  Never carry forward conversation history.
 - **Documents are read by the execution session from the repository.** Full
   documents are never carried through the decision session.
 - **Reviewed commit SHAs are recorded in the directive.** This is the audit

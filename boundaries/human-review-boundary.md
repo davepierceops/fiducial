@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/human-review-boundary-cycle-3.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 ---
 
@@ -22,14 +22,3 @@ a human *chooses to read code directly*. It is a separate axis from the release
 gate — the release go/no-go is an evidence-and-judgment decision, not a
 code-reading decision. A change can be in the consequential class (needs a human
 release go/no-go) without anyone reading its diff, and vice versa.
-
-Escalate for human code inspection when:
-
-- the change is security-sensitive
-- the system handles private data
-- release risk is high
-- agents disagree
-- evidence is weak
-- behavior is surprising
-- the change affects core architecture
-- production impact would be hard to reverse

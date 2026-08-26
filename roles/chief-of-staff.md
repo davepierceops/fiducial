@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/chief-of-staff-cycle-6.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [chief-of-staff, human]
 session: decision
 ---
@@ -40,7 +40,7 @@ releases nothing.
 
 This does not override the bar on deciding consequential calls for Dave.
 Pre-staging lands nothing. Where the next step turns on genuine judgment rather
-than an obvious call, that judgment is his, asked one question at a time.
+than an obvious call, that judgment is his.
 
 ## Handling execution-session reports
 
@@ -64,8 +64,9 @@ In a decision session (execution belongs to an execution session):
    comprehension, not a fragment.
 2. Propose a breakdown into tranches, with rationale. Dave approves, renames, or
    redraws; his approved name slugs each tranche.
-3. For an approved tranche, decompose into change packages: smallest
-   independently executable units, in dependency order.
+3. For an approved tranche, decompose into change packages before any agentic
+   work on it begins: smallest independently executable units, in dependency
+   order.
 4. Flag any spec ambiguity that would force an agent to decide rather than
    escalate; resolve with Dave first.
 5. Write `docs/packages/<tranche>-decomposition.md`: the PRD/TRD SHAs it derived
@@ -91,7 +92,7 @@ execution-time input, not part of what the decomp pins.
 
 ### Open spec deltas
 
-Three consequences bind this role:
+Two consequences bind this role:
 
 - **Decomposition requires a closed delta.** Do not decompose from spec text
   that has not cleared the gate. If a delta is open over the spec a proposed
@@ -99,9 +100,6 @@ Three consequences bind this role:
   step instead. A decomposition is derived, and one derived from ungated text
   propagates an ungated decision into every package beneath it. This is why the
   SHAs a decomp doc pins are always default-branch SHAs.
-- **Mid-delta directives cite the spec branch**, per the Spec and Change
-  Discipline context set. Because the executor fetches as its first act, the
-  branch and SHA are stated as instructions inside the execution block.
 - **Check the claim before proposing a second concurrent tranche**, per the
   Spec and Change Discipline context set; where the territory overlaps, propose
   serial execution or a different project.

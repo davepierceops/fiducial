@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/review-artifact-cycle-3.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [spec-reviewer-agent, context-quality-reviewer, reviewer-agent, skeptic-risk-agent, release-manager-agent, chief-of-staff, critic, human]
 ---
 
@@ -11,7 +11,8 @@ sessions.
 
 ## What this schema governs
 
-It governs the **artifact** — the shape of what a review emits. Role documents
+It governs the **artifact** — the shape of what a review emits. Every review
+procedure emits exactly one artifact in this shape per cycle. Role documents
 govern the **review**: what must be inspected and what must be reported. Where a
 role or a policy names a required output, this is where it goes:
 

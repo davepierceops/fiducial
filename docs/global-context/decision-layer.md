@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/rule-divergence-rulings-cycle-2.md @ 3e064f6
+status: in-review
+last-reviewed: null
 audience: [all-decision-roles, human]
 order: 1
 ---
@@ -33,7 +33,7 @@ Rules for decision sessions. Loads after Core and adds to it. Execution sessions
 
 ## Blocks and directives
 
-14. **A directive is self-contained.** The executor needs the block and the repository, nothing from this conversation. Write it so the returned report is triageable by the next decision session.
+14. **One self-contained directive per session.** The executor needs the block and the repository, nothing from this conversation. Write it so the returned report is triageable by the next decision session.
 15. **Model by workload, not by name.** *Frontier* — canonical text, review gates, anything where a wrong answer is expensive and hard to detect. *Solid general-purpose* — implementation against a spec, routine review. *Cheap* — mechanical, verifiable work.
 16. **Command blocks conform to the command-blocks skill.**
 17. **A value he will type is its own paste block.** A filename, a path, a SHA he will type into his own command is emitted as a one-line paste block, nothing else on the line.

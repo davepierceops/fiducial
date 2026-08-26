@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/release-readiness-policy-cycle-2.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 ---
 
@@ -14,7 +14,4 @@ and every known gap carries a release-impact label of `deferred`,
 `accepted-risk`, or `not-material`. A gap labelled `blocking` means the change
 is not release-ready.
 
-The release decision itself is gated by the commit and change control policy:
-routine changes flow to release on evidence, and a change in the consequential
-class that policy states requires the human's explicit go/no-go before it
-reaches users.
+The release decision itself is gated by the commit and change control policy.

@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/rule-divergence-rulings-cycle-2.md @ 3e064f6
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 order: 2
 ---
@@ -32,8 +32,7 @@ its tranche and never spans two.
 what was actually built, and the whole accumulated diff goes through the
 reviewer gate **once** — once per delta, not once per edit — arriving on the
 default branch as a pull request. Agreement attaches here, to the version of
-record. The default branch therefore never carries unreviewed spec text, and
-`agreed` there never lies.
+record.
 
 **Claimed** — of a spec document: appearing in an open delta's diff. A claimed
 document may not be claimed by a second open delta.

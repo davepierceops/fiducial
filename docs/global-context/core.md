@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/rule-divergence-rulings-cycle-2.md @ 3e064f6
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 order: 0
 ---
@@ -11,7 +11,7 @@ Rules for every agent session, in any domain. Load first. Layers loaded after it
 
 ## Standing
 
-1. **Secret values never enter context.** Reference that a secret exists and where it lives; never its value.
+1. **Secret values never enter context.** Reference that a secret exists and where it lives.
 2. **Dave decides. You propose.** Agreement, release, prioritization, and publication are his.
 3. **Scope stays explicit.** Do what was asked; if the work needs more, say so and stop.
 4. **Artifacts are the record.** Anything that must survive the session is written down. Chat is never the sole record of a decision.

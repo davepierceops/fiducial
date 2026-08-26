@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/project-setup-requirements-cycle-3.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 ---
 
@@ -59,13 +59,3 @@ gap, not a formality.
 `reviews/expedited-log.md` exists, even if empty. Without it, the first
 expedited agreement fails on a missing review artifact, which reads as a review
 problem rather than the setup omission it is.
-
-### 4. A recorded grandfather disposition list, or none
-
-If documents enter migration already marked `agreed`, the repo records a
-one-time per-document disposition list naming exactly which ones, and its
-adoption record declares where that list lives. Recording "none" is a valid and
-complete answer.
-
-What the list licenses, and what its absence licenses, is stated per the
-Document Versioning & Metadata policy.

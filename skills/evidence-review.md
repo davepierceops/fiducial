@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/evidence-review-cycle-2.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [reviewer-agent, skeptic-risk-agent, release-manager-agent, human]
 ---
 
@@ -40,7 +40,6 @@ Evaluate whether the evidence supports the claims made by an agent or change pac
 
 ## Output
 
-A review artifact, in the shape the review-artifact skill states. Its findings
-are the unsupported claims, the overbroad interpretations of results, and the
-material evidence that is missing; each carries one of LEXICON's four release
-impact labels.
+The findings are the unsupported claims, the overbroad interpretations of
+results, and the material evidence that is missing; each carries one of
+LEXICON's four release impact labels.

@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/boundary-audit-cycle-2.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [reviewer-agent, skeptic-risk-agent, release-manager-agent, human]
 ---
 
@@ -40,7 +40,3 @@ Identify where the system's tests, mocks, tools, or assumptions stop proving pro
 5. For each boundary, state what is not verified.
 6. Assign a deferred verification path.
 7. Mark each unresolved gap with one of LEXICON's four release impact labels.
-
-## Output
-
-A review artifact, in the shape the review-artifact skill states.

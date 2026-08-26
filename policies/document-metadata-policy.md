@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/document-metadata-policy-cycle-18.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 ---
 
@@ -44,9 +44,7 @@ project artifacts.
   this methodology, and their configuration directories.
 - Instantiated project PRDs/TRDs. These live in project repos, not
   here, so this repo's enforcement does not reach them mechanically —
-  but adoption is not optional. Every project applying this methodology
-  adopts this metadata schema for its spec documents and stands up its
-  own enforcement as part of project setup.
+  but adoption is not optional.
 
 Enforcement (hooks) checks exactly the in-scope set.
 
@@ -87,7 +85,8 @@ lines, before any content.
     case-by-case: at adoption, the adopting repo records a one-time
     per-document disposition list naming which documents enter
     migration as `agreed` under this clause, and its adoption record
-    declares where that list lives. A document absent from the list
+    declares where that list lives; recording "none" is a valid and
+    complete answer. A document absent from the list
     does not qualify. If no disposition list exists, the clause does
     not apply and normal rules govern.
 - `audience:` list of roles that consume this document. Values are the
@@ -117,7 +116,8 @@ lines, before any content.
 ## Revision lifecycle
 
 - When an `agreed` document is edited, the same commit flips
-  `status: in-review` and resets `last-reviewed: null`.
+  `status: in-review` and resets `last-reviewed: null`, whatever the
+  edit's size.
 - Transitions to `superseded` / `deprecated`, and the agreement flip
   itself, are **status transitions**, not revisions, and are exempt
   from the edit-flips-in-review rule; content edits alone trigger it.
@@ -125,9 +125,6 @@ lines, before any content.
   transition.
 - The document returns to `agreed` when Dave agrees the revision, and
   `last-reviewed` points at the new review artifact.
-- No exceptions for trivial edits **on the way out**. Every content
-  edit to an `agreed` document flips it to `in-review`, whatever its
-  size.
 
 ## Expedited return to `agreed`
 
@@ -232,8 +229,7 @@ The path reaches only documents in the frontmatter in-scope set above.
    defined by the expedited path's condition 3. That class takes the full
    reviewer cycle even when co-authored.
 4. **Asked for, and agreed as-is — Dave's.** Dave asks for this path; at least
-   one consistency sweep is run; Dave signs off with no open findings. Any
-   finding escalates to a full cycle.
+   one consistency sweep is run; Dave signs off with no open findings.
 
    A **consistency sweep** checks the document — and the documents it
    cross-references and that reference it — for any value or cross-reference
@@ -242,8 +238,7 @@ The path reaches only documents in the frontmatter in-scope set above.
    it before sign-off; "at least one" means the most recent sweep post-dates the
    final edit. Completion is attested by Dave's sign-off, not a separate
    artifact.
-5. **Not under `specs/`.** Spec agreement is gated by the Spec Reviewer Agent;
-   this path neither reaches that gate nor overrides it.
+5. **Not under `specs/`**, per the expedited path's condition 4.
 
 Enforcement checks none of this: it verifies the pointer's format, that
 the cited SHA resolves to an entry in the log, and that the transition commit is

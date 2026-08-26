@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/commit-and-change-control-policy-cycle-4.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 ---
 
@@ -19,9 +19,10 @@ an explicit human go/no-go (**change control**).
 
 A change in the **consequential class** must be presented for the human's review
 and receive a clear, explicit go before it is **released**. The following list
-is exhaustive — if a change does not touch any of these, it is routine. When
-unsure, treat as consequential and ask. The consequential class is any change
-that touches:
+is exhaustive — if a change does not touch any of these, it is routine, and
+routine changes flow to release on evidence, without an explicit human
+go/no-go. When unsure, treat as consequential and ask. The consequential class
+is any change that touches:
 
 - authentication or authorization,
 - a schema or data migration,
@@ -110,9 +111,10 @@ the release decision, and the reviewer gate that precedes Dave's agreement of a
 canonical document.
 
 For the **consequential class**, the merge is not what is gated either — the
-*exposure* is. Wherever deploy and release are separate events, a merged pull
-request is not a released change, and the release decision is where the
-explicit go/no-go attaches.
+*exposure* is: flipping a flag that exposes a consequential change *is* the
+gated release, and adding a dark (off) flag is routine. Wherever deploy and
+release are separate events, a merged pull request is not a released change,
+and the release decision is where the explicit go/no-go attaches.
 
 ### Spec branches and the reconciliation pull request
 
