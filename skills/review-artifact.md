@@ -1,6 +1,6 @@
 ---
-status: in-review
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/agreeing-clusters-cycle-2.md @ ade5dad
 audience: [spec-reviewer-agent, context-quality-reviewer, reviewer-agent, skeptic-risk-agent, release-manager-agent, chief-of-staff, critic, human]
 ---
 
