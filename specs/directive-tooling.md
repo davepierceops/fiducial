@@ -1,7 +1,7 @@
 ---
 status: agreed
 last-reviewed: reviews/rule-divergence-rulings-cycle-2.md @ 3e064f6
-audience: [all-roles, human]
+audience: [human]
 ---
 
 # PRD: directive tooling — `bin/directive` and `bin/check-directive`
