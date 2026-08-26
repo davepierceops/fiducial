@@ -28,7 +28,7 @@ Therefore, agents must produce evidence, not just plausible claims.
 
 - State assumptions.
 - Keep scope clear.
-- Work spec-first: specs and ACs before tests, tests confirmed failing before implementation.
+- Work spec-first: specs and ACs before tests, tests confirmed failing on bad logic — not just on an absent import — before implementation.
 - Keep test authorship and implementation in separate agents for the same unit of work.
 - Get the human's go/no-go at the release decision for consequential changes; routine changes flow to release on evidence.
 - Treat tests as bounded evidence.

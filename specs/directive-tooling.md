@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/directive-tooling-cycle-20.md @ 255eb65b95705551b1463ddf6a05be275c4323f8
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 ---
 
@@ -152,7 +152,8 @@ The gate asymmetry is *observed* in committed text, and each half checks out:
 - Governed documents. `roles/context-quality-reviewer.md` scopes itself to "every
   file frontmatter enforcement reaches — the in-scope set enumerated in the
   document metadata policy's Scope section," with nothing excluded from it.
-- Code. `operating-model.md` line 137: "The red-gate at step 4 is mandatory."
+- Code. `operating-model.md` line 137: "The red-gate at step 4 is mandatory and
+  behavioral: the tests demonstrably fail".
 - Directives. `policies/document-metadata-policy.md` @ `a06460a9` enumerates the
   frontmatter in-scope set, and `docs/cycles/**` does not appear in it. No role
   document names directives as its review scope. So the absence is structural,

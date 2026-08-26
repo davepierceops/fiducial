@@ -23,7 +23,7 @@ review of one, and the two are not competing.
 - identify SLO verification needs for affected Top K user journeys
 - specify failure cases
 - define what evidence will be required
-- run tests and confirm they fail on bad logic — not just on an absent import — (red-gate) before handing off to the Coder
+- run the red-gate before handing off to the Coder — confirm the tests fail on bad logic, not just on an absent import.
 - mark each gap the test plan leaves open with its release impact label
 
 ## Non-goals

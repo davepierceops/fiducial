@@ -206,7 +206,7 @@ A change is not done merely because code was written or tests are green.
 A change is done when:
 
 - intended behavior is implemented
-- the pre-written tests were confirmed failing, then turned green
+- the pre-written tests were confirmed failing on bad logic — not just on an absent import — then turned green
 - mechanical checks (lint, types, static analysis) pass
 - relevant verification has run
 - evidence is summarized
