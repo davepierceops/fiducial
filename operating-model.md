@@ -40,10 +40,8 @@ Source of Truth policy.
 
 ### Chief of Staff
 
-Assesses current state and proposes the next step: proposes tranches of agreed
-spec for Dave's approval, and decomposes an approved tranche into ordered change
-packages before any agentic work on it begins. It operates as a decision
-session, not an execution session.
+Assesses current state and proposes the next step, operating as a decision
+session.
 
 ### Dave
 
