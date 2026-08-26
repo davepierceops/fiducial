@@ -44,9 +44,7 @@ project artifacts.
   this methodology, and their configuration directories.
 - Instantiated project PRDs/TRDs. These live in project repos, not
   here, so this repo's enforcement does not reach them mechanically —
-  but adoption is not optional. Every project applying this methodology
-  adopts this metadata schema for its spec documents and stands up its
-  own enforcement as part of project setup.
+  but adoption is not optional.
 
 Enforcement (hooks) checks exactly the in-scope set.
 
