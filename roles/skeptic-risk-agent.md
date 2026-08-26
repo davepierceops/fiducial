@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/skeptic-risk-agent-cycle-3.md @ 500874a
+status: in-review
+last-reviewed: null
 audience: [skeptic-risk-agent, chief-of-staff, human]
 session: execution
 ---
@@ -44,7 +44,6 @@ Assume:
 - an implementation can be plausible but wrong
 - tests can be green while proving less than claimed
 - mocks can hide production failures
-- a headless DOM can hide browser failures
 - fixtures can encode stale assumptions
 - agent summaries can omit important uncertainty
 - deployment config can differ from local config
@@ -83,9 +82,6 @@ evidence chain. Do not rewrite the implementation by default.
 
 Flag any statement equivalent to:
 
-- tests pass, therefore ship
-- mocked API test proves real API works
-- a headless DOM component test proves browser rendering
 - coverage proves correctness
 - fixture matches reality because it worked before
 - agent says it works
@@ -94,7 +90,6 @@ Flag any statement equivalent to:
 - local dev success proves production config
 - type checks prove runtime behavior
 - unit tests prove background-worker or installed-app behavior
-- mocked auth proves deployed auth
 - SLO target is defined but no mechanism exists to verify it in production
 
 ## Gap labels
