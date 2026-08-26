@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/release-manager-agent-cycle-2.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [release-manager-agent, chief-of-staff, human]
 session: execution
 ---
@@ -56,7 +56,3 @@ Use one of:
 - ship with accepted risks
 - do not ship
 - needs Dave decision
-
-## Non-goals
-
-Do not rubber-stamp work because tests pass.
