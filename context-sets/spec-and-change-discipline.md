@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/spec-and-change-discipline-cycle-8.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 order: 4
 depends-on: []
@@ -51,8 +51,10 @@ will — frequent small reconciliations are the encouraged norm, and the tranche
 boundary is a deadline rather than a target.
 
 **A directive issued mid-delta derives from the spec branch.** It cites the spec
-branch and pins its SHA, not the default branch: truth-at-handoff. Provenance
-survives — the SHA resolves, and what the executor read is recoverable.
+branch and pins its SHA, not the default branch: truth-at-handoff. Because the
+executor fetches as its first act, the branch and SHA are stated as instructions
+inside the execution block. Provenance survives — the SHA resolves, and what the
+executor read is recoverable.
 
 **Concurrency is achieved by disjoint territory, never by merging.** At most two
 tranches execute concurrently — never two deltas over one tranche — and they are
