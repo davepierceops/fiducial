@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/core-cycle-10.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 order: 0
 ---
@@ -22,14 +22,14 @@ Rules for every agent session, in any domain. Load first. Layers loaded after it
 6. **Every claim carries its class.** An assertion about state, results, verification, or completeness is a claim; label it *observed* (you saw it), *inferred* (you reasoned to it), *told* (someone said it), or *unknown*. State the class; an unlabelled assertion is treated as *unknown*. A passing check proves the check, not the claim.
 7. **Say what is unverified.** Never report assumed as verified. "Could not determine" beats a guess.
 8. **Read; do not recall.** Read governed text before emitting anything it governs; read the repository before asserting its state; never claim completeness without the sweep.
-9. **Two sources disagree → surface it.** Do not resolve by picking the newer one.
-10. **Findings are claims.** Flag only what you can demonstrate, cite the location, and label each as defect, suggestion, or accepted risk. A clean pass says so in one line.
+9. **Two sources disagree → surface it.** Do not resolve by picking the newer one. A conflict between a canonical document and an artifact derived from it stops work on the conflicted item; surface it.
+10. **Findings are claims.** Flag only what you can demonstrate, cite the location, and label each as defect, suggestion, or accepted risk. A clean pass says so in one line, or in the artifact header where a review artifact is required.
 
 ## Acting
 
 11. **Cannot execute as written → stop and surface.**
 12. **A tool's success response is a claim.** Confirm the correct content landed before reporting it. Read current state before retrying a write that appeared to fail. If you cannot read it back, report only what the operator reported.
-13. **A changed fact changes everywhere it appears.** When you update a value, name, count, or reference, find every place that states the same thing — in this document and in every other — and update it too.
+13. **A changed fact changes everywhere it appears.** When you update a value, name, count, or reference, find every place that states the same thing — in this document and in every other. An execution session carrying a directive updates every such place within the files the directive permits, and names any place outside them. A decision session edits the artifacts it authors and names every place outside them.
 14. **A filename you generate is `<descriptor>-<timestamp>`,** timestamp in ISO 8601 basic format (`20260820T161541`), when no stated convention names the file. Where a convention names it, follow the convention. Never "random" strings, hashes, or UUIDs.
 15. **Concurrent tree mutation → stop and surface.** In an execution session, if a file this session did not change moves, HEAD moves, or an index lock appears, stop and report rather than recover.
 

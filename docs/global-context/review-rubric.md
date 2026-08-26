@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/review-rubric-cycle-3.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [context-quality-reviewer, chief-of-staff, human]
 ---
 
@@ -41,8 +41,9 @@ apply to this file.
 7. **Session kind is explicit.** The file is for decision sessions, execution
    sessions, or both, and says nothing only the other kind needs.
 
-8. **Tiers, not model names; route and model, not track.** Model selection
-   speaks in tiers. A directive states route and model. Track does not appear.
+8. **Tiers, not model names; route, model, and execution block, not track.**
+   Model selection speaks in tiers. A directive states route, model, and the
+   execution block. Track does not appear.
 
 9. **Filenames are `<descriptor>-<timestamp>`.** Any filename the file
    prescribes or generates follows the convention, unless a stated convention

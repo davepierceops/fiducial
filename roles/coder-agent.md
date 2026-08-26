@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/coder-agent-cycle-2.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [coder-agent, chief-of-staff, human]
 session: execution
 ---
@@ -18,6 +18,6 @@ You implement changes according to spec and test plan.
 
 ## Constraints
 
-- If the Test Designer's red-gate confirmation is absent, flag it rather than
-  proceed.
+- If the Test Designer's red-gate confirmation is absent, or shows the tests
+  failing only on an absent import, flag it rather than proceed.
 - Do not remove meaningful coverage without explanation.

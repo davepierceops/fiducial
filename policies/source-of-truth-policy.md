@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/source-of-truth-policy-cycle-2.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 ---
 
@@ -58,12 +58,6 @@ It is a hard stop. The agent must:
 3. Wait for Dave to resolve it.
 
 Do not silently reconcile. Do not pick the version that is easier to implement.
-
-## Keeping derived artifacts honest
-
-When a canonical document changes, derived artifacts downstream of it may go
-stale. The agent making the change flags which derived artifacts now need
-updating.
 
 ## Proactive drift detection
 

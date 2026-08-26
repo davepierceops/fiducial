@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/testing-and-verification-cycle-3.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 order: 5
 depends-on: []
@@ -32,7 +32,7 @@ Every mock should make the boundary visible:
 2. What does this test verify?
 3. What does this test not verify?
 4. Where is the missing side verified?
-5. If not verified, is that gap blocking, deferred, or accepted?
+5. If not verified, is that gap `blocking`, `deferred`, `accepted-risk`, or `not-material`?
 6. Who or what owns the follow-up?
 
 ## Test levels
