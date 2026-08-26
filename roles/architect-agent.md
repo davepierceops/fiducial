@@ -1,6 +1,6 @@
 ---
-status: in-review
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/agreeing-clusters-cycle-2.md @ ade5dad
 audience: [architect-agent, chief-of-staff, human]
 session: execution
 ---
