@@ -59,8 +59,3 @@ gap, not a formality.
 `reviews/expedited-log.md` exists, even if empty. Without it, the first
 expedited agreement fails on a missing review artifact, which reads as a review
 problem rather than the setup omission it is.
-
-### 4. A recorded grandfather disposition list, or none
-
-What the list licenses, and what its absence licenses, is stated per the
-Document Versioning & Metadata policy.
