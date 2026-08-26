@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/decision-log-policy-cycle-2.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 ---
 
@@ -53,7 +53,6 @@ disturbing its neighbours.
 
 ## Reversal and supersession
 
-A decision is never edited in place. To change or reverse one, append a new
-entry whose `Supersedes:` names the old ID. The old entry stays as the
-historical record. Whether a decision is still live is answered by searching its
-ID in later `Supersedes:` lines.
+To change or reverse a decision, append a new entry whose `Supersedes:` names
+the old ID. The old entry stays as the historical record. Whether a decision is
+still live is answered by searching its ID in later `Supersedes:` lines.
