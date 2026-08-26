@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/rule-divergence-rulings-cycle-2.md @ 3e064f6
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 order: 5
 depends-on: []
@@ -243,10 +243,9 @@ reviewing tests, agents should state:
 For a small project or early-stage feature, the minimum acceptable practice is:
 
 1. Keep fast mocked/unit tests.
-2. Declare mocked boundaries.
-3. Add at least one live or browser smoke test for material external/user-visible integrations.
-4. Keep a pre-release checklist for verification not yet automated.
-5. Record accepted risks explicitly.
+2. Add at least one live or browser smoke test for material external/user-visible integrations.
+3. Keep a pre-release checklist for verification not yet automated.
+4. Record accepted risks explicitly.
 
 ## Anti-patterns
 
