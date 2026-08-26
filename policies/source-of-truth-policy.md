@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/rule-divergence-rulings-cycle-2.md @ 3e064f6
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 ---
 
@@ -19,8 +19,9 @@ between artifacts are resolved by authority rather than by guessing.
 1. **PRD** — product intent. Canonical for *what* and *why*.
 2. **TRD** — technical design. Canonical for *how*.
 3. **Acceptance criteria** — derived from the PRD, owned by Dave.
-4. **Architecture summary** (per change) — derived from the TRD, produced by the
-   Architect Agent. This is the artifact a tracker issue is cut from.
+4. **Architecture summary** (per change) — scoped to one unit of work, derived
+   from the TRD, produced by the Architect Agent. This is the artifact a tracker
+   issue is cut from.
 5. **Tracker issues** (currently GitHub Issues) — **derived PM artifacts**. They
    track and organize work. A tracker issue is a *view onto the specs*, not an
    independent source of truth.
