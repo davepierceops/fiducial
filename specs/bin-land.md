@@ -1,7 +1,7 @@
 ---
 status: agreed
 last-reviewed: reviews/bin-land-cycle-7.md @ 3716ae6
-audience: [all-roles, human]
+audience: [human]
 ---
 
 # PRD: `bin/land`
