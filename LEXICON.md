@@ -1,6 +1,6 @@
 ---
-status: in-review
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/rule-divergence-rulings-cycle-2.md @ 3e064f6
 audience: [all-roles, human]
 order: 2
 ---
