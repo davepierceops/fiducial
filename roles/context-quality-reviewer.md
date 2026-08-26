@@ -14,7 +14,9 @@ artifact in the review artifact schema's shape.
 
 Every file frontmatter enforcement reaches — the in-scope set enumerated in the
 document metadata policy's Scope section, which is that set's single
-enumeration. Nothing is excluded from it.
+enumeration. Nothing is excluded from it. Documents under `specs/` — the PRD,
+the TRD, and the acceptance criteria derived from them — are gated by the Spec
+Reviewer, not this role.
 
 ## What it inspects
 
