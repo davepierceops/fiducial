@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/architect-agent-cycle-2.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [architect-agent, chief-of-staff, human]
 session: execution
 ---
@@ -36,8 +36,7 @@ You produce architecture at two levels:
   - instantiating the PRD's NFR dimensions as concrete technical targets
     (TRD section 8)
 
-- **The per-change architecture summary** — scoped to one unit of work, derived
-  from the TRD.
+- **The per-change architecture summary.**
 
 ## Required outputs
 
