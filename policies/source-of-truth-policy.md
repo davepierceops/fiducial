@@ -59,11 +59,6 @@ It is a hard stop. The agent must:
 
 Do not silently reconcile. Do not pick the version that is easier to implement.
 
-## Keeping derived artifacts honest
-
-When a canonical document changes, derived artifacts downstream of it may go
-stale.
-
 ## Proactive drift detection
 
 The Spec Reviewer Agent is the designated mechanism for proactively catching
