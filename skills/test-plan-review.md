@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/rule-divergence-rulings-cycle-2.md @ 3e064f6
+status: in-review
+last-reviewed: null
 audience: [reviewer-agent, human]
 ---
 
@@ -38,7 +38,3 @@ Evaluate whether a test plan is sufficient for the intended change and risk.
 6. Check negative/failure cases.
 7. Identify over-testing or unnecessary complexity.
 8. Recommend changes.
-
-## Output
-
-A review artifact, in the shape the review-artifact skill states.
