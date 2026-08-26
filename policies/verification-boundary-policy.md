@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/verification-boundary-policy-cycle-2.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 ---
 
@@ -25,10 +25,6 @@ elsewhere or explicitly accepted as unverified.
 ## Policy statement
 
 Agents must not let tests imply broader confidence than they actually support.
-
-A mocked boundary carries the answers to the mock-boundary checklist stated in
-the testing and verification context set, including who or what owns the
-follow-up.
 
 ## Boundary declaration
 
