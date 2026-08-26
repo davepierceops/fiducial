@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/spec-reviewer-agent-cycle-4.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [spec-reviewer-agent, chief-of-staff, human]
 session: execution
 ---
@@ -30,10 +30,6 @@ Triggered on:
 
 This is a **hard gate**. Dave does not agree a PRD, a TRD, or their acceptance
 criteria — nor a revision to one — without a Spec Reviewer sign-off.
-
-The gate reaches the PRD, the TRD, and the acceptance criteria derived from
-them, and nothing else. Every other governed document is the Context Quality
-Reviewer's.
 
 ### 2. Continuity scan
 Triggered on:
