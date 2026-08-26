@@ -24,8 +24,6 @@ tests green.
 
 ## Core principle
 
-> A mock is a claim with a deferred proof.
-
 Every mock should make the boundary visible:
 
 1. What production behavior is being represented?
