@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/agreeing-clusters-cycle-2.md @ ade5dad
+status: in-review
+last-reviewed: null
 audience: [spec-reviewer-agent, context-quality-reviewer, architect-agent, chief-of-staff, human]
 ---
 
@@ -72,8 +72,7 @@ interactive co-authoring or artifact-pane review.
    role that gated. Findings from that re-check open the next cycle at step 1.
 10. On Dave's go, the agreement flip lands as a frontmatter-only
     status-transition commit, `last-reviewed` naming the review artifact and
-    the reviewed SHA. The SHA it cites must resolve to a recorded agreement
-    entry.
+    the reviewed SHA.
 
 ## Reconciliation — the cycle that closes an open spec delta
 
