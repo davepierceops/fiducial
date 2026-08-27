@@ -1,6 +1,6 @@
 ---
-status: in-review
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/pass-2b-rulings-cycle-1.md @ be104cf2
 audience: [spec-reviewer-agent, context-quality-reviewer, architect-agent, chief-of-staff, human]
 ---
 
