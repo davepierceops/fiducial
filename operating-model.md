@@ -1,6 +1,6 @@
 ---
-status: in-review
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/pass-2b-rulings-cycle-1.md @ be104cf2
 audience: [all-roles, human]
 order: 3
 ---
