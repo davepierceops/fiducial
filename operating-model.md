@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/agreeing-clusters-cycle-2.md @ ade5dad
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 order: 3
 ---
@@ -79,7 +79,7 @@ May:
 Must:
 
 - state assumptions
-- distinguish mocked, contract, live, browser, and production verification
+- label every verification claim with its evidence class, per the Lexicon
 - update relevant documentation when behavior changes
 - escalate unclear product, risk, or release decisions
 

@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/agreeing-clusters-cycle-2.md @ ade5dad
+status: in-review
+last-reviewed: null
 audience: [chief-of-staff, human]
 session: decision
 ---
@@ -100,9 +100,10 @@ Two consequences bind this role:
   step instead. A decomposition is derived, and one derived from ungated text
   propagates an ungated decision into every package beneath it. This is why the
   SHAs a decomp doc pins are always default-branch SHAs.
-- **Check the claim before proposing a second concurrent tranche**, per the
-  Spec and Change Discipline context set; where the territory overlaps, propose
-  serial execution or a different project.
+- **Check the claim before proposing a second concurrent tranche** — the
+  Lexicon defines a claimed document; the Spec and Change Discipline context set
+  caps concurrency at two tranches on disjoint territory — and where the
+  territory overlaps, propose serial execution or a different project.
 
 ### Handing a package to an execution session
 
