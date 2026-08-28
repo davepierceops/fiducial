@@ -178,14 +178,46 @@ it shares — `[chief-of-staff, human]`. It is not placed under
 session; this one is read by a tool and by the author reviewing what the tool
 produced.
 
-**Resolution is against committed content, not the working tree.** The
-generator reads each section's body from the last commit touching the
-invariants document, via `repo.last_commit_sha` and `repo.file_at_rev` — the
-discipline AC-CO-4 already imposes on cycle mode's scope list. An uncommitted
-edit to the invariants document is refused (§6, FM-G3), downgraded to a `WARN`
-by `--allow-dirty`, which is AC-CO-5's behaviour applied to a second class of
-input. This is what makes AC-DT-01 literal: the section changes in the next
-skeleton when its **commit** changes, with no edit to the generator.
+**Resolution is against committed content, not the working tree — and the
+tree it resolves in is the methodology home, not the repository the tool was
+invoked in.** The generator reads each section's body from the last commit
+touching the invariants document *in the repository that holds that document*:
+`repo.last_commit_sha` and `repo.file_at_rev` are called with
+`repo.methodology_home(root)` as their root, not with `root`. This is the
+discipline AC-CO-4 already imposes on cycle mode's scope list, applied in the
+tree the input actually lives in. An uncommitted edit to the invariants
+document is refused (§6, FM-G3), downgraded to a `WARN` by `--allow-dirty`,
+which is AC-CO-5's behaviour applied to a second class of input; FM-G3's
+`git status --porcelain` runs in the same tree. This is what makes AC-DT-01
+literal: the section changes in the next skeleton when its **commit** changes,
+with no edit to the generator.
+
+**The home-vs-root relationship this assumes.** `repo.methodology_home` returns
+`$AI_METHODOLOGY_HOME`, else `root`, else `root.parent/"ai"`. Only the second
+candidate makes the home and the invocation root the same tree. This design
+assumes nothing about which candidate is taken; it assumes exactly one thing —
+**the methodology home is a git repository, and the invariants document is
+committed in it**. Where home and root coincide, that assumption is free: it is
+the repository the tool was invoked in. Where they do not — a sibling checkout,
+or `$AI_METHODOLOGY_HOME` pointing elsewhere, which is the configuration the
+home mechanism exists for — the two trees carry independent histories, and the
+SHA a manifest entry records for an invariants-document section is a SHA in the
+home's history. A reader resolving that entry in the directive's own repository
+will not find it. That is stated rather than designed around: the manifest's
+job is to name the revision the text was read at, and the revision is the
+home's.
+
+**There is no fallback when the home is not a repository.** The generator
+refuses (§6, FM-G1): `last_commit_sha` returns `None` for a path in a tree with
+no history, and a section whose committed body cannot be read is, for this
+design's purposes, a section that is not there. Refusing is what keeps AC-DT-01
+literal rather than partially true — a generator that fell back to the working
+tree would emit a skeleton whose manifest names a revision it did not read.
+
+**What the test fixture must therefore provide.** §4.1's `make_home` must
+`git init` and commit the invariants document inside the home, not merely write
+files into a directory. That is one helper change, and §3.9 names it as the
+migration's most likely red.
 
 **The substitution syntax.** Region bodies are templates. A placeholder is
 `{{name}}` from a closed set fixed per region in §3.3; `{{{{` is a literal
@@ -291,19 +323,35 @@ document says later.
 | 1 | `<title>` (heading) | `§Heading (general)` | `{{title}}` |
 | 2 | `ROUTE AND MODEL` | `§Route and model` | `{{route}}`, `{{model}}` |
 | 3 | `FIRST ACT` | `§First act` | `{{directive_path}}` |
-| 4 | `WORKING-TREE DISPOSITION` | **author region** | — |
-| 5 | `BASE VERIFICATION` | `§Base verification` | `{{reviewed_ref}}` |
-| 6 | `COMPANIONS` | `§Companions` | `{{companion_list}}` |
-| 7 | `TASK` | **author region** | — |
-| 8 | `SANDBOX` | `§Sandbox constraints` | — |
-| 9 | `VERIFICATION` | `§Verification steps` | — |
-| 10 | `STOP CONDITIONS` | `§Stop conditions` | `{{reviewed_ref}}` |
-| 11 | `REPORT` | `§Report format` | — |
-| 12 | `CLAIM LABELS` | `§Claim labels` | — |
-| 13 | `SOURCE MANIFEST` | `§Source manifest` | `{{manifest}}` |
+| 4 | `DISPOSITION PROMPT` | `§Working-tree disposition prompt` | — |
+| 5 | `WORKING-TREE DISPOSITION` | **author region** | — |
+| 6 | `BASE VERIFICATION` | `§Base verification` | `{{reviewed_ref}}` |
+| 7 | `COMPANIONS` | `§Companions` | `{{companion_list}}` |
+| 8 | `TASK` | **author region** | — |
+| 9 | `SANDBOX` | `§Sandbox constraints` | — |
+| 10 | `VERIFICATION` | `§Verification steps` | — |
+| 11 | `STOP CONDITIONS` | `§Stop conditions` | `{{reviewed_ref}}` |
+| 12 | `REPORT` | `§Report format` | — |
+| 13 | `CLAIM LABELS` | `§Claim labels` | — |
+| 14 | `SOURCE MANIFEST` | `§Source manifest` | `{{manifest}}` |
 
-Two author regions, eleven committed — AC-DT-18 exactly. Region 2 is
+Fourteen regions: two author, twelve committed — AC-DT-18 exactly. Region 2 is
 Q5-dependent and §9's OQ-5 states what moves under each ruling.
+
+**The prompt is region 4, and its marker is `DISPOSITION PROMPT`.** G3 makes
+the disposition slot two regions — an invariant prompt and an author region —
+and AC-DT-03 asserts directly on the first: its text must match the committed
+source *its manifest entry names*, and it must state that a disposition is
+required, name both admitted forms, and state the labelled-statement
+requirement. So the prompt is an emitted region with a marker, a source
+section, and a manifest entry, like any other. Its marker token is
+`DISPOSITION PROMPT` rather than `WORKING-TREE DISPOSITION PROMPT` because the
+label literal may not begin a second marker line: §3.2's condition 3 says the
+generator emits the label unfenced in exactly one place, and a marker beginning
+with the literal would make that sentence false even though §3.4's colon
+requirement would keep the line out of M3's match. AC-DT-03 fixes no marker
+token, so the choice is free and is made where it keeps condition 3 literally
+true.
 
 **Cycle-mode regions, in emission order.** AC-CO-3's six items appear in
 AC-CO-3's relative order; added regions are interleaved without disturbing it.
@@ -312,19 +360,34 @@ AC-CO-3's relative order; added regions are interleaved without disturbing it.
 | --- | --- | --- | --- |
 | 1 | `Cycle <n> Directive — <title>` (heading) | `§Heading (cycle)` | Carries the heading, the `Date:` line, and the `Documents in scope:` list — AC-CO-3's first three items, one region because AC-CO-3 fixes them as one block |
 | 2 | `FIRST ACT` | `§First act` | Added |
-| 3 | `WORKING-TREE DISPOSITION` | **author region** | Added; the slot the PRD names |
-| 4 | `Decisions` (heading) | `§Decisions` | AC-CO-3, carrying the commented placeholder verbatim |
-| 5 | `Deferred / out of scope` (heading) | `§Deferred` | AC-CO-3 |
-| 6 | `Execution notes` (heading) | **author region** | AC-CO-3's third section; cycle mode's task-specific slot |
-| 7–12 | `BASE VERIFICATION` … `CLAIM LABELS` | as general mode | Added |
-| 13 | `SOURCE MANIFEST` | `§Source manifest` | Added |
+| 3 | `DISPOSITION PROMPT` | `§Working-tree disposition prompt` | Added; G3's first region |
+| 4 | `WORKING-TREE DISPOSITION` | **author region** | Added; the slot the PRD names |
+| 5 | `Decisions` (heading) | `§Decisions` | AC-CO-3, carrying the commented placeholder verbatim |
+| 6 | `Deferred / out of scope` (heading) | `§Deferred` | AC-CO-3 |
+| 7 | `Execution notes` (heading) | **author region** | AC-CO-3's third section; cycle mode's task-specific slot |
+| 8 | `BASE VERIFICATION` | `§Base verification` | Added |
+| 9 | `COMPANIONS` | `§Companions` | Added |
+| 10 | `SANDBOX` | `§Sandbox constraints` | Added |
+| 11 | `VERIFICATION` | `§Verification steps` | Added |
+| 12 | `STOP CONDITIONS` | `§Stop conditions` | Added |
+| 13 | `REPORT` | `§Report format` | Added |
+| 14 | `CLAIM LABELS` | `§Claim labels` | Added |
+| 15 | `SOURCE MANIFEST` | `§Source manifest` | Added |
 
-Two author regions here as well.
+Fifteen regions: two author, thirteen committed. Every row is enumerated rather
+than given as a range, because AC-DT-05's partition and AC-DT-18's counts are
+per-mode assertions over the entries themselves, and a range names no marker to
+assert on. The correspondence with general mode, stated once so it need not be
+inferred from the table: general mode's regions 6, 7 and 9–13 are rows 8–14
+here, carrying the same source sections and the same placeholders; general
+mode's `TASK` region has no counterpart, cycle mode's task-specific slot being
+row 7; and general mode's region 2, `ROUTE AND MODEL`, has no counterpart
+either.
 
-**Region 4 is a committed region an author writes into.** The `## Decisions`
-placeholder is committed text (AC-CO-3 requires those exact fields), so the
-manifest classifies it as committed, which is accurate for *the skeleton as
-emitted* — the only thing the manifest claims. PRD §5 already bounds the
+**Cycle mode's region 5 is a committed region an author writes into.** The
+`## Decisions` placeholder is committed text (AC-CO-3 requires those exact
+fields), so the manifest classifies it as committed, which is accurate for *the
+skeleton as emitted* — the only thing the manifest claims. PRD §5 already bounds the
 measure this way: an author writing inside a generator-supplied region
 afterwards is not recorded. The consequence is worth stating rather than
 discovering: in cycle mode the region the author fills most is a committed one,
@@ -332,9 +395,9 @@ so the generator-supplied share reads higher for cycle directives than the
 author's real contribution warrants. The measure is sound for the comparison
 PRD §5 draws — before and after, within a class — and over-reads across classes.
 
-**Which regions render an existing governed rule.** Eleven of the thirteen
-sections are text that exists nowhere else today. One does not:
-`§Working-tree disposition prompt`, which renders
+**Which regions render an existing governed rule.** Of the twelve committed
+sections the general-mode table reads, eleven are text that exists nowhere else
+today. One does not: `§Working-tree disposition prompt`, which renders
 `skills/directive-authoring.md`'s first bullet under "Writing the directive
 file". That section carries the bullet verbatim, flowed, inside its fence, and
 a test asserts byte-equality against the bullet as committed. Drift between the
@@ -382,6 +445,31 @@ it is a reading of agreed text rather than a mechanism the PRD routed here.
 - **Exclusive assignment** — a path-shaped token and a command creating a tree.
   Decided as: the extent contains a `git worktree add` invocation, and a
   quoted or backticked path-shaped token. Both, or neither.
+
+  **That match rule is this document's own narrowing, and is disclosed as
+  one.** The governed rule — `skills/directive-authoring.md`'s first bullet
+  under "Writing the directive file", carried into PRD M3 verbatim — admits
+  "a named directory plus the command creating it". It names no subcommand and
+  no quoting. This document fixes both halves narrower: `git worktree add` for
+  the command, and a quoted or backticked token for the path. The narrowing
+  bounds what the lint **matches**; it adds nothing the lint **enforces**. No
+  directive is required to write its disposition this way, and the requirement
+  M3 states remains the governed one. AC-DT-13 is satisfied on exactly the
+  reading it states for the fence exclusion — "it narrows what the lint matches
+  rather than adding a requirement the lint enforces, and this criterion is
+  about enforcement" — and §3.5's mask is disclosed on the same ground.
+
+  What the narrowing costs is a **false stop**: a well-formed disposition
+  phrased outside the match — a bare unquoted path, another tree-creating
+  command, or a command introduced in a block below the statement's extent —
+  fails M3 though the author did state a disposition. That cost is accepted,
+  and it is not a new risk: it instantiates PRD §7's accepted item "a lint that
+  stops an executor on a well-formed directive it mis-parses", whose accepted
+  reason is that "a false stop costs one invocation and returns the question to
+  a decision session. That is the cheap direction, and every other false
+  positive here leans on it." This is one of those false positives, named. The
+  direction is ruled rather than open; OQ-7 records the parallel narrowing on
+  the sole-tree branch, which is not.
 - **Sole-tree declaration** — the extent contains the literal sentence the
   invariants document fixes as the canonical sole-tree form, which is the
   worked example the prompt's fence carries. A literal, because F-3 records
@@ -466,44 +554,153 @@ One invocation, in order, stopping at the first refusal:
 
 **Per element:**
 
+Each element below states its **match** (the phrase or phrases tested), its
+**extent** (the span the match is decided over), its **anchoring** (whether the
+match is line-leading or free within the extent), whether §3.5's **mask**
+applies, and its **derivation** (the governed wording the phrase is read from,
+or, where there is none, a disclosure saying so). *Extent* where it is a
+statement means §3.4's: the matched line plus every following line up to the
+first blank line. All phrase matches are case-insensitive and collapse interior
+whitespace runs to one space, unless an element says otherwise.
+
 - **M1** — a reviewed-ref pin is present, and its SHA resolves to a commit
   (`git cat-file -e <sha>^{commit}`).
+  - **Match:** an eligible line containing the phrase `reviewed ref` (the two
+    words separated by whitespace or a hyphen) and, later on that same line, a
+    run of 7 to 40 hexadecimal characters bounded by non-hexadecimal characters
+    or by a line end. That run is the SHA the element resolves.
+  - **Extent:** one line. **Anchoring:** free within the line — the corpus
+    writes the pin bolded, bulleted, and mid-sentence. **Mask:** applies.
+  - **Derivation:** `skills/directive-authoring.md`, "Pin STOP conditions to
+    the reviewed ref", supplies the phrase; the hexadecimal run is the ref that
+    bullet says to pin, not wording added here.
 - **M2** — for each companion citation of the form `<path> @ <sha>`: the SHA
-  resolves to a commit; the path is present in that commit's tree; and the
-  commit touches that path (`git log -1 --format=%H <sha> -- <path>` is
-  non-empty). Nothing more. Neither fullness nor lastness is checked, which is
-  AC-DT-17's whole content: an abbreviated SHA of a touching commit passes, and
-  a content commit that is not the last touching the path passes.
+  resolves to a commit; the path is present in that commit's tree; and **that
+  commit itself touches the path**, decided as
+  `git diff-tree --root --no-commit-id --name-only -r <sha> -- <path>`
+  returning a non-empty result. Nothing more. Neither fullness nor lastness is
+  checked, which is AC-DT-17's whole content: an abbreviated SHA of a touching
+  commit passes, and a content commit that is not the last touching the path
+  passes.
+  - **`--root` is not optional.** Without it, `diff-tree` compares a root
+    commit against nothing and reports it as touching no path — so a citation
+    naming a fixture repository's first commit, which is the natural way to
+    build AC-DT-09's fixtures, would fail though that commit introduced the
+    file.
+  - **`git log -1 --format=%H <sha> -- <path>` is not the mechanism**, and a
+    non-empty result from it is not the property M2 states. Given a pathspec,
+    `log` walks history, so it is non-empty whenever *any* ancestor of `<sha>`
+    touches the path, and returns that ancestor rather than `<sha>`. Compared
+    for *equality* with the resolved `<sha>` it decides the same property as
+    `diff-tree --root`; the `diff-tree` form is chosen because it states the
+    property directly rather than by comparison, and because it needs no
+    separate resolution of `<sha>` to compare against. AC-DT-09's third fixture
+    — a commit touching a different path — is a fail under either form and a
+    pass under the non-emptiness reading, which is why the form is fixed here
+    rather than left to the implementer.
+  - **A merge commit touches nothing, for M2's purposes.** `diff-tree` emits no
+    diff for a merge without `-m` or `-c`, and `log`'s pathspec walk simplifies
+    merges away, so both forms agree. A citation naming a merge fails M2 with
+    `citation-not-touching`. That is the cheap direction (PRD §7): a companion
+    is cited for its content, and the content commit is the one to cite.
 - **M3** — §3.4 and §3.5.
 - **M4** — both stop conditions present: cannot-execute-as-written, and
   concurrent tree mutation.
+  - **Match:** two independent tests over the whole file, each satisfied by an
+    eligible line containing the phrase — `cannot execute as written` for the
+    first, `concurrent tree mutation` for the second. Both must be satisfied.
+  - **Extent:** one line each. **Anchoring:** free within the line.
+    **Mask:** applies.
+  - **Derivation:** the two phrases are the governed rules' own trigger
+    clauses, read verbatim — Core rule 11, "Cannot execute as written → stop
+    and surface", and Core rule 15, "Concurrent tree mutation → stop and
+    surface". The invariants document's `§Stop conditions` section is written
+    to contain both, which is how the generator's own output satisfies M4.
 - **M5** — a first-act statement is present, and no other marker line (§3.3)
   precedes it except those the invariants document lists as **preamble
-  markers**. That list is one line of committed text — the document heading and
-  the route-and-model marker — so the ordering requirement has a governed
-  source and the lint reads no manifest to check it.
+  markers**.
+  - **Match:** the first extent containing all four of a form of the verb
+    *write*, the word *commit*, the word *push*, and the phrase
+    `report the SHA`. That extent is the first-act statement.
+  - **Extent:** as above. **Anchoring:** free within the extent.
+    **Mask:** applies.
+  - **Derivation:** Core's Vocabulary entry for *Execution block* — "Its first
+    instruction is to write the directive to a file, commit, push, and report
+    the SHA" — supplies all four phrases, and supplies the ordering requirement
+    in the word *first*.
+  - **The preamble-marker list is a tolerance, not a requirement.** It is one
+    line of committed text in the invariants document — the document heading
+    and the route-and-model marker — and it only *widens* what counts as first,
+    admitting two markers a bare reading of the Vocabulary would exclude. It
+    admits directives the bare reading would fail and refuses none the bare
+    reading would admit, so it adds no requirement the lint enforces, and
+    AC-DT-13's reasoning about the fence exclusion covers it unchanged. The
+    lint reads no manifest to check the ordering.
 - **M6** — a report section is present and enumerates its required fields.
+  - **Match:** a marker line (§3.3) whose token, case-folded, is `report`; and,
+    over that region's extent — its marker line to the next marker line — at
+    least two lines from which §3.5's stripping removed a list marker.
+  - **Extent:** the region the marker begins. **Anchoring:** the marker is
+    line-anchored by §3.3's syntax; the enumerated lines are not.
+    **Mask:** applies.
+  - **Derivation, and a disclosed gap.** Decision Layer rule 14 is one
+    sentence — "One self-contained directive per session. The executor needs
+    the block and the repository, nothing from this conversation. Write it so
+    the returned report is triageable by the next decision session" — and it
+    names no section, no fields, and no count. *Presence of a report section*
+    is the weakest mechanical reading of *triageable* the rule supports. **The
+    enumeration half is not read off governed text at all.** This document
+    fixes it, at two list items, because "enumerates its required fields" is
+    PRD M6 as agreed and an unenumerated section would satisfy it vacuously.
+    It is disclosed here, per element, in the shape G6 licenses for M3's label
+    — with the difference stated rather than elided: M3's label is a form the
+    governed rule *delegates*, and rule 14 delegates nothing. §4.2's B3 records
+    the exposure; OQ-2 records what would close it.
 - **M7** — the claim-label instruction is present.
+  - **Match:** an extent containing all four class words — `observed`,
+    `inferred`, `told`, `unknown`.
+  - **Extent:** a statement extent. **Anchoring:** free within the extent.
+    **Mask:** applies.
+  - **Derivation:** Core rule 6 names exactly those four classes and no others;
+    requiring all four and nothing else adds no wording. G10 and AC-DT-11 bind
+    the *tools'* own claims to two of the four — a different rule about
+    different text, which does not narrow M7.
 - **M8** — the resolved repository-relative path matches exactly one of the
   three patterns. Membership is the whole claim; mode-appropriateness is not
   checked and is named in the unchecked set.
 
-M1, M4, M5, M6, and M7 are presence checks against text the invariants document
-also supplies to the generator. Each is a match against a phrase that document
-fixes, not against wording the lint holds — the same single-source discipline
-as the label, applied to five more strings, and the reason AC-DT-02's scan runs
-over the lint's source as well as the generator's.
+M1, M4, M5, M6, and M7 are presence checks whose phrases are compiled by
+`invariants.py` from the invariants document rather than held as literals in
+the lint's source — the same single-source discipline as the label, applied to
+five more strings. That the lint holds no literal is a property of §3.1's
+split: one module reads that file, both binaries call it, and the lint's
+imports show it.
+
+**AC-DT-02's scan walks the generator's source and nothing else**, as the
+criterion states and as §8 restates it. This document does not widen an agreed
+criterion, and the single-source discipline over M1 and M4–M7 is not a reason
+to: AC-DT-02 is about a manifest's entries and the generator that emits them,
+and the lint emits no manifest.
+
+A section that contains a governed rule's trigger phrase is not thereby a
+*rendering* of that rule. §3.3's one-rendering claim and its byte-equality test
+are at whole-section grain; `§Stop conditions`, `§First act`, `§Report format`
+and `§Claim labels` instantiate their rules for one session rather than restate
+them, which is the distinction §3.2 draws in rejecting Q1's first candidate.
 
 ### 3.7 External dependencies
 
 - **`git`**, as an executable on `PATH`. Used for object resolution only: M1's
-  and M2's `cat-file` and `log`, and the generator's `last_commit_sha` and
-  `file_at_rev`. Neither tool performs a network operation of any kind.
+  `cat-file`, M2's `cat-file` and `diff-tree`, and the generator's
+  `last_commit_sha` and `file_at_rev`. Neither tool performs a network
+  operation of any kind.
 - **The methodology home**, resolved by `repo.methodology_home`, which is where
-  `skills/directive-invariants.md` is read from. This is a change in cycle
-  mode's environmental preconditions: `bin/cycle-open` today calls
-  `cli.load_root` and never touches the home. §3.9 states what that costs the
-  migration.
+  `skills/directive-invariants.md` is read from **and the repository its
+  revision is resolved in** (§3.2). The home must therefore be a git repository
+  with that document committed in it; where it is not, both tools refuse. This
+  is a change in cycle mode's environmental preconditions: `bin/cycle-open`
+  today calls `cli.load_root` and never touches the home. §3.9 states what that
+  costs the migration.
 - **`skills/directive-invariants.md`** itself. Absent, unreadable, or missing a
   named section, the generator refuses (§6). The lint refuses on the same
   condition, because without the label it cannot decide M3 and an undecidable
@@ -518,8 +715,8 @@ No `gh`, no remote, no credential, no network, in either tool, in any mode.
   to change. An amendment that breaks §3.2's condition 2 breaks G3 for every
   subsequent skeleton.
 - **B2 — `git` itself.** The plumbing relied on: `cat-file -e <rev>^{commit}`,
-  `log -1 --format=%H <rev> -- <path>`, `rev-parse`, and, in cycle mode,
-  everything `bin/cycle-open` already uses.
+  `diff-tree --root --no-commit-id --name-only -r <rev> -- <path>`,
+  `rev-parse`, and, in cycle mode, everything `bin/cycle-open` already uses.
 - **B3 — the governed rules M1–M8 derive from.** Core rules 6, 11, 14, 15 and
   its Vocabulary; Decision Layer rule 14; `skills/directive-authoring.md`;
   `decisions/log.md`. A rule that moves or is reworded makes an element check
@@ -560,10 +757,22 @@ edit to the evidence is the one edit most likely to weaken it silently.
 
 **Flag collision, resolved.** `--out` means the bundle directory under
 AC-CO-12, which fixes it as repo-relative and refuses absolute paths with exit
-2. General mode's skeleton destination is therefore **`--write`**, not `--out`;
-without it the skeleton and manifest go to stdout. Reusing `--out` for a second
-meaning would silently redefine a flag whose contract an agreed criterion
-fixes.
+2. General mode's skeleton destination is therefore **`--write`**, not `--out`.
+Reusing `--out` for a second meaning would silently redefine a flag whose
+contract an agreed criterion fixes.
+
+**`--write` is a switch, not a path.** It takes no value. Given, the skeleton
+and its manifest are written to the one destination the generator computes
+below; omitted, both go to stdout and nothing is written anywhere. General mode
+has exactly one destination and the author does not name it. That is not a
+convenience. PRD §7 accepts, as a named risk, that "a hand-written general-mode
+directive named `<slug>-directive.md` passes M8 without a timestamp", and
+accepts it on the mitigation that "the generator makes the name correct by
+construction" — a mitigation a `--write` taking an arbitrary path would make
+false, since the generator could then be driven to emit a skeleton its own lint
+fails M8 on, which is the state PRD §4's Conflict rule reserves for surfacing.
+AC-DT-12(c)'s "the named output path" is this computed path: the name is the
+generator's, which is exactly what the mitigation asserts.
 
 **Mode selection.** Exactly one of `--cycle N`, `--name SLUG` (cycle mode) or
 `--descriptor SLUG` (general mode) is required; none or more than one is a
@@ -572,10 +781,9 @@ AC-CO-1's own behaviour unchanged whenever one of its two is given.
 
 **The general-mode filename — the timestamp form decided.** General mode writes
 to `docs/cycles/<descriptor>-<YYYYMMDDThhmmss>Z.md`: UTC, `Z`-suffixed, from
-`datetime.datetime.now(datetime.timezone.utc)`, with `--date` fixing it for
-determinism as AC-CO-10 already does for cycle mode's `Date:` line. M8 admits
-both the suffixed and unsuffixed forms and stays exactly as agreed; the
-generator emits one of the two. The asymmetry is deliberate and costs nothing
+`datetime.datetime.now(datetime.timezone.utc)`. M8 admits both the suffixed
+and unsuffixed forms and stays exactly as agreed; the generator emits one of
+the two. The asymmetry is deliberate and costs nothing
 under G4, because emitting one admitted form gates no author and refuses
 nothing.
 
@@ -591,9 +799,26 @@ unambiguous. What it does not do is retrofit: the no-retrofit non-goal governs
 the existing names, and M8's optional group stays because M8 is what the PRD
 agreed.
 
+**Fixing that timestamp for tests — a second flag, not `--date`.** `--date`
+cannot do this job, and saying it could would leave the general-mode path
+undeterminable. AC-CO-10 fixes `--date` as the cycle directive's `Date:` line;
+its value is a `YYYY-MM-DD` date with no time component, and its default is
+today's **local** date. The general-mode filename carries `hhmmss` and is
+**UTC**. Nothing about `--date` determines the time component or the zone, so
+the determinism claim does not belong to it. General mode therefore takes
+**`--timestamp YYYYMMDDThhmmss`**, which supplies the whole timestamp verbatim,
+read as UTC, and is the only thing that determines it when given; the clock is
+read only in its absence. It is general-mode-only, and `--date` is
+cycle-mode-only: AC-CO-10's contract is untouched — no widening of its grain,
+no change to its zone, no new meaning in the mode that already uses it. Giving
+`--timestamp` in cycle mode, or `--date` in general mode, is a usage error,
+exit 2, on the selector rule above. This is what makes the expected path
+writable for AC-DT-12(c)'s tree diff, for FM-G5's existing-destination refusal,
+and for any AC-DT-05 or AC-DT-18 assertion that names the emitted file.
+
 **Steps, ordered so a red is attributable to one landing.**
 
-1. Land `skills/directive-invariants.md`: the thirteen general-mode sections,
+1. Land `skills/directive-invariants.md`: the twelve general-mode sections,
    the cycle-mode sections carrying AC-CO-3's strings, the label section, the
    marker syntax, and the preamble-marker list. No code changes. Nothing
    consumes it. `test_cycle_open.py` untouched and green.
@@ -616,14 +841,19 @@ agreed.
 
 **The migration's most likely red, named in advance.** Cycle mode gains a
 dependency on the methodology home, because that is where the invariants
-document is read from (§3.7). `bin/tests/helpers.py`'s `make_home` installs a
-metadata policy, role documents, and a `bin/` symlink, and nothing else; every
-`test_cycle_open.py` case already passes `base_env(methodology_home=self.home)`,
-so the home exists but the invariants document does not. `make_home` gains it.
-That is one helper change, it lands in step 1 or 2, and if it is missed every
-cycle-mode case fails at once with an unresolvable-section refusal — a loud
-failure rather than a subtle one, which is why it is acceptable to state it
-here rather than design around it.
+document is read from **and where its revision is resolved** (§3.2, §3.7).
+`bin/tests/helpers.py`'s `make_home` installs a metadata policy, role
+documents, and a `bin/` symlink into a plain directory, and nothing else; it
+runs no `git init`. Every `test_cycle_open.py` case already passes
+`base_env(methodology_home=self.home)`, so the home exists — but the invariants
+document does not, and neither does a repository around it to resolve its
+revision in. Both gaps are one helper change: `make_home` gains the document
+*and* becomes a git repository with that document committed. It lands in step 1
+or 2, and if either half is missed every cycle-mode case fails at once — with
+an unresolvable-section refusal for the first, and with FM-G1's
+no-committed-body refusal for the second. Both are loud failures rather than
+subtle ones, which is why it is acceptable to state them here rather than
+design around them.
 
 **AC-CO-11 stands unchanged.** Cycle mode now *reads* one more file. Reading is
 not writing; the tool still writes only the directive and the bundle directory,
@@ -635,7 +865,17 @@ and `snapshot_tree` proves it as it does today.
 
 **Decision: the existing `bin/tests/helpers.py` substrate — a real repository
 from `git init` in a throwaway temp directory (`make_repo`) plus a throwaway
-methodology home (`make_home`) — extended with fixture-directive helpers.**
+methodology home (`make_home`) — extended with fixture-directive helpers, and
+with `make_home` becoming a repository of its own.**
+
+`make_home` today writes files into a plain directory and runs no `git init`,
+so the home has no history. §3.2 resolves the invariants document's revision in
+the home, so the substrate must give it one: `make_home` runs `git init` and
+commits what it installs. This is the substrate's only structural change. The
+home and the repository under test stay separately rooted, as every existing
+consumer of the two helpers already has them — which is the production
+configuration the home mechanism exists for, and therefore the one worth
+testing against.
 
 PRD §6 mandates fixture directives, well-formed and each missing one element,
 checked against a fixture repository, with no criterion requiring this
@@ -658,8 +898,12 @@ remote, so no bare repository and no `file://` transport is added.
   (blob hash, tag, commit touching another path, commit touching the path) and
   AC-DT-17's two passing forms, all made by real commits in the fixture repo.
 - `invariants_doc(home, **overrides)` — installs `skills/directive-invariants.md`
-  into the methodology home, with per-section overrides so AC-DT-01 can change
-  one section's committed text and assert the next skeleton changed.
+  into the methodology home **and commits it there**, with per-section
+  overrides so AC-DT-01 can change one section's committed text, commit the
+  change in the home, and assert the next skeleton changed. AC-DT-01 is
+  asserted in the home because §3.2 resolves the document's revision there; the
+  criterion needs a commit to change, so the home must have a history for it to
+  change in.
 
 **New test files:**
 
@@ -671,9 +915,10 @@ remote, so no bare repository and no `file://` transport is added.
 
 **Existing files that change:** `bin/tests/helpers.py` gains `directive` and
 `check-directive` in `CLI_NAMES` and `CLI_MINIMAL_ARGS`, so AC-X-1 through
-AC-X-7 cover both tools from their first landing; and `make_home` gains the
-invariants document (§3.9). `bin/tests/test_cycle_open.py` gains the binary-name
-parameterization of step 3 and nothing else.
+AC-X-7 cover both tools from their first landing; and `make_home` gains both
+the invariants document and a git repository around it, committed (§3.9).
+`bin/tests/test_cycle_open.py` gains the binary-name parameterization of step 3
+and nothing else.
 
 **Criteria that are not tests.** AC-DT-02 and AC-DT-12(a)/(b) are static scans
 over source text, in the idiom `test_cross_cutting.py` already uses for AC-X-1
@@ -737,16 +982,20 @@ file, no lock.
 
 **Inputs.**
 
-- The generator: argv; `skills/directive-invariants.md` at its last commit; for
-  cycle mode, the document set and each document's last-touching commit; the
-  clock, for the timestamp, unless `--date` fixes it.
+- The generator: argv; `skills/directive-invariants.md` at its last commit in
+  the methodology home (§3.2); for cycle mode, the document set and each
+  document's last-touching commit in the invocation root; the clock, for the
+  general-mode timestamp, unless `--timestamp` fixes it, and for cycle mode's
+  `Date:` line, unless `--date` fixes it.
 - The lint: argv; the directive file's bytes as they stand on disk;
   `skills/directive-invariants.md`; the local object store for M1 and M2.
 
 **Outputs.**
 
-- The generator, general mode: the skeleton with its manifest, to stdout or to
-  the path `--write` names. Nothing else is written.
+- The generator, general mode: the skeleton with its manifest, to stdout, or —
+  when `--write` is given — to the single `docs/cycles/` destination the
+  generator computes (§3.9). Nothing else is written, and `--write` names no
+  path.
 - The generator, cycle mode: the directive file and the bundle directory,
   exactly as AC-CO-1, AC-CO-7, and AC-CO-11 fix them.
 - The lint: a report on stdout on both exit paths; diagnostics on stderr;
@@ -782,7 +1031,7 @@ Diagnostic codes are §7's to assign; no cell below names one.
 
 | # | Failure mode | Detected by | Effect |
 | --- | --- | --- | --- |
-| FM-G1 | The invariants document is absent or unreadable | Read of the methodology home | Refusal before anything is written |
+| FM-G1 | The invariants document is absent or unreadable, or the methodology home carries no committed revision of it — the home is not a git repository, or the document is untracked there | Read of the methodology home; `last_commit_sha` against the home (§3.2) | Refusal before anything is written. There is no working-tree fallback: a section whose committed body cannot be read is a section that is not there |
 | FM-G2 | A named section is missing from it | Section parse | Refusal before anything is written |
 | FM-G3 | The invariants document has uncommitted modifications | `git status --porcelain` on it | Refusal, or a `WARN` under `--allow-dirty` — AC-CO-5's shape, applied to a second input |
 | FM-G4 | A region body carries a placeholder the generator does not recognise | Substitution pass | Refusal; never a silent pass-through |
@@ -835,7 +1084,7 @@ existing five-code contract is reused with no new code and no advisory tier:
 | --- | --- | --- |
 | 0 | Every checked element passed; the report states the unchecked set | A skeleton was produced |
 | 1 | At least one element failed or is unknown | Cycle mode's AC-CO-6 refusal, unchanged |
-| 2 | Refused invocation: no argument, a path outside the repository, a path that does not exist, not in a repository, undecodable file | Usage: the selector rule, AC-CO-12's absolute `--out` |
+| 2 | Refused invocation: no argument, a path outside the repository, a path that does not exist, not in a repository, undecodable file | Usage: the selector rule, a flag given in the mode it does not belong to (`--timestamp` in cycle mode, `--date` in general mode), AC-CO-12's absolute `--out` |
 | 3 | Unused | Precondition: FM-G1 through FM-G5, FM-G7; AC-CO-2 and AC-CO-5 unchanged |
 | 4 | Unused | Unused |
 
@@ -905,8 +1154,8 @@ surface is the argv each tool constructs: a path or a SHA read out of a
 directive is caller-supplied text, so every git invocation passes arguments as
 an argv list through `repo.run`'s `subprocess.run` with no shell, and pathspecs
 are always separated by `--`. A SHA read from a directive is passed to
-`cat-file` and `log` as a single argv element and never interpolated into a
-revision expression built by string concatenation. The lint writes nothing, so
+`cat-file` and `diff-tree` as a single argv element and never interpolated into
+a revision expression built by string concatenation. The lint writes nothing, so
 it cannot damage the tree it inspects (AC-DT-12(b)) — verifiable statically.
 
 **Maintainability.** G1, G6, and G0. A governed rule that changes changes the
@@ -1079,7 +1328,7 @@ The remaining questions are this document's own.
 - **OQ-4 — Whether general mode may refuse an existing destination.** G4 says
   the general mode "refuses nothing", and also that what it does not refuse is
   "the content an author writes". §3.9 reads the first clause as bounded by the
-  second and has general mode refuse an existing `--write` destination (FM-G5),
+  second and has general mode refuse an existing computed destination (FM-G5),
   the same precondition AC-CO-2 states for cycle mode. The alternative is
   silent overwrite, which no reading of the PRD asks for. *Resolved by*: a
   reading of G4 at the next gate.
