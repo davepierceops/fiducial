@@ -1,6 +1,6 @@
 ---
-status: draft
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/directive-tooling-cycle-23.md @ d3ab472
 audience: [human]
 ---
 
