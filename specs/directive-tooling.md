@@ -41,12 +41,13 @@ for one class, the reviewer-gated spec-review cycle. It becomes a mode of
 `bin/directive` (§4 G0).
 
 **Measured cost of freehand authorship.** `docs/research/gh-write-friction-20260823T184149Z.md`
-found that across the directive corpus, sentences carrying write-path
-vocabulary were 16.5% of sentences and 21.8% of characters; in the six most
-recent `pass2` directives, write mechanics ran 13.9%–43.3% of each file; and
-eight committed directives instructed one merge mechanism while the most recent
-instructed its opposite. Those figures describe the invariant text this effort
-stops hand-writing.
+found that across the 90 markdown files in `docs/cycles/` it measured,
+sentences carrying write-path vocabulary were 16.5% of sentences and 21.8% of
+characters — a count of files in a directory, not of directives as a class; in
+the six most recent `pass2` directives, write mechanics ran 13.9%–43.3% of each
+file; and eight committed directives instructed one merge mechanism while the
+most recent instructed its opposite. Those figures describe the invariant text
+this effort stops hand-writing.
 
 ## 2. Users and use cases
 
@@ -143,7 +144,9 @@ every claim about the generator names its mode:
 - **Conflict rule.** A goal in this document that cannot be satisfied without
   breaking a preserved AC-CO criterion, or a decision that makes one binary's
   output fail the other's check, is a defect in this document — surfaced, not
-  resolved by the implementer.
+  resolved by the implementer. It is raised as a blocking finding at the next
+  gate review and resolved by a dictated disposition that states, in this
+  document's text, which of the two moved and why.
 
 ### Scope split with the TRD
 
@@ -229,8 +232,8 @@ failing-path invocation point to Q2.
   lint into a broad-sounding assurance (§7).
 - **G10 — Two provenance labels.** The tools' own claims are labelled
   *observed* or *unknown*, and no other class — a subset of Core rule 6, on the
-  `bin/land` precedent. Text they quote or emit from committed sources is
-  outside this.
+  precedent `specs/bin-land.md` §4 G6 sets. Text they quote or emit from
+  committed sources is outside this.
 
 #### The two element sets
 
@@ -299,6 +302,10 @@ lint's claims:
 - **Repairing a directive.** The lint reports; it never edits. Neither does the
   executor.
 - **Judging executability.** Per the judgment-only set.
+- **Retrofitting the existing corpus.** The lint governs directives written
+  after adoption; historical directive files are not retrofitted, because
+  renaming the existing corpus would break every citation by path that points
+  into it.
 - **Claiming `cycle-open`'s non-skeleton behaviour.** Per the migration scope.
 - **Naming vocabulary.** Binary names are not methodology vocabulary; neither
   tool enters `LEXICON.md`.
@@ -315,15 +322,27 @@ lint's claims:
   not recorded.
 - **Malformed directives are caught at the first act rather than mid-cycle.**
   Signal: lint failures at the first act versus executor stops on a missing
-  element after work began. Mechanism: execution reports.
+  element after work began. Baseline: at least one — the motivating incident.
+  Mechanism: execution reports and retros.
 - **Invariant text stops contradicting itself.** Signal: new contradictions
-  between the invariant sections of directives landed after adoption. Baseline:
-  the one contradiction across nine files the research document recorded.
-  Mechanism: manual review of the corpus.
+  between the invariant sections of directives landed after adoption — the set
+  §4's no-retrofit non-goal scopes the lint to. Baseline: the one contradiction
+  across nine files the research document recorded. Mechanism: manual review of
+  the corpus. Bound: the first recount reads zero against zero by construction,
+  the post-adoption set being empty at adoption, so an early zero is arithmetic
+  and not evidence; the outcome is meaningful only once enough post-adoption
+  directives exist for a contradiction to have had the opportunity to appear.
 
 Lint pass rate is not a quality measure and is not tracked (§7).
 
 ## 6. Acceptance criteria
+
+These criteria derive from §4, each concrete enough to derive a test case from.
+The test substrate is fixture directives — well-formed, and each missing one
+element — checked against a fixture repository, which makes the set testable
+offline: no criterion here requires this repository's commit history to run.
+AC-DT-15 and AC-DT-16 are the two exceptions, discharged against this
+repository rather than a fixture one, and both offline.
 
 - **AC-DT-01** — Changing the committed text of a source a skeleton section is
   read from changes that section in the next generated skeleton, with no edit to
@@ -373,9 +392,18 @@ Lint pass rate is not a quality measure and is not tracked (§7).
   - (vii) the only labelled statement is fenced — non-zero;
   - two unfenced labelled statements — non-zero; a single statement carrying
     neither form, or both — non-zero.
-  For M8: a fixture named from a subdirectory by relative path and one named by
-  absolute path both match on the resolved path; the two names `bin/cycle-open`
-  was observed to emit that AC-CO-1 does not license are failing fixtures.
+  For M8, eight fixtures — four passing, four failing. Passing: one
+  `<descriptor>-<timestamp>.md`, one `cycle-<N>-directive.md`, one
+  `<SLUG>-directive.md`, and one named from a subdirectory by relative path,
+  which matches on the resolved path. Failing: `<descriptor>-YYYYMMDD.md`, a
+  date with no time, because M8 requires the full `<date>T<time>` form; a name
+  that is neither timestamped nor `-directive.md`-suffixed; and
+  `docs/cycles/sub/nested-directive.md` and `docs/escaped-directive.md`, the two
+  names `bin/cycle-open` was observed to emit that AC-CO-1 does not license. A
+  fixture named by absolute path also matches on the resolved path. No fixture
+  exercises a `<SLUG>` character boundary and none may: M8 carries no character
+  class, so such a fixture would assert a requirement G6 forbids, and the
+  passing slug fixture may therefore use any characters.
 - **AC-DT-07** — A well-formed fixture directive carrying every element M1–M8
   exits 0.
 - **AC-DT-08** — Exit 0 output includes the unchecked set — at minimum:
@@ -403,7 +431,10 @@ Lint pass rate is not a quality measure and is not tracked (§7).
 - **AC-DT-13** — The lint enforces no requirement absent from its cited
   governed sources. Every element M1–M8 satisfies this as written; the label's
   lexical form is a delegation the governed rule makes, not an unsourced
-  requirement.
+  requirement. M3's fence exclusion is this document's own and no governed file
+  states it, but it is not an exception either: it narrows what the lint
+  matches rather than adding a requirement the lint enforces, and this
+  criterion is about enforcement.
 - **AC-DT-14** — After migration, `bin/` contains exactly one directive-skeleton
   generator. The cycle skeleton is produced by `bin/directive` in cycle mode,
   carries Route and Model and no Track (DEC-000180), and `bin/cycle-open` no
@@ -459,16 +490,53 @@ use; §5 declines to measure quality by pass rate for the same reason.
   without a timestamp. Mode-appropriateness is not decidable from a filename.
   Mitigation: the generator makes the name correct by construction, and
   AC-DT-08 discloses the bound on every pass.
+- A lint that stops an executor on a well-formed directive it mis-parses. A
+  false stop costs one invocation and returns the question to a decision
+  session. That is the cheap direction, and every other false positive here
+  leans on it.
+- Adoption of the generator ahead of the lint, or the reverse.
+- **With a named cost:** folding `cycle-open` into `bin/directive` (G0) puts a
+  working tool through a migration for a benefit that only pays off once a
+  second class of directive uses it. The alternative accepted risk was two
+  generators drifting; that one has no ceiling, and this one is bounded by the
+  migration.
 - A labelled disposition statement that is true in form and false in fact —
   the tree it names is not the tree the session will use.
-- A fenced labelled statement that is not carried wording but the author's own
-  disposition, wrongly fenced: M3 counts it as a mention and the file fails on
-  zero unfenced statements. False positive, surfaced loudly, corrected by the
-  author.
+- Two residuals of M3's fence handling:
+  - A fenced labelled statement that is not carried wording but the author's
+    own disposition, wrongly fenced. It is a statement formatted badly rather
+    than a mention, but M3's fence exclusion does not match it, so the file
+    carries zero unfenced labelled statements and fails though the author did
+    state a disposition. False positive, surfaced loudly, corrected by the
+    author.
+  - A labelled statement carried outside a fence: a directive quoting another
+    directive's labelled disposition in running text carries two unfenced
+    labelled statements and exits non-zero, though it states exactly one
+    disposition of its own. The governed rule does not draw that line either —
+    it distinguishes the labelled statement from incidental mention of trees or
+    commands, not from a labelled statement under carriage — so a lint drawing
+    it would enforce a requirement no governed file states (G6).
 
-**Not accepted.** A requirement enforced that no governed file states (G6,
-AC-DT-13); a silent pass (G9); either tool on the write path to the remote
-(AC-DT-12).
+**Not accepted.**
+
+- A lint claim about a judgment-only property (G7).
+- Invariant text or a required element hardcoded in a tool rather than read
+  from committed text (G1, AC-DT-02). That failure recreates the drift the
+  tools exist to remove, in a place with less visibility than prose.
+- A refusal by either mode that turns on the *content* of a directive rather
+  than on a precondition (G4), which would put refusal in two places and make
+  the generator a second gate.
+- Any write from the lint, of any kind, and any write from the generator beyond
+  the skeleton and manifest — in cycle mode, beyond what AC-CO-1 and AC-CO-7
+  require within AC-CO-11 (AC-DT-12). Either tool on the write path to the
+  remote is not accepted alongside this, not in place of it.
+- A requirement enforced that no governed file states (G6, AC-DT-13).
+- A silent pass — an exit 0 that does not state its bounds (G9).
+
+**Escalation.** A lint failure returns the directive to the decision session;
+the executor never repairs it. Anything the lint cannot decide is reported
+unknown and handed to the session, which stops and surfaces. Whether an
+undecidable element is acceptable is Dave's judgment, never the tool's.
 
 ## 8. Open product questions
 
@@ -501,7 +569,9 @@ each with the ruling that closed it; only the open ones are carried here.
   `bin/directive` emits. Property the resolution must satisfy: the generator
   and the lint source the label from one committed definition. Three criteria
   wait on it — AC-DT-06's M3 fixtures as files, the single-source property, and
-  AC-DT-03's count — all specified now. Resolved by: the TRD stage.
+  AC-DT-03's count — all specified now, and all three read on AC-DT-16's model,
+  as waiting on a decision rather than as red, until this question resolves.
+  Resolved by: the TRD stage.
 - **Q10 — The mechanism by which a generated skeleton holds G3's invariant.**
   Candidates: the prompt's committed source shows the label only inside a
   fenced block; that source is bounded not to show it; or the generator fences
