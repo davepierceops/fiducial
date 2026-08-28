@@ -392,7 +392,7 @@ repository rather than a fixture one, and both offline.
   - (vii) the only labelled statement is fenced — non-zero;
   - two unfenced labelled statements — non-zero; a single statement carrying
     neither form, or both — non-zero.
-  For M8, eight fixtures — four passing, four failing. Passing: one
+  For M8, nine fixtures — five passing, four failing. Passing: one
   `<descriptor>-<timestamp>.md`, one `cycle-<N>-directive.md`, one
   `<SLUG>-directive.md`, and one named from a subdirectory by relative path,
   which matches on the resolved path. Failing: `<descriptor>-YYYYMMDD.md`, a
@@ -400,7 +400,8 @@ repository rather than a fixture one, and both offline.
   that is neither timestamped nor `-directive.md`-suffixed; and
   `docs/cycles/sub/nested-directive.md` and `docs/escaped-directive.md`, the two
   names `bin/cycle-open` was observed to emit that AC-CO-1 does not license. A
-  fixture named by absolute path also matches on the resolved path. No fixture
+  fixture named by absolute path also matches on the resolved path, the fifth
+  passing fixture. No fixture
   exercises a `<SLUG>` character boundary and none may: M8 carries no character
   class, so such a fixture would assert a requirement G6 forbids, and the
   passing slug fixture may therefore use any characters.
