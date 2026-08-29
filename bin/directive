@@ -4,13 +4,10 @@
 Contract: `specs/directive-tooling.md` §6 and `specs/directive-tooling-trd.md`
 §3.2, §3.3, §3.9, §6, §7. Two modes: general mode, every directive class that
 is not a reviewer-gated cycle, and cycle mode, which is `bin/cycle-open`'s
-surface after the G0 migration.
-
-**This package lands general mode only** (§3.9 step 2). Cycle mode's selectors
-parse here so the selector rule and the flag-collision rule answer with the
-statuses §3.9 fixes, and a well-formed cycle-mode invocation is refused rather
-than half-served; §3.9 step 3 is where that refusal is replaced by the
-migrated identity, document-set, and bundle code.
+surface after the G0 migration (§3.9 step 3): the same identity, document-set,
+revision-resolution and reviewed-revision-bundle code, migrated unchanged into
+`aimeta/directive.py`. `bin/cycle-open` remains the executable its own suite
+also drives until step 4 replaces its body with a forwarder.
 
 No region text lives in this file. Every region is addressed by its section
 name in the invariants document, and every marker is the first line of that
@@ -52,6 +49,13 @@ def build_parser():
     p.add_argument("--model", metavar="M", help="the dispatch model this directive states")
     p.add_argument("--out", metavar="DIR", help="cycle-mode bundle output directory")
     p.add_argument(
+        "--bundle",
+        metavar="ENTRY",
+        action="append",
+        default=[],
+        help="cycle mode: expand this context-set entry point into the document set",
+    )
+    p.add_argument(
         "--write",
         action="store_true",
         help="write the skeleton to the destination the generator computes",
@@ -76,11 +80,13 @@ def select_mode(args):
 
 
 def check_flag_collisions(mode, args):
-    """`--timestamp` is general-mode-only; `--date`, `--out` and documents are not."""
+    """`--timestamp`/`--write` are general-mode-only; `--date`, `--out`,
+    `--bundle` and documents are cycle-mode-only."""
     if mode == "general":
         for flag, given in (
             ("--date", args.date),
             ("--out", args.out),
+            ("--bundle", args.bundle),
         ):
             if given:
                 raise cli.ToolError(
@@ -92,12 +98,16 @@ def check_flag_collisions(mode, args):
                 "general mode takes no document arguments; it writes no bundle",
                 cli.EXIT_USAGE,
             )
-    elif args.timestamp:
-        raise cli.ToolError(
-            "--timestamp belongs to general mode; cycle mode fixes its date with "
-            "--date",
-            cli.EXIT_USAGE,
-        )
+    else:
+        for flag, given in (
+            ("--timestamp", args.timestamp),
+            ("--write", args.write),
+        ):
+            if given:
+                raise cli.ToolError(
+                    "%s belongs to general mode; cycle mode does not take it" % flag,
+                    cli.EXIT_USAGE,
+                )
 
 
 def resolve_timestamp(given):
@@ -136,14 +146,43 @@ def run_general(args):
     return cli.EXIT_OK
 
 
+def resolve_date(given):
+    """Cycle mode's `Date:` line: the flag verbatim, else today's local date
+    (AC-CO-10). Not `--timestamp`'s job: this is a date, local, with no time
+    component, and general mode's timestamp is UTC with one."""
+    return given or datetime.date.today().isoformat()
+
+
 def run_cycle(args):
-    """Cycle mode does not land in this package; §3.9 step 3 replaces this."""
-    raise cli.ToolError(
-        "[cycle-mode-unavailable] observed: cycle mode is not wired in this "
-        "landing; the migration's step 3 adds it, and bin/cycle-open remains the "
-        "executable that emits a cycle skeleton until it does",
-        cli.EXIT_USAGE,
+    root = cli.load_root()
+    # AC-CO-12: `--out` is repo-relative, always. Resolved before anything is
+    # written, so a refused run leaves no directive behind either.
+    out_rel = cli.repo_relative_path(root, args.out, "--out") if args.out else None
+    doc = invariants.load(root, allow_dirty=args.allow_dirty)
+    relpath, heading_line = directive.directive_identity(root, args)
+    directive.refuse_existing(root, relpath)
+
+    documents = directive.collect_documents(root, args)
+    revisions = directive.resolve_revisions(root, documents, args.allow_dirty)
+    date = resolve_date(args.date)
+
+    values = directive.cycle_values(
+        heading=heading_line[len("# "):],
+        date=date,
+        scope_list="\n".join("- %s @ %s" % (rp, sha) for rp, sha in revisions),
+        route=args.route,
+        model=args.model,
+        directive_path=relpath,
     )
+    text = directive.assemble(doc, directive.CYCLE_REGIONS, values)
+    directive.land(root, relpath, text)
+
+    stem = os.path.basename(relpath)[: -len(".md")]
+    out_rel = out_rel or "%s/%s" % (directive.BUNDLE_DIR_DEFAULT, stem)
+    outdir = root / out_rel
+    directive.write_bundle(root, outdir, revisions, relpath)
+    directive.warn_if_bundle_not_ignored(root, out_rel)
+    return cli.EXIT_OK
 
 
 def main(argv=None):
