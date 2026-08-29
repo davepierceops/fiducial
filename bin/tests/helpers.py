@@ -483,3 +483,685 @@ def plan_block(path, action="migrate", **fields):
     for key, value in fields.items():
         lines.append("- %s: %s" % (key.replace("_", "-"), value))
     return "\n".join(lines) + "\n"
+
+
+# ================================================================ directive tooling
+#
+# Fixture substrate for `bin/directive` and `bin/check-directive`, per
+# `specs/directive-tooling-trd.md` §4.1. Everything below is **additive**: no
+# existing helper's behaviour changes, so the pre-existing suite is untouched.
+#
+# Two deviations from §4.1 are deliberate and are filed as findings in the
+# test-authorship report:
+#
+#   * `make_home` is NOT turned into a git repository here. §4.1 requires that
+#     change, but making it at test-authorship time would redden the existing
+#     suite, which the red-gate discipline reserves for new tests. `make_home_repo`
+#     supplies the same substrate additively; the implementer folds it into
+#     `make_home` at migration step 1/2.
+#   * `directive` and `check-directive` are NOT added to `CLI_NAMES` /
+#     `CLI_MINIMAL_ARGS` here, for the same reason: AC-X-1..X-7 would go red
+#     against binaries that do not exist. `test_directive_trd.py` carries a red
+#     test asserting that integration point instead.
+
+#: Where the two binaries are looked up. Overridden by `$DIRECTIVE_TOOLING_BIN`
+#: for the red-gate run against the deliberately-wrong stubs in
+#: `bin/tests/stubs/`. Test-only; no production code reads it.
+DT_BIN_ENV_VAR = "DIRECTIVE_TOOLING_BIN"
+
+INVARIANTS_RELPATH = "skills/directive-invariants.md"
+AUTHORING_RELPATH = "skills/directive-authoring.md"
+
+#: TRD §3.4's Q9 decision. The fixture substrate sources it from one place so
+#: that a test can vary it and prove the single-source property.
+DISPOSITION_LABEL = "WORKING-TREE DISPOSITION"
+
+#: TRD §3.4's sole-tree branch: a literal the invariants document fixes.
+SOLE_TREE_SENTENCE = "This session works in the sole tree at the clone root."
+
+DT_STUB_DIR = TESTS_DIR / "stubs"
+
+
+def dt_bin_dir():
+    """Directory the two directive-tooling binaries are invoked from."""
+    override = os.environ.get(DT_BIN_ENV_VAR)
+    return pathlib.Path(override) if override else BIN_DIR
+
+
+def using_stub_binaries():
+    """True when the red-gate run has pointed us at `bin/tests/stubs/`."""
+    return dt_bin_dir().resolve() != BIN_DIR.resolve()
+
+
+def run_dt(name, *args, cwd, env=None, methodology_home=None, timeout=90):
+    """`run_cli` for the two directive-tooling binaries, honouring `dt_bin_dir()`."""
+    return run_cli(
+        name,
+        *args,
+        cwd=cwd,
+        env=env,
+        methodology_home=methodology_home,
+        timeout=timeout,
+        script_dir=dt_bin_dir(),
+    )
+
+
+# ------------------------------------------------------- the invariants document
+#
+# TRD §3.2 decides *that* the invariants document holds one section per region,
+# "each addressed by its heading", and §3.3 fixes the marker syntax and the
+# region tables. It fixes no schema for the document itself: no heading level,
+# no statement of whether a region's marker line is part of the committed
+# section body or emitted by the generator, and no section name for the M1 and
+# M4-M7 match phrases §3.6 says `invariants.py` compiles from it.
+#
+# This fixture therefore *is* the schema the tests assert against:
+#
+#   * sections are `## <name>` ATX headings; a section's body runs to the next
+#     `## ` heading;
+#   * a region section's body **begins with that region's marker line**, so the
+#     generator copies it verbatim and composes no prose of its own (§3.2
+#     condition 1) while AC-DT-02 still forbids the marker from being a literal
+#     in the generator's source;
+#   * `## Disposition label`, `## Marker syntax`, `## Preamble markers` and
+#     `## Match phrases` carry the lint's compiled strings inside fenced blocks.
+#
+# The label literal appears **only inside fenced blocks** (§3.2 condition 2).
+
+_SECTION_ORDER = (
+    "Heading (general)",
+    "Heading (cycle)",
+    "Route and model",
+    "First act",
+    "Working-tree disposition prompt",
+    "Base verification",
+    "Companions",
+    "Task",
+    "Sandbox constraints",
+    "Verification steps",
+    "Stop conditions",
+    "Report format",
+    "Claim labels",
+    "Decisions",
+    "Deferred",
+    "Execution notes",
+    "Source manifest",
+    "Disposition label",
+    "Marker syntax",
+    "Preamble markers",
+    "Match phrases",
+)
+
+_FENCE = "```"
+
+
+def invariants_sections():
+    """The fixture invariants document, section name -> body (no heading line)."""
+    prompt_examples = "\n".join(
+        [
+            _FENCE + "text",
+            "%s (exclusive assignment): this session works only in a worktree" % DISPOSITION_LABEL,
+            'at "wt/<name>", created by: git worktree add "wt/<name>" main',
+            "",
+            "%s: %s" % (DISPOSITION_LABEL, SOLE_TREE_SENTENCE),
+            _FENCE,
+        ]
+    )
+    label_block = "\n".join(
+        [
+            _FENCE + "text",
+            "%s:" % DISPOSITION_LABEL,
+            _FENCE,
+        ]
+    )
+    sole_tree_block = "\n".join([_FENCE + "text", SOLE_TREE_SENTENCE, _FENCE])
+    return {
+        "Heading (general)": "# {{title}}\n",
+        "Heading (cycle)": (
+            "# Cycle {{cycle}} Directive — {{title}}\n"
+            "\n"
+            "Date: {{date}}\n"
+            "\n"
+            "Documents in scope:\n"
+            "\n"
+            "{{scope_list}}\n"
+        ),
+        "Route and model": "ROUTE AND MODEL\n\nRoute: {{route}}\nModel: {{model}}\n",
+        "First act": (
+            "FIRST ACT\n"
+            "\n"
+            "Write this directive verbatim to {{directive_path}}, commit it alone,\n"
+            "push, and report the SHA.\n"
+        ),
+        "Working-tree disposition prompt": (
+            "DISPOSITION PROMPT\n"
+            "\n"
+            "A working-tree disposition is required. Two forms are admitted: an\n"
+            "exclusive assignment — a named directory plus the command creating it —\n"
+            "or an explicit sole-tree declaration. A prohibition is not a\n"
+            "disposition. The disposition is stated as its own labelled statement,\n"
+            "exactly one per directive, mechanically distinguishable from incidental\n"
+            "mention of trees or commands elsewhere in the file.\n"
+            "\n"
+            "Worked examples of the two admitted forms:\n"
+            "\n" + prompt_examples + "\n"
+        ),
+        "Base verification": (
+            "BASE VERIFICATION\n"
+            "\n"
+            "Before anything else, confirm the base is at the reviewed ref\n"
+            "{{reviewed_ref}}. If it has moved, stop and report.\n"
+        ),
+        "Companions": "COMPANIONS\n\n{{companion_list}}\n",
+        "Task": "TASK\n",
+        "Sandbox constraints": (
+            "SANDBOX\n"
+            "\n"
+            "Commands run in a sandbox. Use the scratchpad directory for temporary\n"
+            "files; a denied write is reported, never worked around.\n"
+        ),
+        "Verification steps": (
+            "VERIFICATION\n"
+            "\n"
+            "Run the test suite and the frontmatter check from the working tree, and\n"
+            "state both results.\n"
+        ),
+        "Stop conditions": (
+            "STOP CONDITIONS\n"
+            "\n"
+            "Pinned to the reviewed ref {{reviewed_ref}}. Cannot execute as written:\n"
+            "stop and surface. Concurrent tree mutation: stop and surface.\n"
+        ),
+        "Report format": (
+            "REPORT\n"
+            "\n"
+            "- the directive file's commit SHA\n"
+            "- what was verified, and how\n"
+            "- anything observed this directive did not anticipate\n"
+        ),
+        "Claim labels": (
+            "CLAIM LABELS\n"
+            "\n"
+            "Label every claim observed, inferred, told, or unknown.\n"
+        ),
+        "Decisions": (
+            "## Decisions\n"
+            "\n"
+            "<!--\n"
+            "Finding:\n"
+            "Resolution:\n"
+            "Dictated wording:\n"
+            "-->\n"
+        ),
+        "Deferred": "## Deferred / out of scope\n",
+        "Execution notes": "## Execution notes\n",
+        "Source manifest": (
+            "SOURCE MANIFEST\n"
+            "\n"
+            "One entry per emitted region, in emission order: the marker that begins\n"
+            "the region, and either the committed path it was read from or an\n"
+            "author-region marking.\n"
+            "\n"
+            "{{manifest}}\n"
+        ),
+        "Disposition label": (
+            "The label literal the generator emits, at column 0:\n"
+            "\n" + label_block + "\n"
+            "\n"
+            "Match rule: an eligible line whose leading content, after stripping, is\n"
+            "exactly that literal, followed by a colon anywhere later on the same\n"
+            "line. Case-sensitive; no hyphen variants; no case folding.\n"
+            "\n"
+            "Statement extent: the label line plus every following line up to the\n"
+            "first blank line.\n"
+            "\n"
+            "Exclusive-assignment form: the extent contains a `git worktree add`\n"
+            "invocation and a quoted or backticked path-shaped token.\n"
+            "\n"
+            "Canonical sole-tree sentence:\n"
+            "\n" + sole_tree_block + "\n"
+        ),
+        "Marker syntax": (
+            "A marker is a line at column 0 that is either an ATX heading (one to\n"
+            "six `#` characters, a space, then text; the token is the text after the\n"
+            "run) or an all-caps run of three or more characters drawn from `A`-`Z`,\n"
+            "`0`-`9`, `-`, and single interior spaces, terminated by any character\n"
+            "outside that set or by end of line (the token is the run). Nothing else\n"
+            "is a marker.\n"
+        ),
+        "Preamble markers": (
+            "Markers admitted before the first-act statement (M5):\n"
+            "\n" + _FENCE + "text\n"
+            "<document heading>\n"
+            "ROUTE AND MODEL\n"
+            + _FENCE + "\n"
+        ),
+        "Match phrases": (
+            "The phrases the lint compiles, one fenced block per element.\n"
+            "\n"
+            "M1:\n"
+            "\n" + _FENCE + "text\nreviewed ref\n" + _FENCE + "\n"
+            "\n"
+            "M4:\n"
+            "\n" + _FENCE + "text\ncannot execute as written\nconcurrent tree mutation\n"
+            + _FENCE + "\n"
+            "\n"
+            "M5:\n"
+            "\n" + _FENCE + "text\nwrite\ncommit\npush\nreport the SHA\n" + _FENCE + "\n"
+            "\n"
+            "M6:\n"
+            "\n" + _FENCE + "text\nreport\n" + _FENCE + "\n"
+            "\n"
+            "M7:\n"
+            "\n" + _FENCE + "text\nobserved\ninferred\ntold\nunknown\n" + _FENCE + "\n"
+        ),
+    }
+
+
+def invariants_text(overrides=None, drop=()):
+    """Render the fixture invariants document.
+
+    `overrides` replaces a section's body outright — AC-DT-01 changes one
+    section's committed text this way. `drop` removes sections, for FM-G2.
+    """
+    sections = invariants_sections()
+    sections.update(overrides or {})
+    parts = ["# Directive Invariants\n"]
+    for name in _SECTION_ORDER:
+        if name in drop:
+            continue
+        parts.append("\n## %s\n\n%s" % (name, sections[name]))
+    return "".join(parts)
+
+
+def invariants_doc(home, overrides=None, drop=(), env=None, commit_it=True,
+                   message="invariants"):
+    """Install `skills/directive-invariants.md` into `home` and commit it there.
+
+    §3.2 resolves the document's revision in the **methodology home**, so the
+    fixture must give the home a history (F-2's resolution). Returns the
+    commit SHA, or None when `commit_it` is False.
+    """
+    env = env or base_env()
+    write(home, INVARIANTS_RELPATH, invariants_text(overrides, drop))
+    if not commit_it:
+        return None
+    return commit(home, message, env=env)
+
+
+def make_home_repo(case, git_init=True, **kwargs):
+    """`make_home`, made a git repository, with the invariants document committed.
+
+    TRD §4.1 folds this into `make_home` itself at migration step 1/2; it is
+    kept separate here so the existing suite's `make_home` behaviour is byte
+    for byte what it was.
+    """
+    home = make_home(case, **kwargs)
+    if git_init:
+        env = base_env()
+        git(home, "init", "-q", "-b", "main", env=env, check=True)
+        git(home, "config", "user.email", "tests@example.invalid", env=env, check=True)
+        git(home, "config", "user.name", "AI Methodology Tests", env=env, check=True)
+        git(home, "config", "commit.gpgsign", "false", env=env, check=True)
+        write(home, ".gitignore", "bin\n")
+        invariants_doc(home, env=env, message="home: invariants and policy")
+    return home
+
+
+# ------------------------------------------------------------ fixture directives
+#
+# One well-formed base carrying every element M1-M8, built as an ordered list of
+# (block key, text) pairs so `omit=` removes exactly one element's text
+# (TRD §4.1). Two elements cannot be built by subtraction and are built by
+# corruption instead, which is filed as a finding:
+#
+#   * M2 — a directive with no companion citation passes M2 vacuously, so the
+#     failing fixture replaces a citation rather than removing one;
+#   * M8 — the element is a property of the filename, not of the text.
+
+DT_DEFAULT_NAME = "docs/cycles/fixture-well-formed-20260828T170000.md"
+DT_COMPANION_A = "docs/companion-a.md"
+DT_COMPANION_B = "docs/companion-b.md"
+
+#: The label line the base fixture carries: §3.4's parenthetical tolerance.
+DT_DISPOSITION_STATEMENT = (
+    '%s (exclusive assignment): this session works only in a worktree at\n'
+    '"wt/fixture", created by: git worktree add "wt/fixture" main\n'
+) % DISPOSITION_LABEL
+
+DT_SOLE_TREE_STATEMENT = "%s: %s\n" % (DISPOSITION_LABEL, SOLE_TREE_SENTENCE)
+
+
+def _dt_blocks(reviewed_ref, companion_path, companion_sha, title, directive_path):
+    """The base directive's regions, in order, as (key, text) pairs."""
+    return [
+        ("heading", "# %s\n" % title),
+        ("route", "ROUTE AND MODEL\n\nRoute: fresh\nModel: Opus 5\n"),
+        (
+            "first-act",
+            "FIRST ACT\n"
+            "\n"
+            "Write this directive verbatim to %s, commit it alone, push, and\n"
+            "report the SHA.\n" % directive_path,
+        ),
+        (
+            "disposition-prompt",
+            "DISPOSITION PROMPT\n"
+            "\n"
+            "A working-tree disposition is required. Two forms are admitted: an\n"
+            "exclusive assignment — a named directory plus the command creating it —\n"
+            "or an explicit sole-tree declaration. A prohibition is not a\n"
+            "disposition. The disposition is stated as its own labelled statement,\n"
+            "exactly one per directive.\n",
+        ),
+        ("disposition", DT_DISPOSITION_STATEMENT),
+        (
+            "base-verification",
+            "BASE VERIFICATION\n"
+            "\n"
+            "Confirm the base is at the reviewed ref %s before anything else.\n"
+            % reviewed_ref,
+        ),
+        (
+            "companions",
+            "COMPANIONS\n\n- %s @ %s\n" % (companion_path, companion_sha),
+        ),
+        ("task", "TASK\n\nDo the fixture work described by the dispatching session.\n"),
+        (
+            "sandbox",
+            "SANDBOX\n"
+            "\n"
+            "Commands run in a sandbox. Use the scratchpad directory for temporary\n"
+            "files.\n",
+        ),
+        (
+            "verification",
+            "VERIFICATION\n\nRun the suite and the frontmatter check, and state both\nresults.\n",
+        ),
+        (
+            "stop-conditions",
+            "STOP CONDITIONS\n"
+            "\n"
+            "Pinned to the reviewed ref %s. Cannot execute as written: stop and\n"
+            "surface. Concurrent tree mutation: stop and surface.\n" % reviewed_ref,
+        ),
+        (
+            "report",
+            "REPORT\n"
+            "\n"
+            "- the directive file's commit SHA\n"
+            "- what was verified, and how\n"
+            "- anything observed this directive did not anticipate\n",
+        ),
+        (
+            "claim-labels",
+            "CLAIM LABELS\n\nLabel every claim observed, inferred, told, or unknown.\n",
+        ),
+    ]
+
+
+#: Which base block each element's text lives in, for `omit=`.
+DT_ELEMENT_BLOCKS = {
+    "M1": ("base-verification", "stop-conditions"),
+    "M3": ("disposition",),
+    "M4": ("stop-conditions",),
+    "M5": ("first-act",),
+    "M6": ("report",),
+    "M7": ("claim-labels",),
+}
+
+#: M1 and M4 share the `stop-conditions` block, so removing one must leave the
+#: other's text standing. These are the reduced forms.
+DT_REDUCED_BLOCKS = {
+    "M1": {
+        "base-verification": "BASE VERIFICATION\n\nConfirm the base before anything\nelse.\n",
+        "stop-conditions": (
+            "STOP CONDITIONS\n"
+            "\n"
+            "Cannot execute as written: stop and surface. Concurrent tree mutation:\n"
+            "stop and surface.\n"
+        ),
+    },
+    "M4": {
+        "stop-conditions": "STOP CONDITIONS\n\nPinned to the reviewed ref %s.\n",
+    },
+}
+
+
+def directive_body(
+    *,
+    reviewed_ref,
+    companion_path=DT_COMPANION_A,
+    companion_sha=None,
+    title="Fixture Directive — well formed",
+    directive_path=DT_DEFAULT_NAME,
+    omit=None,
+    replace=None,
+    extra=None,
+):
+    """The text of a fixture directive.
+
+    `omit` names one of M1, M3-M7 and removes exactly that element's text.
+    `replace` maps a block key to replacement text. `extra` is appended.
+    """
+    blocks = _dt_blocks(reviewed_ref, companion_path, companion_sha, title, directive_path)
+    reduced = dict(DT_REDUCED_BLOCKS.get(omit, {}))
+    if omit == "M4":
+        reduced["stop-conditions"] = reduced["stop-conditions"] % reviewed_ref
+    drop = set()
+    if omit in DT_ELEMENT_BLOCKS and omit not in DT_REDUCED_BLOCKS:
+        drop = set(DT_ELEMENT_BLOCKS[omit])
+    out = []
+    for key, text in blocks:
+        if key in drop:
+            continue
+        if key in reduced:
+            text = reduced[key]
+        if replace and key in replace:
+            if replace[key] is None:
+                continue
+            text = replace[key]
+        out.append(text)
+    body = "\n".join(out)
+    if extra:
+        body += "\n" + extra
+    return body
+
+
+def directive_fixture(
+    repo,
+    *,
+    reviewed_ref,
+    omit=None,
+    name=None,
+    companion_path=DT_COMPANION_A,
+    companion_sha=None,
+    replace=None,
+    extra=None,
+    text=None,
+    title="Fixture Directive — well formed",
+):
+    """Write a fixture directive into `repo` and return its repo-relative path.
+
+    `omit="M8"` is a name change, not a text change: M8 is a property of the
+    resolved path. `omit="M2"` corrupts the citation rather than removing it,
+    because a directive carrying no citation passes M2 vacuously.
+    """
+    relpath = name or DT_DEFAULT_NAME
+    if omit == "M8":
+        relpath = name or "docs/cycles/fixture-no-timestamp.md"
+        omit = None
+    if omit == "M2":
+        omit = None
+    if text is None:
+        text = directive_body(
+            reviewed_ref=reviewed_ref,
+            companion_path=companion_path,
+            companion_sha=companion_sha,
+            title=title,
+            directive_path=relpath,
+            omit=omit,
+            replace=replace,
+            extra=extra,
+        )
+    write(repo, relpath, text)
+    return relpath
+
+
+# ------------------------------------------------------------------ M3 shape set
+#
+# AC-DT-06's shapes (i)-(vii) plus the two-statement and neither/both cases,
+# instantiable now that §3.4 fixes the label. Each varies only the disposition
+# region of the well-formed base, so a non-zero exit is attributable to M3.
+
+DT_M3_SHAPES = (
+    "i-exclusive",
+    "i-sole-tree",
+    "ii-unlabelled-prohibition",
+    "iii-plus-unlabelled-instance",
+    "iv-slot-filled",
+    "v-slot-blank",
+    "vi-unfenced-plus-fenced",
+    "vii-only-fenced",
+    "two-unfenced",
+    "neither-form",
+    "both-forms",
+)
+
+#: Shapes AC-DT-06 fixes as passing M3.
+DT_M3_PASSING = frozenset(
+    {"i-exclusive", "i-sole-tree", "iii-plus-unlabelled-instance",
+     "iv-slot-filled", "vi-unfenced-plus-fenced"}
+)
+
+
+def _dt_m3_disposition(shape):
+    """`(disposition block text, extra text appended after the base)`."""
+    fenced = "\n".join(
+        [
+            _FENCE + "text",
+            "%s (exclusive assignment): a carried disposition from another" % DISPOSITION_LABEL,
+            'directive, quoted under the origin exception: git worktree add "wt/other" main',
+            _FENCE,
+            "",
+        ]
+    )
+    if shape == "i-exclusive":
+        return DT_DISPOSITION_STATEMENT, None
+    if shape == "i-sole-tree":
+        return DT_SOLE_TREE_STATEMENT, None
+    if shape == "ii-unlabelled-prohibition":
+        return (
+            "Do not create a worktree and do not share a tree with another\n"
+            "session.\n"
+        ), None
+    if shape == "iii-plus-unlabelled-instance":
+        return DT_DISPOSITION_STATEMENT, (
+            "CLEANUP\n"
+            "\n"
+            'Afterwards remove the tree at "wt/fixture" created by\n'
+            'git worktree add "wt/fixture" main.\n'
+        )
+    if shape == "iv-slot-filled":
+        return (
+            "%s (exclusive assignment): this session works only in a worktree at\n"
+            '"wt/slot", created by: git worktree add "wt/slot" main\n' % DISPOSITION_LABEL
+        ), None
+    if shape == "v-slot-blank":
+        return "%s:\n" % DISPOSITION_LABEL, None
+    if shape == "vi-unfenced-plus-fenced":
+        return DT_DISPOSITION_STATEMENT, fenced
+    if shape == "vii-only-fenced":
+        return "The disposition is carried below, wrongly fenced.\n", fenced
+    if shape == "two-unfenced":
+        return DT_DISPOSITION_STATEMENT, DT_SOLE_TREE_STATEMENT
+    if shape == "neither-form":
+        return (
+            "%s: this session works wherever the operator finds convenient.\n"
+            % DISPOSITION_LABEL
+        ), None
+    if shape == "both-forms":
+        return (
+            "%s (exclusive assignment): this session works only in a worktree at\n"
+            '"wt/both", created by: git worktree add "wt/both" main. %s\n'
+            % (DISPOSITION_LABEL, SOLE_TREE_SENTENCE)
+        ), None
+    raise AssertionError("unknown M3 shape: %r" % shape)
+
+
+def disposition_fixture(repo, shape, *, reviewed_ref, companion_sha=None, name=None):
+    """One of AC-DT-06's M3 shapes, written into `repo`."""
+    block, extra = _dt_m3_disposition(shape)
+    relpath = name or ("docs/cycles/fixture-m3-%s-20260828T170000.md" % shape)
+    return directive_fixture(
+        repo,
+        reviewed_ref=reviewed_ref,
+        companion_sha=companion_sha,
+        name=relpath,
+        replace={"disposition": block},
+        extra=extra,
+        title="Fixture Directive — M3 %s" % shape,
+    )
+
+
+# ------------------------------------------------------------- citation fixtures
+#
+# AC-DT-09's four synthetic citations and AC-DT-17's two passing forms, all on
+# real objects in the fixture repository. The touching commit is the repository's
+# **root** commit, so the pair exercises F-1's `diff-tree --root` semantics: a
+# root commit compared against nothing reports touching no path.
+
+
+def citation_fixtures(repo, env=None):
+    """Build real objects for M2 and return the SHAs each fixture cites.
+
+    Keys:
+      `touching`      — the root commit, which introduced `DT_COMPANION_A`
+      `non_touching`  — a later commit touching `DT_COMPANION_B` only
+      `blob`          — `DT_COMPANION_A`'s blob hash
+      `tag`           — an annotated tag object pointing at `touching`
+      `abbreviated`   — an 8-character prefix of `touching` (AC-DT-17 (a))
+      `not_last`      — a content commit that is not the last touching the path
+      `last`          — the last commit touching `DT_COMPANION_A`
+      `unresolvable`  — a well-formed SHA that names no object
+    """
+    env = env or base_env()
+    write(repo, DT_COMPANION_A, "# Companion A\n\nv1\n")
+    touching = commit(repo, "companion a", env=env)
+    write(repo, DT_COMPANION_B, "# Companion B\n\nv1\n")
+    non_touching = commit(repo, "companion b", env=env)
+    blob = git(repo, "rev-parse", "%s:%s" % (touching, DT_COMPANION_A), env=env, check=True)[1].strip()
+    git(repo, "tag", "-a", "fixture-tag", "-m", "annotated", touching, env=env, check=True)
+    tag = git(repo, "rev-parse", "fixture-tag", env=env, check=True)[1].strip()
+    write(repo, DT_COMPANION_A, "# Companion A\n\nv2\n")
+    last = commit(repo, "companion a v2", env=env)
+    return {
+        "touching": touching,
+        "non_touching": non_touching,
+        "blob": blob,
+        "tag": tag,
+        "abbreviated": touching[:8],
+        "not_last": touching,
+        "last": last,
+        "unresolvable": "0" * 40,
+    }
+
+
+# ---------------------------------------------------------------- M8 name fixtures
+#
+# AC-DT-06's nine: five passing, four failing. `subdir_relative` and `absolute`
+# name the same file as `timestamped`, invoked differently — M8 matches on the
+# resolved repository-relative path (AC-DT-19).
+
+DT_M8_PASSING_NAMES = {
+    "timestamped": "docs/cycles/fixture-desc-20260828T170000.md",
+    "cycle": "docs/cycles/cycle-7-directive.md",
+    "slug": "docs/cycles/some slug+odd-directive.md",
+}
+
+DT_M8_FAILING_NAMES = {
+    "date-only": "docs/cycles/fixture-desc-20260828.md",
+    "neither": "docs/cycles/fixture-plain-name.md",
+    "nested": "docs/cycles/sub/nested-directive.md",
+    "escaped": "docs/escaped-directive.md",
+}

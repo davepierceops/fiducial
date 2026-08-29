@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+"""RED-GATE STUB for `bin/check-directive`. Deliberately wrong.
+
+Wrongness, on purpose: it always exits 0 and prints nothing — the silent pass
+PRD G9 puts under "Not accepted". It decides no element, resolves no git
+object, and reads no invariants document.
+
+See `bin/tests/stubs/README.md`.
+"""
+
+import sys
+
+
+def main(argv):
+    if "--help" in argv or "-h" in argv:
+        sys.stdout.write("usage: check-directive [stub]\n")
+        return 0
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

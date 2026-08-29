@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+"""RED-GATE STUB for `bin/directive`. Deliberately wrong. Not an implementation.
+
+Wrongness, on purpose:
+  * no source manifest region at all;
+  * two unfenced labelled disposition statements, not one;
+  * `--write` is accepted and ignored — nothing is ever written;
+  * no invariants document is read, so no region text comes from committed text.
+
+See `bin/tests/stubs/README.md`.
+"""
+
+import sys
+
+SKELETON = """# Stub Directive
+
+ROUTE AND MODEL
+
+Route: stub
+Model: stub
+
+FIRST ACT
+
+Write this directive verbatim to docs/cycles/stub.md, commit it alone, push,
+and report the SHA.
+
+DISPOSITION PROMPT
+
+A working-tree disposition is required.
+
+WORKING-TREE DISPOSITION:
+
+TASK
+
+WORKING-TREE DISPOSITION: a second, wrong, unfenced labelled statement.
+
+STOP CONDITIONS
+
+Cannot execute as written: stop and surface. Concurrent tree mutation: stop and
+surface.
+"""
+
+
+def main(argv):
+    if "--help" in argv or "-h" in argv:
+        sys.stdout.write("usage: directive [stub]\n")
+        return 0
+    sys.stdout.write(SKELETON)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))
