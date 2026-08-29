@@ -1,6 +1,6 @@
 ---
-status: draft
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/directive-tooling-trd-cycle-3.md @ 3a945c9
 audience: [human]
 ---
 
