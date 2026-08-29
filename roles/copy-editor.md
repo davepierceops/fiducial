@@ -1,6 +1,6 @@
 ---
-status: draft
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/expedited-log.md @ a67c1a1e412fe0a5e93180abd6fc6ece527d46cf
 audience: [copy-editor, human]
 session: decision
 ---
@@ -46,6 +46,7 @@ Correct each of these as one tracked change per correction:
 - a fact, number, name, or date stated one way in one section and another
   way in another
 - platform-specific formatting, per the Criteria's venue rule
+- speech introduced by a bare colon — quote it, per the Criteria's many-languages rule
 
 Apply this test to every change before you make it: two copy editors working
 from the same authority would make the same change. If two could reasonably
