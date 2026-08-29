@@ -39,6 +39,7 @@ CLI_NAMES = [
     "bundle",
     "migrate-frontmatter",
     "install-hooks",
+    "directive",
 ]
 
 #: Minimal argv that gets each CLI past argparse, for tests that only care
@@ -50,6 +51,7 @@ CLI_MINIMAL_ARGS = {
     "bundle": ["base"],
     "migrate-frontmatter": ["--plan"],
     "install-hooks": [],
+    "directive": ["--descriptor", "x", "--title", "T"],
 }
 
 REAL_POLICY_TEXT = (REPO_ROOT / POLICY_RELPATH).read_text()
@@ -248,12 +250,18 @@ def porcelain(repo, env=None):
 # ---------------------------------------------------------------- methodology home
 
 
-def make_home(case, policy_text=None, roles=DEFAULT_ROLE_SLUGS, parent=None, name="ai"):
-    """A temp methodology home: a policy, roles, and a `bin/` symlink.
+def make_home(case, policy_text=None, roles=DEFAULT_ROLE_SLUGS, parent=None, name="ai",
+              git_init=True):
+    """A temp methodology home: a policy, roles, a `bin/` symlink, and a history.
 
     `bin/` is a **symlink to the real `bin/`**, so the scripts exercised are
     the ones under test, while `policies/document-metadata-policy.md` is a
     copy this test can vary (AC-CF-13).
+
+    TRD §4.1 and §3.9's migration make the home a git repository with
+    `skills/directive-invariants.md` committed in it: §3.2 resolves that
+    document's revision in the home, so the substrate must give it one.
+    `git_init=False` withholds both, for FM-G1's no-committed-body refusal.
     """
     parent = pathlib.Path(parent) if parent is not None else temp_dir(case, "aimeta-home-")
     home = parent / name
@@ -264,6 +272,14 @@ def make_home(case, policy_text=None, roles=DEFAULT_ROLE_SLUGS, parent=None, nam
     link = home / "bin"
     if not link.exists():
         link.symlink_to(BIN_DIR, target_is_directory=True)
+    if git_init:
+        env = base_env()
+        git(home, "init", "-q", "-b", "main", env=env, check=True)
+        git(home, "config", "user.email", "tests@example.invalid", env=env, check=True)
+        git(home, "config", "user.name", "AI Methodology Tests", env=env, check=True)
+        git(home, "config", "commit.gpgsign", "false", env=env, check=True)
+        write(home, ".gitignore", "bin\n")
+        invariants_doc(home, env=env, message="home: invariants and policy")
     return home
 
 
@@ -491,18 +507,18 @@ def plan_block(path, action="migrate", **fields):
 # `specs/directive-tooling-trd.md` §4.1. Everything below is **additive**: no
 # existing helper's behaviour changes, so the pre-existing suite is untouched.
 #
-# Two deviations from §4.1 are deliberate and are filed as findings in the
-# test-authorship report:
+# Two deviations from §4.1 were deliberate at test-authorship time and are
+# closed by the implementation landing (§3.9 steps 1-2):
 #
-#   * `make_home` is NOT turned into a git repository here. §4.1 requires that
-#     change, but making it at test-authorship time would redden the existing
-#     suite, which the red-gate discipline reserves for new tests. `make_home_repo`
-#     supplies the same substrate additively; the implementer folds it into
-#     `make_home` at migration step 1/2.
-#   * `directive` and `check-directive` are NOT added to `CLI_NAMES` /
-#     `CLI_MINIMAL_ARGS` here, for the same reason: AC-X-1..X-7 would go red
-#     against binaries that do not exist. `test_directive_trd.py` carries a red
-#     test asserting that integration point instead.
+#   * `make_home` IS now a git repository with the invariants document
+#     committed in it, per §4.1. It was not at test-authorship time, because
+#     making it so before a tool read the home would have reddened the existing
+#     suite. `make_home_repo` survives as a thin alias.
+#   * `directive` IS now in `CLI_NAMES` / `CLI_MINIMAL_ARGS`, so AC-X-1..X-7
+#     cover it. `check-directive` is still absent: its binary does not exist
+#     yet, and adding the name would redden those seven against nothing.
+#     `test_directive_trd.py` carries the red test asserting that remaining
+#     integration point.
 
 #: Where the two binaries are looked up. Overridden by `$DIRECTIVE_TOOLING_BIN`
 #: for the red-gate run against the deliberately-wrong stubs in
@@ -790,22 +806,13 @@ def invariants_doc(home, overrides=None, drop=(), env=None, commit_it=True,
 
 
 def make_home_repo(case, git_init=True, **kwargs):
-    """`make_home`, made a git repository, with the invariants document committed.
+    """A thin alias for `make_home`, kept so existing imports stand.
 
-    TRD §4.1 folds this into `make_home` itself at migration step 1/2; it is
-    kept separate here so the existing suite's `make_home` behaviour is byte
-    for byte what it was.
+    TRD §4.1 said this fold lands at migration step 1/2, and it has: there is
+    one substrate helper again, and this name is the migration's step rather
+    than a second one.
     """
-    home = make_home(case, **kwargs)
-    if git_init:
-        env = base_env()
-        git(home, "init", "-q", "-b", "main", env=env, check=True)
-        git(home, "config", "user.email", "tests@example.invalid", env=env, check=True)
-        git(home, "config", "user.name", "AI Methodology Tests", env=env, check=True)
-        git(home, "config", "commit.gpgsign", "false", env=env, check=True)
-        write(home, ".gitignore", "bin\n")
-        invariants_doc(home, env=env, message="home: invariants and policy")
-    return home
+    return make_home(case, git_init=git_init, **kwargs)
 
 
 # ------------------------------------------------------------ fixture directives

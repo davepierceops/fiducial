@@ -1,0 +1,159 @@
+#!/usr/bin/env python3
+"""Assemble a directive skeleton from committed governed regions.
+
+Contract: `specs/directive-tooling.md` §6 and `specs/directive-tooling-trd.md`
+§3.2, §3.3, §3.9, §6, §7. Two modes: general mode, every directive class that
+is not a reviewer-gated cycle, and cycle mode, which is `bin/cycle-open`'s
+surface after the G0 migration.
+
+**This package lands general mode only** (§3.9 step 2). Cycle mode's selectors
+parse here so the selector rule and the flag-collision rule answer with the
+statuses §3.9 fixes, and a well-formed cycle-mode invocation is refused rather
+than half-served; §3.9 step 3 is where that refusal is replaced by the
+migrated identity, document-set, and bundle code.
+
+No region text lives in this file. Every region is addressed by its section
+name in the invariants document, and every marker is the first line of that
+section's committed body.
+"""
+
+import argparse
+import datetime
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from aimeta import cli, directive, invariants  # noqa: E402
+
+TIMESTAMP_FORMAT = "%Y%m%dT%H%M%S"
+
+
+def build_parser():
+    p = argparse.ArgumentParser(
+        prog="directive",
+        description=(
+            "Assemble a directive skeleton from the committed invariants "
+            "document, with a manifest naming where each region came from."
+        ),
+    )
+    p.add_argument("paths", nargs="*", metavar="PATH", help="documents in scope")
+    p.add_argument("--descriptor", metavar="SLUG", help="general-mode selector")
+    p.add_argument("--cycle", metavar="N", help="cycle-mode selector: cycle number")
+    p.add_argument("--name", metavar="SLUG", help="cycle-mode selector: directive slug")
+    p.add_argument("--title", metavar="T", help="directive title")
+    p.add_argument(
+        "--timestamp",
+        metavar="YYYYMMDDThhmmss",
+        help="fix the general-mode timestamp, read as UTC",
+    )
+    p.add_argument("--date", metavar="YYYY-MM-DD", help="fix the cycle directive date")
+    p.add_argument("--route", metavar="R", help="the dispatch route this directive states")
+    p.add_argument("--model", metavar="M", help="the dispatch model this directive states")
+    p.add_argument("--out", metavar="DIR", help="cycle-mode bundle output directory")
+    p.add_argument(
+        "--write",
+        action="store_true",
+        help="write the skeleton to the destination the generator computes",
+    )
+    p.add_argument(
+        "--allow-dirty",
+        action="store_true",
+        help="warn instead of refusing when an input has uncommitted edits",
+    )
+    return p
+
+
+def select_mode(args):
+    """§3.9's selector rule, extended to a third selector. Usage errors only."""
+    selectors = [bool(args.cycle), bool(args.name), bool(args.descriptor)]
+    if sum(1 for chosen in selectors if chosen) != 1:
+        raise cli.ToolError(
+            "exactly one of --cycle, --name or --descriptor is required",
+            cli.EXIT_USAGE,
+        )
+    return "general" if args.descriptor else "cycle"
+
+
+def check_flag_collisions(mode, args):
+    """`--timestamp` is general-mode-only; `--date`, `--out` and documents are not."""
+    if mode == "general":
+        for flag, given in (
+            ("--date", args.date),
+            ("--out", args.out),
+        ):
+            if given:
+                raise cli.ToolError(
+                    "%s belongs to cycle mode; general mode does not take it" % flag,
+                    cli.EXIT_USAGE,
+                )
+        if args.paths:
+            raise cli.ToolError(
+                "general mode takes no document arguments; it writes no bundle",
+                cli.EXIT_USAGE,
+            )
+    elif args.timestamp:
+        raise cli.ToolError(
+            "--timestamp belongs to general mode; cycle mode fixes its date with "
+            "--date",
+            cli.EXIT_USAGE,
+        )
+
+
+def resolve_timestamp(given):
+    """The general-mode timestamp: the flag verbatim, read as UTC, else the clock."""
+    if given:
+        try:
+            datetime.datetime.strptime(given, TIMESTAMP_FORMAT)
+        except ValueError:
+            raise cli.ToolError(
+                "--timestamp must be YYYYMMDDThhmmss, read as UTC: %s" % given,
+                cli.EXIT_USAGE,
+            )
+        return given
+    now = datetime.datetime.now(datetime.timezone.utc)
+    return now.strftime(TIMESTAMP_FORMAT)
+
+
+def run_general(args):
+    root = cli.load_root()
+    doc = invariants.load(root, allow_dirty=args.allow_dirty)
+    timestamp = resolve_timestamp(args.timestamp)
+    relpath = directive.destination(args.descriptor, timestamp)
+    if args.write:
+        directive.refuse_existing(root, relpath)
+    values = directive.general_values(
+        title=args.title or args.descriptor.replace("-", " "),
+        route=args.route,
+        model=args.model,
+        directive_path=relpath,
+    )
+    text = directive.assemble(doc, directive.GENERAL_REGIONS, values)
+    if args.write:
+        directive.land(root, relpath, text)
+    else:
+        sys.stdout.write(text)
+    return cli.EXIT_OK
+
+
+def run_cycle(args):
+    """Cycle mode does not land in this package; §3.9 step 3 replaces this."""
+    raise cli.ToolError(
+        "[cycle-mode-unavailable] observed: cycle mode is not wired in this "
+        "landing; the migration's step 3 adds it, and bin/cycle-open remains the "
+        "executable that emits a cycle skeleton until it does",
+        cli.EXIT_USAGE,
+    )
+
+
+def main(argv=None):
+    args = build_parser().parse_args(argv)
+    mode = select_mode(args)
+    check_flag_collisions(mode, args)
+    if mode == "general":
+        return run_general(args)
+    return run_cycle(args)
+
+
+if __name__ == "__main__":
+    sys.exit(cli.run(main))
