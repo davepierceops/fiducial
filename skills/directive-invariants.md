@@ -1,0 +1,262 @@
+---
+status: draft
+last-reviewed: null
+audience: [chief-of-staff, human]
+---
+
+# Directive Invariants
+
+The regions a generated directive skeleton is assembled from, and the strings
+the directive lint compiles. `bin/aimeta/invariants.py` is the only code that
+reads this file; both `bin/directive` and `bin/check-directive` reach it
+through that module, so the label, the marker syntax and every region's text
+have one definition rather than two agreeing copies.
+
+Every section below is a `##` heading at column 0. A section's body runs from
+its heading to the next `##` heading, and **the first non-blank line of a body
+is always body** — three sections carry an ATX marker as their first body line
+and are still one section each. A region section's body opens with that
+region's marker line, so the generator copies the marker rather than composing
+it. Placeholders are `{{name}}` from the closed set the TRD's §3.3 tables fix
+per region; an unrecognised placeholder is a refusal, never a pass-through.
+
+The disposition label appears in this document **only inside fenced blocks**.
+That is the one property of this one file that makes the generated skeleton
+carry exactly one unfenced labelled statement, and amending it breaks that
+guarantee for every subsequent skeleton.
+
+## Heading (general)
+
+# {{title}}
+
+## Heading (cycle)
+
+# Cycle {{cycle}} Directive — {{title}}
+
+Date: {{date}}
+Documents in scope:
+{{scope_list}}
+
+## Route and model
+
+ROUTE AND MODEL
+
+Route: {{route}}
+Model: {{model}}
+
+## First act
+
+FIRST ACT
+
+Write this directive verbatim to {{directive_path}}, commit it alone with a
+message naming the package it opens, push the branch to origin, and report the
+SHA. Do this before reading anything else and before touching any other file.
+
+## Working-tree disposition prompt
+
+DISPOSITION PROMPT
+
+A working-tree disposition is required, and it is stated below as its own
+labelled statement. The governed rule it answers to:
+
+```text
+**Every directive states its working-tree disposition** — either an exclusive
+assignment (a named directory plus the command creating it) or an explicit
+sole-tree declaration. A prohibition is not a disposition. The disposition is
+stated as its own labelled statement, exactly one per directive, mechanically
+distinguishable from incidental mention of trees or commands elsewhere in the
+file; the label's fixed form is a tooling concern, not this document's. Two
+sessions sharing a tree mutate each other's preconditions; prefer not
+splitting work across trees.
+```
+
+Both admitted forms, worked:
+
+```text
+WORKING-TREE DISPOSITION (exclusive assignment): this session works only in a
+worktree at "wt/<name>", created by: git worktree add "wt/<name>" main
+
+WORKING-TREE DISPOSITION: This session works in the sole tree at the clone root.
+```
+
+## Base verification
+
+BASE VERIFICATION
+
+Before anything else, fetch and confirm the base is at the reviewed ref
+{{reviewed_ref}}. Judge the fetch by the refs it reports, not by a credential
+helper's noise on stderr. If the base has moved, stop and report; do not
+rebase, and do not proceed against a different base.
+
+## Companions
+
+COMPANIONS
+
+Read these whole, from the working tree, at the revision each names, before
+writing anything:
+
+{{companion_list}}
+
+## Task
+
+TASK
+
+## Sandbox constraints
+
+SANDBOX
+
+Commands run inside the sandbox. `gh` cannot reach the GitHub API from here,
+so a directive that wants a pull request gets a pushed branch and a report line
+saying so, and the decision session opens it. No credential ever enters a file
+or stdout.
+
+## Verification steps
+
+VERIFICATION
+
+Run the verification this directive names, from the working tree it assigns
+you, with the output captured to a file. State each result and the log's path.
+A step you did not run is reported as not run, never as passed.
+
+## Stop conditions
+
+STOP CONDITIONS
+
+Pinned to the reviewed ref {{reviewed_ref}}. Cannot execute as written: stop
+and report. Concurrent tree mutation: stop and report. On any failed command,
+any precondition not met, or any tree mutation you did not intend, including
+your own — stop and report; do not retry with different flags, and do not
+delete or create any ref to recover.
+
+## Report format
+
+REPORT
+
+- the directive file's commit SHA
+- every commit SHA this session landed, in order, and the branch they are on
+- what was verified, how, and where the run log is
+- anything observed this directive did not anticipate
+- the worktree-removal status
+
+## Claim labels
+
+CLAIM LABELS
+
+Label every claim observed, inferred, told, or unknown.
+
+## Decisions
+
+## Decisions
+
+<!--
+### <finding id> — <accept | reject | modify>
+Finding: <one-line restatement>
+Resolution: <instruction to the executor; for "modify", exact intent;
+for "reject", no action — recorded for audit>
+Dictated wording: <verbatim, if any — executor must use as-is>
+-->
+
+## Deferred
+
+## Deferred / out of scope
+
+- <item> — <where it is tracked>
+
+## Execution notes
+
+## Execution notes
+
+<constraints on how edits are made, if any>
+
+## Source manifest
+
+SOURCE MANIFEST
+
+One entry per emitted region, in emission order: the marker that begins the
+region, and either the committed path it was read from at the revision named
+or an author-region marking.
+
+{{manifest}}
+
+## Disposition label
+
+The label literal the generator emits, at column 0:
+
+```text
+WORKING-TREE DISPOSITION:
+```
+
+Match rule: an eligible line whose leading content, after stripping, is exactly
+that literal, followed by a colon anywhere later on the same line.
+Case-sensitive; no hyphen variants; no case folding; no other spelling.
+
+Statement extent: the label line plus every following line up to the first
+blank line. Form-membership is decided over that extent, and exactly one of the
+two forms must be present — zero fails, both fail.
+
+Exclusive-assignment form: the extent contains a `git worktree add` invocation
+and a quoted or backticked path-shaped token. Both, or neither.
+
+Canonical sole-tree sentence:
+
+```text
+This session works in the sole tree at the clone root.
+```
+
+## Marker syntax
+
+A marker is a line at column 0 that is either an ATX heading (one to six `#`
+characters, a space, then text; the token is the text after the run) or an
+all-caps run of three or more characters drawn from `A`-`Z`, `0`-`9`, `-`, and
+single interior spaces, terminated by any character outside that set or by end
+of line (the token is the run). Nothing else is a marker.
+
+## Preamble markers
+
+Markers admitted before the first-act statement:
+
+```text
+<document heading>
+ROUTE AND MODEL
+```
+
+## Match phrases
+
+The phrases the lint compiles, one fenced block per element.
+
+M1:
+
+```text
+reviewed ref
+```
+
+M4:
+
+```text
+cannot execute as written
+concurrent tree mutation
+```
+
+M5:
+
+```text
+write
+commit
+push
+report the SHA
+```
+
+M6:
+
+```text
+report
+```
+
+M7:
+
+```text
+observed
+inferred
+told
+unknown
+```
