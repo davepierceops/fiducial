@@ -887,13 +887,14 @@ class TestMarkdownSensitivity(CheckDirectiveTestCase):
 
 
 class TestInvariantsDocumentDependency(CheckDirectiveTestCase):
-    """FM-L3, and the asymmetry §3.6 step 4 leaves against §3.2.
+    """FM-L3 and FM-L7 — the lint's read of the invariants document.
 
-    §3.2 scopes the **generator's** read of the invariants document to committed
-    content in the methodology home. §3.6 step 4 says only "load the invariants
-    … from the methodology home" and scopes the **lint's** read to nothing. This
-    class tests the lint to the TRD as written — an uncommitted edit takes
-    effect immediately — and is the test that changes if the asymmetry resolves.
+    §3.6 step 4 scopes the lint's read to committed content in the methodology
+    home, exactly as §3.2 scopes the generator's, and refuses an uncommitted
+    modification under FM-L7 — FM-G3's analogue on the lint's side. The reason
+    is Q9's single-source property: the generator's output satisfies the lint by
+    construction only if both tools read the same bytes, so an edit that reached
+    one and not the other would break that construction silently.
     """
 
     def test_fm_l3_a_missing_invariants_document_refuses_the_invocation(self):
@@ -918,11 +919,13 @@ class TestInvariantsDocumentDependency(CheckDirectiveTestCase):
             "expected [invariants-section-missing]; saw %r" % bracket_codes(out + err),
         )
 
-    def test_the_lints_read_is_not_scoped_to_committed_content(self):
-        """§3.6 step 4 as written: an **uncommitted** label change takes effect.
+    def test_fm_l7_the_lints_read_is_scoped_to_committed_content(self):
+        """§3.6 step 4: an **uncommitted** edit is refused, never read.
 
-        The generator refuses the same edit under FM-G3. The asymmetry is filed
-        as a finding; if it resolves toward §3.2, this test inverts.
+        The generator refuses the same edit under FM-G3; FM-L7 is its analogue.
+        The label redefinition below would change M3's verdict if the lint read
+        the working tree, so a run that decides M3 either way has read what it
+        must not.
         """
         write(
             self.home,
@@ -932,7 +935,22 @@ class TestInvariantsDocumentDependency(CheckDirectiveTestCase):
         )
         relpath = self.fixture()
         rc, out, err = self.lint(relpath)
-        self.assert_fails(rc, out, err, "M3", "disposition-absent")
+        self.assertTrue(no_traceback(out, err), "traceback: %r" % err)
+        self.assertNotEqual(
+            rc, 0, "an uncommitted invariants document was not refused; "
+            "stdout=%r stderr=%r" % (out, err),
+        )
+        self.assertIn(
+            "invariants-dirty",
+            bracket_codes(out + err),
+            "expected [invariants-dirty] (TRD §6, FM-L7); saw %r"
+            % bracket_codes(out + err),
+        )
+        self.assertNotIn(
+            "disposition-absent",
+            bracket_codes(out + err),
+            "the lint decided M3 against the working tree rather than the commit",
+        )
 
 
 class TestGeneratedSkeletonPassesTheLint(CheckDirectiveTestCase):

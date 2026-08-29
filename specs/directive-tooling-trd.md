@@ -13,9 +13,9 @@ This is the standing technical specification for the two tools
 It proposes. Where a choice is product judgment, or where making it would amend
 an agreed goal or acceptance criterion, this document records it in §9 as an
 open technical question naming what would resolve it, rather than settling it
-here. Four questions the PRD routes to Dave — Q2, Q4, Q5, Q6 — are carried in
+here. Three questions the PRD routes to Dave — Q2, Q4, Q6 — are carried in
 §9 in exactly that form, with options, tradeoffs, and a recommendation. Every
-other section is written to stand whichever way each of the four is ruled;
+other section is written to stand whichever way each of the three is ruled;
 where a section cannot, §9's entry names it.
 
 ## 1. System overview
@@ -105,7 +105,7 @@ side — no latency target, scalability N/A.
 | --- | --- |
 | `bin/directive` | Parse argv, select the mode, call the assembler, write or print the result, exit with the mapped code. No git logic, no region text, no rendering decisions. |
 | `bin/check-directive` | Parse argv, resolve the path, call the element set, serialize the finding report, exit with the mapped code. No element logic. |
-| `aimeta/invariants.py` | New. Parses `skills/directive-invariants.md` into named sections; exposes each section's raw body, the substitution pass, the disposition label literal, M3's match rule, the marker syntax, and the preamble-marker list. The single reader of that file. |
+| `aimeta/invariants.py` | New. Parses `skills/directive-invariants.md` into named sections; exposes each section's raw body, the substitution pass, the disposition label literal, M3's match rule, the marker syntax, the preamble-marker list, and §3.6's match phrases. The single reader of that file. |
 | `aimeta/directive.py` | New. The region set per mode, emission order, substitution, the manifest, and the generated-skeleton invariant. Cycle mode's identity and document-set resolution, migrated from `bin/cycle-open`. |
 | `aimeta/mdmask.py` | New. One pure function over directive text: which lines are eligible for a line-anchored match, and which are masked (§3.5). Touches no git and no filesystem. |
 | `aimeta/elements.py` | New. M1–M8, one function each, over `(root, relpath, text, eligible_lines, invariants)`. Returns per-element results. Knows nothing of exit codes or output format. |
@@ -335,8 +335,19 @@ document says later.
 | 13 | `CLAIM LABELS` | `§Claim labels` | — |
 | 14 | `SOURCE MANIFEST` | `§Source manifest` | `{{manifest}}` |
 
-Fourteen regions: two author, twelve committed — AC-DT-18 exactly. Region 2 is
-Q5-dependent and §9's OQ-5 states what moves under each ruling.
+Fourteen regions: two author, twelve committed — AC-DT-18 exactly.
+
+**Route and model are emitted, and not checked.** `--route` and `--model`
+supply region 2's two placeholders. Both flags are accepted in both modes, and
+the cycle-mode table below carries the same region read from the same section,
+so a directive of either class states the dispatch that produced it. The values
+go into a **committed** region rather than an author slot: the author-region
+count stays at two, which is what G2 and AC-DT-18 fix, and the manifest
+classifies region 2 as committed like every other sourced region. The lint
+checks neither value. Route and model stay in AC-DT-08's unchecked set, the
+element set stays at eight, and no element derives a requirement from
+DEC-000180 — which fixes route and model of the *dispatch*, not of the file,
+and would have to be amended before any lint could enforce them.
 
 **The prompt is region 4, and its marker is `DISPOSITION PROMPT`.** G3 makes
 the disposition slot two regions — an invariant prompt and an author region —
@@ -358,31 +369,53 @@ AC-CO-3's relative order; added regions are interleaved without disturbing it.
 
 | # | Marker | Region source | Note |
 | --- | --- | --- | --- |
-| 1 | `Cycle <n> Directive — <title>` (heading) | `§Heading (cycle)` | Carries the heading, the `Date:` line, and the `Documents in scope:` list — AC-CO-3's first three items, one region because AC-CO-3 fixes them as one block |
-| 2 | `FIRST ACT` | `§First act` | Added |
-| 3 | `DISPOSITION PROMPT` | `§Working-tree disposition prompt` | Added; G3's first region |
-| 4 | `WORKING-TREE DISPOSITION` | **author region** | Added; the slot the PRD names |
-| 5 | `Decisions` (heading) | `§Decisions` | AC-CO-3, carrying the commented placeholder verbatim |
-| 6 | `Deferred / out of scope` (heading) | `§Deferred` | AC-CO-3 |
-| 7 | `Execution notes` (heading) | **author region** | AC-CO-3's third section; cycle mode's task-specific slot |
-| 8 | `BASE VERIFICATION` | `§Base verification` | Added |
-| 9 | `COMPANIONS` | `§Companions` | Added |
-| 10 | `SANDBOX` | `§Sandbox constraints` | Added |
-| 11 | `VERIFICATION` | `§Verification steps` | Added |
-| 12 | `STOP CONDITIONS` | `§Stop conditions` | Added |
-| 13 | `REPORT` | `§Report format` | Added |
-| 14 | `CLAIM LABELS` | `§Claim labels` | Added |
-| 15 | `SOURCE MANIFEST` | `§Source manifest` | Added |
+| 1 | `Cycle <n> Directive — <title>` or `<Title> Directive` (heading) | `§Heading (cycle)` | Carries the heading, the `Date:` line, and the `Documents in scope:` list — AC-CO-3's first three items, one region because AC-CO-3 fixes them as one block. Two marker forms, one per selector; see below |
+| 2 | `ROUTE AND MODEL` | `§Route and model` | Added; the same section general mode's region 2 reads, with the same two placeholders |
+| 3 | `FIRST ACT` | `§First act` | Added |
+| 4 | `DISPOSITION PROMPT` | `§Working-tree disposition prompt` | Added; G3's first region |
+| 5 | `WORKING-TREE DISPOSITION` | **author region** | Added; the slot the PRD names |
+| 6 | `Decisions` (heading) | `§Decisions` | AC-CO-3, carrying the commented placeholder verbatim |
+| 7 | `Deferred / out of scope` (heading) | `§Deferred` | AC-CO-3 |
+| 8 | `Execution notes` (heading) | **author region** | AC-CO-3's third section; cycle mode's task-specific slot |
+| 9 | `BASE VERIFICATION` | `§Base verification` | Added |
+| 10 | `COMPANIONS` | `§Companions` | Added |
+| 11 | `SANDBOX` | `§Sandbox constraints` | Added |
+| 12 | `VERIFICATION` | `§Verification steps` | Added |
+| 13 | `STOP CONDITIONS` | `§Stop conditions` | Added |
+| 14 | `REPORT` | `§Report format` | Added |
+| 15 | `CLAIM LABELS` | `§Claim labels` | Added |
+| 16 | `SOURCE MANIFEST` | `§Source manifest` | Added |
 
-Fifteen regions: two author, thirteen committed. Every row is enumerated rather
+Sixteen regions: two author, fourteen committed. Every row is enumerated rather
 than given as a range, because AC-DT-05's partition and AC-DT-18's counts are
 per-mode assertions over the entries themselves, and a range names no marker to
 assert on. The correspondence with general mode, stated once so it need not be
-inferred from the table: general mode's regions 6, 7 and 9–13 are rows 8–14
-here, carrying the same source sections and the same placeholders; general
-mode's `TASK` region has no counterpart, cycle mode's task-specific slot being
-row 7; and general mode's region 2, `ROUTE AND MODEL`, has no counterpart
-either.
+inferred from the table: general mode's region 2 is row 2 here, and general
+mode's regions 6, 7 and 9–13 are rows 9–15, all carrying the same source
+sections and the same placeholders; general mode's `TASK` region has no
+counterpart, cycle mode's task-specific slot being row 8.
+
+**AC-DT-14's route-and-model clause is satisfied by row 2.** The criterion
+requires the cycle skeleton to carry Route and Model and no Track; row 2 emits
+both, from the section general mode reads, and no region of either mode emits a
+`Track:` line — DEC-000180 retired it, and nothing in the invariants document
+restores it. Both modes therefore carry the region, and the clause is discharged
+by the cycle emission rather than by a check.
+
+**Row 1 has two marker forms, one per cycle-mode selector.** `--cycle N` emits
+`# Cycle <n> Directive — <title>`, whose marker token is
+`Cycle <n> Directive — <title>`. `--name SLUG` emits `# <Title> Directive`,
+whose token is `<Title> Directive`, `<Title>` defaulting to the slug with its
+hyphens read as spaces. Both are AC-CO-1's forms, preserved unchanged by the
+migration. The two are **one region and one manifest entry either way**, so
+AC-DT-18's counts read identically under each — sixteen entries, two author,
+fourteen committed — and AC-DT-05's partition reads identically too: the token
+is whatever text follows the `#` run on the emitted line, that line is the
+file's first, so the partition has no head gap, and the token appears once. What
+differs between the selectors is the entry's marker *text*, and AC-DT-05 fixes
+the entry as naming "the marker that begins the region" rather than any
+particular literal. Nothing in either assertion depends on which form was
+emitted, which is why the row is one row and not two.
 
 **Cycle mode's region 5 is a committed region an author writes into.** The
 `## Decisions` placeholder is committed text (AC-CO-3 requires those exact
@@ -405,13 +438,86 @@ two is then a red test rather than a reader's discovery — which is the cost
 `reviews/directive-authoring-cycle-3.md`'s downstream-exposure table prices for
 by-value quotation, paid here in a place that fails loudly.
 
+#### The invariants document's own format
+
+§3.2 decides *that* the document holds one section per region, "each addressed
+by its heading", and the two tables above address them. It fixes no schema for
+the document itself, and the tools parse it, so the schema is fixed here.
+
+**Heading level.** One `#` title opens the document. Every section is a `##` ATX
+heading at column 0, and there is no third level. A section's body is everything
+between its heading and the next section heading, under one rule that is
+load-bearing rather than incidental: **the first non-blank line of a body is
+always body, never a heading.** Three region sections — `Decisions`, `Deferred`,
+`Execution notes` — carry an ATX marker as the first line of their body (rows 6,
+7 and 8 of the cycle table), so a parse that ended a section at the first `##`
+line inside it would read all three as empty and invent three sections that are
+not there. The rule is what makes cycle mode's AC-CO-3 headings expressible as
+committed region text at all.
+
+**Section-name form.** A section's name is its heading text, in sentence case,
+and it names the **region rather than the marker**: `Deferred` is the name,
+`Deferred / out of scope` is the marker its body carries. The names are the keys
+the tables above address, written there as `§<name>`. There are twenty-one:
+
+- **seventeen region sections** — `Heading (general)`, `Heading (cycle)`,
+  `Route and model`, `First act`, `Working-tree disposition prompt`,
+  `Base verification`, `Companions`, `Task`, `Sandbox constraints`,
+  `Verification steps`, `Stop conditions`, `Report format`, `Claim labels`,
+  `Decisions`, `Deferred`, `Execution notes`, `Source manifest`;
+- **four lint sections** — `Disposition label`, `Marker syntax`,
+  `Preamble markers`, `Match phrases`.
+
+**A committed region's marker line is the first line of its committed section
+body.** The marker is copied text, not prose the generator composes, which is
+§3.2's condition 1 applied to the one line an author would otherwise expect the
+tool to supply from a literal of its own. It is also what keeps AC-DT-02
+satisfiable in the direction that matters: the criterion forbids the generator's
+source from reproducing a line of a manifest entry's committed content, and a
+marker line is such a line.
+
+**An author region has no committed content, so AC-DT-02 does not reach its
+marker.** Its manifest entry names no path, and the criterion scans per entry
+against *that entry's* committed content; where there is none, a marker literal
+in the generator's source offends nothing the criterion states. This design
+holds no such literal anyway, and the reason is Q9 rather than AC-DT-02: the
+disposition author region's marker is the label, read from `§Disposition label`,
+which the single-source property (§3.1) requires, and `TASK` and
+`## Execution notes` are read from `§Task` and `§Execution notes`, whose bodies
+are their marker lines and nothing else. What makes those entries *author*
+entries is that the region's content below the marker is the author's — which is
+the whole of what AC-DT-18's classification claims.
+
+**Where §3.4's three parts live.** All three — the literal the generator emits,
+the match rule the lint compiles, and the statement's extent — are in the one
+`## Disposition label` section, together with the exclusive-assignment form's
+rule. **The canonical sole-tree sentence is in that same section**, inside a
+fence, and `§Working-tree disposition prompt`'s own fence carries it worked, per
+§3.2's Q10 decision. One section, so a change to the label's definition moves
+the generator's emission and the lint's match together rather than one of them.
+
+**Where §3.6's compiled phrases live.** `## Match phrases`, one fenced block per
+element, each labelled by its element: M1's `reviewed ref`; M4's two
+stop-condition phrases; M5's four first-act phrases; M6's `report`; M7's four
+class words. M2, M3 and M8 have no block, and their absence is not an omission —
+M2 and M8 match no phrase at all, and M3's strings are `## Disposition label`'s.
+
+**Fencing.** The label literal appears in this document only inside fenced
+blocks, which is §3.2's condition 2 and the one property of the one file that
+makes G3 hold. `## Preamble markers` and `## Match phrases` fence their strings
+for the same reason the label section does: they are text a tool compiles, and a
+fence is what separates a string to be matched from prose about matching.
+`## Marker syntax` fences nothing, because it states a grammar rather than a set
+of strings.
+
 ### 3.4 The disposition label — Q9 decided
 
 **Decision: the label is the literal `WORKING-TREE DISPOSITION`, and a labelled
 disposition statement is a line whose leading content, after §3.5's stripping,
 is that literal, followed by a colon anywhere later on the same line.**
 
-Stated as three parts, all three in one section of the invariants document:
+Stated as three parts, all three in the invariants document's one
+`## Disposition label` section (§3.3):
 
 - **The literal the generator emits:** `WORKING-TREE DISPOSITION:` at column 0.
 - **The match rule the lint compiles:** an eligible line (§3.5) whose leading
@@ -470,9 +576,9 @@ it is a reading of agreed text rather than a mechanism the PRD routed here.
   positive here leans on it." This is one of those false positives, named. The
   direction is ruled rather than open; OQ-7 records the parallel narrowing on
   the sole-tree branch, which is not.
-- **Sole-tree declaration** — the extent contains the literal sentence the
-  invariants document fixes as the canonical sole-tree form, which is the
-  worked example the prompt's fence carries. A literal, because F-3 records
+- **Sole-tree declaration** — the extent contains the literal sentence
+  `## Disposition label` fixes as the canonical sole-tree form (§3.3), which is
+  also the worked example the prompt's fence carries. A literal, because F-3 records
   that no instance of this form exists to generalise from, and inventing a
   pattern from zero examples would enforce a shape no author has ever written.
 
@@ -545,10 +651,33 @@ One invocation, in order, stopping at the first refusal:
 3. **Read the file** and build the mask (§3.5). One read, decoded UTF-8
    explicitly (AC-X-7).
 4. **Load the invariants** — the label, the match rule, the marker syntax, the
-   preamble-marker list — from the methodology home (§3.7).
+   preamble-marker list, and the match phrases — from the methodology home
+   (§3.7), **at their last commit there, exactly as the generator reads them**
+   (§3.2). The read is scoped to committed content, and an uncommitted
+   modification to the invariants document is a refused invocation (§6, FM-L7),
+   the lint-side analogue of FM-G3. The reason is Q9's single-source property:
+   the generator's output satisfies the lint by construction only if both tools
+   read the same bytes, and a working-tree edit that reached one tool and not
+   the other would break that construction with no diagnostic anywhere. The lint
+   has no `--allow-dirty` to downgrade the refusal with — it takes one required
+   argument and no flag (step 1) — and the refusal is applied after step 4's
+   absence check, so a document that is not there is still `invariants-missing`
+   rather than `invariants-dirty`.
 5. **Decide M1–M8**, each independently, each returning pass, fail with a
    named cause, or unknown. No element reads another's result. M3 is total by
    construction and never returns unknown.
+
+   **What returns unknown, named as one class.** An element is unknown when **a
+   git read fails for a reason the lint cannot attribute to the directive** — an
+   unreadable object store, a damaged repository, `git` exiting with no answer
+   about the object. These are environment faults rather than findings: nothing
+   about the directive's text has been decided, so no coded finding would be an
+   honest report of them. Every condition in that class maps to `element-unknown`
+   and exit 1 (§7), which is AC-DT-10's requirement that no undecidable element
+   yields exit 0, and it is the only class that does. The boundary against a
+   finding is drawn by the citation cases: a SHA that resolves to no object is
+   `citation-unresolvable`, a claim *about the citation the directive wrote*; a
+   read that cannot say whether the object exists at all is unknown.
 6. **Report and exit.** The checked set, the per-element result, and the
    unchecked set, on both exit paths (G9, AC-DT-08). Exit per §7.
 
@@ -575,13 +704,27 @@ whitespace runs to one space, unless an element says otherwise.
     the reviewed ref", supplies the phrase; the hexadecimal run is the ref that
     bullet says to pin, not wording added here.
 - **M2** — for each companion citation of the form `<path> @ <sha>`: the SHA
-  resolves to a commit; the path is present in that commit's tree; and **that
-  commit itself touches the path**, decided as
+  resolves to a commit; **the object the SHA itself names is a commit** —
+  `git cat-file -t <sha>` returns exactly `commit`; the path is present in that
+  commit's tree; and **that commit itself touches the path**, decided as
   `git diff-tree --root --no-commit-id --name-only -r <sha> -- <path>`
   returning a non-empty result. Nothing more. Neither fullness nor lastness is
   checked, which is AC-DT-17's whole content: an abbreviated SHA of a touching
   commit passes, and a content commit that is not the last touching the path
   passes.
+  - **The object-type step, and why it is separate from resolution.**
+    `cat-file -e <sha>^{commit}` peels, and so does `diff-tree`: an annotated
+    tag's SHA satisfies both, because git resolves the tag object to the commit
+    it points at before answering. AC-DT-09 requires a citation by tag to fail,
+    so the type is read **unpeeled** and compared for equality with `commit`; a
+    `tag` or a `blob` fails with `citation-unresolvable`, before the touch test
+    runs. What the step reaches is bounded, and the bound is stated rather than
+    left to be discovered: **a lightweight tag is indistinguishable from its
+    commit.** A lightweight tag's ref carries no object of its own, so the SHA
+    an author copies out of it *is* the commit's SHA and `cat-file -t` returns
+    `commit` — it passes, correctly, since it names the commit M2 is about.
+    **Only an annotated tag is rejectable**, and AC-DT-09's "tag" is satisfied
+    on that form, which is the form its fixture builds.
   - **`--root` is not optional.** Without it, `diff-tree` compares a root
     commit against nothing and reports it as touching no path — so a citation
     naming a fixture repository's first commit, which is the natural way to
@@ -628,14 +771,32 @@ whitespace runs to one space, unless an element says otherwise.
     instruction is to write the directive to a file, commit, push, and report
     the SHA" — supplies all four phrases, and supplies the ordering requirement
     in the word *first*.
+  - **The marker beginning the statement's own region does not precede it.**
+    The ordering rule is about what stands *before* the first-act statement, and
+    the statement sits inside a region whose marker line opens it — `FIRST ACT`
+    in both modes. Counting that marker as preceding would make the rule
+    unsatisfiable by any skeleton this generator emits, and would oblige the
+    preamble list to name one marker per mode, a list that then has to be
+    maintained against §3.3's two tables. The exclusion is therefore in the rule
+    rather than in the list: the marker whose region contains the statement is
+    not a preceding marker, so `FIRST ACT` is not a preamble marker and does not
+    need to be. The statement is the more general one on purpose — it holds for
+    whatever marker a mode gives the first-act region, and for a hand-written
+    directive that gives it none.
   - **The preamble-marker list is a tolerance, not a requirement.** It is one
-    line of committed text in the invariants document — the document heading
-    and the route-and-model marker — and it only *widens* what counts as first,
-    admitting two markers a bare reading of the Vocabulary would exclude. It
-    admits directives the bare reading would fail and refuses none the bare
-    reading would admit, so it adds no requirement the lint enforces, and
-    AC-DT-13's reasoning about the fence exclusion covers it unchanged. The
-    lint reads no manifest to check the ordering.
+    line of committed text in the invariants document — the document heading and
+    `ROUTE AND MODEL` — and it only *widens* what counts as first, admitting two
+    markers a bare reading of the Vocabulary would exclude. **One list serves
+    both modes.** Now that §3.3's cycle table carries the route-and-model region
+    too, the same two markers precede the first-act statement in a cycle
+    directive and in a general one, so the route-and-model entry needs no
+    per-mode duplicate; and the heading entry is written as *the document
+    heading* rather than as any mode's heading text, so §3.3's three heading
+    forms — general mode's, and cycle mode's two — need no entry of their own
+    either. The list admits directives the bare reading would fail and refuses
+    none the bare reading would admit, so it adds no requirement the lint
+    enforces, and AC-DT-13's reasoning about the fence exclusion covers it
+    unchanged. The lint reads no manifest to check the ordering.
 - **M6** — a report section is present and enumerates its required fields.
   - **Match:** a marker line (§3.3) whose token, case-folded, is `report`; and,
     over that region's extent — its marker line to the next marker line — at
@@ -888,10 +1049,23 @@ remote, so no bare repository and no `file://` transport is added.
 
 - `directive_fixture(repo, *, omit=None, name=None, **regions)` — writes a
   directive built from one well-formed base and returns its relpath. `omit`
-  names one element of M1–M8 and removes exactly that element's text. Building
-  the eight failing fixtures by subtraction from one base, rather than writing
-  eight files by hand, is what makes "missing exactly that element" a property
-  of the helper instead of a claim about eight files nobody re-reads.
+  names one element and removes exactly that element's text. Building the
+  failing fixtures by subtraction from one base, rather than writing eight files
+  by hand, is what makes "missing exactly that element" a property of the helper
+  instead of a claim about eight files nobody re-reads.
+
+  **Two of the eight substitute rather than subtract, and `omit=` cannot build
+  them.** M2's failing fixture cites **a non-touching SHA** in place of the
+  touching one, because M2 quantifies over the citations a directive carries:
+  removing the companion region leaves zero citations, zero citations satisfy
+  the quantifier vacuously, and subtraction would therefore yield a fixture that
+  exits 0 on the very element it was built to fail. M8's failing fixture is
+  written under **a non-matching name**, because M8 is a property of the
+  resolved path and not of the text — there is no line for `omit=` to remove.
+  Both substitutions leave the rest of the base intact, so a non-zero exit is
+  still attributable to one element; what differs is that the fixture is a
+  corrupted base rather than a reduced one, and the helper states which of the
+  two each fixture is at its definition.
 - `disposition_fixture(repo, shape)` — the seven M3 shapes AC-DT-06 enumerates,
   now instantiable because §3.4 fixes the label.
 - `citation_fixtures(repo)` — the four synthetic M2 citations AC-DT-09 needs
@@ -919,6 +1093,19 @@ AC-X-7 cover both tools from their first landing; and `make_home` gains both
 the invariants document and a git repository around it, committed (§3.9).
 `bin/tests/test_cycle_open.py` gains the binary-name parameterization of step 3
 and nothing else.
+
+**Both helper changes land with the implementation, not with the tests.**
+Adding the two names to `CLI_NAMES` before the binaries exist reddens AC-X-1
+through AC-X-7, and turning `make_home` into a repository before a tool reads
+the home reddens `test_cycle_open.py` — in both cases a red in the *pre-existing*
+suite that says nothing about the new work, which is the one red the red-gate
+discipline does not buy anything with. So the test-side form is **additive**:
+`make_home_repo` supplies the repository-backed home with the invariants
+document committed in it, while `make_home` keeps its present behaviour byte for
+byte, and the integration point is asserted instead by one test that stays red
+until the implementer folds `make_home_repo` into `make_home` and adds the two
+names at migration step 1 or 2 (§3.9). `make_home_repo` is a step in the
+migration, not a second substrate: after that landing there is one helper again.
 
 **Criteria that are not tests.** AC-DT-02 and AC-DT-12(a)/(b) are static scans
 over source text, in the idiom `test_cross_cutting.py` already uses for AC-X-1
@@ -1014,8 +1201,8 @@ persists inside the landed directive. It is what makes PRD §5's first outcome
 signal computable from the file alone, and it is an input to nothing.
 
 **Authority.** The invariants document is authoritative for every region's
-text, for the label, for the marker syntax, and for the preamble-marker list.
-No copy of any of them exists in code.
+text, for the label, for the marker syntax, for the preamble-marker list, and
+for §3.6's match phrases. No copy of any of them exists in code.
 
 ## 6. Failure modes and recovery
 
@@ -1026,6 +1213,22 @@ which stops and surfaces; a lint failure returns the directive to the decision
 session, the only place a missing element can be supplied.
 
 Diagnostic codes are §7's to assign; no cell below names one.
+
+**AC-DT-04's author-text clause is satisfied by construction, and no cell below
+can name it.** The criterion requires that in both modes no text an author
+places in the task-specific region causes a non-zero exit, including text the
+lint would fail. The generator never sees such text. §5 enumerates its inputs —
+argv, the invariants document at its last commit in the methodology home, cycle
+mode's document set and each document's last-touching commit, and the clock —
+and none of them is directive prose: the task-specific region is emitted as an
+empty author slot, and it is filled after the generator has exited. There is
+consequently no exit path for author text to reach, and the clause is discharged
+by the input set rather than by a check, which is why it appears in no row of
+either table below. What is enforceable in the clause lives on the other tool:
+the lint is the one that reads author text, and its posture under G4 is that it
+decides M1–M8 and refuses nothing else about content — no element is added for
+what an author wrote in a region, and the unchecked set says so on every pass
+(AC-DT-08).
 
 **The generator.**
 
@@ -1052,8 +1255,9 @@ author would fill it, hand it over, and the executor would stop.
 | FM-L2 | Not inside a git repository | `cli.load_root` (AC-X-4) | Refused invocation |
 | FM-L3 | The invariants document is absent, unreadable, or missing the label section | Section parse | Refused invocation. The lint cannot decide M3 without the label, and AC-DT-10 forbids exit 0 for an element it cannot decide |
 | FM-L4 | One or more of M1–M8 fails | The element set | Non-zero, naming each element and the governed text it derives from |
-| FM-L5 | An element cannot be decided — a git read fails, a citation's SHA is unresolvable in a way that is not a finding about the citation | The element set | Reported **unknown**, non-zero (AC-DT-10) |
+| FM-L5 | An element cannot be decided: a git read fails for a reason the lint cannot attribute to the directive — an unreadable object store, a damaged repository, `git` returning no answer about the object (§3.6 step 5) | The element set | Reported **unknown** against that element, exit 1 (AC-DT-10). Distinct from a citation finding, which is a claim about text the directive carries |
 | FM-L6 | The file is not valid UTF-8 | Decode | Refused invocation. Not an element finding: the lint cannot read the text every element is about |
+| FM-L7 | The invariants document has uncommitted modifications | `git status --porcelain` on that document, in the methodology home | Refused invocation — FM-G3's analogue on the lint's side (§3.6 step 4). There is no `--allow-dirty` to downgrade it. Applied after FM-L3, so an absent document is still FM-L3 |
 
 **What no failure mode of either tool includes:** a write to a remote, a
 staged change, a commit, a modification to a file the invocation did not
@@ -1084,7 +1288,7 @@ existing five-code contract is reused with no new code and no advisory tier:
 | --- | --- | --- |
 | 0 | Every checked element passed; the report states the unchecked set | A skeleton was produced |
 | 1 | At least one element failed or is unknown | Cycle mode's AC-CO-6 refusal, unchanged |
-| 2 | Refused invocation: no argument, a path outside the repository, a path that does not exist, not in a repository, undecodable file | Usage: the selector rule, a flag given in the mode it does not belong to (`--timestamp` in cycle mode, `--date` in general mode), AC-CO-12's absolute `--out` |
+| 2 | Refused invocation: no argument, a path outside the repository, a path that does not exist, not in a repository, undecodable file, an invariants document that is absent, missing a named section, or uncommitted (FM-L7) | Usage: the selector rule, a flag given in the mode it does not belong to (`--timestamp` in cycle mode, `--date` in general mode), AC-CO-12's absolute `--out` |
 | 3 | Unused | Precondition: FM-G1 through FM-G5, FM-G7; AC-CO-2 and AC-CO-5 unchanged |
 | 4 | Unused | Unused |
 
@@ -1117,7 +1321,7 @@ brackets. One code per situation a session must answer differently.
 | `path-absent` | The named file does not exist | lint |
 | `invariants-missing` | The invariants document is absent or unreadable | both |
 | `invariants-section-missing` | A named section is absent | both |
-| `invariants-dirty` | Uncommitted modifications (FM-G3) | generator |
+| `invariants-dirty` | Uncommitted modifications to the invariants document (FM-G3, FM-L7) | both |
 | `invariants-placeholder-unknown` | An unrecognised placeholder (FM-G4) | generator |
 | `directive-exists` | The destination already exists (FM-G5) | generator |
 | `skeleton-self-check-failed` | FM-G7 | generator |
@@ -1210,7 +1414,7 @@ Model and no Track.
 
 ## 9. Open technical questions
 
-Four of these are the PRD's Q2, Q4, Q5, and Q6, carried here with options,
+Three of these are the PRD's Q2, Q4, and Q6, carried here with options,
 tradeoffs, and a recommendation, and **not decided**. Each names what it would
 cost to rule either way, and which section of this document, if any, cannot
 stand under a given ruling.
@@ -1258,33 +1462,6 @@ stand under a given ruling.
   - Sections that cannot stand under a ruling: under (a), §3.3's source table
     changes which path each region names. The mechanism — read a named section
     from a governed file — is unchanged, so only that column moves.
-- **OQ-Q5 — Route and model tier: unchecked set only, or emitted into the
-  file.**
-  - **(a) Unchecked set only.** The file carries neither; AC-DT-08 names them
-    as unchecked, as it already does.
-  - **(b) Emit and check.** The generator emits them and a ninth element checks
-    their presence.
-  - **(c) Emit, do not check.** `--route` and `--model` supply values into a
-    committed template region (§3.3, region 2); the element set stays at eight
-    and route and model stay in the unchecked set.
-  - Tradeoff: (a) leaves the executor's file silent about the dispatch that
-    produced it, so a retro reading the file alone cannot say which tier ran.
-    (b) would enforce a file-scoped requirement no governed file states —
-    DEC-000180 requires route and model of the *dispatch*, not the file — so it
-    needs either an amendment to DEC-000180 or a requirement invented in the
-    invariants document, which satisfies G6 in letter and hollows it out.
-  - Surfaced by the design: (b) also collides with AC-DT-18. A third author
-    region would break the count of two that G2 and AC-DT-18 fix; (c) avoids
-    this by making route and model *substituted values inside a committed
-    region* rather than an author slot.
-  - **Recommendation: (c).**
-  - Sections that cannot stand under a ruling: under (a), §3.3's general-mode
-    table loses region 2 and the marker list loses `ROUTE AND MODEL`, which
-    also removes one entry from M5's preamble-marker list — a change in three
-    named places and nothing else. **Under (b), this document does not stand:**
-    §3.6's element set has eight rows, AC-DT-08's unchecked set names route and
-    model, and a ninth element would need a governed source this design cannot
-    supply. (b) is an amendment to the PRD before it is a change here.
 - **OQ-Q6 — One exit status, or a blocking/advisory split.**
   - **(a) One non-zero status.** Every finding, every unknown, and AC-DT-19's
     refusal exit 1. The session's rule is "non-zero, stop".
@@ -1341,9 +1518,11 @@ The remaining questions are this document's own.
   output, which is precisely the state PRD §4's Conflict rule names as a defect
   in the PRD, to be surfaced rather than resolved by the implementer. This
   document designs to the reading that the PRD's two-item list is illustrative
-  of the license rather than a cap on the region set. *Resolved by*: a dictated
-  disposition in the PRD's text stating which of the two moved and why, per the
-  Conflict rule.
+  of the license rather than a cap on the region set. The route-and-model region
+  is added on a different ground and is not part of this question: AC-DT-14
+  requires the cycle skeleton to carry Route and Model, so an agreed criterion
+  licenses it directly. *Resolved by*: a dictated disposition in the PRD's text
+  stating which of the two moved and why, per the Conflict rule.
 - **OQ-6 — Q6's answer determines §7.** Recorded above as OQ-Q6; noted here so
   §7's tables have a single pointer.
 - **OQ-7 — Whether the sole-tree form's canonical sentence is this document's
