@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/agreeing-clusters-cycle-2.md @ ade5dad
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 ---
 
@@ -28,7 +28,9 @@ project artifacts.
 - `engagements/**`
 - `operating-model.md`
 - `LEXICON.md`
-- `prose-criteria.md`
+- `public-prose-criteria.md`
+- `voice.md`
+- `voice-template.md`
 
 **Out of scope:**
 
@@ -39,7 +41,7 @@ project artifacts.
 - State and tracker artifacts: `MANIFEST.md`, `OPEN-ITEMS.md`,
   `COLLAB-STATE.md`, `BACKLOG-v2.md`, review artifacts
   (`reviews/**`, `REVIEW-*.md`), retros (`retros/`), merge history
-  (`MERGE-NOTES-v0.4.md`).
+  (`MERGE-NOTES-v0.4.md`), the voice inbox (`voice-inbox.md`).
 - Adapters — the per-tool entry files that point a vendor's harness at
   this methodology, and their configuration directories.
 - Instantiated project PRDs/TRDs. These live in project repos, not
