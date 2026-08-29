@@ -4,7 +4,7 @@ This file tracks open questions, deferred decisions, and outstanding fixes
 for the AI operating model. Updated at defined checkpoints per
 `context-sets/spec-and-change-discipline.md`.
 
-Last updated: 2026-08-28
+Last updated: 2026-08-29
 
 ---
 
@@ -1199,4 +1199,18 @@ About 31 `$TMPDIR` worktrees registered against `~/code/fiducial`. Branches to d
 - DEC-000140 sweep still owed.
 - `roles/architect-agent.md` session-kind self-contradiction; C053 touched the file — re-check before opening a cycle.
 - Six methodology decisions from the 15-hour session not yet in `decisions/log.md`.
-- Writing corpus: the GitHub connector cannot see `davepierceops/writing` (404); `prose-criteria.md` audience tag defect.
+- ~~Writing corpus: the GitHub connector cannot see `davepierceops/writing` (404); `prose-criteria.md` audience tag defect.~~ RESOLVED 2026-08-29 by PR #230 (`53f7f40`): the writing repository's content was migrated from a snapshot at `387bde6`, so the connector no longer needs to see it; `prose-criteria.md` is retired to `docs/history/` and replaced by `public-prose-criteria.md` and `voice.md` (DEC-000240).
+
+---
+
+## Writing methodology landed — follow-ups
+
+**Source:** writing workstream decision session, 2026-08-28/29; PR #230 (`53f7f40`); DEC-000220 through DEC-000260.
+
+- **Full cycle owed on `policies/document-metadata-policy.md`.** Amended at `9160a86` to name `public-prose-criteria.md`, `voice.md`, and `voice-template.md` in the in-scope set and drop `prose-criteria.md`; a gate document, now `in-review` on main by Dave's decision to amend now and cycle later.
+- **Doc-only agreements owed**, one each, sequential: `roles/copy-editor.md`, `roles/critic.md`, `roles/writer.md` (in-review), `skills/outline.md`, `public-prose-criteria.md`, `voice.md`, `voice-template.md`. All co-authored in the pane; none is a gate document.
+- **Voice inbox triage owed**: the 2026-08-22 §4 and §5 entries in `voice-inbox.md`, against `voice.md`, as a doc-only cycle.
+- **Retire `davepierceops/writing`** after the agreements above land and Dave confirms nothing is missing. Its `pieces/converging-on-intent/` directory (arc, outline, six pass reports at `387bde6`) is piece record, not methodology, and is Dave's to keep outside fiducial per DEC-000250.
+- **Candidate Core line** (later cycle): a role that names a document absent from its context asks for it before acting on what it governs, and never proceeds from memory of it.
+- **`voice-template.md` audience is `[human]`**; how it reaches a writing bundle is the bundle-system PRD's decision (DEC-000260).
+- **`review-artifact.md` lists `critic` in its audience**; that slug now resolves to `roles/critic.md`. Whether the review-artifact skill should reach the Critic at all is open — the Critic emits comments in a document, not a review artifact.
