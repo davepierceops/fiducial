@@ -1,6 +1,6 @@
 ---
-status: draft
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/expedited-log.md @ 55d4a43e40458c88fa223d16c8e7e9cba53a970d
 audience: [human]
 ---
 
