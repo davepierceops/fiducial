@@ -1,6 +1,6 @@
 ---
-status: in-review
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/expedited-log.md @ 5109df2fc8e7faa8eadcd98105be2bc51d346a1a
 audience: [writer, human]
 order: 10
 session: decision
