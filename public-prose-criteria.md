@@ -1,6 +1,6 @@
 ---
-status: draft
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/expedited-log.md @ dcb64275d2c69eac7623d3969acf2881343ac4e9
 audience: [writer, copy-editor, critic, human]
 order: 11
 ---
