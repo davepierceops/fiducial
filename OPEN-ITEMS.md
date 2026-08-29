@@ -4,7 +4,7 @@ This file tracks open questions, deferred decisions, and outstanding fixes
 for the AI operating model. Updated at defined checkpoints per
 `context-sets/spec-and-change-discipline.md`.
 
-Last updated: 2026-08-27
+Last updated: 2026-08-28
 
 ---
 
@@ -1144,6 +1144,8 @@ Implementation is not blocked by this gate; the build-gating rule in
 `~/Downloads/bundle-system-prd-draft-20260825T023000.md`, status draft, on Dave's disk only. DEC-000210 cites it as the decision's context and names the `bundle-methodology` removal (now landed, PR #221) as a package under it.
 
 **What's needed:** commit it under `specs/`, then the spec-review cycle.
+
+**Recorded requirement for the PRD's cycle 1 (Dave, via the writing workstream decision session, 2026-08-28):** bundles are distributed through GitHub Releases. `bin/bundle` generates one bundle file per audience; a release attaches those files pinned to the repository SHA they were generated from; a consumer downloads one file and never touches the repository. No generated bundle is ever committed to the tree. Consequences the PRD must state: new audience values (`writer`, `copy`, `critic` are coming) must be accepted without a code change; whether a release carries every audience's bundle or a stated subset is the PRD's decision; every writing bundle carries the Public Prose Criteria document, the per-author Voice document, and a Voice template for new authors, mechanism the PRD's call; release cadence and ownership are open, unconstrained by the writing workstream. Nothing here changes DEC-000210 — this adds a delivery surface downstream of `bin/bundle`.
 
 ---
 
