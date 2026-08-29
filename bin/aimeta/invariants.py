@@ -15,6 +15,7 @@ AC-DT-01 literal.
 
 from __future__ import annotations
 
+import pathlib
 import re
 
 from . import cli, repo
@@ -314,6 +315,18 @@ def load(root, allow_dirty=False):
         home = repo.methodology_home(root)
     except LookupError as exc:
         raise cli.ToolError(str(exc), cli.EXIT_USAGE)
+
+    # §3.6 step 4: "a document that is not there is still invariants-missing
+    # rather than invariants-dirty." An uncommitted deletion still has a
+    # commit touching the path (`last_commit_sha` looks at history, not the
+    # working tree), so absence from the working tree is checked first and
+    # separately from the dirty check below.
+    if not (pathlib.Path(home) / RELPATH).is_file():
+        raise cli.ToolError(
+            "[invariants-missing] observed: %s is not present in the methodology "
+            "home at %s; there is no working-tree fallback" % (RELPATH, home),
+            cli.EXIT_PRECONDITION,
+        )
 
     sha = repo.last_commit_sha(home, RELPATH)
     if sha is None:
