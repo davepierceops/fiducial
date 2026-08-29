@@ -1085,7 +1085,18 @@ remote, so no bare repository and no `file://` transport is added.
   generator half, AC-DT-12(a) and (c), AC-DT-18.
 - `bin/tests/test_check_directive.py` — AC-DT-06 through AC-DT-11, AC-DT-12(b),
   AC-DT-13, AC-DT-17, AC-DT-19.
-- `bin/tests/test_mdmask.py` — §3.5's mask, as pure text. Builds no repository.
+
+**§3.5's mask has no test file of its own.** There is no
+`bin/tests/test_mdmask.py`: a unit test that imports `aimeta.mdmask` before the
+module exists reds on the import, and an import red says nothing about the
+behaviour under test — the same red the red-gate discipline does not buy
+anything with. So the mask is asserted **through the lint binary**, in
+`TestMarkdownSensitivity` in `bin/tests/test_check_directive.py`, one case per
+masking rule §3.5 states, each phrased as a directive the lint must pass
+because the labelled statement inside it is masked. Those reds are
+behavioural. Whether the implementer later adds a pure-text unit test beside
+`mdmask.py`, once the module exists to import, is left open; nothing in this
+document depends on one.
 
 **Existing files that change:** `bin/tests/helpers.py` gains `directive` and
 `check-directive` in `CLI_NAMES` and `CLI_MINIMAL_ARGS`, so AC-X-1 through
@@ -1409,8 +1420,11 @@ Model and no Track.
 - `bin/tests/test_cycle_open.py`: the binary-name parameterization of §3.9
   step 3.
 - `skills/directive-invariants.md`: new, and the migration's first landing.
-- `bin/tests/test_directive.py`, `bin/tests/test_check_directive.py`,
-  `bin/tests/test_mdmask.py`: new.
+- `bin/tests/test_directive.py`, `bin/tests/test_check_directive.py`: new.
+  §3.5's mask is covered inside the second of these, in
+  `TestMarkdownSensitivity`, driven through the lint binary; there is no
+  `test_mdmask.py`, because a unit test over a module that does not yet exist
+  reds on its import rather than on the behaviour (§4.1).
 
 ## 9. Open technical questions
 
