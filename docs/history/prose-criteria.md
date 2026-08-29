@@ -1,5 +1,6 @@
 ---
-status: agreed
+status: superseded
+superseded-by: public-prose-criteria.md
 last-reviewed: reviews/prose-criteria-cycle-3.md @ cd7db71
 audience: [writer, human]
 order: 11
