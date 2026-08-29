@@ -455,13 +455,19 @@ class TestUndecidableElements(CheckDirectiveTestCase):
         This is one induceable form of the class §3.6 step 5 names — "a git
         read that fails for a reason the lint cannot attribute to the
         directive" — alongside a damaged repository and git exiting with no
-        answer about the object.
+        answer about the object. Ruling 2026-08-29 (finding 2): the defeat is
+        narrowed to the cited object alone so repository discovery still
+        succeeds and the failure lands inside M2, rather than at discovery.
         """
         relpath = self.fixture()
-        objects = self.repo / ".git" / "objects"
-        original = objects.stat().st_mode
-        self.addCleanup(objects.chmod, stat.S_IMODE(original))
-        objects.chmod(0o000)
+        loose = (
+            self.repo / ".git" / "objects"
+            / self.companion_sha[:2] / self.companion_sha[2:]
+        )
+        self.assertTrue(loose.is_file(), "expected a loose object at %s" % loose)
+        original = loose.stat().st_mode
+        self.addCleanup(loose.chmod, stat.S_IMODE(original))
+        loose.chmod(0o000)
         rc, out, err = self.lint(relpath)
         self.assertNotEqual(rc, 0, "stdout=%r stderr=%r" % (out, err))
         self.assertIn(
@@ -976,20 +982,41 @@ class TestGeneratedSkeletonPassesTheLint(CheckDirectiveTestCase):
         )
 
     def test_ac_dt_06_iv_a_generated_skeleton_with_the_slot_filled_passes(self):
+        """AC-DT-06(iv): ruling 2026-08-29 (finding 1) fills both the
+        disposition and reviewed-ref author slots — general mode has no
+        reviewed-ref flag, so M1 fails on the placeholder otherwise — and
+        widens the assertion to the full ELEMENTS set, since this is the
+        suite's only end-to-end meeting of generator output and lint reading.
+        Ruling 2026-08-29 (fix-2 follow-up): the disposition slot is matched
+        by its exact blank form — the label-and-colon line and nothing
+        else — rather than by a first-occurrence substring replace, since a
+        plain substring match hits the fenced worked example in the prompt
+        region before it reaches the real, blank author slot.
+        """
         rc, out, err = self.generate("--write")
         self.assertEqual(rc, 0, "generator: stdout=%r stderr=%r" % (out, err))
         relpath = "docs/cycles/roundtrip-20260828T170000Z.md"
         path = pathlib.Path(self.repo) / relpath
         self.assertTrue(path.is_file(), "the generator wrote no skeleton at %s" % relpath)
-        filled = path.read_text().replace(
-            "%s:" % DISPOSITION_LABEL,
-            '%s: this session works only in a worktree at "wt/rt", created by:\n'
-            'git worktree add "wt/rt" main' % DISPOSITION_LABEL,
+        lines = path.read_text().split("\n")
+        label_line = "%s:" % DISPOSITION_LABEL
+        slots = [i for i, line in enumerate(lines) if line.rstrip() == label_line]
+        self.assertEqual(
+            len(slots),
             1,
+            "expected exactly one blank disposition slot line; found %d" % len(slots),
+        )
+        lines[slots[0]:slots[0] + 1] = [
+            '%s: this session works only in a worktree at "wt/rt", created by:'
+            % DISPOSITION_LABEL,
+            'git worktree add "wt/rt" main',
+        ]
+        filled = "\n".join(lines).replace(
+            "<full sha of the reviewed ref>", self.reviewed_ref
         )
         path.write_text(filled)
         rc, out, err = self.lint(relpath)
-        self.assert_pass(rc, out, err, elements=("M3",))
+        self.assert_pass(rc, out, err)
 
     def test_ac_dt_06_v_a_generated_skeleton_with_a_blank_slot_fails(self):
         rc, out, err = self.generate("--write")
