@@ -428,9 +428,12 @@ class TestDispositionSlot(DirectiveTestCase):
         )
 
     def test_ac_dt_03_the_author_region_is_the_label_over_a_blank_slot(self):
+        """Counted over §3.5's eligible lines, per AC-DT-03's "unfenced" and the
+        2026-08-29 ruling — the prompt region's fenced worked examples are masked
+        out before counting."""
         text = self.skeleton()
-        lines = text.split("\n")
-        hits = [i for i, l in enumerate(lines) if l.startswith("%s:" % DISPOSITION_LABEL)]
+        lines, eligible = eligible_lines(text)
+        hits = [i for i in eligible if lines[i].startswith("%s:" % DISPOSITION_LABEL)]
         self.assertEqual(
             len(hits), 1, "expected exactly one label line at column 0; got %d" % len(hits)
         )
@@ -585,26 +588,32 @@ class TestSourceManifest(DirectiveTestCase):
                     self.assertRegex(source[2], r"^[0-9a-f]{40}$")
 
     def test_ac_dt_05_every_marker_appears_in_the_file_exactly_once(self):
+        """Counted over §3.5's eligible lines, per AC-DT-03's "unfenced" and the
+        2026-08-29 ruling — a marker token appearing inside a fenced worked
+        example does not count as a second occurrence."""
         text = self.skeleton()
         entries = parse_manifest(text)
         self.assertTrue(entries, "the skeleton carried no manifest entries to locate")
-        lines = text.split("\n")
+        lines, eligible = eligible_lines(text)
         for marker, _ in entries:
             with self.subTest(marker=marker):
-                hits = [l for l in lines if is_marker(l) == (True, marker)]
+                hits = [i for i in eligible if is_marker(lines[i]) == (True, marker)]
                 self.assertEqual(
                     len(hits), 1, "marker %r appears %d times" % (marker, len(hits))
                 )
 
     def test_ac_dt_05_the_markers_partition_the_whole_file(self):
-        """Each region runs marker to next marker: no head gap, no gap, no overlap."""
+        """Each region runs marker to next marker: no head gap, no gap, no overlap.
+
+        The partition is decided over §3.5's eligible lines, per AC-DT-03's
+        "unfenced" and the 2026-08-29 ruling."""
         text = self.skeleton()
         entries = parse_manifest(text)
         self.assertTrue(entries, "no manifest to partition against")
-        lines = text.split("\n")
+        lines, eligible = eligible_lines(text)
         positions = []
         for marker, _ in entries:
-            found = [i for i, l in enumerate(lines) if is_marker(l) == (True, marker)]
+            found = [i for i in eligible if is_marker(lines[i]) == (True, marker)]
             self.assertEqual(len(found), 1, "marker %r is not unique" % marker)
             positions.append(found[0])
         self.assertEqual(
