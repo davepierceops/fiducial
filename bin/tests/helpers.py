@@ -636,7 +636,7 @@ def invariants_sections():
     return {
         "Heading (general)": "# {{title}}\n",
         "Heading (cycle)": (
-            "# Cycle {{cycle}} Directive — {{title}}\n"
+            "# {{heading}}\n"
             "\n"
             "Date: {{date}}\n"
             "\n"

@@ -34,8 +34,35 @@ DIRECTIVE_7 = "docs/cycles/cycle-7-directive.md"
 FULL_SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 EM_DASH = "—"
 
+#: TRD §3.9 step 3: cycle mode moves from `bin/cycle-open` to `bin/directive`.
+#: Every AC-CO-* test runs once through each, so the migration's evidence is
+#: the same suite passing against both rather than a restated one.
+BINARIES = ("cycle-open", "directive")
+
+
+def for_each_binary(cls):
+    """Class decorator: replace `cls` with one concrete subclass per binary.
+
+    A class parameterization, not `subTest`, because the binary is fixed for
+    an entire test class's `setUp` and every test in it — not a value varied
+    within one test body — and this way each generated class's name (e.g.
+    `TestDirectivePlacement__directive`) carries the binary into `unittest`'s
+    own failure output with no change to any assertion. The undecorated name
+    is removed from the module namespace (return `None`) so only the two
+    concrete, binary-bound classes are collected by `unittest discover`.
+    """
+    for binary in BINARIES:
+        variant_name = "%s__%s" % (cls.__name__, binary.replace("-", "_"))
+        variant = type(variant_name, (cls,), {"CLI_NAME": binary})
+        variant.__module__ = cls.__module__
+        globals()[variant_name] = variant
+    return None
+
 
 class CycleOpenTestCase(unittest.TestCase):
+    #: Overridden per generated subclass by `for_each_binary`.
+    CLI_NAME = "cycle-open"
+
     def setUp(self):
         self.home = make_home(self)
         self.repo = make_repo(self)
@@ -47,7 +74,7 @@ class CycleOpenTestCase(unittest.TestCase):
         self.sha_b = commit(self.repo, "add beta", env=self.env)
 
     def open_cycle(self, *args):
-        return run_cli("cycle-open", *args, cwd=self.repo, env=self.env)
+        return run_cli(self.CLI_NAME, *args, cwd=self.repo, env=self.env)
 
     def directive(self, relpath=DIRECTIVE_7):
         self.assertTrue(
@@ -66,6 +93,7 @@ class CycleOpenTestCase(unittest.TestCase):
         return read(self.repo, relpath)
 
 
+@for_each_binary
 class TestDirectivePlacement(CycleOpenTestCase):
     def test_co1_cycle_number_names_the_directive(self):
         """AC-CO-1: `--cycle N` writes `docs/cycles/cycle-<N>-directive.md`."""
@@ -99,6 +127,7 @@ class TestDirectivePlacement(CycleOpenTestCase):
         self.assertIn("existing", self.directive())
 
 
+@for_each_binary
 class TestDirectiveContent(CycleOpenTestCase):
     def setUp(self):
         super().setUp()
@@ -145,6 +174,7 @@ class TestDirectiveContent(CycleOpenTestCase):
             self.assertRegex(sha, FULL_SHA_RE)
 
 
+@for_each_binary
 class TestPreconditions(CycleOpenTestCase):
     def test_co5_refuses_a_dirty_document(self):
         """AC-CO-5: uncommitted edits make the recorded SHA a lie (exit 3)."""
@@ -184,6 +214,7 @@ class TestPreconditions(CycleOpenTestCase):
         self.assertIn("policies/never-existed.md", out + err)
 
 
+@for_each_binary
 class TestBundleEmission(CycleOpenTestCase):
     def test_co7_default_output_directory_and_flattened_names(self):
         """AC-CO-7: default `--out` is `.cycle-bundles/<directive-stem>/`."""
@@ -242,6 +273,7 @@ class TestBundleEmission(CycleOpenTestCase):
         self.assertNotIn("WARN", out + err)
 
 
+@for_each_binary
 class TestBundleExpansion(CycleOpenTestCase):
     def setUp(self):
         super().setUp()
@@ -280,6 +312,7 @@ class TestBundleExpansion(CycleOpenTestCase):
         self.assertIn(DOC_A, paths)
 
 
+@for_each_binary
 class TestOutPathContainment(CycleOpenTestCase):
     """AC-CO-12 (§8): `--out` is relative to the repo root, always.
 
@@ -336,7 +369,7 @@ class TestOutPathContainment(CycleOpenTestCase):
         # CLI behaviour and AC-CO-12 does not change it. Only `--out` is under
         # test here, so the two must not be conflated.
         rc, out, err = run_cli(
-            "cycle-open", "--cycle", "7", "--title", "T", "--out", "bundlehere",
+            self.CLI_NAME, "--cycle", "7", "--title", "T", "--out", "bundlehere",
             "../../" + DOC_A,
             cwd=nested, env=self.env,
         )
@@ -364,6 +397,7 @@ class TestOutPathContainment(CycleOpenTestCase):
         self.assertFalse(inside.exists(), "the refused bundle was written anyway")
 
 
+@for_each_binary
 class TestDateAndSideEffects(CycleOpenTestCase):
     def test_co10_date_flag_fixes_the_date_line(self):
         """AC-CO-10: `--date` makes the directive deterministic."""
