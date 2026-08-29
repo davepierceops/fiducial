@@ -384,9 +384,9 @@ class TestNoHardcodedInvariantText(DirectiveTestCase):
     def test_ac_dt_02_scans_the_generator_only(self):
         """§8 and the agreed criterion scope the scan to the generator's source.
 
-        §3.6 says elsewhere that it runs over the lint's source too; F-8. This
-        test pins the agreed scope, and is the test that changes if the wider
-        reading is adopted as a PRD amendment.
+        §3.6 now states this in bold: "AC-DT-02's scan walks the generator's
+        source and nothing else". This test pins the agreed scope, and is the
+        test that changes if the wider reading is adopted as a PRD amendment.
         """
         scanned = {p.name for p in production_dt_files()}
         self.assertNotIn("check-directive", scanned)
@@ -753,10 +753,10 @@ class TestCycleMode(DirectiveTestCase):
             else run_dt(binary, *args, cwd=self.repo, env=self.env)
 
     def test_ac_dt_14_the_cycle_skeleton_carries_route_and_model_and_no_track(self):
-        """AC-DT-14 as agreed. Expected red against the TRD's current design:
-        §3.3's cycle-mode region table has no route-and-model region, and states
-        so — "general mode's region 2, `ROUTE AND MODEL`, has no counterpart
-        either". Written to the criterion, per DEC of 2026-08-28."""
+        """AC-DT-14 as agreed. §3.3's cycle-mode region table carries row 2,
+        `ROUTE AND MODEL`, from the same section general mode's region 2 reads;
+        AC-DT-14's route-and-model clause is discharged by the cycle emission
+        itself, not by a check. Written to the criterion, per DEC of 2026-08-28."""
         text = self.cycle_directive(
             "--cycle", "7", "--title", "T", "--date", "2026-08-28",
             "--route", "fresh", "--model", "Opus 5", "docs/companion-a.md",

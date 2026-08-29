@@ -417,7 +417,7 @@ the entry as naming "the marker that begins the region" rather than any
 particular literal. Nothing in either assertion depends on which form was
 emitted, which is why the row is one row and not two.
 
-**Cycle mode's region 5 is a committed region an author writes into.** The
+**Cycle mode's region 6 is a committed region an author writes into.** The
 `## Decisions` placeholder is committed text (AC-CO-3 requires those exact
 fields), so the manifest classifies it as committed, which is accurate for *the
 skeleton as emitted* — the only thing the manifest claims. PRD §5 already bounds the

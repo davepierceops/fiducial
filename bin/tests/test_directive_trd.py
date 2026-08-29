@@ -1,10 +1,10 @@
-"""The TRD's own testable decisions, and the four questions it does not decide.
+"""The TRD's own testable decisions, and the three questions it does not decide.
 
 Contract: `specs/directive-tooling-trd.md` §3.1 (the `invariants.py` split),
 §3.3 (marker syntax), §3.4 (Q9), §7 (exit statuses and diagnostic codes), §8
-(required integration points), §9 (OQ-Q2, OQ-Q4, OQ-Q5, OQ-Q6).
+(required integration points), §9 (OQ-Q2, OQ-Q4, OQ-Q6).
 
-Tests blocked on the four questions the PRD routes to Dave are written to the
+Tests blocked on the three questions the PRD routes to Dave are written to the
 TRD's recommendation and **skipped with a reason naming the question**, so the
 suite is honest about what a ruling would change rather than silently encoding
 one. AC-DT-16 binds the decision session and not code, so it is represented the
@@ -53,12 +53,6 @@ SKIP_Q4 = (
     "recommends (c), the invariants document is the home and "
     "`skills/directive-authoring.md` gains a path pointer to it. Under (a) or "
     "(b) this assertion is wrong rather than merely unmet."
-)
-SKIP_Q5 = (
-    "PRD §8 Q5 (route and model: unchecked set only, or emitted) is open; TRD "
-    "OQ-Q5 recommends (c), emit into a committed region and do not check. "
-    "Under (a) the ROUTE AND MODEL region does not exist; under (b) a ninth "
-    "element does, and the TRD does not stand."
 )
 SKIP_Q6 = (
     "PRD §8 Q6 (one exit status, or a blocking/advisory split) is open; TRD "
@@ -367,7 +361,12 @@ class TestExitStatusContract(TrdTestCase):
 
 
 class TestOpenQuestions(TrdTestCase):
-    """Q2, Q4, Q5 — written to the TRD's recommendation, skipped with the reason."""
+    """Q2, Q4 — written to the TRD's recommendation, skipped with the reason.
+
+    Q5 is ruled (c) — Dave's Q5 ruling, 2026-08-28, recorded in
+    `docs/cycles/directive-tooling-trd-conv1-20260828T1745.md` — so its two
+    tests below assert the ruling's consequences directly rather than skip.
+    """
 
     @unittest.skip(SKIP_Q2)
     def test_q2_a_failing_lint_still_leaves_the_directive_landable(self):
@@ -397,31 +396,78 @@ class TestOpenQuestions(TrdTestCase):
             "(F-3's residue, OQ-8)",
         )
 
-    @unittest.skip(SKIP_Q5)
-    def test_q5_route_and_model_are_substituted_into_a_committed_region(self):
-        """OQ-Q5 (c): values inside a committed region, not a third author slot."""
+    def test_route_and_model_are_committed_in_both_modes_and_the_author_count_stays_two(self):
+        """Dave's Q5 ruling (c), 2026-08-28, recorded in
+        `docs/cycles/directive-tooling-trd-conv1-20260828T1745.md`: route and
+        model are substituted into a committed region in both modes'
+        manifests, not a third author slot, so AC-DT-18's author-region count
+        stays at exactly two per mode.
+        """
         from tests.test_directive import parse_manifest
 
         rc, out, err = self.generate(
             "--descriptor", "q5", "--title", "T", "--timestamp", TIMESTAMP,
             "--route", "fresh", "--model", "Opus 5",
         )
-        self.assertEqual(rc, 0, "stdout=%r stderr=%r" % (out, err))
+        self.assertEqual(rc, 0, "general mode: stdout=%r stderr=%r" % (out, err))
         self.assertIn("Route: fresh", out)
         self.assertIn("Model: Opus 5", out)
-        entries = dict(parse_manifest(out))
-        self.assertIn("ROUTE AND MODEL", entries)
+        general_entries = parse_manifest(out)
+        general_by_marker = dict(general_entries)
+        self.assertIn("ROUTE AND MODEL", general_by_marker)
         self.assertEqual(
-            entries["ROUTE AND MODEL"][0],
+            general_by_marker["ROUTE AND MODEL"][0],
             "committed",
-            "route and model became a third author region, breaking AC-DT-18's two",
+            "general mode: route and model became a third author region, "
+            "breaking AC-DT-18's two",
+        )
+        general_authors = [m for m, s in general_entries if s[0] == "author"]
+        self.assertEqual(
+            len(general_authors), 2,
+            "general mode: author-region count is not two: %r" % general_authors,
         )
 
-    @unittest.skip(SKIP_Q5)
-    def test_q5_the_element_set_stays_at_eight(self):
-        """OQ-Q5 (c): no ninth element checks route and model."""
-        rc, out, err = self.lint(self.fixture())
-        self.assertEqual(rc, 0, "stdout=%r stderr=%r" % (out, err))
+        cycle_relpath = "docs/cycles/cycle-7-directive.md"
+        rc, out, err = self.generate(
+            "--cycle", "7", "--title", "T", "--date", "2026-08-28",
+            "--route", "fresh", "--model", "Opus 5",
+            "docs/companion-a.md",
+        )
+        self.assertEqual(rc, 0, "cycle mode: stdout=%r stderr=%r" % (out, err))
+        self.assertTrue(
+            (self.repo / cycle_relpath).is_file(),
+            "cycle mode wrote no directive at %s" % cycle_relpath,
+        )
+        cycle_entries = parse_manifest(read(self.repo, cycle_relpath))
+        cycle_by_marker = dict(cycle_entries)
+        self.assertIn("ROUTE AND MODEL", cycle_by_marker)
+        self.assertEqual(
+            cycle_by_marker["ROUTE AND MODEL"][0],
+            "committed",
+            "cycle mode: route and model became a third author region, "
+            "breaking AC-DT-18's two",
+        )
+        cycle_authors = [m for m, s in cycle_entries if s[0] == "author"]
+        self.assertEqual(
+            len(cycle_authors), 2,
+            "cycle mode: author-region count is not two: %r" % cycle_authors,
+        )
+
+    def test_the_lint_checks_exactly_m1_through_m8_with_route_and_model_absent(self):
+        """Dave's Q5 ruling (c), 2026-08-28, recorded in
+        `docs/cycles/directive-tooling-trd-conv1-20260828T1745.md`: route and
+        model stay in AC-DT-08's unchecked set, so a well-formed directive
+        with the `ROUTE AND MODEL` region entirely absent still exits 0, and
+        no output names a ninth element.
+        """
+        relpath = self.fixture(replace={"route": None})
+        self.assertNotIn(
+            "ROUTE AND MODEL", read(self.repo, relpath), "the fixture must carry no route region"
+        )
+        rc, out, err = self.lint(relpath)
+        self.assert_lint_passes(
+            rc, out, err, "M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8"
+        )
         self.assertNotIn("M9", out)
 
 

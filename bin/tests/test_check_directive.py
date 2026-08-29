@@ -371,9 +371,11 @@ class TestCompanionCitations(CheckDirectiveTestCase):
     def test_ac_dt_09_citation_by_annotated_tag_fails(self):
         """A tag object is not a commit.
 
-        Written to AC-DT-09 as agreed, not to TRD §3.6's mechanism: an annotated
-        tag SHA satisfies both `cat-file -e <sha>^{commit}` and
-        `diff-tree --root ... <sha>`, because git peels it. Filed as a finding.
+        Written to AC-DT-09 as agreed, and now to TRD §3.6's mechanism too:
+        the unpeeled object-type step (`cat-file -t <sha>` returning exactly
+        `commit`) rejects an annotated tag before `cat-file -e <sha>^{commit}`
+        or `diff-tree --root ... <sha>` would peel it through. The test and
+        §3.6's mechanism now agree.
         """
         relpath = self.fixture(companion_sha=self.citations["tag"])
         rc, out, err = self.lint(relpath)
@@ -450,8 +452,10 @@ class TestUndecidableElements(CheckDirectiveTestCase):
     def test_ac_dt_10_a_failed_git_read_is_reported_unknown_and_exits_non_zero(self):
         """AC-DT-10/FM-L5: an element that cannot be decided is `unknown`.
 
-        The only induceable form of FM-L5's "a git read fails" is to make the
-        object store unreadable; the TRD names no other. Recorded as a finding.
+        This is one induceable form of the class §3.6 step 5 names — "a git
+        read that fails for a reason the lint cannot attribute to the
+        directive" — alongside a damaged repository and git exiting with no
+        answer about the object.
         """
         relpath = self.fixture()
         objects = self.repo / ".git" / "objects"
@@ -532,7 +536,7 @@ class TestSourcedRequirements(CheckDirectiveTestCase):
                 )
 
     def test_ac_dt_13_no_ninth_element_is_enforced(self):
-        """The checked set is exactly M1-M8: route and model stay unchecked (OQ-Q5)."""
+        """The checked set is exactly M1-M8: route and model stay unchecked."""
         rc, out, err = self.lint(self.fixture())
         self.assert_pass(rc, out, err)
         for absent in ("M9", "M10"):
