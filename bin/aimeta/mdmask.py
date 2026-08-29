@@ -79,6 +79,17 @@ def _closes(body, char, length):
     return body[len(run.group(1)):].strip() == ""
 
 
+def is_list_item(line):
+    """True when `leading_content` would strip a list marker from `line` (M6).
+
+    Applies only the first two of `leading_content`'s four steps: up to three
+    leading spaces, then the list-marker test. Used to count a report
+    region's enumerated fields without re-deriving §3.5's stripping rule.
+    """
+    text = re.sub(r"^ {0,3}", "", line, count=1)
+    return _LIST_MARKER.match(text) is not None
+
+
 def leading_content(line):
     """What an eligible line leads with, once decoration is stripped.
 

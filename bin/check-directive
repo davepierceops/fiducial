@@ -1,0 +1,152 @@
+#!/usr/bin/env python3
+"""Decide a directive file's eight required elements and report.
+
+Contract: `specs/directive-tooling.md` §6 and `specs/directive-tooling-trd.md`
+§3.6, §6, §7. Takes the path of a directive file as it stands on disk, decides
+M1-M8, and exits non-zero when any is missing or undecidable. Writes nothing,
+anywhere.
+"""
+
+import argparse
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from aimeta import cli, elements, invariants  # noqa: E402
+
+ELEMENT_NAMES = ("M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8")
+
+#: §7's per-element governed-source citations. M2 carries none: the
+#: directive's own citation table lists seven of the eight, and M2's
+#: derivation (Core Vocabulary's "Companion document" and "Directive file")
+#: has no single governed path to name.
+ELEMENT_SOURCES = {
+    "M1": "skills/directive-authoring.md",
+    "M3": "skills/directive-authoring.md",
+    "M8": "skills/directive-authoring.md",
+    "M4": "docs/global-context/core.md",
+    "M5": "docs/global-context/core.md",
+    "M7": "docs/global-context/core.md",
+    "M6": "docs/global-context/decision-layer.md",
+}
+
+_UNCHECKED_REPORT = """\
+UNCHECKED
+
+This report checks M1-M8 and nothing else. Left to the reading agent,
+because they require judgment this tool does not make: the executability of
+the working-tree disposition, observed as a claim this tool cannot verify —
+whether the tree it names can actually be created in this session's sandbox;
+the dispatch route and the model tier this directive states; whether any
+blanket constraint here would contradict an explicit instruction in the same
+file; whether a Do-not list is scoped to the blast radius rather than stated
+more broadly; whether dictated wording is carried here as a pointer, unless
+this directive is itself the wording's origin; whether this directive is
+self-contained, needing nothing from the dispatching conversation; and the
+mode-appropriateness of the filename — whether the matched pattern is the one
+this directive's mode should have produced. Deciding any of the above is
+unknown to this tool; every claim it makes about the checked set is observed.
+"""
+
+
+def build_parser():
+    parser = argparse.ArgumentParser(
+        prog="check-directive",
+        description=(
+            "Decide a directive file's eight required elements (M1-M8) and "
+            "report the checked and unchecked sets. Writes nothing, anywhere."
+        ),
+    )
+    parser.add_argument("path", metavar="PATH", help="the directive file to lint")
+    return parser
+
+
+def _resolve(root, argument):
+    try:
+        relpath = cli.relpath_of(root, argument)
+    except cli.ToolError:
+        raise cli.ToolError(
+            "[path-outside-repo] observed: %s is outside the repository" % argument,
+            cli.EXIT_USAGE,
+        )
+    if not (root / relpath).is_file():
+        raise cli.ToolError(
+            "[path-absent] observed: %s does not exist" % relpath, cli.EXIT_USAGE
+        )
+    return relpath
+
+
+def _read(root, relpath):
+    text, finding = cli.read_document(str(root / relpath))
+    if finding is not None:
+        raise cli.ToolError(
+            "[undecodable] observed: %s: %s" % (relpath, finding.message),
+            cli.EXIT_USAGE,
+        )
+    return text
+
+
+def _load_invariants(root):
+    """The invariants document, refused at exit 2 rather than the generator's 3.
+
+    `invariants.load` is shared with the generator and raises with the
+    generator's precondition code (3, FM-G1/G2/G3). §7's table gives the
+    lint's refusals exit 2 instead (FM-L3, FM-L7); the message — already
+    bracketed by `invariants.py` — is preserved verbatim.
+    """
+    try:
+        doc = invariants.load(root)
+        doc.label()
+        doc.marker_syntax()
+        doc.preamble_markers()
+        doc.match_phrases()
+    except cli.ToolError as exc:
+        raise cli.ToolError(exc.message, cli.EXIT_USAGE)
+    return doc
+
+
+def _emit_report(results):
+    lines = []
+    all_pass = True
+    for name in ELEMENT_NAMES:
+        finding = results[name]
+        if finding.status == elements.PASS:
+            lines.append("%s: pass" % name)
+            continue
+        all_pass = False
+        if finding.status == elements.UNKNOWN:
+            code = "element-unknown"
+            lines.append(
+                "%s: unknown [%s] unknown: %s" % (name, code, finding.detail)
+            )
+            cli.diagnostic("ERROR", name, code, "unknown: %s" % finding.detail)
+        else:
+            code = finding.code
+            source = ELEMENT_SOURCES.get(name)
+            citation = " (derived from %s)" % source if source else ""
+            lines.append(
+                "%s: fail [%s] observed: %s%s" % (name, code, finding.detail, citation)
+            )
+            cli.diagnostic(
+                "ERROR", name, code, "observed: %s%s" % (finding.detail, citation)
+            )
+    lines.append("")
+    lines.append(_UNCHECKED_REPORT)
+    sys.stdout.write("\n".join(lines) + "\n")
+    return all_pass
+
+
+def main(argv=None):
+    args = build_parser().parse_args(argv)
+    root = cli.load_root()
+    relpath = _resolve(root, args.path)
+    text = _read(root, relpath)
+    doc = _load_invariants(root)
+    results = elements.decide(root, relpath, text, doc)
+    all_pass = _emit_report(results)
+    return cli.EXIT_OK if all_pass else cli.EXIT_POLICY
+
+
+if __name__ == "__main__":
+    sys.exit(cli.run(main))

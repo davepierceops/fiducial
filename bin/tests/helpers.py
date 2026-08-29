@@ -40,6 +40,7 @@ CLI_NAMES = [
     "migrate-frontmatter",
     "install-hooks",
     "directive",
+    "check-directive",
 ]
 
 #: Minimal argv that gets each CLI past argparse, for tests that only care
@@ -52,6 +53,7 @@ CLI_MINIMAL_ARGS = {
     "migrate-frontmatter": ["--plan"],
     "install-hooks": [],
     "directive": ["--descriptor", "x", "--title", "T"],
+    "check-directive": ["docs/cycles/x-20260828T170000.md"],
 }
 
 REAL_POLICY_TEXT = (REPO_ROOT / POLICY_RELPATH).read_text()
