@@ -1088,29 +1088,9 @@ the refused case — merging convergent spec edits — is what is left on the ta
 
 ## `bin/cycle-open` and the retirement of Track
 
-**Track is retired — do not resurrect the field on unshelving.**
-`docs/cycles/friction-refactor-corrections-2026-08-10-directive.md` (C1),
-2026-08-10, removes `track` from the methodology entirely; the requirements are
-**route, model, execution block**, three not four, and `LEXICON.md` carries a
-tombstone. If TP-1 is unshelved, its skeleton emits **Route and Model and
-nothing else** of the three — the execution block is not a field of the
-directive file. This reverses `DEC-000150`'s stated-field requirement as it
-applies to track; the reversal is drafted for `decisions/log.md` in
-`docs/cycles/friction-refactor-2026-08-09-decisions.md` (D21) and is not yet
-promoted. TP-1's shelved spec is deliberately **not** rewritten — this
-annotation is the guard.
+**Track is retired — do not resurrect the field.** `DEC-000180` removed `track` from the methodology entirely; the requirements are **route, model, execution block**, three not four, and `LEXICON.md` carries a tombstone. The obligation that the cycle skeleton emit **Route and Model and nothing else** of the three is borne by **`bin/directive`'s cycle mode** (`DEC-000270`, 2026-08-30): route and model come from the committed `Route and model` section of `skills/directive-invariants.md` into a committed region of every skeleton, in both modes, and no region emits a `Track:` line. `bin/cycle-open` is a forwarder (TRD §3.9 step 4) and holds no skeleton text of its own, so there is no shelved spec left to guard; the guard is the invariants document, which is governed text and changes only through its review cycle.
 
-**Source:** as above (D1.3). `DEC-000150` records that `bin/cycle-open` (TP-1)
-must emit Route, Model, and Track in its directive skeleton; the tool currently
-emits none of them, so nothing is broken today. The original concern — that
-**Track** had been redefined from a delivery path to the executor's repository
-environment, so TP-1's spec had to be written against the current definition —
-is overtaken by the retirement above. Still live at that point: the skeleton is
-a directive *file* template, and the executor now writes that file from a paste
-block, so what the tool produces is the thing chat pastes rather than the thing
-chat commits.
-
-**Landing precondition, recorded 2026-08-24:** `specs/directive-tooling.md` AC-DT-16 (agreed at `06e5d110`) makes two acts preconditions on the landing that migrates the cycle mode from `bin/cycle-open` to `bin/directive`: a new `decisions/log.md` entry superseding DEC-000180 and re-anchoring its tooling consequence on `bin/directive`'s cycle mode, and the rewrite of this section's guard to name that binary. Both fall to the decision session that lands the migration, not to the implementer, and neither is done before it.
+**Landing precondition recorded 2026-08-24 — discharged 2026-08-30.** `specs/directive-tooling.md` AC-DT-16 made two acts preconditions on the landing that migrates the cycle mode: the entry superseding `DEC-000180` (now `DEC-000270`) and this rewrite. Both landed in the decision session that merged PR #244.
 
 ## `bin/bundle`'s path-following closure mode is retired, replaced in Pass 2 by audience selection
 
