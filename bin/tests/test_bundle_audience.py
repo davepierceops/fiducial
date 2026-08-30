@@ -164,7 +164,9 @@ class BundleAudienceTestCase(unittest.TestCase):
         write(self.repo, "policies/glob-member.md", doc([self.TARGET]))
         write(self.repo, "docs/global-context/extra.md", doc([self.TARGET]))
         write(self.repo, "engagements/some-engagement.md", doc([self.TARGET]))
-        write(self.repo, "prose-criteria.md", doc([self.TARGET]))
+        write(self.repo, "public-prose-criteria.md", doc([self.TARGET]))
+        write(self.repo, "voice.md", doc([self.TARGET]))
+        write(self.repo, "voice-template.md", doc([self.TARGET]))
 
         # Excluded roots: same audience value would make them members if the
         # governed-set boundary leaked.
@@ -205,11 +207,13 @@ class TestGovernedFileSet(BundleAudienceTestCase):
         self.assertEqual(rc, 0, "stderr=%r" % err)
         self.assertIn("engagements/some-engagement.md", out)
 
-    def test_ba1_prose_criteria_is_governed(self):
-        """AC-BA-1: `prose-criteria.md` is a governed file."""
+    def test_ba1_writing_documents_are_governed(self):
+        """AC-BA-1: the writing documents are governed files."""
         rc, out, err = self.bundle("--audience", self.TARGET)
         self.assertEqual(rc, 0, "stderr=%r" % err)
-        self.assertIn("prose-criteria.md", out)
+        self.assertIn("public-prose-criteria.md", out)
+        self.assertIn("voice.md", out)
+        self.assertIn("voice-template.md", out)
 
     def test_ba1_excluded_roots_never_appear(self):
         """AC-BA-1: docs/history, docs/batons, docs/cycles, reviews, retros,
