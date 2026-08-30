@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/expedited-log.md @ 4e4eeba8455d6be80ba320ee238253ef4042e271
+last-reviewed: reviews/expedited-log.md @ d560689fe69ad190bb340682e5a2c10a4238e009
 audience: [critic, human]
 session: decision
 ---
@@ -40,10 +40,9 @@ document carries one. Then run the other two in any order.
 - **AI-smell.** Read adversarially: assume the piece contains generated-prose
   tells and look for each one. Check the piece against every tell in the
   Criteria's list and report each occurrence at its location. Check also for
-  the Criteria's two structure defects — a point restated from the other
-  side, and a clause that explains the move it sits in — and report each the
-  same way. Where you find a tell the list does not name, report it and
-  propose the line that would add it.
+  the Criteria's structure defects and report each the same way. Where you find
+  a tell the list does not name, report it and propose the line that would add
+  it.
 - **Voice.** Read the piece as the Voice document describes its author. Flag
   every break in either direction: a passage that reads as house style,
   persona, or another writer, and a passage that under-delivers the register

@@ -1,6 +1,6 @@
 ---
 status: agreed
-last-reviewed: reviews/expedited-log.md @ a7e21331070ed5e554d7482b72a4bc50d57e5437
+last-reviewed: reviews/expedited-log.md @ f7179b744044d55966a766741a6abf3865e281ce
 audience: [writer, copy-editor, critic, human]
 order: 12
 ---
@@ -28,6 +28,19 @@ register question to Dave; do not change the register on your own.
   constant mode.
 - Blunt categorical claim first, then the personal instance.
 - Hacker register is in voice: grok, box.
+- When a draft reads thick, the fix is a terse pass that moves the story
+  forward, not line-level trimming; the target after a wordy draft is about
+  10% under budget.
+- Sentence fragments are in voice when they land a point; a fragment opener
+  is a baton-turn device, one per section, never the default cadence.
+- Mirrored two-sentence pairs and a closing contrast pair are structure, not
+  restatement — flag, do not cut; a second closing pair in a piece needs a
+  reason.
+- The flat absolute over the hedged quantifier; hedging a claim Dave can
+  stand behind reads as weaker, not more careful.
+- Rising-specificity repetition — the same claim three times, each more
+  concrete — is his rhythm; when cutting for budget keep the first and last,
+  the middle is the candidate.
 
 ## Profanity
 
