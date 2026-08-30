@@ -13,7 +13,14 @@ marker line is such a line.
 
 from __future__ import annotations
 
+import argparse
+import datetime
+import os
+import sys
+
 from . import cli, closure, invariants, mdmask, repo
+
+TIMESTAMP_FORMAT = "%Y%m%dT%H%M%S"
 
 #: How a manifest entry separates a marker from its provenance.
 _ENTRY_JOIN = " — "
@@ -347,3 +354,177 @@ def warn_if_bundle_not_ignored(root, out_rel):
             "bundle-not-ignored",
             "the bundle directory is not gitignored; uploads risk becoming tracked files",
         )
+
+
+# ---------------------------------------------------------------------------
+# The CLI entry point, shared by `bin/directive` and `bin/cycle-open` (TRD
+# §3.9 step 4): one `main`, called with argv unchanged, so both executables
+# are byte-identical in behaviour for every argv.
+
+
+def build_parser():
+    p = argparse.ArgumentParser(
+        prog="directive",
+        description=(
+            "Assemble a directive skeleton from the committed invariants "
+            "document, with a manifest naming where each region came from."
+        ),
+    )
+    p.add_argument("paths", nargs="*", metavar="PATH", help="documents in scope")
+    p.add_argument("--descriptor", metavar="SLUG", help="general-mode selector")
+    p.add_argument("--cycle", metavar="N", help="cycle-mode selector: cycle number")
+    p.add_argument("--name", metavar="SLUG", help="cycle-mode selector: directive slug")
+    p.add_argument("--title", metavar="T", help="directive title")
+    p.add_argument(
+        "--timestamp",
+        metavar="YYYYMMDDThhmmss",
+        help="fix the general-mode timestamp, read as UTC",
+    )
+    p.add_argument("--date", metavar="YYYY-MM-DD", help="fix the cycle directive date")
+    p.add_argument("--route", metavar="R", help="the dispatch route this directive states")
+    p.add_argument("--model", metavar="M", help="the dispatch model this directive states")
+    p.add_argument("--out", metavar="DIR", help="cycle-mode bundle output directory")
+    p.add_argument(
+        "--bundle",
+        metavar="ENTRY",
+        action="append",
+        default=[],
+        help="cycle mode: expand this context-set entry point into the document set",
+    )
+    p.add_argument(
+        "--write",
+        action="store_true",
+        help="write the skeleton to the destination the generator computes",
+    )
+    p.add_argument(
+        "--allow-dirty",
+        action="store_true",
+        help="warn instead of refusing when an input has uncommitted edits",
+    )
+    return p
+
+
+def select_mode(args):
+    """§3.9's selector rule, extended to a third selector. Usage errors only."""
+    selectors = [bool(args.cycle), bool(args.name), bool(args.descriptor)]
+    if sum(1 for chosen in selectors if chosen) != 1:
+        raise cli.ToolError(
+            "exactly one of --cycle, --name or --descriptor is required",
+            cli.EXIT_USAGE,
+        )
+    return "general" if args.descriptor else "cycle"
+
+
+def check_flag_collisions(mode, args):
+    """`--timestamp`/`--write` are general-mode-only; `--date`, `--out`,
+    `--bundle` and documents are cycle-mode-only."""
+    if mode == "general":
+        for flag, given in (
+            ("--date", args.date),
+            ("--out", args.out),
+            ("--bundle", args.bundle),
+        ):
+            if given:
+                raise cli.ToolError(
+                    "%s belongs to cycle mode; general mode does not take it" % flag,
+                    cli.EXIT_USAGE,
+                )
+        if args.paths:
+            raise cli.ToolError(
+                "general mode takes no document arguments; it writes no bundle",
+                cli.EXIT_USAGE,
+            )
+    else:
+        for flag, given in (
+            ("--timestamp", args.timestamp),
+            ("--write", args.write),
+        ):
+            if given:
+                raise cli.ToolError(
+                    "%s belongs to general mode; cycle mode does not take it" % flag,
+                    cli.EXIT_USAGE,
+                )
+
+
+def resolve_timestamp(given):
+    """The general-mode timestamp: the flag verbatim, read as UTC, else the clock."""
+    if given:
+        try:
+            datetime.datetime.strptime(given, TIMESTAMP_FORMAT)
+        except ValueError:
+            raise cli.ToolError(
+                "--timestamp must be YYYYMMDDThhmmss, read as UTC: %s" % given,
+                cli.EXIT_USAGE,
+            )
+        return given
+    now = datetime.datetime.now(datetime.timezone.utc)
+    return now.strftime(TIMESTAMP_FORMAT)
+
+
+def run_general(args):
+    root = cli.load_root()
+    doc = invariants.load(root, allow_dirty=args.allow_dirty)
+    timestamp = resolve_timestamp(args.timestamp)
+    relpath = destination(args.descriptor, timestamp)
+    if args.write:
+        refuse_existing(root, relpath)
+    values = general_values(
+        title=args.title or args.descriptor.replace("-", " "),
+        route=args.route,
+        model=args.model,
+        directive_path=relpath,
+    )
+    text = assemble(doc, GENERAL_REGIONS, values)
+    if args.write:
+        land(root, relpath, text)
+    else:
+        sys.stdout.write(text)
+    return cli.EXIT_OK
+
+
+def resolve_date(given):
+    """Cycle mode's `Date:` line: the flag verbatim, else today's local date
+    (AC-CO-10). Not `--timestamp`'s job: this is a date, local, with no time
+    component, and general mode's timestamp is UTC with one."""
+    return given or datetime.date.today().isoformat()
+
+
+def run_cycle(args):
+    root = cli.load_root()
+    # AC-CO-12: `--out` is repo-relative, always. Resolved before anything is
+    # written, so a refused run leaves no directive behind either.
+    out_rel = cli.repo_relative_path(root, args.out, "--out") if args.out else None
+    doc = invariants.load(root, allow_dirty=args.allow_dirty)
+    relpath, heading_line = directive_identity(root, args)
+    refuse_existing(root, relpath)
+
+    documents = collect_documents(root, args)
+    revisions = resolve_revisions(root, documents, args.allow_dirty)
+    date = resolve_date(args.date)
+
+    values = cycle_values(
+        heading=heading_line[len("# "):],
+        date=date,
+        scope_list="\n".join("- %s @ %s" % (rp, sha) for rp, sha in revisions),
+        route=args.route,
+        model=args.model,
+        directive_path=relpath,
+    )
+    text = assemble(doc, CYCLE_REGIONS, values)
+    land(root, relpath, text)
+
+    stem = os.path.basename(relpath)[: -len(".md")]
+    out_rel = out_rel or "%s/%s" % (BUNDLE_DIR_DEFAULT, stem)
+    outdir = root / out_rel
+    write_bundle(root, outdir, revisions, relpath)
+    warn_if_bundle_not_ignored(root, out_rel)
+    return cli.EXIT_OK
+
+
+def main(argv=None):
+    args = build_parser().parse_args(argv)
+    mode = select_mode(args)
+    check_flag_collisions(mode, args)
+    if mode == "general":
+        return run_general(args)
+    return run_cycle(args)

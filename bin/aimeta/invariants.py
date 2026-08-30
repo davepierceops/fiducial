@@ -346,7 +346,9 @@ def load(root, allow_dirty=False):
             cli.EXIT_PRECONDITION,
         )
 
-    code, out, _ = repo.run(["status", "--porcelain", "--", RELPATH], cwd=home)
+    code, out, _ = repo.run(
+        ["--no-optional-locks", "status", "--porcelain", "--", RELPATH], cwd=home
+    )
     if code == 0 and out.strip():
         if not allow_dirty:
             raise cli.ToolError(
