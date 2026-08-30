@@ -1,6 +1,6 @@
 ---
-status: in-review
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/document-metadata-policy-cycle-20.md @ 9160a865fc7070775fc17e9b50c55bc5610318df
 audience: [all-roles, human]
 ---
 
