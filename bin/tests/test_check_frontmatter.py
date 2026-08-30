@@ -622,7 +622,7 @@ class TestSessionAndOrderEnforcement(CheckFrontmatterTestCase):
         write(self.repo, "engagements/assistant.md", agreed_doc(body=self.ROLE_BODY))
         write(
             self.repo,
-            "prose-criteria.md",
+            "public-prose-criteria.md",
             frontmatter_block(status="draft", last_reviewed=None, audience=["bogus-role"])
             + BODY_V1,
         )
@@ -637,7 +637,7 @@ class TestSessionAndOrderEnforcement(CheckFrontmatterTestCase):
         for relpath in [
             "docs/global-context/core.md",
             "engagements/assistant.md",
-            "prose-criteria.md",
+            "public-prose-criteria.md",
         ]:
             self.assertIn(relpath, err)
 
