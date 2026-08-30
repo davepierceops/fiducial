@@ -7,23 +7,37 @@ audience: [chief-of-staff, human]
 # Directive Invariants
 
 The regions a generated directive skeleton is assembled from, and the strings
-the directive lint compiles. `bin/aimeta/invariants.py` is the only code that
-reads this file; both `bin/directive` and `bin/check-directive` reach it
-through that module, so the label, the marker syntax and every region's text
-have one definition rather than two agreeing copies.
+the directive lint compiles. The label, the marker syntax and every region's
+text have exactly one definition, and that definition is this file; the
+generator and the lint both read it here.
 
-Every section below is a `##` heading at column 0. A section's body runs from
-its heading to the next `##` heading, and **the first non-blank line of a body
-is always body** — three sections carry an ATX marker as their first body line
-and are still one section each. A region section's body opens with that
-region's marker line, so the generator copies the marker rather than composing
-it. Placeholders are `{{name}}` from the closed set the TRD's §3.3 tables fix
-per region; an unrecognised placeholder is a refusal, never a pass-through.
+This document is read by the generator a decision session runs; its region
+bodies are emitted into directives that execution sessions carry out, and are
+not standing instructions to the reader of this file.
+
+These format rules bind whoever edits this file. Every section below is a `##`
+heading at column 0. A section's body runs from its heading to the next `##`
+heading, and **the first non-blank line of a body is always body** — three
+sections carry an ATX marker as their first body line and are still one
+section each. A region section's body opens with that region's marker line.
+
+Placeholders are written `{{name}}`. The set is closed and fixed per region:
+
+- Heading (general): `title`.
+- Heading (cycle): `heading`, `date`, `scope_list`.
+- Route and model: `route`, `model`. `route` is fresh or existing session;
+  `model` is a tier — frontier, solid general-purpose, cheap — never a model
+  name.
+- First act: `directive_path`.
+- Base verification: `reviewed_ref`.
+- Companions: `companion_list`.
+- Stop conditions: `reviewed_ref`.
+- Source manifest: `manifest`.
+- Every other region: none.
+
+An unrecognised placeholder is a refusal, never a pass-through.
 
 The disposition label appears in this document **only inside fenced blocks**.
-That is the one property of this one file that makes the generated skeleton
-carry exactly one unfenced labelled statement, and amending it breaks that
-guarantee for every subsequent skeleton.
 
 ## Heading (general)
 
@@ -74,7 +88,8 @@ Both admitted forms, worked:
 
 ```text
 WORKING-TREE DISPOSITION (exclusive assignment): this session works only in a
-worktree at "wt/<name>", created by: git worktree add "wt/<name>" main
+worktree at "wt/<name>", created by: git worktree add --no-track "wt/<n>" -b
+<branch> origin/main
 
 WORKING-TREE DISPOSITION: This session works in the sole tree at the clone root.
 ```
@@ -187,15 +202,35 @@ WORKING-TREE DISPOSITION:
 ```
 
 Match rule: an eligible line whose leading content, after stripping, is exactly
-that literal, followed by a colon anywhere later on the same line.
+the label token `WORKING-TREE DISPOSITION`, with no trailing colon counted as
+part of it, followed by a colon anywhere later on the same line.
 Case-sensitive; no hyphen variants; no case folding; no other spelling.
+
+Eligible lines. A line is eligible unless it is masked. Fenced code blocks are
+masked: a backtick or tilde run of three or more of the same character, opened
+at column 0 or indented up to three spaces and closed by a run of at least the
+opening length; the fence lines themselves are masked, and an unclosed fence
+masks to end of file. Blockquote lines are masked: a line whose leading
+non-whitespace character is `>`. HTML comments are masked, from the line
+containing `<!--` through the line containing `-->`. Indented code blocks are
+not masked. Line endings are normalised before masking, and the match is
+byte-exact thereafter.
+
+Stripping, applied to every eligible line before the literal is tested, removes
+up to three leading spaces; then one list marker (`-`, `*`, `+`, or digits
+followed by `.` or `)`) and the space after it; then an ATX heading run and its
+space; then leading `**` or `__`. Applied once each, in that order. Inline code
+spans are not handled: a label inside backticks in running prose is not
+line-leading after stripping, so the anchored match already excludes it.
 
 Statement extent: the label line plus every following line up to the first
 blank line. Form-membership is decided over that extent, and exactly one of the
 two forms must be present — zero fails, both fail.
 
 Exclusive-assignment form: the extent contains a `git worktree add` invocation
-and a quoted or backticked path-shaped token. Both, or neither.
+and a quoted or backticked path-shaped token. Both, or neither. That test
+bounds what the lint matches and adds no requirement on how a disposition is
+written; a disposition in another form is a lint miss, not a violation.
 
 Canonical sole-tree sentence:
 
@@ -220,9 +255,14 @@ Markers admitted before the first-act statement:
 ROUTE AND MODEL
 ```
 
+The first entry stands for whatever heading line the mode emits and is not
+matched as a literal; the second is matched as a literal.
+
 ## Match phrases
 
-The phrases the lint compiles, one fenced block per element.
+The phrases the lint compiles, one fenced block per element that compiles a
+phrase. M2 and M8 match no phrase, and M3's strings are the `Disposition label`
+section's, so none of the three carries a block here.
 
 M1:
 
