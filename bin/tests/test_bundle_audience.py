@@ -13,7 +13,8 @@ tracker entry rather than from `docs/packages/package-a-spec.md`").
 - **AC-BA-1** The governed file set is exactly: every file matched by
   `bin/check-frontmatter`'s configured in-scope globs (read at runtime from
   `policies/document-metadata-policy.md` §Scope, via `aimeta.scope`), union
-  `docs/global-context/**`, `engagements/**`, and `prose-criteria.md`.
+  `docs/global-context/**`, `engagements/**`, `public-prose-criteria.md`,
+  `voice.md`, and `voice-template.md`.
   Nothing under `docs/history/`, `docs/batons/`, `docs/cycles/`, `reviews/`,
   `retros/`, `decisions/`, or an adapter file (e.g. `CLAUDE.md`) is ever a
   candidate, even when it carries an `audience:` field.
@@ -136,7 +137,8 @@ class BundleAudienceTestCase(unittest.TestCase):
     """Shared governed-set fixture used by most AC-BA-1/2/3/4 tests.
 
     One file per governed root (policy-glob, `docs/global-context/`,
-    `engagements/`, `prose-criteria.md`), plus one file under each excluded
+    `engagements/`, `public-prose-criteria.md`, `voice.md`,
+    `voice-template.md`), plus one file under each excluded
     root (AC-BA-1's negative list) and an adapter-shaped file at the repo
     root. Every excluded/adapter file carries a value unique to itself
     (`excluded-<slug>`) so its absence from `--list`/a bundle is a positive
