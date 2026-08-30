@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/expedited-log.md @ dcb64275d2c69eac7623d3969acf2881343ac4e9
+status: in-review
+last-reviewed: null
 audience: [writer, copy-editor, critic, human]
 order: 11
 ---
@@ -76,7 +76,9 @@ target; the writer chooses what goes. After a wordy draft, target 10% under
 budget, not budget.
 
 Make a point once, flat. Cut any contrast pair that restates it from the other
-side. Cut any clause that explains the move it sits in.
+side. Cut any clause that explains the move it sits in. Cut scene-setting
+clauses ("when I sit down to build," "from where I sit"); stance carries on
+the verb.
 
 ## Continuity
 
