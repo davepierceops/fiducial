@@ -20,6 +20,9 @@ heading at column 0. A section's body runs from its heading to the next `##`
 heading, and **the first non-blank line of a body is always body** — three
 sections carry an ATX marker as their first body line and are still one
 section each. A region section's body opens with that region's marker line.
+In the Disposition label section the fences are positional — the first carries
+the emitted literal and the last carries the canonical sole-tree sentence — so
+no fence is added, removed, or reordered there.
 
 Placeholders are written `{{name}}`; `{{{{` is a literal `{{`. The set is
 closed and fixed per region:
@@ -38,9 +41,12 @@ closed and fixed per region:
 
 An unrecognised placeholder is a refusal, never a pass-through.
 
-The label literal the generator emits — the colon-terminated form the first
-fence of the Disposition label section carries — appears in this document
-**only inside fenced blocks**; the bare token may appear in prose.
+Outside fenced blocks, no eligible line of this document satisfies the match
+rule the Disposition label section states — after stripping, no unfenced line
+leads with the bare label token and carries a colon later on the same line.
+The emitted, colon-terminated literal — the form the first fence of that
+section carries — appears only inside fenced blocks; the bare token may appear
+in prose where it does not lead the line.
 
 ## Heading (general)
 
@@ -92,7 +98,7 @@ Both admitted forms, worked:
 ```text
 WORKING-TREE DISPOSITION (exclusive assignment): this session works only in a
 worktree at "wt/<name>", created by: git worktree add --no-track "wt/<name>" -b
-<branch> origin/main
+<name> origin/main
 
 WORKING-TREE DISPOSITION: This session works in the sole tree at the clone root.
 ```
@@ -154,7 +160,8 @@ REPORT
 - every commit SHA this session landed, in order, and the branch they are on
 - what was verified, how, and where the run log is
 - anything observed this directive did not anticipate
-- the worktree-removal status
+- the worktree-removal status — or, under the sole-tree form, that no worktree
+  existed
 
 ## Claim labels
 
