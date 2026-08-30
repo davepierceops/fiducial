@@ -1,0 +1,29 @@
+You are an execution session on davepierceops/fiducial, clone at ~/code/fiducial. One task: carry out the cycle-19 decisions on policies/document-metadata-policy.md. The document itself is not edited; the fixes are in bin/ and the tracker.
+
+SYNC FIRST: from the main tree, git fetch origin (an osxkeychain "failed to store" message is noise; judge the fetch by the refs). Confirm origin/document-metadata-policy-cycle-19 exists and its tip contains commit fd16aa7758407c86561318c59a713319c18c486a (git merge-base --is-ancestor fd16aa7758407c86561318c59a713319c18c486a origin/document-metadata-policy-cycle-19 exits 0); if not, stop and report.
+
+WORKING-TREE DISPOSITION (exclusive assignment): this session works only in a worktree at "$TMPDIR/fiducial-dmp-cycle-19-fix", created after the fetch above by: git worktree add --no-track "$TMPDIR/fiducial-dmp-cycle-19-fix" -b dmp-cycle-19-fix origin/document-metadata-policy-cycle-19
+Before creating it, run git worktree list; if any existing worktree holds a branch named dmp-cycle-19-fix, stop and report. Do not touch the main tree's checkout. All pushes go to origin dmp-cycle-19-fix.
+
+FIRST ACT — directive file. Write this entire directive verbatim to docs/cycles/document-metadata-policy-cycle-19-fix-directive.md in the worktree, commit it alone with message "Directive: document-metadata-policy cycle 19 fixes", push with git push origin dmp-cycle-19-fix, and report the SHA.
+
+DECISION RECORD — cycle 19, artifact reviews/document-metadata-policy-cycle-19.md @ fd16aa7758407c86561318c59a713319c18c486a, reviewed revision 9160a865fc7070775fc17e9b50c55bc5610318df:
+- DMP19-1 (blocking): accepted. Fix in bin/tests, below.
+- DMP19-2 (non-blocking): accepted. Fix in bin/bundle, below.
+- DMP19-3 (non-blocking): rejected as a finding on this document — nothing in the policy changes under any ruling, and the homes it proposes are gate documents owed their own cycles. Recorded as a rubric-cycle candidate in the tracker, below.
+
+EDIT 1 — test anchors (DMP19-1). Read bin/tests/test_scope.py around lines 82 and 170 and bin/tests/test_check_frontmatter.py around lines 625 and 640 before changing anything. At each of the four anchors, the assertion names prose-criteria.md as an in-scope file; replace that filename with public-prose-criteria.md and change nothing else in the assertion. If any of the four anchors would not keep its stated intent under a filename swap alone — for example, if it asserts a count, a position, or a property prose-criteria.md had and public-prose-criteria.md lacks — stop and report with the anchor's text. Commit the two test files together with message "tests: re-anchor scope assertions on public-prose-criteria.md (DMP19-1)". Push.
+
+EDIT 2 — bin/bundle (DMP19-2). Read bin/bundle around line 29. In GOVERNED_EXTRA_FILES, replace the entry for prose-criteria.md with three entries in this order: public-prose-criteria.md, voice.md, voice-template.md. Change nothing else. Commit bin/bundle alone with message "bundle: governed extras name the writing documents, drop prose-criteria.md (DMP19-2)". Push.
+
+VERIFY: run bin/tests/run from the worktree, capturing output with tee to "$TMPDIR/dmp19-fix-suite.txt" (not committed). Expected: the three DMP19-1 failures are gone; the seven recorded cycle-mode-unavailable landing-state failures remain; nothing new fails. Report the exact failure count and the names of every failing test. If any failure is not one of the seven recorded ones, stop and report. Then run bin/bundle --audience writer and confirm from its file list that public-prose-criteria.md, voice.md and voice-template.md appear; report the list. If any is absent, stop and report. Run bin/check-frontmatter --all (must exit 0).
+
+EDIT 3 — OPEN-ITEMS.md. Read the file's convention for struck-through and added entries before editing. (a) Strike the entry at or near line 1211 that lists the seven doc-only agreements as owed (the writing-methodology follow-ups entry naming roles/writer.md, roles/copy-editor.md, roles/critic.md, skills/outline.md, public-prose-criteria.md, voice.md, voice-template.md), using the file's strike convention, with the note: all seven agreed 2026-08-29, PRs #235, #236, #238, #239, #240, #242, #243. (b) Find the existing candidate item for a review-rubric cycle (the criteria 3, 4, 6, 11, 12 negation problem); add to it, in the file's convention for a sub-point or an appended sentence, this text verbatim: criterion 12 exemption for a template's examples (DEC-000240; reviews/document-metadata-policy-cycle-19.md DMP19-3, rejected there) — encode in the rubric or the reviewer's role, or refuse. If no such rubric item exists, stop and report rather than creating one. Commit OPEN-ITEMS.md alone with message "OPEN-ITEMS: seven writing agreements landed; rubric candidate gains DMP19-3". Push.
+
+Do not edit policies/document-metadata-policy.md or any other governed document. Do not open a pull request. Never merge anything. Never flip a status.
+
+CLEANUP — after the report is composed and all pushes are verified landed: from the main tree, run git worktree remove "$TMPDIR/fiducial-dmp-cycle-19-fix" (no --force). If it fails, report the failure; do not retry. Your report's final line states whether the worktree was removed.
+
+STOP CONDITIONS: on any failed command, any precondition not met, or any tree mutation you did not intend, including your own — stop and report; do not rebase, do not retry with different flags, do not delete or create any ref to recover.
+
+REPORT: directive-file commit SHA; the four commit SHAs for edits 1–3 with their stats; the four anchor lines before and after; the GOVERNED_EXTRA_FILES lines before and after; suite failure count and failing test names; the writer bundle's file list; check-frontmatter exit code; worktree-removal status as the final line. Label every claim observed, inferred, told, or unknown.

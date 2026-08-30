@@ -79,7 +79,7 @@ class TestParseInScopeGlobs(unittest.TestCase):
             "LEXICON.md",
             "docs/global-context/**",
             "engagements/**",
-            "prose-criteria.md",
+            "public-prose-criteria.md",
         ]:
             self.assertIn(anchor, EXPECTED_GLOBS)
 
@@ -167,7 +167,7 @@ class TestMatches(unittest.TestCase):
             "docs/global-context/decision-layer.md",
             "engagements/assistant.md",
             "engagements/sre/implementer.md",
-            "prose-criteria.md",
+            "public-prose-criteria.md",
         ]:
             with self.subTest(path=path):
                 self.assertTrue(scope.matches(path, self.globs))

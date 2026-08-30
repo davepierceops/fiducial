@@ -1,0 +1,26 @@
+You are an execution session on davepierceops/fiducial, clone at ~/code/fiducial, filling the Context Quality Reviewer role. One task: gate review, cycle 19, of policies/document-metadata-policy.md, returned as one review artifact.
+
+SYNC FIRST: from the main tree, git fetch origin (an osxkeychain "failed to store" message is noise; judge the fetch by the refs). Confirm origin/main contains commit 1bb41f7b6dbd8b0900f22fb97533e333566a9c20 (git merge-base --is-ancestor 1bb41f7b6dbd8b0900f22fb97533e333566a9c20 origin/main exits 0); if not, stop and report. Record origin/main's SHA for your report.
+
+WORKING-TREE DISPOSITION (exclusive assignment): this session works only in a worktree at "$TMPDIR/fiducial-dmp-cycle-19", created after the fetch above by: git worktree add --no-track "$TMPDIR/fiducial-dmp-cycle-19" -b document-metadata-policy-cycle-19 origin/main
+Before creating it, run git worktree list; if any existing worktree holds a branch named document-metadata-policy-cycle-19, stop and report. Do not touch the main tree's checkout.
+
+FIRST ACT — directive file. Write this entire directive verbatim to docs/cycles/document-metadata-policy-cycle-19-directive.md in the worktree, commit it alone with message "Directive: document-metadata-policy cycle 19 gate", push with git push origin document-metadata-policy-cycle-19, and report the SHA.
+
+REVIEWED REVISION: policies/document-metadata-policy.md at content commit 9160a865fc7070775fc17e9b50c55bc5610318df. Confirm with git log -1 --format=%H -- policies/document-metadata-policy.md in the worktree that this is the last commit touching the file; if not, stop and report. The change under review is that commit's diff (git show 9160a865fc7070775fc17e9b50c55bc5610318df -- policies/document-metadata-policy.md): the in-scope set gains public-prose-criteria.md, voice.md, voice-template.md and drops prose-criteria.md; voice-inbox.md is named as a tracker. Review the whole document, not only the diff.
+
+READ BEFORE REVIEWING, from the worktree, in this order: roles/context-quality-reviewer.md (your role), docs/global-context/review-rubric.md (the twelve criteria), skills/review-artifact.md (the artifact schema), docs/global-context/core.md, docs/global-context/decision-layer.md. Then the document under review, whole.
+
+CROSS-CHECK SET, minimum — name each in the artifact's Cross-checked line, and add any other governed file you consulted: skills/spec-review-cycle.md; roles/context-quality-reviewer.md; decisions/log.md entries DEC-000010 through DEC-000060 and DEC-000240 (the doc-only and expedited rulings the policy encodes); public-prose-criteria.md, voice.md, voice-template.md (the three files the amendment names; confirm each exists at docroot and carries frontmatter); LEXICON.md; the bin/check-frontmatter output below.
+
+RUN, and cite in the artifact as verified by running: bin/check-frontmatter --all from the worktree, capturing output with tee to "$TMPDIR/fiducial-dmp-cycle-19/check-frontmatter-cycle-19.txt" (do not commit that file). Report its exit code and the file count it prints. Also confirm by grep that no tracked file outside docs/history/ still refers to prose-criteria.md as a live document (git grep -n "prose-criteria.md" -- . ':!docs/history/**'); each hit is a candidate criterion-12 finding — judge each.
+
+ARTIFACT: write reviews/document-metadata-policy-cycle-19.md in the review artifact schema's shape exactly: the header block (Verdict, Reviewed: policies/document-metadata-policy.md @ 9160a865fc7070775fc17e9b50c55bc5610318df, Reviewer: Context Quality Reviewer, Date, Scope, Cross-checked, Not inspected, Findings, Prior cycle, Dave should inspect), then one entry per finding with Claim, Location, Evidence, Consequence, Fix, Related. Prior cycle: reviews/agreeing-clusters-cycle-2.md @ ade5dad (the artifact the last agreement cited); note that reviews/document-metadata-policy-cycle-18.md is the last single-document cycle. Every finding cites the rubric criterion number it fails and states its evidence as verified by running or inferred by reading. A clean pass is the header and nothing else. Do not edit the document under review or any other governed file.
+
+Commit reviews/document-metadata-policy-cycle-19.md alone with message "Review: document-metadata-policy cycle 19". git push origin document-metadata-policy-cycle-19. Do not open a pull request. Never merge anything. Never flip a status.
+
+CLEANUP — after the report is composed and all pushes are verified landed: from the main tree, run git worktree remove "$TMPDIR/fiducial-dmp-cycle-19" (no --force). If it fails, report the failure; do not retry. Your report's final line states whether the worktree was removed.
+
+STOP CONDITIONS: on any failed command, any precondition not met, or any tree mutation you did not intend, including your own — stop and report; do not rebase, do not retry with different flags, do not delete or create any ref to recover.
+
+REPORT: directive-file commit SHA; artifact commit SHA; the artifact's header block verbatim; check-frontmatter exit code and file count; the git grep hits, if any; origin/main SHA verified; worktree-removal status as the final line. Label every claim observed, inferred, told, or unknown.
