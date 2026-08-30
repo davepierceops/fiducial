@@ -40,17 +40,17 @@ that repository's `prose-criteria.md`, which is now `voice.md` and
 - Command blocks for interactive paste must be wrapped in a subshell; a top-level `exit` kills Dave's shell.
 - Section Writer must not assume repo paths from memory; `voice-inbox.md` lives at the repo root, not under the piece directory.
 
-## 2026-08-22 — §4 session
+## 2026-08-22 — §4 session — triaged 2026-08-29
 
-- When a draft "reads thick," Dave's fix is a terse pass that "cranks out the points" and moves the story forward, not line-level trimming. Target ~10% under budget.
-- Sentence fragments are in-voice when they land a point ("True, and the smallest part."). Accepted without comment.
-- Short mirrored two-sentence pairs ("The encoding moves. It does not stop." / "The loss did not go away. It moved too.") accepted as structure at high density; flagged, not cut.
-- Deleting scene-setting clauses ("when I sit down to build," "from where I sit") read as improvement, not loss. Stance carries on the verb.
+- [accepted → voice.md] When a draft "reads thick," Dave's fix is a terse pass that "cranks out the points" and moves the story forward, not line-level trimming. Target ~10% under budget.
+- [accepted → voice.md] Sentence fragments are in-voice when they land a point ("True, and the smallest part."). Accepted without comment.
+- [accepted → voice.md] Short mirrored two-sentence pairs ("The encoding moves. It does not stop." / "The loss did not go away. It moved too.") accepted as structure at high density; flagged, not cut.
+- [accepted → public-prose-criteria.md] Deleting scene-setting clauses ("when I sit down to build," "from where I sit") read as improvement, not loss. Stance carries on the verb.
 
-## §5 harvest — 2026-08-22 (accepted, 262 words)
+## §5 harvest — 2026-08-22 (accepted, 262 words) — triaged 2026-08-29
 
-- Prefers the flat absolute over the hedged quantifier: "usually all at once" replaced "most of them at once." Hedging a claim he can stand behind reads as weaker, not more careful.
-- Rising-specificity repetition (same claim three times, each more concrete) is a rhythm he likes and will cut for budget. Keep the first and last statement of a claim; the middle one is the candidate.
-- Fragment openers accepted as a baton-turn device ("True of the file. Never true of the intent."). One per section; not a default cadence.
-- Accepted unflagged: "I have watched people try" as the section's single wry line; "in my handwriting" as a literal-safe metaphor for hand-encoding.
-- Contrast pair at section close ("never clean / never predictable") accepted as the two-channel exit condition. Next use needs a reason.
+- [accepted → voice.md] Prefers the flat absolute over the hedged quantifier: "usually all at once" replaced "most of them at once." Hedging a claim he can stand behind reads as weaker, not more careful.
+- [accepted → voice.md] Rising-specificity repetition (same claim three times, each more concrete) is a rhythm he likes and will cut for budget. Keep the first and last statement of a claim; the middle one is the candidate.
+- [accepted → voice.md] Fragment openers accepted as a baton-turn device ("True of the file. Never true of the intent."). One per section; not a default cadence.
+- ~~Accepted unflagged: "I have watched people try" as the section's single wry line; "in my handwriting" as a literal-safe metaphor for hand-encoding.~~ (rejected: prose, not criterion)
+- [accepted → voice.md] Contrast pair at section close ("never clean / never predictable") accepted as the two-channel exit condition. Next use needs a reason.
