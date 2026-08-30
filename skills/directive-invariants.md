@@ -31,7 +31,7 @@ guarantee for every subsequent skeleton.
 
 ## Heading (cycle)
 
-# Cycle {{cycle}} Directive — {{title}}
+# {{heading}}
 
 Date: {{date}}
 Documents in scope:
