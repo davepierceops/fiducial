@@ -4,7 +4,7 @@ This file tracks open questions, deferred decisions, and outstanding fixes
 for the AI operating model. Updated at defined checkpoints per
 `context-sets/spec-and-change-discipline.md`.
 
-Last updated: 2026-08-29
+Last updated: 2026-08-30
 
 ---
 
@@ -1129,7 +1129,9 @@ Implementation is not blocked by this gate; the build-gating rule in
 
 ---
 
-## `CLAUDE.md` carries a derived copy of governed rules
+## ~~`CLAUDE.md` carries a derived copy of governed rules~~
+
+**RESOLVED** 2026-08-28 by PR #224: `CLAUDE.md` and `AGENTS.md` are deleted. fiducial is a portable corpus; the project-adapter question belongs to the bundle-system PRD.
 
 **Source:** pass-2b gate, `reviews/pass-2b-rulings-cycle-1.md` @ `32371f14` (F1), 2026-08-26. The adapter's "Required behavior" list restates ten rules from `operating-model.md` and is now stale on the C018 wording. It also says guidance lives under `/ai/` (the repo was renamed) and points at `context-sets/base.md` and `context-sets/collab-workflow.md`, whose presence in the current corpus is unverified. Deliberately not edited by the pass-2b directive: adapters are outside the governed set.
 
@@ -1137,9 +1139,43 @@ Implementation is not blocked by this gate; the build-gating rule in
 
 ---
 
-## `specs/directive-tooling.md` names a retired binary
+## ~~`specs/directive-tooling.md` names a retired binary~~
+
+**RESOLVED** 2026-08-28 by the PRD rewrite (PR #225, agreed at cycle 23 @ `d3ab472`): the rewrite carries none of the references this entry names — verified by two full reads. The document's next opening cycle is queued under "`specs/directive-tooling.md` — rider queue" below.
 
 **Source:** `reviews/retire-bundle-methodology-cycle-1.md` @ `32371f14` (RBM-4), 2026-08-26. Line ~2051 lists `bundle-methodology` in a `bin/` inventory marked observed; the binary is gone as of PR #221. The spec is `agreed`, so the fix is a cycle. Bundle with the stale AC-CO-3 pointer and the three findings `skills/directive-authoring.md` defers to the TRD stage, so the document opens once.
+
+---
+
+## `skills/directive-invariants.md` is `draft` and load-bearing
+
+Landed 2026-08-29 (PR #231, `ab3f2ef`; heading line amended PR #244, `c4a0353`). Every skeleton `bin/directive` emits, in both modes, reads its regions from this document at its last commit in the methodology home, so the document governs every directive from adoption forward while sitting at `status: draft`. **What's needed:** its Context Quality Reviewer cycle, first in the directive-tooling queue. Then the `skills/directive-authoring.md` consolidation cycle (five expedited amendments outstanding), which also carries: the OQ-Q4(c) path pointer to this document; the own-worktree-cleanup-and-report-final-line rule; the holder-check rule; "expected-output lines are claims" (verify it is already there in spirit); OQ-10's Naming-section branch gap; `git push origin <branch>` with no `-u` in the sandbox (`.git/config` is not writable); never bypassing the pre-commit hook. Adoption — authors reaching for `bin/directive` rather than freehand — waits on that pointer.
+
+---
+
+## `specs/directive-tooling.md` — rider queue
+
+For the PRD's next opening cycle; do not open a cycle for these alone. (a) §4 "plus the disposition slot and the source manifest" is illustrative, not exhaustive — dictated clause per TRD §9 OQ-5 (Dave, 2026-08-28). (b) AC-DT-09 "tag" → "annotated tag"; a lightweight tag is indistinguishable, verified by running. (c) AC-DT-04's author-text clause clarification; the TRD states satisfied-by-construction meanwhile.
+
+---
+
+## `specs/directive-tooling-trd.md` — rider queue and open questions
+
+Riders for the TRD's next opening cycle, each from an implementation-package ruling on main (directives `docs/cycles/directive-tooling-impl-{1,2,3,4,4b}-*.md`, `directive-tooling-tests-{fix-1,fix-2,fix-2b,3}-*.md`, 2026-08-29/30): §3.3 Heading (cycle)'s first line is `# {{heading}}`, filled whole from `directive_identity`, and the placeholder table drops `{{cycle}}`/`{{title}}` for that section (ruling (b)); §3.3 "appears exactly once in the file" reads *once among eligible lines*, the mask applying to the generator's self-check and the tests alike (ruling (a)); `{{reviewed_ref}}` and `{{companion_list}}` have no flag in the §3.9 flag set and are emitted as author slots inside committed regions, which the manifest then classifies as committed; M2 skips the source-manifest region, because manifest entries cite the methodology home, which in the test substrate is not the linted repository; §3.7's git dependency notes that `status` reads run with `--no-optional-locks`, which is what holds §3.9's "reading is not writing" (test_x5 caught the index rewrite); the stale counts cycle-1 deferred as O-1..O-4 (`bin/` executable count; corpus 170/114/68 today vs 144/109/63 in the text). Test-suite gap for the Test Designer: §3.3's byte-equality test of the disposition prompt against `skills/directive-authoring.md`'s bullet does not exist, so §4.2's B3 is pinned by nothing and drift would be silent.
+
+Open questions carrying recommendations, Dave's to rule whenever: Q2 rec (b), directive lands and work stops; Q4 rec (c), the skill gains a path pointer to the invariants document; Q6 rec (b), the five-code contract — §7 is already written to (b). Plus the TRD's own OQ-1..10; OQ-7 (sole-tree literal) and OQ-9 (M3-extent reading) want a gate or Dave.
+
+---
+
+## Convergence process — canonization owed
+
+Ruled ad hoc for the directive-tooling TRD, canonization after from the retro (Dave, 2026-08-28). The shape as run: one blocker-scoped review cycle, the TRD stays open, the Test Designer writes tests against it, findings mediated through the decision session both ways, joint flip when they cohere. It ran clean; evidence is the `docs/cycles/directive-tooling-trd-*.md` chain and `reviews/directive-tooling-trd-cycle-{1,2,3}.md`. One detail the description added and the run used: the decision session as the mediating agent — executors state intent in dispositions and verify against the counterparty's artifacts, and correct a wrong disposition with disclosure. A full cycle on `skills/spec-review-cycle.md` (or a sibling skill) writes it in.
+
+---
+
+## PRD and TRD templates carry the wrong audience — directed fix
+
+Dave, 2026-08-28: PRDs and TRDs are audience `[human]` (the narrowing of `specs/directive-tooling.md` from `[all-roles, human]` was deliberate and kept, cycle 21 O1). Both templates (`prd-template`, `trd-template`) still say otherwise and are wrong. A directed change awaiting its review cycle, not a candidate.
 
 ---
 
@@ -1156,8 +1192,10 @@ Each is a full cycle on a gate document; none is decided.
 - **Rubric criteria 3, 4, 6, 11, 12 are absence tests.** Restate affirmatively (e.g. 4 → "every rule is stated in exactly one governed file, and this file is that one"). Dave's concern: negated framing primes the forbidden thing and yields uncitable "I didn't see one" findings. Run the same audit over `docs/global-context/core.md` and `decision-layer.md`. criterion 12 exemption for a template's examples (DEC-000240; reviews/document-metadata-policy-cycle-19.md DMP19-3, rejected there) — encode in the rubric or the reviewer's role, or refuse.
 - **Multi-document review artifacts.** A gate over a branch is now practice (PRs #211, #215, #218, #221) but `skills/spec-review-cycle.md` and `skills/review-artifact.md` are written for one document, one stem. Write the case in: artifact stem names the branch; `Reviewed:` lists the documents; `Baseline:` carries the pre-change ref.
 - **Bundle invariant.** A rule may be deleted from file A only if the home B's audience covers A's; otherwise the duplicate is legitimate. Lives only in a collapse directive today; belongs in the rubric.
-- **Decision-layer 3, "landmine".** Add a test: something Dave would act on differently, or be surprised by, if unnamed. Expected tool behaviour and items already on the tracker or baton are not landmines. Observed 2026-08-26: the label was being spent on nothing, training the reader to skip it.
+- **Decision-layer 3, "landmine".** Sharpened 2026-08-29 (Dave): the word is reserved for a consequence of doing what was asked that is severe or hard to reverse — a wrong merge, a lost record, a broken gate. Expected tool behaviour, state information, and items already on the tracker or baton are triage, unlabelled. Observed 2026-08-26 and again 2026-08-29: the label spent on nothing trains the reader to skip it.
 - **Executor STOP wording.** State the tree-mutation stop on intent, not cause: "any tree mutation you did not intend, including your own." Used in the pass-2b directives; the gate executor stopped correctly under it.
+- **Governed documents carry substance only.** Findings dispositions, cycle changelog prose, per-sentence provenance tags and SHA citations belong in review artifacts and cycle directives, not in the document they concern. The directive-tooling PRD rewrite (PR #225) went from a bloated draft to 511 lines on this rule alone; write it into the rubric or the authoring skills.
+- **Executor decision lists are committed, not chatted.** Every implementation package this session reported a numbered list of decisions the spec left open; those lists live only in chat, and the package-3 executor could not read package 1's. The report's decision list is appended to the directive file (or a sibling report file) as the executor's last commit, so the next executor reads it from the tree.
 
 ---
 
@@ -1165,11 +1203,15 @@ Each is a full cycle on a gate document; none is decided.
 
 Two instances: the agreeing-clusters gate executor ran `git checkout <sha> -- .`, staged branch content by mistake, reset itself, and continued (2026-08-26); the pass-2b executor's `git worktree add -b … origin/<ref>` failed on a sandbox `.git/config` write-deny, and it deleted the stray ref and retried with `--no-track` (2026-08-26). Neither damaged anything; both flagged honestly; both should have stopped. Under the intent-based STOP wording above the pass-2b gate executor did stop on the same failure. Operating note: in the sandbox, create worktrees with `--no-track`, or check out an existing local branch.
 
+2026-08-29/30, directive-tooling packages: two more, disclosed and accepted — the package-1 executor committed its directive file with the pre-commit hook bypassed (verified clean afterwards; directives now say "never bypass the pre-commit hook"), and the AC-DT-16 executor committed its edits before its directive file and pushed both together (record accepted as-is, PR #245). Against that, four correct stops in the same run: tests-fix-2 on an unruled finding, tests-3 on the parameterization scope, impl-4 on test_x5, and impl-1's own self-check refusing its first skeleton. The stop wording holds; the two deviations are a different class — a step taken on the executor's own judgment rather than a recovery — and the invariants document's First act and Sandbox regions are where they get closed.
+
 ---
 
 ## Worktree and branch pile
 
-About 31 `$TMPDIR` worktrees registered against `~/code/fiducial`. Branches to delete, all merged: `log-dec-200-210`, `rule-extraction-pass1`, `rule-dedup-pass2`, `rule-divergence-rulings`, `rule-divergence-rulings-gate`, `rule-divergence-rulings-cycle-2`, `rule-divergence-rulings-gate-2`, `flip-rule-divergence-rulings`, `flip-directive-tooling`, `untag-specs-audience`, `agreeing-clusters`, `agreeing-clusters-gate`, `flip-agreeing-clusters`, `pass-2b-rulings`, `pass-2b-rulings-gate`, `flip-pass-2b-rulings`, `retire-bundle-methodology`, `retire-bundle-methodology-gate`, `open-items-flush-20260827`. One command block from the CoS; the `retros/` untracked files in the main clone are Dave's and are not touched.
+Worktrees: cleared. `git worktree prune` from Dave's terminal on 2026-08-29 left one registered worktree, `fiducial-dmp-cycle-20`, which belongs to a live cycle. Standing pattern that held for every directive this session: each session removes its own worktree as its final act and reports the status as the report's last line; a worktree another session created cannot be removed from the sandbox (EPERM on `.git/worktrees/<name>`), and `git worktree prune` from Dave's terminal clears the metadata once the directory is gone.
+
+Branches to delete, all merged to main: `log-dec-200-210`, `rule-extraction-pass1`, `rule-dedup-pass2`, `rule-divergence-rulings`, `rule-divergence-rulings-gate`, `rule-divergence-rulings-cycle-2`, `rule-divergence-rulings-gate-2`, `flip-rule-divergence-rulings`, `flip-directive-tooling`, `untag-specs-audience`, `agreeing-clusters`, `agreeing-clusters-gate`, `flip-agreeing-clusters`, `pass-2b-rulings`, `pass-2b-rulings-gate`, `flip-pass-2b-rulings`, `retire-bundle-methodology`, `retire-bundle-methodology-gate`, `open-items-flush-20260827`, `directive-tooling-impl-1`, `directive-tooling-tests-fix-1`, `directive-tooling-impl-2`, `directive-tooling-tests-fix-2`, `directive-tooling-tests-3`, `directive-tooling-impl-3`, `directive-tooling-ac-dt-16`, `directive-tooling-impl-4`. One command block from the CoS; the `retros/` untracked files in the main clone are Dave's and are not touched.
 
 ---
 
