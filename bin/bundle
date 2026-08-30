@@ -26,7 +26,7 @@ REPO_NAME = "davepierceops/fiducial"
 #: this repo. They stay because AC-BA-1 states the governed set as that union:
 #: a repo whose policy has not adopted the three roots still bundles them.
 GOVERNED_EXTRA_DIRS = ("docs/global-context", "engagements")
-GOVERNED_EXTRA_FILES = ("prose-criteria.md",)
+GOVERNED_EXTRA_FILES = ("public-prose-criteria.md", "voice.md", "voice-template.md")
 
 #: AC-BA-5: the three reserved audience values.
 RESERVED_AUDIENCES = {"all-roles", "all-decision-roles", "human"}
