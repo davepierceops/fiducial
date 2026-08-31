@@ -1,6 +1,6 @@
 ---
-status: in-review
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/directive-authoring-cycle-6.md @ afbe7df9924f0449a2f48a408c26c67399595eb8
 audience: [chief-of-staff, human]
 ---
 
