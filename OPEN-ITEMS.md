@@ -1117,6 +1117,10 @@ Implementation is not blocked by this gate; the build-gating rule in
 
 **What's needed:** a change to `bin/bundle`'s ACs (AC-BA-*), as a package under the bundle-system PRD. Until then, the bundle uploaded per project is the `bundle-chief-of-staff-*` file `bin/bundle` emits.
 
+**Folded 2026-08-31 into `specs/bundle-system.md` OQ-5**, which records the
+filename/header conflict as Dave's open ruling; this entry closes when OQ-5
+resolves and adds nothing to it.
+
 ---
 
 ## Bundle-system PRD draft is uncommitted
@@ -1177,7 +1181,18 @@ Landed 2026-08-29 (PR #231, `ab3f2ef`; heading line amended PR #244, `c4a0353`).
 
 ---
 
-## `skills/directive-authoring.md` consolidation cycle owed — adoption of `bin/directive` waits on it
+## ~~`skills/directive-authoring.md` consolidation cycle owed — adoption of `bin/directive` waits on it~~
+
+**RESOLVED 2026-08-31.** Consolidation revision D-0 plus amendments b, c, d;
+gates at cycles 4/5 (ready-with-findings, 0 blocking), 5/6
+(ready-with-findings, 1 non-blocking each), and 6/7 (ready, zero findings).
+Both documents `agreed` at `reviews/directive-authoring-cycle-6.md` and
+`reviews/directive-invariants-cycle-7.md`, both @
+afbe7df9924f0449a2f48a408c26c67399595eb8; flips landed by `bin/flip-agreed`
+(one self-commit per invocation), PRs #263–#267, all merge commits, main at
+24dab436. Adoption is unblocked: directives are generated with
+`bin/directive` and linted with `bin/check-directive` from here on. Persisting
+items and riders moved to the topic-walk section below.
 
 Five expedited amendments outstanding, plus: the OQ-Q4(c) path pointer to
 `skills/directive-invariants.md`; the own-worktree-cleanup-and-report-final-line
@@ -1327,7 +1342,160 @@ The `retros/` untracked files in the main clone were not touched.
 12. **Tooling-facts artifact (T30, T04).** A dated, falsifiable record of connector and sandbox behaviour — or the decision that the bundle-system PRD's lore-home requirement is that artifact.
 13. **SLO gate hole (T29, open since 2026-08-05).** The consequential class and the change package reference Top K journeys and SLO budgets that nothing defines or maintains, so a gate criterion cannot fire: define them or remove the criterion and the field.
 14. **The 2026-08-05 board pass (T33).** One disposition — landed, superseded, or still open — per action item AI-1 through AI-15 of `retros/retro-triage-board.md`, recorded so the board can be called synthesized.
-15. **Test counts carry their environment (T06).** A count reported by an executor states the environment it was observed in (clone, worktree, sandbox); a count measured elsewhere is not an expectation.
+15. **Test counts carry their environment (T06).** A count reported by an executor states the environment it was observed in (clone, worktree, sandbox); a count measured elsewhere is not an expectation. **LANDED 2026-08-31** — the invariants Report region bullet (amendment b, refined by amendment d's arc to the tree axis with a sandbox clause), agreed at cycle 7.
 16. **`bin/check-directive` M2 rejects a backticked citation (TRD rider).** Observed 2026-08-31 linting this directive: a `path @ sha` citation written with the path in backticks fails M2 as path-absent, because the citation pattern takes the backtick as part of the path. Either the pattern strips inline-code delimiters or the authoring skill states that citations are written bare. Add to the `specs/directive-tooling-trd.md` rider queue above.
 
 Confirmed by the corpus and already tracked above, no new entry: convergence-process canonization; multi-document gates; substance-only governed documents; rubric negation, bundle invariant, agent-instruction test; landmine test; executor self-recovery; six unlogged decisions; skills conformance and name/description; Illuminait retro; `bin/land` usage document; PRD/TRD template audience; Critic vs review-artifact audience.
+
+---
+
+## Topic walk 2026-08-31 — rulings
+
+**Source:** the full 33-topic walk over
+retros/retro-synthesis-20260831T163000.md, ruled by Dave one topic per turn in
+the retrospective decision session, same day. Every topic now has a home; this
+section is the record. The follow-up numbers below are the section above's.
+
+**Cycles opened or re-scoped by the walk:**
+
+1. **Decision Layer cycle (one open, several changes).** Rule 13 becomes
+   pointers-only — a baton carries decisions, open questions, and pointers;
+   every fact about the tree is re-read; one carve-out: a baton may name a
+   state the successor would not know to check (a session left running, a
+   branch mid-merge), labelled told (T08). Rule 5 gains: dispatch of ruled
+   work is emitted, not offered (T08). Rule 3 gains the test: a landmine is a
+   consequence Dave would act on differently if it went unnamed (T15).
+   Register lines: say what the item is before the choice; y/n where
+   possible; after a turn carrying a report or a block, restate the open
+   question (T16). A spoken standing rule enters governed text the same turn
+   (T17); a decision is logged in the session that makes it (T24); a document
+   handed for reading is delivered rendered — the pane is for documents being
+   edited (T26). Follow-ups 3, 4, 5, and 11 close into this cycle.
+2. **Remote-write verification policy cycle** (`policies/remote-write-verification-policy.md`).
+   Four rules: the content-expectation check (size and stats, closing the
+   policy's own Known gap); connector writes are creates or small verified
+   diffs — an existing governed document is never regenerated whole over the
+   connector; any connector write of an in-scope file sets all frontmatter
+   explicitly and an executor runs `bin/check-frontmatter --all` on a branch
+   before merge; after a timeout on a write, read the PR or commit state
+   before re-creating (T07, T11). Plus classify-before-remedy: a reported
+   tool failure is classified — lost response, never dispatched, caller
+   error, tool defect — before any remedy (T30). The 2026-08-03
+   success-shaped-response entry and the 2026-08-06 landing-not-content entry
+   fold into this cycle and close when it lands.
+3. **Spec-review-cycle skill cycle** (follow-up 6 + convergence, T09, T20).
+   A re-gate disposes findings and takes no new decisions — a new decision
+   opens its own cycle; the agreement bar and gate cadence are stated at loop
+   start, and a gate may be scoped to confirmation of named resolutions;
+   findings below the reviewed document's stage route to the next stage's
+   question list; a named defect class is triaged before its instances; plus
+   the convergence shape — spec and tests revised together, joint flip, the
+   decision session mediating, dispositions are intent (the executor verifies
+   against the counterparty artifact and discloses deviation). The
+   "Convergence process — canonization owed" entry closes into this cycle.
+4. **Chief of Staff role cycle** (T05, T23). The one-chat-holds-the-connector
+   constraint stated where decision sessions read it; a decision session
+   assumes sole hold unless the baton or Dave says otherwise, and treats a
+   timeout as contention first, restart second; the baton names any session
+   left running, labelled told; and the rotation trigger — the Chief of Staff
+   proposes handoff before the next major work item, one line, taking an ack.
+   Follow-ups 2 and 10's first half close into this cycle.
+
+**Riders recorded on existing entries and queues:**
+
+5. **`skills/directive-authoring.md` next cycle** (follow-up 8 pile; T02,
+   T03, T20, T21, walk evidence): a verification step in a directive binds
+   the directive's own dictated text — read every dictated string against
+   every self-check before sending; the holder check names a third case, the
+   branch existing with no worktree; the reuse form — cite the prior
+   directive path @ SHA as companion, `git worktree add "<path>" <branch>`
+   with no -b and no --no-track, re-pin, deltas only; carry the remedy with
+   the ban; a directive that dictates wording cites its source or marks it
+   new; a flip directive states `bin/flip-agreed`'s self-commit behaviour —
+   one commit per invocation, never a caller-authored combined commit; the
+   Naming example gains the UTC `Z` per the filename decision below;
+   per-file test runs use `python3 -m unittest discover -s bin/tests -t bin
+   -p <file>`; a long test suite states its expected duration so an
+   executor's tool timeout is raised before the run.
+6. **`specs/directive-tooling-trd.md` rider queue:** M2's citation pattern
+   captures an enclosing backtick or quote as part of the path (observed
+   twice, 2026-08-31: backticked citation; the flip directive's quoted
+   `--review` argument) — strip delimiters or the skill states citations are
+   written bare; and M2 requires the cited SHA to touch the path, which a
+   multi-document artifact's tip citation and a flip's artifact citation both
+   trip — state the rule's intended reach.
+7. **Rubric candidate entry** (T13, T28): add the collapse check — before
+   collapsing two duplicate rules, confirm they state the same rule, not
+   merely similar text (pass-2b evidence: the clustering over-matched); the
+   criterion-with-no-reviewer-is-a-wish test and
+   prohibition-becomes-per-instance-test rules cross-reference here from the
+   conformance pass.
+8. **Skills-conformance-pass entry** (T28): scope candidates recorded — the
+   role-register audit (roles written before rubric criterion 5 carry a
+   human register; writer.md's rewrite is the precedent), and the two
+   test-form rules above; scope decided when the pass's rubric is drafted.
+9. **`operating-model.md` next opening cycle** (T10): two riders — a spike
+   step (time-boxed, throwaway, permitted before agreement, findings only,
+   never shipping code), and mutation-as-coverage-finding (a mutation
+   surviving a green suite is a finding; the code's author does not write
+   the closing test). The orchestrator question is closed by the
+   spec-review-cycle cycle; the expedited-stretch question becomes a
+   one-line check at `policies/document-metadata-policy.md`'s next cycle.
+10. **`policies/commit-and-change-control-policy.md` next cycle** (T29,
+    follow-up 13): remove the Top K / SLO-budget criterion and the change
+    package's SLO field — a criterion nothing defines cannot fire and reads
+    as coverage — and relocate: a project with user-facing journeys defines
+    its Top K and budgets at adoption, stated in the Project Setup
+    Requirements policy. The 08-05 board's AI-1 disposes into this.
+11. **`context-sets/collab-workflow.md` next opening** (T12): one rider —
+    before "ship," the pane content is verified against the diff that
+    actually lands; the commit derives from the pane, never from memory of
+    the discussion.
+12. **`docs/global-context/core.md` next opening** (filename decision): rule
+    14's example gains the `Z`.
+13. **Bundle-system PRD cycle 1 riders** (T26, T30): replace the three
+    hard-coded `~/Downloads` paths and both "sort to the top" phrases with a
+    citation of the delivery-directory decision, `--out` remaining the
+    override per AC-BN-12; and the lore home (G11/AC-BS-12) is the
+    tooling-facts artifact — entries are dated, falsifiable, and classified
+    (lost response / never dispatched / caller error / tool defect).
+    Follow-up 12 closes into this.
+14. **`bin/land` usage-document entry** (T32): two added requirements — a
+    flip runs from a tree that contains the review artifact it cites, and
+    the document states `bin/flip-agreed`'s self-commit behaviour.
+15. **By-title pointer dependency** (gate cycle-4 O-2, record only): the
+    criterion-3 by-title reference between the two directive skills holds
+    because both carry audience [chief-of-staff, human]; the dependency is
+    recorded here and nowhere in either file — an audience change on either
+    breaks criteria 1 and 3 silently. Dave weighs whether it ever needs more
+    than this record.
+
+**Refusals and deferrals, recorded:**
+
+16. **Trivial-additive fast lane (T25, follow-up 9): refused 2026-08-31.**
+    Two instances, both predating the cycle-20 metadata policy. Hitting the
+    gap again is itself the trigger for a revisit — the next concrete case
+    with no fitting route reopens this entry with itself as the evidence,
+    and is not absorbed or worked around.
+17. **Autonomous overnight-run skill (T23): deferred until the next run is
+    wanted.** Two clean runs exist as evidence; when Dave next says "keep
+    going, I'm off to bed," the skill is drafted first — bounds (ruled work
+    only, nothing consequential, no flips), stop conditions (any question
+    that would go to Dave), wake-up report shape — and that run validates it.
+18. **Illuminait / discovery methodology (T27): stays parked**, one note
+    added — the spike definition is landing via the operating-model rider
+    above; the parked gap analysis does not re-derive it.
+
+**Owned elsewhere, confirmed by the walk:** T01 adoption (landed above); T04
+sandbox lore and T31 adapters/reach (bundle-system PRD); T14 staleness and
+format (PRD; format entry folded into OQ-5); T33 closed — the class is swept
+by this walk, with the same-turn encoding line and the retro skill's
+standing-preferences prompt as the two structural fixes that keep it empty.
+
+**Queued next:** the 08-05 board pass (follow-up 14) as a read-only directive
+appending a per-item disposition table (AI-1 → T29; AI-8 → T30's ruling;
+AI-15 → landed via T17; the rest read against main); then the retro-skill
+cycle (follow-up 1, five changes), the bundle PRD cycle 1, the spec-review
+cycle, the remote-write policy cycle, the Decision Layer cycle, the
+command-blocks cycle (follow-up 7, three changes), and the Chief of Staff
+role cycle.
