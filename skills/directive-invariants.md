@@ -1,6 +1,6 @@
 ---
-status: draft
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/directive-invariants-cycle-4.md @ 3f0a96e4f97015ed3091e3d666b64fbc22895eec
 audience: [chief-of-staff, human]
 ---
 
