@@ -21,7 +21,8 @@ heading, and **the first non-blank line of a body is always body** — three
 sections carry an ATX marker as their first body line and are still one
 section each. A region section's body opens with that region's marker line.
 
-Placeholders are written `{{name}}`. The set is closed and fixed per region:
+Placeholders are written `{{name}}`; `{{{{` is a literal `{{`. The set is
+closed and fixed per region:
 
 - Heading (general): `title`.
 - Heading (cycle): `heading`, `date`, `scope_list`.
@@ -37,7 +38,9 @@ Placeholders are written `{{name}}`. The set is closed and fixed per region:
 
 An unrecognised placeholder is a refusal, never a pass-through.
 
-The disposition label appears in this document **only inside fenced blocks**.
+The label literal the generator emits — the colon-terminated form the first
+fence of the Disposition label section carries — appears in this document
+**only inside fenced blocks**; the bare token may appear in prose.
 
 ## Heading (general)
 
@@ -88,7 +91,7 @@ Both admitted forms, worked:
 
 ```text
 WORKING-TREE DISPOSITION (exclusive assignment): this session works only in a
-worktree at "wt/<name>", created by: git worktree add --no-track "wt/<n>" -b
+worktree at "wt/<name>", created by: git worktree add --no-track "wt/<name>" -b
 <branch> origin/main
 
 WORKING-TREE DISPOSITION: This session works in the sole tree at the clone root.
@@ -213,8 +216,8 @@ opening length; the fence lines themselves are masked, and an unclosed fence
 masks to end of file. Blockquote lines are masked: a line whose leading
 non-whitespace character is `>`. HTML comments are masked, from the line
 containing `<!--` through the line containing `-->`. Indented code blocks are
-not masked. Line endings are normalised before masking, and the match is
-byte-exact thereafter.
+not masked. Line endings are normalised before masking — `\r\n` and `\r`
+become `\n`, and the match is byte-exact thereafter.
 
 Stripping, applied to every eligible line before the literal is tested, removes
 up to three leading spaces; then one list marker (`-`, `*`, `+`, or digits
@@ -237,6 +240,10 @@ Canonical sole-tree sentence:
 ```text
 This session works in the sole tree at the clone root.
 ```
+
+Sole-tree form: the extent contains that sentence literally, reproduced
+exactly — capitalisation and full stop included; a paraphrase carries no
+admitted form.
 
 ## Marker syntax
 
