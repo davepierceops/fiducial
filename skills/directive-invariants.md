@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/directive-invariants-cycle-4.md @ 3f0a96e4f97015ed3091e3d666b64fbc22895eec
+status: in-review
+last-reviewed: null
 audience: [chief-of-staff, human]
 ---
 
@@ -22,7 +22,11 @@ sections carry an ATX marker as their first body line and are still one
 section each. A region section's body opens with that region's marker line.
 In the Disposition label section the fences are positional — the first carries
 the emitted literal and the last carries the canonical sole-tree sentence — so
-no fence is added, removed, or reordered there.
+no fence is added, removed, or reordered there. No eligible line of this
+document — eligibility as the Disposition label section defines it — leads,
+after stripping, with the bare label token and carries a colon later on the
+same line; the bare token may appear where it does not lead the line, and the
+colon-terminated literal appears only inside fenced blocks.
 
 Placeholders are written `{{name}}`; `{{{{` is a literal `{{`. The set is
 closed and fixed per region:
@@ -39,14 +43,9 @@ closed and fixed per region:
 - Source manifest: `manifest`.
 - Every other region: none.
 
-An unrecognised placeholder is a refusal, never a pass-through.
-
-Outside fenced blocks, no eligible line of this document satisfies the match
-rule the Disposition label section states — after stripping, no unfenced line
-leads with the bare label token and carries a colon later on the same line.
-The emitted, colon-terminated literal — the form the first fence of that
-section carries — appears only inside fenced blocks; the bare token may appear
-in prose where it does not lead the line.
+An unrecognised placeholder is a refusal, never a pass-through. An
+angle-bracketed token inside a worked example, such as `<name>`, is a slot the
+author fills; it is not a placeholder and the generator never substitutes it.
 
 ## Heading (general)
 
@@ -88,9 +87,10 @@ assignment (a named directory plus the command creating it) or an explicit
 sole-tree declaration. A prohibition is not a disposition. The disposition is
 stated as its own labelled statement, exactly one per directive, mechanically
 distinguishable from incidental mention of trees or commands elsewhere in the
-file; the label's fixed form is a tooling concern, not this document's. Two
-sessions sharing a tree mutate each other's preconditions; prefer not
-splitting work across trees.
+file; the label's fixed form, the canonical sole-tree sentence, and a worked
+example of each form are stated in the Directive Invariants document, which is
+their one definition. Two sessions sharing a tree mutate each other's
+preconditions; prefer not splitting work across trees.
 ```
 
 Both admitted forms, worked:
@@ -108,9 +108,10 @@ WORKING-TREE DISPOSITION: This session works in the sole tree at the clone root.
 BASE VERIFICATION
 
 Before anything else, fetch and confirm the base is at the reviewed ref
-{{reviewed_ref}}. Judge the fetch by the refs it reports, not by a credential
-helper's noise on stderr. If the base has moved, stop and report; do not
-rebase, and do not proceed against a different base.
+{{reviewed_ref}}. Judge every remote operation — fetch, push, ls-remote — by
+the refs it reports, not by a credential helper's noise on stderr. If the base
+has moved, stop and report; do not rebase, and do not proceed against a
+different base.
 
 ## Companions
 
@@ -150,7 +151,8 @@ Pinned to the reviewed ref {{reviewed_ref}}. Cannot execute as written: stop
 and report. Concurrent tree mutation: stop and report. On any failed command,
 any precondition not met, or any tree mutation you did not intend, including
 your own — stop and report; do not retry with different flags, and do not
-delete or create any ref to recover.
+delete or create any ref to recover. A remote operation that exits successfully
+is not a failed command, whatever a credential helper writes to stderr.
 
 ## Report format
 
@@ -159,6 +161,8 @@ REPORT
 - the directive file's commit SHA
 - every commit SHA this session landed, in order, and the branch they are on
 - what was verified, how, and where the run log is
+- every count reported, with the tree it was observed in — the clone's main
+  tree, or the worktree the directive assigns; a sandboxed run says so
 - anything observed this directive did not anticipate
 - the worktree-removal status — or, under the sole-tree form, that no worktree
   existed
@@ -269,8 +273,8 @@ Markers admitted before the first-act statement:
 ROUTE AND MODEL
 ```
 
-The first entry stands for whatever heading line the mode emits and is not
-matched as a literal; the second is matched as a literal.
+The entry written in angle brackets stands for whatever heading line the mode
+emits and is not matched as a literal; the other entry is matched as a literal.
 
 ## Match phrases
 
