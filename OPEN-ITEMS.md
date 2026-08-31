@@ -4,7 +4,7 @@ This file tracks open questions, deferred decisions, and outstanding fixes
 for the AI operating model. Updated at defined checkpoints per
 `context-sets/spec-and-change-discipline.md`.
 
-Last updated: 2026-08-30
+Last updated: 2026-08-31
 
 ---
 
@@ -1127,6 +1127,8 @@ Implementation is not blocked by this gate; the build-gating rule in
 
 **Recorded requirement for the PRD's cycle 1 (Dave, via the writing workstream decision session, 2026-08-28):** bundles are distributed through GitHub Releases. `bin/bundle` generates one bundle file per audience; a release attaches those files pinned to the repository SHA they were generated from; a consumer downloads one file and never touches the repository. No generated bundle is ever committed to the tree. Consequences the PRD must state: new audience values (`writer`, `copy`, `critic` are coming) must be accepted without a code change; whether a release carries every audience's bundle or a stated subset is the PRD's decision; every writing bundle carries the Public Prose Criteria document, the per-author Voice document, and a Voice template for new authors, mechanism the PRD's call; release cadence and ownership are open, unconstrained by the writing workstream. Nothing here changes DEC-000210 — this adds a delivery surface downstream of `bin/bundle`.
 
+**Seven further requirements for cycle 1 (retrospective session, 2026-08-31):** provenance and staleness stamps on every bundle; filename and header per DEC-000210; stated regeneration triggers; per-rule selection or a stated reason for file granularity; Releases distribution as recorded above; how an adopting project reaches the corpus with a document and a chat and nothing else; a home for sandbox and connector lore with a stated audience. Each is stated in full under "Follow-ups — bundle-system PRD inputs" in retros/retro-synthesis-20260831T163000.md @ b615d0d04da9421941c47fd789d3690ad7849203, with the retros that raised it.
+
 ---
 
 ## ~~`CLAUDE.md` carries a derived copy of governed rules~~
@@ -1304,3 +1306,28 @@ The `retros/` untracked files in the main clone were not touched.
 - **Candidate Core line** (later cycle): a role that names a document absent from its context asks for it before acting on what it governs, and never proceeds from memory of it.
 - **`voice-template.md` audience is `[human]`**; how it reaches a writing bundle is the bundle-system PRD's decision (DEC-000260).
 - **`review-artifact.md` lists `critic` in its audience**; that slug now resolves to `roles/critic.md`. Whether the review-artifact skill should reach the Critic at all is open — the Critic emits comments in a document, not a review artifact.
+
+---
+
+## Retrospective session 2026-08-31 — follow-ups
+
+**Source:** retros/retro-synthesis-20260831T163000.md @ b615d0d04da9421941c47fd789d3690ad7849203, the first synthesis over this repository's `retros/` (29 files, 33 deduplicated topics, each with count, most recent session, and state against `main` at 37c6818). Topic numbers below are that document's. Each item is a candidate for a review cycle on the named document; none is decided. The prior retrospective session, 2026-08-05, ran over wne-crm's corpus; its board is `retros/retro-triage-board.md` and its action items have no recorded disposition (item 14).
+
+1. **`skills/conversation-retro.md` — one cycle, four changes (T17, T18).** The retro reads nothing from and writes nothing to any remote — the file is handed in chat, placement is a separate command-block step from a decision session; `date:` is the session's last interaction, derived from the last dated artifact the session touched, with `generated:` added and the filename timestamp kept as the opaque handle; a synthesis lists the retro filenames it covers, so unsynthesized retros are computed; a prompt for standing preferences repeated across sessions, held separate from in-session corrections (the 08-05 board's AI-15, never landed). The document is on the expedited path's ineligible list; full gate.
+2. **`roles/chief-of-staff.md` read-sequence — "what else is running" (T05).** A check for other chats holding the connector and other worktrees before any connector write; and the constraint itself — one chat holds GitHub at a time — stated where decision sessions read it.
+3. **Decision Layer 13 vs the 2026-08-24 recovery retro (T08).** Rule 13 says a baton carries "pointers and state"; the retro says a baton carries never computed state, which is re-read from the repo. Two governed-adjacent sources disagree; Dave's ruling, then the losing text moves.
+4. **Decision Layer 5 or the Chief of Staff role (T08).** The baton's ordered next-step list is Dave's ruling; the successor session's first response dispatches item one and does not ask whether to.
+5. **Decision Layer register (T16, T17).** "Say what the item is before the choice" and "y/n where possible" — repeated across sessions, in no governed text.
+6. **`skills/spec-review-cycle.md` (T09).** A re-gate disposes findings and takes no new decisions; the agreement bar and gate cadence are stated at loop start; findings below the reviewed document's stage are routed to the next stage's question list, not filed as blockers.
+7. **`skills/command-blocks.md` (T19).** No ``` fence inside a paste block — inner fences are `~~~` with a fence note; an expected-output line is observed in the environment the block runs in, or is qualitative; a block never pushes the default branch.
+8. **`skills/directive-authoring.md`, after the consolidation cycle (T20, T21, T22).** Reviewer Fix text carried verbatim unless the record states the departure; every fix names its seam and the sweep that checks it; position-bearing derived artifacts get a mechanical re-check; dispositions are intent — the executor verifies against the counterparty artifact and discloses deviation.
+9. **Trivial-additive fast lane (T25).** An owner-approved, additive, tool-verifiable-green change that neither the doc-only nor the expedited path covers: scope it or refuse it.
+10. **Session rotation and the autonomous run (T23).** A stated trigger for the Chief of Staff to propose handoff and take an ack; a named skill for the autonomous overnight run if it is to recur — two instances exist as its evidence.
+11. **Files handed to Dave (T26).** `~/Downloads`, named to sort to the top; long documents presented rendered and navigable. One line in the Decision Layer; today it lives in memory only.
+12. **Tooling-facts artifact (T30, T04).** A dated, falsifiable record of connector and sandbox behaviour — or the decision that the bundle-system PRD's lore-home requirement is that artifact.
+13. **SLO gate hole (T29, open since 2026-08-05).** The consequential class and the change package reference Top K journeys and SLO budgets that nothing defines or maintains, so a gate criterion cannot fire: define them or remove the criterion and the field.
+14. **The 2026-08-05 board pass (T33).** One disposition — landed, superseded, or still open — per action item AI-1 through AI-15 of `retros/retro-triage-board.md`, recorded so the board can be called synthesized.
+15. **Test counts carry their environment (T06).** A count reported by an executor states the environment it was observed in (clone, worktree, sandbox); a count measured elsewhere is not an expectation.
+16. **`bin/check-directive` M2 rejects a backticked citation (TRD rider).** Observed 2026-08-31 linting this directive: a `path @ sha` citation written with the path in backticks fails M2 as path-absent, because the citation pattern takes the backtick as part of the path. Either the pattern strips inline-code delimiters or the authoring skill states that citations are written bare. Add to the `specs/directive-tooling-trd.md` rider queue above.
+
+Confirmed by the corpus and already tracked above, no new entry: convergence-process canonization; multi-document gates; substance-only governed documents; rubric negation, bundle invariant, agent-instruction test; landmine test; executor self-recovery; six unlogged decisions; skills conformance and name/description; Illuminait retro; `bin/land` usage document; PRD/TRD template audience; Critic vs review-artifact audience.
