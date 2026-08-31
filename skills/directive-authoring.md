@@ -10,17 +10,17 @@ This procedure runs in a decision session.
 
 ## Writing the directive file
 
-- **Every directive states its working-tree disposition** — either an
-  exclusive assignment (a named directory plus the command creating it) or an
-  explicit sole-tree declaration. A prohibition is not a disposition. The
-  disposition is stated as its own labelled statement, exactly one per
-  directive, mechanically distinguishable from incidental mention of trees or
-  commands elsewhere in the file; the label's fixed form, the canonical
-  sole-tree sentence, and a worked example of each form are stated in the
-  Directive Invariants document and nowhere else. Two sessions sharing a tree
-  mutate each other's preconditions; prefer not splitting work across trees.
+- **Every directive states its working-tree disposition** — either an exclusive
+  assignment (a named directory plus the command creating it) or an explicit
+  sole-tree declaration. A prohibition is not a disposition. The disposition is
+  stated as its own labelled statement, exactly one per directive, mechanically
+  distinguishable from incidental mention of trees or commands elsewhere in the
+  file; the label's fixed form, the canonical sole-tree sentence, and a worked
+  example of each form are stated in the Directive Invariants document, which
+  is their one definition. Two sessions sharing a tree mutate each other's
+  preconditions; prefer not splitting work across trees.
 - **The disposition label leads the disposition statement and no other
-  unfenced line.**
+  eligible line.**
 - **The route line names one session** — a fresh session, or an existing
   session named by the directive it landed, never by the tree or branch it
   holds.

@@ -88,9 +88,9 @@ sole-tree declaration. A prohibition is not a disposition. The disposition is
 stated as its own labelled statement, exactly one per directive, mechanically
 distinguishable from incidental mention of trees or commands elsewhere in the
 file; the label's fixed form, the canonical sole-tree sentence, and a worked
-example of each form are stated in the Directive Invariants document and
-nowhere else. Two sessions sharing a tree mutate each other's preconditions;
-prefer not splitting work across trees.
+example of each form are stated in the Directive Invariants document, which is
+their one definition. Two sessions sharing a tree mutate each other's
+preconditions; prefer not splitting work across trees.
 ```
 
 Both admitted forms, worked:
@@ -151,7 +151,8 @@ Pinned to the reviewed ref {{reviewed_ref}}. Cannot execute as written: stop
 and report. Concurrent tree mutation: stop and report. On any failed command,
 any precondition not met, or any tree mutation you did not intend, including
 your own — stop and report; do not retry with different flags, and do not
-delete or create any ref to recover.
+delete or create any ref to recover. A remote operation whose refs report
+success is not a failed command.
 
 ## Report format
 
@@ -160,8 +161,8 @@ REPORT
 - the directive file's commit SHA
 - every commit SHA this session landed, in order, and the branch they are on
 - what was verified, how, and where the run log is
-- every count reported, with the environment it was observed in — clone,
-  worktree, or sandbox
+- every count reported, with the tree it was observed in — the clone's main
+  tree, or the worktree the directive assigns; a sandboxed run says so
 - anything observed this directive did not anticipate
 - the worktree-removal status — or, under the sole-tree form, that no worktree
   existed
