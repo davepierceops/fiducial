@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/conversation-retro-cycle-2.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 ---
 
@@ -21,9 +21,13 @@ lighter path it would otherwise be eligible for.
 
 ## Use when
 
-- a decision session on a project has ended and its durable lessons should be
-  captured
-- Dave directs a retro explicitly
+Three triggers reach this procedure. All three run it unchanged; none is a
+separate mechanism.
+
+- Dave directs a retro explicitly.
+- The Chief of Staff proposes session rotation and Dave acks it.
+- The conversation is closing — Dave signals the end of the chat. Run the
+  retro, then close with the stop signal.
 
 Do not run a retro on a reviewer-gated cycle conversation unless directed —
 its decision record is the cycle directive.
@@ -37,31 +41,70 @@ its decision record is the cycle directive.
   changed in the session. Restating standing methodology is noise.
 - **Structurally identical.** Every retro uses the schema below.
 
+## Producing a retro touches no remote
+
+Producing a retro reads nothing from and writes nothing to any remote,
+GitHub included. Every input is the conversation itself and the local tree.
+
+The finished retro is handed to Dave in the chat that produced it, and that
+is where this procedure ends.
+
+Placing a retro into the repository is a separate step, taken afterward by a
+decision session as a command block that writes and commits the file in a
+local tree. Producing a retro never places one, and never asks a connector to.
+
+## Standing preferences
+
+Every retro answers one question explicitly: which preferences did Dave state
+this session that he has also stated in earlier sessions?
+
+- A repeated preference is a candidate standing rule and is recorded in its
+  own schema section.
+- A correction Dave made once, inside this session, is evidence and stays in
+  the Evidence section. The two are never merged: the schema catches
+  in-session corrections on its own, and repetition across sessions is what
+  it would otherwise miss.
+- Naming a candidate is this procedure's act. Encoding one into governed text
+  is a decision, and Dave's.
+
 ## Storage
 
 - Retros live in the project repo at `retros/`, sibling to the project's
   review artifacts. They are local project history and never travel to
   the methodology repo.
 - The header block in the retro schema below is synthesis metadata
-  (project, date, source pointer), not governance metadata. It serves
+  (project, dates, source pointer), not governance metadata. It serves
   corpus tooling and carries no lifecycle semantics.
 - Retros predating adoption of this skill are grandfathered as-is. Data, not
   governed documents.
 
 ## Filenames
 
-`retro-<timestamp>.md`, the timestamp in ISO 8601 basic format, taken at
-generation time.
+`retro-<timestamp>.md`, the timestamp taken at generation time in ISO 8601
+basic format, UTC, with the `Z` designator required and both date and time
+components present: `<YYYYMMDD>T<HHMMSS>Z`.
 
 Filenames are opaque, collision-free handles only — never parse them for
 meaning. The schema header is the canonical identity of a retro.
+
+## Dates
+
+- `date:` is the session's last interaction, not the moment the retro was
+  written. Derive it from the last dated artifact the session touched — a
+  merged pull request, a commit, a review artifact. Where the session touched
+  no dated artifact, take it from the `source:` pointer.
+- `generated:` is when the retro was written, in the timestamp form above.
+- Where the two disagree, they are both correct and both stated. A retro
+  written days after its session carries the session's date and its own
+  generation time.
 
 ## Retro schema
 
 ```markdown
 ---
 project: <project slug>
-date: <YYYY-MM-DD>
+date: <YYYY-MM-DD; the session's last interaction>
+generated: <YYYYMMDDTHHMMSSZ; when this retro was written>
 source: <conversation pointer: title, URL, or export filename; null if none>
 ---
 
@@ -78,6 +121,11 @@ paraphrases of pivotal moments; no interpretation here>
 <what the evidence suggests; each item references the evidence numbers
 it rests on>
 
+## Standing preferences
+<preferences Dave stated this session that he has stated in earlier
+sessions too, each as a candidate standing rule and each naming where it
+was stated before; empty-with-a-statement if none>
+
 ## Durable insights
 <techniques, workflow changes, belief changes that transfer beyond this
 session; empty-with-a-statement if none>
@@ -92,6 +140,11 @@ inputs to a future review cycle — not as decisions>
 - **Project synthesis:** performed over a project's `retros/` directory.
   Output is a synthesis document in the same directory, clearly marked
   as synthesis, never overwriting source retros.
+- **A synthesis names what it covered.** Its header carries a `covers:` list
+  of the filename of every retro it read. A retro named in no synthesis's
+  `covers:` list is unsynthesized; the next synthesis computes its input set
+  by comparing those lists against the directory, and states the count it
+  read.
 - **Cross-project synthesis:** a read operation, not a storage
   arrangement — concatenate the relevant `retros/` directories from
   local clones as needed. No shared corpus repo.
@@ -100,6 +153,7 @@ inputs to a future review cycle — not as decisions>
 
 ## Output
 
-- One Markdown file per conversation, delivered as a downloadable
-  artifact where the client supports it; otherwise exactly one fenced
-  Markdown block containing the entire document and nothing else.
+- One Markdown file per conversation, handed in the chat that produced it:
+  delivered as a downloadable artifact where the client supports it;
+  otherwise exactly one fenced Markdown block containing the entire document
+  and nothing else.
