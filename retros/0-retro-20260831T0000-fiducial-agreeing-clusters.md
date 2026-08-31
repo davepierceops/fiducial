@@ -1,10 +1,11 @@
 ---
 project: fiducial
-date: 2026-08-31
+date: 2026-08-26
+generated: 2026-08-31
 source: Chief of Staff decision session, main 6e80742 → a3acb75 (PRs #214–#217)
 ---
 
-# Retro — fiducial — 2026-08-31
+# Retro — fiducial — 2026-08-26
 
 ## Context
 
