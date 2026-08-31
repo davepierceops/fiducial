@@ -1147,9 +1147,53 @@ Implementation is not blocked by this gate; the build-gating rule in
 
 ---
 
-## `skills/directive-invariants.md` is `draft` and load-bearing
+## ~~`skills/directive-invariants.md` is `draft` and load-bearing~~
 
-Landed 2026-08-29 (PR #231, `ab3f2ef`; heading line amended PR #244, `c4a0353`). Every skeleton `bin/directive` emits, in both modes, reads its regions from this document at its last commit in the methodology home, so the document governs every directive from adoption forward while sitting at `status: draft`. **What's needed:** its Context Quality Reviewer cycle, first in the directive-tooling queue. Then the `skills/directive-authoring.md` consolidation cycle (five expedited amendments outstanding), which also carries: the OQ-Q4(c) path pointer to this document; the own-worktree-cleanup-and-report-final-line rule; the holder-check rule; "expected-output lines are claims" (verify it is already there in spirit); OQ-10's Naming-section branch gap; `git push origin <branch>` with no `-u` in the sandbox (`.git/config` is not writable); never bypassing the pre-commit hook. Adoption — authors reaching for `bin/directive` rather than freehand — waits on that pointer.
+**RESOLVED** 2026-08-30: agreed at `3f0a96e4f97015ed3091e3d666b64fbc22895eec`
+(`reviews/directive-invariants-cycle-4.md`), flip `a8a9913`, on `main` at
+`3e64efe`. Four Context Quality Reviewer cycles and three revisions, PRs
+#250–#258, all merge commits. Directives: `docs/cycles/directive-invariants-{gate,rev-1b,rev-1c,rev-1d,gate-2,rev-2,rev-2b,gate-3,rev-3,gate-4,agree}-*.md`.
+Rejected and recorded at cycle 1: F-4/F-5 (Stop-conditions and Claim-labels
+regions restate Core 11/15 and 6 — by-value quotation into emitted skeletons,
+same class as the disposition prompt). Suite at every content commit: 604 OK /
+7 skipped, zero reds — the three writing-workstream reds (test_scope sc1/sc3,
+test_check_frontmatter cf13) are gone; expected-state lists in directives now
+name no known red.
+
+Riders on the document, for its next cycle: cycle-4 F-1 — state the
+match-rule property as an editor constraint inside the format-rules paragraph;
+cycle-4 O-2 — the Preamble markers positional prose (`<document heading>`
+first, literal second) is a second unstated positional dependency; code
+classifies by shape, so swapping the entries leaves the check green and the
+prose false; cycle-4 O-3 — "eligible line" and "unfenced line" alternate in
+the fence-only paragraph; the second is stronger; cycle-4 O-1 — `<name>` in
+the worked example is still undefined as a placeholder.
+
+**Original entry, kept for the record:**
+
+Landed 2026-08-29 (PR #231, `ab3f2ef`; heading line amended PR #244, `c4a0353`). Every skeleton `bin/directive` emits, in both modes, reads its regions from this document at its last commit in the methodology home, so the document governs every directive from adoption forward while sitting at `status: draft`.
+
+---
+
+## `skills/directive-authoring.md` consolidation cycle owed — adoption of `bin/directive` waits on it
+
+Five expedited amendments outstanding, plus: the OQ-Q4(c) path pointer to
+`skills/directive-invariants.md`; the own-worktree-cleanup-and-report-final-line
+rule; the holder-check rule; "expected-output lines are claims" (verify it is
+already there in spirit); OQ-10's Naming-section branch gap; `git push origin
+<branch>` with no `-u` in the sandbox (`.git/config` is not writable); never
+bypassing the pre-commit hook. Added 2026-08-30 from the invariants arc:
+cycle-2 O-3 — the governed rule's "this document" inverts its referent when the
+bullet is emitted into a directive by value; fixable only in this skill, and the
+two copies move together under the byte-equality rule; and **the route line
+names one session** — "the holding session" is ambiguous when two execution
+sessions hold the same worktree, which happened on rev-1c/rev-1d (below).
+Evidence for adoption: three of this arc's stops were authoring defects
+`bin/check-directive` exists to catch — a blanket constraint contradicting an
+instruction (rev-1b, F-11), a dictated literal violating the same directive's
+own self-check (rev-2, F-2), and a base-verification guard broader than the
+blast radius (rev-1). Adoption — authors reaching for `bin/directive` rather
+than freehand — waits on the pointer.
 
 ---
 
@@ -1162,6 +1206,16 @@ For the PRD's next opening cycle; do not open a cycle for these alone. (a) §4 "
 ## `specs/directive-tooling-trd.md` — rider queue and open questions
 
 Riders for the TRD's next opening cycle, each from an implementation-package ruling on main (directives `docs/cycles/directive-tooling-impl-{1,2,3,4,4b}-*.md`, `directive-tooling-tests-{fix-1,fix-2,fix-2b,3}-*.md`, 2026-08-29/30): §3.3 Heading (cycle)'s first line is `# {{heading}}`, filled whole from `directive_identity`, and the placeholder table drops `{{cycle}}`/`{{title}}` for that section (ruling (b)); §3.3 "appears exactly once in the file" reads *once among eligible lines*, the mask applying to the generator's self-check and the tests alike (ruling (a)); `{{reviewed_ref}}` and `{{companion_list}}` have no flag in the §3.9 flag set and are emitted as author slots inside committed regions, which the manifest then classifies as committed; M2 skips the source-manifest region, because manifest entries cite the methodology home, which in the test substrate is not the linted repository; §3.7's git dependency notes that `status` reads run with `--no-optional-locks`, which is what holds §3.9's "reading is not writing" (test_x5 caught the index rewrite); the stale counts cycle-1 deferred as O-1..O-4 (`bin/` executable count; corpus 170/114/68 today vs 144/109/63 in the text). Test-suite gap for the Test Designer: §3.3's byte-equality test of the disposition prompt against `skills/directive-authoring.md`'s bullet does not exist, so §4.2's B3 is pinned by nothing and drift would be silent.
+
+Confirmed absent 2026-08-30 by the cycle-2 gate sweep
+(`reviews/directive-invariants-cycle-2.md` O-2): `AUTHORING_RELPATH` is defined
+in `bin/tests/helpers.py` and referenced by nothing. Two more riders from the
+invariants arc: §3.3's cycle-mode table has no Placeholders column, so
+`{{heading}}`, `{{date}}`, `{{scope_list}}` are fixed only in
+`skills/directive-invariants.md` and `bin/aimeta/directive.py`; and §3.4's
+decision sentence calls the label the bare token while its match-rule bullet
+says "exactly the literal" whose definition carries the colon — the document
+and `matches_label` both take the bare-token reading.
 
 Open questions carrying recommendations, Dave's to rule whenever: Q2 rec (b), directive lands and work stops; Q4 rec (c), the skill gains a path pointer to the invariants document; Q6 rec (b), the five-code contract — §7 is already written to (b). Plus the TRD's own OQ-1..10; OQ-7 (sole-tree literal) and OQ-9 (M3-extent reading) want a gate or Dave.
 
@@ -1205,13 +1259,26 @@ Two instances: the agreeing-clusters gate executor ran `git checkout <sha> -- .`
 
 2026-08-29/30, directive-tooling packages: two more, disclosed and accepted — the package-1 executor committed its directive file with the pre-commit hook bypassed (verified clean afterwards; directives now say "never bypass the pre-commit hook"), and the AC-DT-16 executor committed its edits before its directive file and pushed both together (record accepted as-is, PR #245). Against that, four correct stops in the same run: tests-fix-2 on an unruled finding, tests-3 on the parameterization scope, impl-4 on test_x5, and impl-1's own self-check refusing its first skeleton. The stop wording holds; the two deviations are a different class — a step taken on the executor's own judgment rather than a recovery — and the invariants document's First act and Sandbox regions are where they get closed.
 
+2026-08-30, directive-invariants arc: one more disclosed deviation and its
+cause. Two execution sessions held the same worktree — rev-1c and rev-1d were
+routed to "the holding session" while two existed — and the session that did
+the work continued past a directive commit the other had landed under it,
+citing benign content; the other stopped correctly three times on the same
+class of mutation. The deviation is accepted; the cause is the route line, now
+a consolidation-cycle item above. Six correct stops in the same arc, three of
+them on the Chief of Staff's own authoring defects.
+
 ---
 
-## Worktree and branch pile
+## ~~Worktree and branch pile~~
 
-Worktrees: cleared. `git worktree prune` from Dave's terminal on 2026-08-29 left one registered worktree, `fiducial-dmp-cycle-20`, which belongs to a live cycle. Standing pattern that held for every directive this session: each session removes its own worktree as its final act and reports the status as the report's last line; a worktree another session created cannot be removed from the sandbox (EPERM on `.git/worktrees/<name>`), and `git worktree prune` from Dave's terminal clears the metadata once the directory is gone.
-
-Branches to delete, all merged to main: `log-dec-200-210`, `rule-extraction-pass1`, `rule-dedup-pass2`, `rule-divergence-rulings`, `rule-divergence-rulings-gate`, `rule-divergence-rulings-cycle-2`, `rule-divergence-rulings-gate-2`, `flip-rule-divergence-rulings`, `flip-directive-tooling`, `untag-specs-audience`, `agreeing-clusters`, `agreeing-clusters-gate`, `flip-agreeing-clusters`, `pass-2b-rulings`, `pass-2b-rulings-gate`, `flip-pass-2b-rulings`, `retire-bundle-methodology`, `retire-bundle-methodology-gate`, `open-items-flush-20260827`, `directive-tooling-impl-1`, `directive-tooling-tests-fix-1`, `directive-tooling-impl-2`, `directive-tooling-tests-fix-2`, `directive-tooling-tests-3`, `directive-tooling-impl-3`, `directive-tooling-ac-dt-16`, `directive-tooling-impl-4`. One command block from the CoS; the `retros/` untracked files in the main clone are Dave's and are not touched.
+**RESOLVED** 2026-08-30. One command block from the CoS, computed rather than
+listed: every branch on origin fully merged into `origin/main` — 178 of them,
+the 27 listed here among them — deleted; 39 local branches deleted (31 by
+plain delete, 8 by force after an ancestor-of-`origin/main` check, because the
+local `main` was behind); both stale worktree entries pruned; `git worktree
+list` shows only the main tree. Record: `~/Downloads/branch-cleanup-20260830T1100Z.txt`.
+The `retros/` untracked files in the main clone were not touched.
 
 ---
 
@@ -1229,7 +1296,8 @@ Branches to delete, all merged to main: `log-dec-200-210`, `rule-extraction-pass
 
 **Source:** writing workstream decision session, 2026-08-28/29; PR #230 (`53f7f40`); DEC-000220 through DEC-000260.
 
-- **Full cycle owed on `policies/document-metadata-policy.md`.** Amended at `9160a86` to name `public-prose-criteria.md`, `voice.md`, and `voice-template.md` in the in-scope set and drop `prose-criteria.md`; a gate document, now `in-review` on main by Dave's decision to amend now and cycle later.
+- ~~**Full cycle owed on `policies/document-metadata-policy.md`.**~~ Agreed
+  2026-08-30 at cycle 20 (PR #249, `d577819`).
 - ~~**Doc-only agreements owed**, one each, sequential: `roles/copy-editor.md`, `roles/critic.md`, `roles/writer.md` (in-review), `skills/outline.md`, `public-prose-criteria.md`, `voice.md`, `voice-template.md`. All co-authored in the pane; none is a gate document.~~ all seven agreed 2026-08-29, PRs #235, #236, #238, #239, #240, #242, #243.
 - **Voice inbox triage owed**: the 2026-08-22 §4 and §5 entries in `voice-inbox.md`, against `voice.md`, as a doc-only cycle.
 - **Retire `davepierceops/writing`** after the agreements above land and Dave confirms nothing is missing. Its `pieces/converging-on-intent/` directory (arc, outline, six pass reports at `387bde6`) is piece record, not methodology, and is Dave's to keep outside fiducial per DEC-000250.
