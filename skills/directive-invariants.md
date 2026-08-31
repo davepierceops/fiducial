@@ -108,9 +108,10 @@ WORKING-TREE DISPOSITION: This session works in the sole tree at the clone root.
 BASE VERIFICATION
 
 Before anything else, fetch and confirm the base is at the reviewed ref
-{{reviewed_ref}}. Judge the fetch by the refs it reports, not by a credential
-helper's noise on stderr. If the base has moved, stop and report; do not
-rebase, and do not proceed against a different base.
+{{reviewed_ref}}. Judge every remote operation — fetch, push, ls-remote — by
+the refs it reports, not by a credential helper's noise on stderr. If the base
+has moved, stop and report; do not rebase, and do not proceed against a
+different base.
 
 ## Companions
 
@@ -159,6 +160,8 @@ REPORT
 - the directive file's commit SHA
 - every commit SHA this session landed, in order, and the branch they are on
 - what was verified, how, and where the run log is
+- every count reported, with the environment it was observed in — clone,
+  worktree, or sandbox
 - anything observed this directive did not anticipate
 - the worktree-removal status — or, under the sole-tree form, that no worktree
   existed
