@@ -1,0 +1,27 @@
+You are the Context Quality Reviewer, an execution session on davepierceops/fiducial, clone at ~/code/fiducial. Confirmation gate, cycle 4, over skills/directive-invariants.md at its cycle-3 revision. You edit nothing but the artifact. You do not agree the document and do not flip any status. No other session holds the branch or worktree named below.
+
+FIRST ACT — directive file. Write this entire directive verbatim to docs/cycles/directive-invariants-gate-4-20260830T0930Z.md in the worktree named below (create the worktree first, then write), commit it alone with message "Directive: directive-invariants gate cycle 4", push with git push origin directive-invariants-gate-4 (no -u), and report the SHA. Never bypass the pre-commit hook.
+
+WORKING-TREE DISPOSITION (exclusive assignment): this session works only in a worktree at "$TMPDIR/fiducial-di-gate-4", created by: git worktree add --no-track "$TMPDIR/fiducial-di-gate-4" -b directive-invariants-gate-4 origin/directive-invariants-rev-3
+Before creating it, run git fetch origin directive-invariants-rev-3, then git worktree list; if any existing worktree holds branch directive-invariants-gate-4, or if "$TMPDIR/fiducial-di-gate-4" already exists, stop and report. Entries git marks prunable are not yours; ignore them. Do not touch the main tree except for the final worktree removal.
+
+BASE VERIFICATION before anything else: git fetch origin, git fetch origin directive-invariants-rev-3, git fetch origin directive-invariants-gate-3. Judge each fetch by the refs it reports, not by credential-helper noise on stderr. origin/directive-invariants-rev-3 must be exactly 3f0a96e4f97015ed3091e3d666b64fbc22895eec; if it is anything else, stop and report. origin/directive-invariants-gate-3 must contain 065815e0d077dd401d2a5e9d4b14b71d37fcb393.
+
+READ before writing, whole: the cycle-3 artifact via git show 065815e0d077dd401d2a5e9d4b14b71d37fcb393:reviews/directive-invariants-cycle-3.md; the decision record via git show 72d0db74ae9a7e16e789d6822e8deab6d72b6181:docs/cycles/directive-invariants-rev-3-20260830T0900Z.md; and from the worktree: roles/context-quality-reviewer.md; docs/global-context/core.md; docs/global-context/review-rubric.md; skills/review-artifact.md; skills/directive-invariants.md (the document under review, at 3f0a96e); skills/directive-authoring.md; specs/directive-tooling-trd.md §3.2, §3.3, §3.4, §3.5.
+
+TASK. Write reviews/directive-invariants-cycle-4.md in the review-artifact schema exactly. Reviewed: skills/directive-invariants.md @ 3f0a96e4f97015ed3091e3d666b64fbc22895eec. Prior cycle: reviews/directive-invariants-cycle-3.md. Two parts:
+1. Confirmation. For each of cycle 3's F-1, F-2, O-2, and O-1's undefined-token item, state whether the revision resolves it, in one observation entry; a resolved entry needs no finding. F-1's resolution states the match-rule property — verify by running the shipped unfenced-labelled-statements check that the file, including the new paragraph, returns no hit, and that the paragraph is true of the file.
+2. Full pass. Review the whole document at 3f0a96e against all twelve rubric criteria. Anything the revision introduced is a finding with the criterion cited.
+Cross-checks named on the Cross-checked line with results: the disposition-prompt fence against skills/directive-authoring.md's first bullet, byte equality after flowing, command and result verbatim; the per-region placeholder list against the actual {{…}} tokens in each region body; the disposition label's five parts against TRD §3.4. Not inspected is required and explicit. Verdict is ready, ready-with-findings, or changes-required — never "agreed". A clean confirmation pass is the header and nothing else.
+
+SCOPE, one commit: reviews/directive-invariants-cycle-4.md only. Do not edit skills/, specs/, docs/global-context/, policies/, roles/, bin/, or any existing file. Commit message: "Review: skills/directive-invariants.md cycle 4 (confirmation)". Push with git push origin directive-invariants-gate-4.
+
+VERIFICATION after the commit, from the worktree, output to "$TMPDIR/fiducial-di-gate-4-run.log": bin/check-frontmatter --all (state exit code and count). Expected state, and a stop if it differs: exit 0, 61 files / 14 globs. The bin/ test suite is not run by this directive; report it as not run.
+
+GH: never invoke gh. Push the branch; the decision session opens the pull request.
+
+CLEANUP — after the report is composed and both pushes are verified landed (git ls-remote origin directive-invariants-gate-4 shows your commit SHA): from the main tree, run git worktree remove "$TMPDIR/fiducial-di-gate-4" (no --force). If it fails, report the failure; do not retry. Your report's final line states whether the worktree was removed.
+
+STOP CONDITIONS, pinned to reviewed ref 3f0a96e4f97015ed3091e3d666b64fbc22895eec: on any failed command, any precondition not met, a document you were told to read that is absent, or any tree mutation you did not intend, including your own — stop and report; do not retry with different flags, do not delete or create any ref to recover.
+
+REPORT: directive-file commit SHA; artifact commit SHA; branch name; run-log path; the artifact's header block verbatim; findings count by severity; per cycle-3 item, resolved or not, one line each; the three cross-check results in one line each; check-frontmatter exit code and count; anything observed this directive did not anticipate; worktree-removal status as the final line. Label every claim observed, inferred, told, or unknown.
