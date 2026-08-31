@@ -151,8 +151,8 @@ Pinned to the reviewed ref {{reviewed_ref}}. Cannot execute as written: stop
 and report. Concurrent tree mutation: stop and report. On any failed command,
 any precondition not met, or any tree mutation you did not intend, including
 your own — stop and report; do not retry with different flags, and do not
-delete or create any ref to recover. A remote operation whose refs report
-success is not a failed command.
+delete or create any ref to recover. A remote operation that exits successfully
+is not a failed command, whatever a credential helper writes to stderr.
 
 ## Report format
 

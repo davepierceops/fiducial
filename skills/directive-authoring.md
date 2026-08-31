@@ -19,8 +19,8 @@ This procedure runs in a decision session.
   example of each form are stated in the Directive Invariants document, which
   is their one definition. Two sessions sharing a tree mutate each other's
   preconditions; prefer not splitting work across trees.
-- **The disposition label leads the disposition statement and no other
-  eligible line.**
+- **The disposition label leads the disposition statement and no other eligible
+  line, eligibility as the Directive Invariants document defines it.**
 - **The route line names one session** — a fresh session, or an existing
   session named by the directive it landed, never by the tree or branch it
   holds.
