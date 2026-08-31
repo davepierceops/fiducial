@@ -1,0 +1,20 @@
+You are the Editor, the execution session holding worktree "$TMPDIR/fiducial-di-rev-1" on branch directive-invariants-rev-1 at 2c422c67e208bf7d978b95140d05d2e7551f7e03. This directive amends docs/cycles/directive-invariants-rev-1b-20260830T0615Z.md @ 2c422c67e208bf7d978b95140d05d2e7551f7e03 and carries only the deltas; everything in that file not amended here stands, including all fifteen decision entries, the commit message, the verification block, and the report format.
+
+FIRST ACT — directive file. Write this entire directive verbatim to docs/cycles/directive-invariants-rev-1c-20260830T0630Z.md in the existing worktree, commit it alone with message "Directive: directive-invariants cycle 1 revision (amendment c)", push with git push origin directive-invariants-rev-1 (no -u), and report the SHA. Never bypass the pre-commit hook.
+
+WORKING-TREE DISPOSITION (exclusive assignment): this session works only in the worktree at "$TMPDIR/fiducial-di-rev-1", which already exists and was created by: git worktree add --no-track "$TMPDIR/fiducial-di-rev-1" -b directive-invariants-rev-1 origin/main
+Reuse it. Before writing, confirm: git status --porcelain in it is empty, and its HEAD is 2c422c67e208bf7d978b95140d05d2e7551f7e03. If either differs, stop and report. Do not touch the main tree except for the final worktree removal.
+
+BASE VERIFICATION: already passed under the rev-1b guard at origin/main d5778195970015e9b65e81f8b3ba4152ab113c3c. Re-run git fetch origin; if origin/main has moved past d577819, apply the rev-1b guard's enumerated list to the new commits; stop if any is touched.
+
+AMENDMENT 1 — editing constraint narrowed. Replace the rev-1b sentence "The first non-blank line of every section's body is unchanged." with: "The first non-blank line of every region section's body is unchanged; the four lint sections' opening prose may change where a decision names it." F-11 now executes in full as written. Added constraint: no fenced block is added anywhere in ## Disposition label — its last fence is read as the canonical sole-tree sentence; F-1, F-3 and F-9 add prose only.
+
+AMENDMENT 2 — F-3's gloss corrected. Strike the rev-1b parenthetical gloss of eligibility and stripping. The rule to state in ## Disposition label's prose is the one the TRD's masking section actually gives, which you have read; carry it as: a line is eligible unless it is inside a fenced code block, is a blockquote line (its leading non-whitespace character is >), or is inside an HTML comment; stripping removes, once each and in this order, up to three leading spaces, then one list marker (-, *, +, or digits followed by . or )) with the single space after it, then an ATX heading run with its space, then a leading ** or __. If the TRD's text disagrees with this restatement in any particular, the TRD's text wins and you report the difference; do not carry my wording over its.
+
+AMENDMENT 3 — O-2 as you read it: retain {{name}} in the preamble as the placeholder-syntax notation. Confirmed.
+
+Everything else per rev-1b: carry out F-1, F-2, F-3 (as amended), F-6, F-7, F-8, F-9, F-10, F-11, F-12, O-1; no action on F-4, F-5, O-2, O-3. One content commit, message "directive-invariants: cycle 1 revision (F-1, F-2, F-3, F-6..F-12, O-1)". Push with git push origin directive-invariants-rev-1. Then rev-1b's VERIFICATION block, expected state, GH clause, and STOP CONDITIONS pinned to 7c233c1506dc6111194b5fe603f2fd2f967d4998, unchanged.
+
+CLEANUP — after the report is composed and all three pushes are verified landed (git ls-remote origin directive-invariants-rev-1 shows your content commit SHA): from the main tree, run git worktree remove "$TMPDIR/fiducial-di-rev-1" (no --force). If it fails, report the failure; do not retry. Your report's final line states whether the worktree was removed.
+
+REPORT: per rev-1b, plus: this amendment's directive-file commit SHA alongside 2c422c67e208bf7d978b95140d05d2e7551f7e03; the eligibility-and-stripping prose as landed, verbatim; the new opening line of ## Match phrases verbatim. Label every claim observed, inferred, told, or unknown.
