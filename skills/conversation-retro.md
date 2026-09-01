@@ -1,6 +1,6 @@
 ---
-status: in-review
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/conversation-retro-cycle-4.md @ ac286022bb01a0f04e5c402f6b9e379213ff5030
 audience: [all-decision-roles, human]
 ---
 
