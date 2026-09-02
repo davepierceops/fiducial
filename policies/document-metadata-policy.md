@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/document-metadata-policy-cycle-20.md @ 9160a865fc7070775fc17e9b50c55bc5610318df
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 ---
 
@@ -67,7 +67,10 @@ lines, before any content.
 
 ## Required fields
 
-- `status:` one of `draft | in-review | agreed | superseded | deprecated`
+- `status:` one of `draft | in-review | converging | agreed | superseded | deprecated`
+  - `converging` = the document's first reviewer gate has run and, on
+    Dave's say, the document is edited freely while tests are written
+    against it; nothing in it is agreed.
   - `agreed` = Dave has agreed this document. This is the repo's
     standing verb; "approved" is not used.
   - `superseded` = replaced; a successor exists.
@@ -76,6 +79,8 @@ lines, before any content.
   the reviewed commit SHA — or `null` if never reviewed.
   - Format: `<reviews/path.md> @ <sha>`
   - `status: agreed` requires a non-null `last-reviewed`.
+  - `status: converging` requires no `last-reviewed`; the document is
+    not agreed.
   - The cited artifact must state, in its own scope, that it reviewed
     this document at the cited SHA.
   - `status: agreed` requires that artifact's verdict to be `ready` or
@@ -120,11 +125,21 @@ lines, before any content.
 - When an `agreed` document is edited, the same commit flips
   `status: in-review` and resets `last-reviewed: null`, whatever the
   edit's size.
-- Transitions to `superseded` / `deprecated`, and the agreement flip
-  itself, are **status transitions**, not revisions, and are exempt
-  from the edit-flips-in-review rule; content edits alone trigger it.
+- Transitions to `superseded` / `deprecated`, the transition to
+  `converging`, and the agreement flip itself, are **status
+  transitions**, not revisions, and are exempt from the
+  edit-flips-in-review rule; content edits alone trigger it.
   A status-transition commit contains nothing but the frontmatter
   transition.
+- **Dave's.** A document enters `converging` after its first reviewer
+  gate has run, whatever the verdict, on Dave's say. A content edit to a
+  `converging` document changes neither its status nor its
+  `last-reviewed`. The document leaves `converging` only by the
+  agreement flip, on Dave's ruling at the exit gate.
+- Enforcement of `converging` — the hook leaving a content edit
+  unflipped, and the flip tool accepting the value as a source and as
+  an entry target — lands as a `bin/` change before any document enters
+  the status.
 - The document returns to `agreed` when Dave agrees the revision, and
   `last-reviewed` points at the new review artifact.
 
@@ -274,12 +289,14 @@ lands in its own commit, per the expedited path's "no other tracked path" rule.
   "Build against" means: implement, modify, or test code whose
   requirements derive from that spec. Citing or discussing a draft
   spec is not building against it.
-- Do not build against a `draft` or `in-review` spec without explicit
-  human confirmation. A task assignment referencing the spec
-  establishes intent, but the agent must state the spec's current
-  status and receive confirmation before proceeding. Confirmation is
-  per-task, not per-session — one acknowledgment covers the whole
-  task, not each action within it.
+- The build-gating rule is three-valued by status:
+  - `draft` or `in-review` — nothing is implemented or tested against
+    the spec.
+  - `converging` — tests are written and run against the spec; nothing
+    is implemented against it.
+  - `agreed` — implementation proceeds.
+  An agent handed a task against a spec states the spec's current
+  status in its report and does no more than that status admits.
 - Methodology documents (policies, roles, context-sets, boundaries,
   skills) are governed by context loading, not the build-gating rule:
   agents follow the currently agreed methodology; a `draft` methodology
