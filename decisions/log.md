@@ -509,3 +509,53 @@ Decision: No third sanctioned route to `agreed` is created for owner-approved, a
 Context: Owner decision (Dave), 2026-08-31, topic-walk session, T25. The two motivating instances (2026-08-24) predate the cycle-20 revision of the document-metadata policy; a route defined from stale evidence is how gate complexity accretes.
 
 The six decisions owed from the 15-hour session are not written here: their content is not recoverable from this session and must be reconstructed from that session's records before entries can be drafted. The OPEN-ITEMS entry for them stands.
+
+## DEC-000310 — A retro runs when Dave asks, not by default
+Date: 2026-09-01
+Decision: A retrospective runs only when Dave asks for one. There is no
+standing end-of-session obligation, no skip condition (nothing is owed
+by default), and no baton-before-retro ordering rule.
+Context: Owner decision (Dave), 2026-09-01, Decision Layer human
+review; Decision Layer rule 12 rewritten accordingly, agreed at
+cycle 15 (reviews/decision-layer-cycle-15.md; reviewed document SHA
+999dc9a1cfa8aa695e4a324f4cbd4c5320f200ec).
+skills/conversation-retro.md still encodes the prior obligation; its
+conforming revision is queued as a full cycle.
+
+## DEC-000320 — Bundle filename and header: ruled form; DEC-000210's carried form retired
+Date: 2026-09-01
+Decision: A generated bundle is named
+fiducial-bundle-<audience>-<timestamp>, timestamp per DEC-000290,
+delivered per DEC-000200. The header keeps the tool's present fields —
+repository, HEAD SHA, generation time, numbered member list with
+per-file blob SHAs, per-member markers. Hand-built and generated
+bundles are interchangeable under this form. DEC-000210's
+carried-forward filename and Source-line form is retired; the losing
+form's removal lands in the bundle-system PRD's header package.
+Context: Owner decision (Dave), 2026-09-01, bundle-system PRD human
+review, resolving the PRD's OQ-5. Recorded in specs/bundle-system.md
+at the review's landing (pull request #275).
+Supersedes: DEC-000210 (carried-forward filename and header clause only)
+
+## DEC-000330 — Releases: every audience, whole, at one HEAD; event-driven; go is Dave's
+Date: 2026-09-01
+Decision: A release re-produces every audience's bundle, regenerated
+whole at the release's SHA — untouched audiences included, so every
+asset states the same SHA; release notes name the audiences whose
+member set or content changed. Cadence is event-driven, no calendar:
+when a default-branch commit changes any bundle member, the decision
+session tells Dave a release is owed, and it is cut on his explicit
+go. The go is Dave's; the decision session owns mechanics and
+verification (generate, cut, attach, notes, read-back confirming every
+asset's SHA); a release found wrong returns to Dave as a triage item,
+never a silent fix.
+Context: Owner decision (Dave), 2026-09-01, bundle-system PRD human
+review, resolving the PRD's OQ-6 whole.
+
+## DEC-000340 — skills/outline.md audience: writer alone
+Date: 2026-09-01
+Decision: skills/outline.md is audience [writer]; the human value comes
+off in the bundle-system tagging package. A human does not need the
+outline skill.
+Context: Owner decision (Dave), 2026-09-01, bundle-system PRD human
+review, resolving the PRD's OQ-10.

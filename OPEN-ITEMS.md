@@ -1236,6 +1236,13 @@ and `matches_label` both take the bare-token reading.
 
 Open questions carrying recommendations, Dave's to rule whenever: Q2 rec (b), directive lands and work stops; Q4 rec (c), the skill gains a path pointer to the invariants document; Q6 rec (b), the five-code contract — §7 is already written to (b). Plus the TRD's own OQ-1..10; OQ-7 (sole-tree literal) and OQ-9 (M3-extent reading) want a gate or Dave.
 
+Candidate M-rule: a dictated artifact path must not exist at the base ref —
+mechanical, would have caught both 2026-09-01 instances. M5 false positive: a
+slashless root-level path in Documents in scope (OPEN-ITEMS.md) is misread as
+a companion marker preceding FIRST ACT and fails first-act-missing; observed
+2026-09-01 on this flush directive, in both scope-line orders. Classified,
+not worked around, per the M2 precedent.
+
 ---
 
 ## Convergence process — canonization owed
@@ -1328,7 +1335,7 @@ The `retros/` untracked files in the main clone were not touched.
 
 **Source:** retros/retro-synthesis-20260831T163000.md @ b615d0d04da9421941c47fd789d3690ad7849203, the first synthesis over this repository's `retros/` (29 files, 33 deduplicated topics, each with count, most recent session, and state against `main` at 37c6818). Topic numbers below are that document's. Each item is a candidate for a review cycle on the named document; none is decided. The prior retrospective session, 2026-08-05, ran over wne-crm's corpus; its board is `retros/retro-triage-board.md` and its action items have no recorded disposition (item 14).
 
-1. **`skills/conversation-retro.md` — one cycle, four changes (T17, T18).** The retro reads nothing from and writes nothing to any remote — the file is handed in chat, placement is a separate command-block step from a decision session; `date:` is the session's last interaction, derived from the last dated artifact the session touched, with `generated:` added and the filename timestamp kept as the opaque handle; a synthesis lists the retro filenames it covers, so unsynthesized retros are computed; a prompt for standing preferences repeated across sessions, held separate from in-session corrections (the 08-05 board's AI-15, never landed). The document is on the expedited path's ineligible list; full gate.
+1. **`skills/conversation-retro.md` — one cycle, five changes (T17, T18).** The retro reads nothing from and writes nothing to any remote — the file is handed in chat, placement is a separate command-block step from a decision session; `date:` is the session's last interaction, derived from the last dated artifact the session touched, with `generated:` added and the filename timestamp kept as the opaque handle; a synthesis lists the retro filenames it covers, so unsynthesized retros are computed; a prompt for standing preferences repeated across sessions, held separate from in-session corrections (the 08-05 board's AI-15, never landed). The document is on the expedited path's ineligible list; full gate. LANDED 2026-09-01 — agreed at cycle 4, reviews/conversation-retro-cycle-4.md.
 2. **`roles/chief-of-staff.md` read-sequence — "what else is running" (T05).** A check for other chats holding the connector and other worktrees before any connector write; and the constraint itself — one chat holds GitHub at a time — stated where decision sessions read it.
 3. **Decision Layer 13 vs the 2026-08-24 recovery retro (T08).** Rule 13 says a baton carries "pointers and state"; the retro says a baton carries never computed state, which is re-read from the repo. Two governed-adjacent sources disagree; Dave's ruling, then the losing text moves.
 4. **Decision Layer 5 or the Chief of Staff role (T08).** The baton's ordered next-step list is Dave's ruling; the successor session's first response dispatches item one and does not ask whether to.
@@ -1339,7 +1346,7 @@ The `retros/` untracked files in the main clone were not touched.
 9. **Trivial-additive fast lane (T25).** An owner-approved, additive, tool-verifiable-green change that neither the doc-only nor the expedited path covers: scope it or refuse it.
 10. **Session rotation and the autonomous run (T23).** A stated trigger for the Chief of Staff to propose handoff and take an ack; a named skill for the autonomous overnight run if it is to recur — two instances exist as its evidence.
 11. **Files handed to Dave (T26).** `~/Downloads`, named to sort to the top; long documents presented rendered and navigable. One line in the Decision Layer; today it lives in memory only.
-12. **Tooling-facts artifact (T30, T04).** A dated, falsifiable record of connector and sandbox behaviour — or the decision that the bundle-system PRD's lore-home requirement is that artifact.
+12. **Tooling-facts artifact (T30, T04).** A dated, falsifiable record of connector and sandbox behaviour — or the decision that the bundle-system PRD's lore-home requirement is that artifact. `git push -u` in the executor sandbox lands the ref, then fails only the upstream-config write (`.git/config`: Operation not permitted); push without `-u`. Connector whole-file writes drift when content is retyped: precompute the target blob locally and compare after the write; one caught instance 2026-09-01 (a one-word regression, corrected before merge).
 13. **SLO gate hole (T29, open since 2026-08-05).** The consequential class and the change package reference Top K journeys and SLO budgets that nothing defines or maintains, so a gate criterion cannot fire: define them or remove the criterion and the field.
 14. **The 2026-08-05 board pass (T33).** One disposition — landed, superseded, or still open — per action item AI-1 through AI-15 of `retros/retro-triage-board.md`, recorded so the board can be called synthesized.
 15. **Test counts carry their environment (T06).** A count reported by an executor states the environment it was observed in (clone, worktree, sandbox); a count measured elsewhere is not an expectation. **LANDED 2026-08-31** — the invariants Report region bullet (amendment b, refined by amendment d's arc to the tree axis with a sandbox clause), agreed at cycle 7.
@@ -1370,7 +1377,12 @@ section is the record. The follow-up numbers below are the section above's.
    question (T16). A spoken standing rule enters governed text the same turn
    (T17); a decision is logged in the session that makes it (T24); a document
    handed for reading is delivered rendered — the pane is for documents being
-   edited (T26). Follow-ups 3, 4, 5, and 11 close into this cycle.
+   edited (T26). Follow-ups 3, 4, 5, and 11 close into this cycle. LANDED
+   2026-09-01 — human review with Dave; agreed at cycle 15
+   (reviews/decision-layer-cycle-15.md; reviewed document SHA
+   999dc9a1cfa8aa695e4a324f4cbd4c5320f200ec). Rider for the next Decision
+   Layer cycle: cycle 14's DL-2, the pane named inconsistently across
+   documents. Follow-ups 3, 4, 5, and 11 closed.
 2. **Remote-write verification policy cycle** (`policies/remote-write-verification-policy.md`).
    Four rules: the content-expectation check (size and stats, closing the
    policy's own Known gap); connector writes are creates or small verified
@@ -1416,7 +1428,13 @@ section is the record. The follow-up numbers below are the section above's.
    Naming example gains the UTC `Z` per the filename decision below;
    per-file test runs use `python3 -m unittest discover -s bin/tests -t bin
    -p <file>`; a long test suite states its expected duration so an
-   executor's tool timeout is raised before the run.
+   executor's tool timeout is raised before the run. Cycle-number
+   derivation: the artifact cycle number comes from a full, version-sorted
+   listing of reviews/ (never sort|tail on lexical names), and the directive
+   instructs the executor to confirm the artifact path absent at the base
+   before writing. Two instances 2026-09-01: conversation-retro cycle 3,
+   decision-layer cycle 14 — both stopped by the executor, neither reached a
+   record.
 6. **`specs/directive-tooling-trd.md` rider queue:** M2's citation pattern
    captures an enclosing backtick or quote as part of the path (observed
    twice, 2026-08-31: backticked citation; the flip directive's quoted
@@ -1494,8 +1512,17 @@ standing-preferences prompt as the two structural fixes that keep it empty.
 
 **Queued next:** the 08-05 board pass (follow-up 14) as a read-only directive
 appending a per-item disposition table (AI-1 → T29; AI-8 → T30's ruling;
-AI-15 → landed via T17; the rest read against main); then the retro-skill
-cycle (follow-up 1, five changes), the bundle PRD cycle 1, the spec-review
-cycle, the remote-write policy cycle, the Decision Layer cycle, the
-command-blocks cycle (follow-up 7, three changes), and the Chief of Staff
-role cycle.
+AI-15 → superseded, pull request #269's body the ruling, the
+standing-preferences half landed 2026-09-01 via the retro-skill cycle; the
+rest read against main); then the retro-skill cycle (follow-up 1, five
+changes; DONE 2026-09-01, agreed at cycle 4,
+reviews/conversation-retro-cycle-4.md), the bundle PRD cycle 1 (PRD
+human-reviewed 2026-09-01, pull request #275; OQ-5, OQ-6, OQ-10 resolved
+in-document; Spec Reviewer gate still owed), the spec-review cycle, the
+remote-write policy cycle, the Decision Layer cycle (DONE 2026-09-01, human
+review with Dave, agreed at cycle 15, reviews/decision-layer-cycle-15.md;
+reviewed document SHA 999dc9a1cfa8aa695e4a324f4cbd4c5320f200ec), the
+command-blocks cycle (follow-up 7, three changes), the Chief of Staff role
+cycle, and skills/conversation-retro.md's conforming revision — drop the
+chat-close auto-run and the rule-12 standing-obligation deference, per
+DEC-000310; full cycle, ineligible list.
