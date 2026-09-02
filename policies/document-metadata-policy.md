@@ -79,8 +79,7 @@ lines, before any content.
   the reviewed commit SHA — or `null` if never reviewed.
   - Format: `<reviews/path.md> @ <sha>`
   - `status: agreed` requires a non-null `last-reviewed`.
-  - `status: converging` requires no `last-reviewed`; the document is
-    not agreed.
+  - `status: converging` requires no `last-reviewed`.
   - The cited artifact must state, in its own scope, that it reviewed
     this document at the cited SHA.
   - `status: agreed` requires that artifact's verdict to be `ready` or
@@ -136,6 +135,13 @@ lines, before any content.
   `converging` document changes neither its status nor its
   `last-reviewed`. The document leaves `converging` only by the
   agreement flip, on Dave's ruling at the exit gate.
+- **Dave's.** A revision of an `agreed` document — flipped to
+  `in-review` by its edit — may enter `converging` under the same entry
+  rule: a reviewer gate has run on the revision, whatever its verdict;
+  Dave says so; and the transition is a frontmatter-only status
+  transition from `in-review` to `converging`. It leaves `converging` the
+  same way the first interval does. A revision whose tests do not change
+  takes the ordinary route from `in-review` to `agreed`.
 - Enforcement of `converging` — the hook leaving a content edit
   unflipped, and the flip tool accepting the value as a source and as
   an entry target — lands as a `bin/` change before any document enters
