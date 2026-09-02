@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/agreeing-clusters-cycle-2.md @ ade5dad
+status: in-review
+last-reviewed: null
 audience: [spec-reviewer-agent, context-quality-reviewer, reviewer-agent, skeptic-risk-agent, release-manager-agent, chief-of-staff, critic, human]
 ---
 
@@ -63,6 +63,7 @@ Every artifact opens with this block, clean pass or not:
 
 Verdict: ready | ready-with-findings | changes-required
 Reviewed: <path> @ <sha, short or full>
+Baseline: <path> @ <sha, short or full>
 Reviewer: <role, agent, or human>
 Date: <YYYY-MM-DD>
 Scope: <what was inspected>
@@ -74,7 +75,10 @@ Dave should inspect: <the few items that need his judgment, or none>
 ```
 
 `Cross-checked`, `Prior cycle`, and `Dave should inspect` are **omit-if-none** —
-a clean pass should not have to write lines of `none`. The rest are required,
+a clean pass should not have to write lines of `none`. `Baseline` is
+**required when the artifact reviews a range** — an exit gate over a
+`converging` document, or a reconciliation — and names the revision the diff
+starts from; a review of one revision omits it. The rest are required,
 **including `Not inspected`**: that one is required precisely because omitting
 it is how an unbounded claim gets made by accident.
 

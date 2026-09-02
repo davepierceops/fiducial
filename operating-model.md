@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/pass-2b-rulings-cycle-1.md @ be104cf2
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 order: 3
 ---
@@ -116,12 +116,12 @@ substance. Trivial changes — typo fixes, comment edits, mechanical formatting 
 are not meaningful in this sense, and use a lighter shape. Each stage completes
 before the next begins; no skipping or working ahead.
 
-1. **Specs agreed** — PRD/TRD and the acceptance criteria derived from them written, reviewed by the Spec Reviewer Agent (hard gate), and agreed by Dave; the Spec Reviewer's gate reaches nothing else. Methodology and other governed context documents are gated by the Context Quality Reviewer. *(PM/EM/Owner + Architect + Spec Reviewer for specs; Context Quality Reviewer for governed context documents)*
+1. **Specs gated, then converging** — PRD/TRD and the acceptance criteria derived from them written and reviewed by the Spec Reviewer Agent (hard gate); the Spec Reviewer's gate reaches nothing else. After that first gate, whatever its verdict, the spec enters `converging` on Dave's say, by a frontmatter-only status transition. Methodology and other governed context documents are gated by the Context Quality Reviewer. *(PM/EM/Owner + Architect + Spec Reviewer for specs; Context Quality Reviewer for governed context documents)*
    While a tranche is executing, spec edits may land ungated on its spec branch and are gated together at reconciliation; the default branch never carries unreviewed spec text.
 2. **Acceptance criteria** — explicit, written ACs for the unit of work. *(PM/EM/Owner)*
 3. **Architecture summary** — per-change design derived from the TRD; the tracker issue is cut from this. *(Architect)*
-4. **Test plan, confirmed red** — ACs translated into test code, run, and confirmed to fail on bad logic — not just on an absent import — before any implementation. *(Test Designer)*
-5. **Implement to green** — minimum code to turn the failing tests green; mechanical checks (lint, types, static analysis) pass as part of "green." *(Coder — a different agent from the Test Designer for this unit)*
+4. **Test plan, confirmed red; spec and tests converge; specs agreed** — ACs and the converging spec's testable claims translated into test code, run, and confirmed to fail on bad logic — not just on an absent import — before any implementation. While the spec is `converging` it is edited freely, and findings flow both ways between spec and tests through the decision session. When they cohere, an exit gate reviews the spec's diff from the transition that set `converging` to the reviewed revision, together with the tests; Dave reads that diff; and one ruling by Dave agrees the spec — a frontmatter-only status transition — and accepts the tests as its red-gate evidence, recorded in the exit gate's review artifact. *(Test Designer; Spec Reviewer for the exit gate; Dave for the ruling)*
+5. **Implement to green** — begins only after the spec is agreed and the tests accepted; minimum code to turn the failing tests green; mechanical checks (lint, types, static analysis) pass as part of "green." *(Coder — a different agent from the Test Designer for this unit)*
 6. **Quality review** — judgment on maintainability, correctness, consistency, and test adequacy, over the diff and the mechanical results. *(Reviewer — hard gate)*
 7. **Skeptic/risk review** — judgment on false confidence, mocked-boundary and live-integration gaps, config/deploy risk, and release overclaims, over the whole evidence chain. *(Skeptic/Risk)*
 8. **Release package** — assemble evidence and a ship recommendation. *(Release Manager)*
@@ -155,7 +155,7 @@ A meaningful change should produce a change package containing:
 
 1. Intent / problem statement
 2. Acceptance criteria
-3. Test plan
+3. Test plan, and the exit-gate review artifact recording the tests' acceptance
 4. Implementation summary
 5. Test results — including the test commands run, any skipped tests, and a
    recommendation on whether the testing evidence is sufficient
@@ -189,6 +189,7 @@ A change is not done merely because code was written or tests are green.
 A change is done when:
 
 - intended behavior is implemented
+- the spec was agreed and the tests accepted as its red-gate evidence before implementation began
 - the pre-written tests were confirmed failing on bad logic — not just on an absent import — then turned green
 - mechanical checks (lint, types, static analysis) pass
 - relevant verification has run

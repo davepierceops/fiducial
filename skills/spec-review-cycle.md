@@ -1,7 +1,7 @@
 ---
 status: in-review
 last-reviewed: null
-audience: [spec-reviewer-agent, context-quality-reviewer, architect-agent, chief-of-staff, human]
+audience: [spec-reviewer-agent, context-quality-reviewer, architect-agent, test-designer-agent, chief-of-staff, human]
 ---
 
 # Skill: Spec Review Cycle
@@ -33,6 +33,10 @@ interactive co-authoring or artifact-pane review.
   link from directive to reviewed state. A directive without SHAs is invalid.
   Which revisions those SHAs name mid-delta is stated per the Spec and Change
   Discipline context set.
+- **An exit gate's directive states its range.** Two labelled lines:
+  `Baseline:` the status-transition commit that set `converging`, and
+  `Reviewed:` the reviewed SHA. The gate reviews the diff between them; its
+  artifact carries both lines.
 
 ## Inputs
 
@@ -44,8 +48,9 @@ interactive co-authoring or artifact-pane review.
 
 The loop is the run of cycles over one document, from its first gate to its
 agreement flip. At loop start, Dave states two things, and the opening
-directive records both; they stand for every cycle in the loop unless a later
-cycle directive restates them:
+directive records both; they stand for every cycle in the loop unless Dave
+restates them, and the cycle directive records the restatement as the opening
+directive recorded the originals:
 
 - **The agreement bar** — which verdict satisfies the flip: `ready`, or
   `ready-with-findings`. The document metadata policy admits either; the bar
@@ -67,10 +72,10 @@ cycle directive restates them:
      its own ahead of the class ruling.
    - **A finding below the reviewed document's stage routes forward.** A
      PRD gate raising a TRD question, or a spec gate raising an
-     implementation question, routes the finding to the next stage's
-     question list — the TRD's open questions, the implementation package's
-     open questions. It is not filed as a blocking finding against the
-     reviewed document, and it does not bar the flip.
+     implementation question, routes the finding to the loose-end tracker,
+     where the next stage — the TRD, the change package — takes it up. It is
+     not filed as a blocking finding against the reviewed document, and it
+     does not bar the flip.
 3. Record any wording or constraints Dave dictates verbatim.
 
 ### 2. Directive
@@ -86,7 +91,8 @@ cycle directive restates them:
 7. The executor verifies the working tree matches the reviewed SHAs (or
    contains them in history with no intervening edits to the documents in
    scope); makes targeted edits per the directive; commits referencing the
-   cycle number; pushes.
+   cycle number; pushes; and discloses in its report any deviation from a
+   disposition.
 
 ### 4. Verify and re-gate
 
@@ -99,42 +105,62 @@ cycle directive restates them:
      scope — opens its own cycle at step 1, where the directive records it.
    - **A re-gate takes one of two forms**, and its directive and its artifact
      each state which. *Full-depth*: the whole document is read again.
-     *Confirmation-scoped*: the gate confirms that the named resolutions of
-     the cycle it closes landed as ruled, and reads nothing else; a finding
-     outside that scope is filed only when it is a new blocking contradiction
-     the revision introduced.
+     *Confirmation-scoped*: the gate reads the named resolutions of the cycle
+     it closes and the revision's diff against the governed text it cites,
+     and nothing else; it confirms that the resolutions landed as ruled, and
+     files a finding outside them only when it is a new blocking
+     contradiction the revision introduced.
 10. On Dave's go, the agreement flip lands as a frontmatter-only
     status-transition commit, `last-reviewed` naming the review artifact and
     the reviewed SHA.
 
-## Convergence — spec and tests revised together
+## Convergence — spec and tests before agreement
 
 When tests are written against the document under review — a TRD and its
-test suite — the document and the tests converge, and the loop runs in this
-shape:
+test suite — the document and the tests converge before the document is
+agreed. This is the standard flow for such a document, not an exception.
+`converging` is a status between `in-review` and `agreed`, and the interval
+the document holds it; the loop runs in this shape:
 
-1. The spec stays open while the Test Designer writes tests against it.
-   Neither is final until they cohere: every testable claim the spec makes
-   has a test asserting it, and every test asserts something the spec states.
-   A test that had to invent a contract the spec does not state is a spec
-   finding; a spec claim no test can be derived from is a test-side gap.
-2. Findings flow both ways. A gate over the spec files findings against the
-   tests where the tests encode something the spec does not say; the Test
-   Designer's report files findings against the spec where the spec leaves a
-   test underivable. Both go to triage at step 1 of the Procedure.
-3. The decision session is the mediating agent between the two execution
+1. **Entry.** After the document's first reviewer gate has run, whatever its
+   verdict, Dave says the document enters `converging`. The transition lands
+   as a frontmatter-only status-transition commit, and that commit is the
+   entry point; nothing else records it.
+2. **While `converging`.** The spec is edited freely, and the Test Designer
+   writes tests against it; nothing is implemented against it. A content
+   edit to a `converging` document changes neither its status nor its
+   `last-reviewed`. Neither the spec nor the tests is final until they
+   cohere: every testable claim the spec makes has a test asserting it, and
+   every test asserts something the spec states. A test that had to invent a
+   contract the spec does not state is a spec finding; a spec claim no test
+   can be derived from is a test-side gap.
+3. **Findings flow both ways.** A gate over the spec files findings against
+   the tests where the tests encode something the spec does not say; the
+   Test Designer's report files findings against the spec where the spec
+   leaves a test underivable. Both go to triage at step 1 of the Procedure.
+   The decision session is the mediating agent between the two execution
    sessions — the one revising the spec and the one writing the tests.
    Findings pass between them only through the decision session's triage and
    directives; neither execution session edits the other's artifact on its
    own judgment.
-4. Dispositions are intent. The executor of a disposition verifies its edit
-   against the counterparty's artifact — the tests when revising the spec,
-   the spec when revising the tests — and discloses any deviation from the
-   disposition in its report. A disposition found wrong on verification is
-   corrected with disclosure, not absorbed.
-5. When they cohere, both flip agreed together, on one ruling by Dave: the
-   spec's agreement flip and the acceptance of the tests as its red-gate
-   evidence land together, and neither is agreed while the other is open.
+4. **Dispositions are intent.** The executor of a disposition verifies its
+   edit against the counterparty's artifact — the tests when revising the
+   spec, the spec when revising the tests — and discloses any deviation from
+   the disposition in its report. A disposition found wrong on verification
+   is corrected with disclosure, not absorbed.
+5. **Exit gate.** When they cohere, one gate, run by the role that gated the
+   document, reviews the diff from the entry point to the exit point together
+   with the tests. Its directive states the range — `Baseline:` the
+   transition commit that set `converging`, `Reviewed:` the reviewed SHA —
+   and its artifact carries both lines. The Test Designer's red-gate result
+   is the gate's evidence for the tests. Dave reads that diff before the
+   flip.
+6. **Exit is one ruling by Dave.** The spec flips `agreed` as step 10 has
+   it — a frontmatter-only status-transition commit, `last-reviewed` naming
+   the exit gate's artifact and the reviewed SHA. The tests' acceptance as
+   red-gate evidence is recorded in that artifact, not in the flip commit.
+   Neither lands without the other, and implementation begins only after
+   both.
 
 ## Reconciliation — the cycle that closes an open spec delta
 
