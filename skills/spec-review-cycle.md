@@ -127,7 +127,11 @@ the document holds it; the loop runs in this shape:
    as a frontmatter-only status-transition commit, and that commit is the
    entry point; nothing else records it.
 2. **While `converging`.** The spec is edited freely, and the Test Designer
-   writes tests against it; nothing is implemented against it. A content
+   writes tests against it under a convergence directive: the decision
+   session directs it from the `converging` spec, pinning the SHA of the
+   transition commit that set `converging`. The suite it produces is the
+   spec's, not any change package's; no change package runs against a
+   `converging` spec, and nothing is implemented against it. A content
    edit to a `converging` document changes neither its status nor its
    `last-reviewed`. Neither the spec nor the tests is final until they
    cohere: every testable claim the spec makes has a test asserting it, and
@@ -152,9 +156,13 @@ the document holds it; the loop runs in this shape:
    document, reviews the diff from the entry point to the exit point together
    with the tests. Its directive states the range — `Baseline:` the
    transition commit that set `converging`, `Reviewed:` the reviewed SHA —
-   and its artifact carries both lines. The Test Designer's red-gate result
-   is the gate's evidence for the tests. Dave reads that diff before the
-   flip.
+   and its artifact carries both lines. Over the tests the gate makes two
+   checks and no other: that the coherence condition of step 2 holds — every
+   testable claim has a test asserting it, and every test asserts something
+   the spec states — and that the Test Designer's red-gate result is present
+   and behavioral, the tests failing on bad logic and not just on an absent
+   import. Test adequacy is not the gate's question; it stays with quality
+   review. Dave reads that diff before the flip.
 6. **Exit is one ruling by Dave.** The spec flips `agreed` as step 10 has
    it — a frontmatter-only status-transition commit, `last-reviewed` naming
    the exit gate's artifact and the reviewed SHA. The tests' acceptance as

@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/agreeing-clusters-cycle-2.md @ ade5dad
+status: in-review
+last-reviewed: null
 audience: [spec-reviewer-agent, chief-of-staff, human]
 session: execution
 ---
@@ -20,13 +20,14 @@ cross-document traceability.
 
 ## Activation
 
-The Spec Reviewer fires in two modes:
+The Spec Reviewer fires in three modes:
 
 ### 1. Gate review
 Triggered on:
-- initial authorship of a PRD or a TRD, before Dave agrees it
+- initial authorship of a PRD or a TRD — the first gate, before the document
+  enters `converging`
 - any revision to a PRD, a TRD, or the acceptance criteria derived from them,
-  before Dave agrees the revision
+  before Dave agrees the revision or it re-enters `converging`
 
 This is a **hard gate**. Dave does not agree a PRD, a TRD, or their acceptance
 criteria — nor a revision to one — without a Spec Reviewer sign-off.
@@ -37,6 +38,13 @@ Triggered on:
 - on demand at any time (any depth)
 
 See **Continuity scan** section below.
+
+### 3. Exit gate
+Triggered on:
+- a `converging` spec whose text and tests cohere, on the decision session's
+  directive, before Dave's ruling that agrees it
+
+See **Exit gate** section below.
 
 ## Gate review responsibilities
 
@@ -71,6 +79,29 @@ Before Dave agrees a TRD or a TRD revision, the Spec Reviewer must confirm:
 - every external dependency is captured as a boundary carrying an evidence class
 - failure modes and recovery are addressed at the system level
 - technical non-goals are explicit
+
+## Exit gate
+
+The exit gate inspects two things: the spec's range diff, from the transition
+commit that set `converging` to the reviewed SHA — the directive's `Baseline:`
+and `Reviewed:` lines — and the tests written against the spec, with the Test
+Designer's red-gate result.
+
+Over them it makes two checks and no other:
+
+- **Coherence.** Every testable claim the spec makes has a test asserting it,
+  and every test asserts something the spec states. A test that asserts a
+  contract the spec does not state is a spec finding; a testable claim with no
+  test is a test-side gap. Either is filed, not resolved.
+- **The red-gate result is present and behavioral.** The tests were run and
+  failed on bad logic, not just on an absent import; a result missing or
+  showing only a missing-module failure is a finding.
+
+Test adequacy — whether the suite tests enough, at the right levels, with the
+right boundaries mocked — is not the exit gate's question; it stays with the
+Reviewer Agent's quality review. The exit gate's review artifact carries the
+`Baseline:` and `Reviewed:` lines and records the tests' acceptance on Dave's
+ruling, with the spec's agreement.
 
 ## Continuity scan
 
