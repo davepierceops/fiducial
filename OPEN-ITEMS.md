@@ -4,7 +4,7 @@ This file tracks open questions, deferred decisions, and outstanding fixes
 for the AI operating model. Updated at defined checkpoints per
 `context-sets/spec-and-change-discipline.md`.
 
-Last updated: 2026-08-31
+Last updated: 2026-09-02
 
 ---
 
@@ -601,7 +601,12 @@ expedited-log carve-out.
 4. **New: the header names one revision where a revision review has two.**
    `Reviewed: <path> @ <sha>` fits a first-cycle review of a draft. Cycles 2+
    review a range; the baseline SHA is what makes the diff reproducible. A
-   `Baseline:` field would carry it.
+   `Baseline:` field would carry it. LANDED 2026-09-02 in
+   skills/review-artifact.md (converging-model CM-5).
+5. **O-4** (reviews/converging-model-cycle-1.md): the multi-document branch
+   gate is a third range form; the Reviewed line carries a commit plus
+   several documents and the schema does not describe it; name the form at
+   the schema's next cycle.
 
 **What worked, recorded because it is load-bearing:** the
 `verified by running` / `inferred by reading` split. B2 and B4 exist because the
@@ -1039,6 +1044,10 @@ take the full reviewer cycle:
 - **N3** — the single-document rule is stated under `### Sequence`, not among the
   five eligibility conditions, though it is eligibility-shaped. Consider
   promoting it to a numbered condition.
+- Rider from pull request #273: the doc-only path sentence (near "A doc-only
+  agreement covers exactly one in-scope document") lacks the F-10 clause the
+  expedited path's sentence carries; fold in with F-10 at the policy's next
+  cycle.
 
 ## bin/aimeta/expedited.py is path-blind (benign under the single-document rule)
 
@@ -1243,13 +1252,20 @@ a companion marker preceding FIRST ACT and fails first-act-missing; observed
 2026-09-01 on this flush directive, in both scope-line orders. Classified,
 not worked around, per the M2 precedent.
 
+M5 false positive (slashless root-level path in Documents in scope read as a
+companion marker) fired on five of this session's directives, 2026-09-02;
+M2's flip-pointer false positive (artifact @ reviewed-document SHA) fired on
+the nine-flip directive. Both classified, not worked around.
+
 directive-tooling TRD lines ~808-810 quote old Decision Layer rule 14
 verbatim — the TRD's own B3/G6 defect class; recorded as DL-4 in
 reviews/decision-layer-cycle-14.md.
 
 ---
 
-## Convergence process — canonization owed
+## ~~Convergence process — canonization owed~~
+
+**RESOLVED** 2026-09-02 by DEC-000360 and the converging-model branch (pull requests #287–#292): convergence is the standard change flow with a named status, converging; written into operating-model.md, skills/spec-review-cycle.md, policies/document-metadata-policy.md, roles/test-designer-agent.md, roles/chief-of-staff.md, roles/spec-reviewer-agent.md, LEXICON.md, context-sets/spec-and-change-discipline.md, skills/review-artifact.md; all nine agreed at reviews/converging-model-cycle-2.md.
 
 Ruled ad hoc for the directive-tooling TRD, canonization after from the retro (Dave, 2026-08-28). The shape as run: one blocker-scoped review cycle, the TRD stays open, the Test Designer writes tests against it, findings mediated through the decision session both ways, joint flip when they cohere. It ran clean; evidence is the `docs/cycles/directive-tooling-trd-*.md` chain and `reviews/directive-tooling-trd-cycle-{1,2,3}.md`. One detail the description added and the run used: the decision session as the mediating agent — executors state intent in dispositions and verify against the counterparty's artifacts, and correct a wrong disposition with disclosure. A full cycle on `skills/spec-review-cycle.md` (or a sibling skill) writes it in.
 
@@ -1296,6 +1312,9 @@ class of mutation. The deviation is accepted; the cause is the route line, now
 a consolidation-cycle item above. Six correct stops in the same arc, three of
 them on the Chief of Staff's own authoring defects.
 
+2026-09-02: a Sonnet 5 executor reported the clone's main tree, behind
+origin/main, as "ahead"; harmless, recorded as a claim-labelling miss.
+
 ---
 
 ## ~~Worktree and branch pile~~
@@ -1312,7 +1331,7 @@ The `retros/` untracked files in the main clone were not touched.
 
 ## Corpus defects carried from prior batons
 
-- Four untriaged finding classes against agreed `specs/bin-land-trd.md`: completeness gap, coverage gaps, unverified boundary conditions, open questions.
+- Four untriaged finding classes against agreed `specs/bin-land-trd.md`: completeness gap, coverage gaps, unverified boundary conditions, open questions. Rider: line ~1536 cites the retired per-task confirmation as the metadata policy's build-gating rule; restate under the three-valued rule (reviews/converging-model-cycle-1.md N-4).
 - DEC-000140 sweep still owed.
 - `roles/architect-agent.md` session-kind self-contradiction; C053 touched the file — re-check before opening a cycle.
 - Six methodology decisions from the 15-hour session not yet in `decisions/log.md`.
@@ -1344,7 +1363,7 @@ The `retros/` untracked files in the main clone were not touched.
 3. **Decision Layer 13 vs the 2026-08-24 recovery retro (T08).** Rule 13 says a baton carries "pointers and state"; the retro says a baton carries never computed state, which is re-read from the repo. Two governed-adjacent sources disagree; Dave's ruling, then the losing text moves.
 4. **Decision Layer 5 or the Chief of Staff role (T08).** The baton's ordered next-step list is Dave's ruling; the successor session's first response dispatches item one and does not ask whether to.
 5. **Decision Layer register (T16, T17).** "Say what the item is before the choice" and "y/n where possible" — repeated across sessions, in no governed text.
-6. **`skills/spec-review-cycle.md` (T09).** A re-gate disposes findings and takes no new decisions; the agreement bar and gate cadence are stated at loop start; findings below the reviewed document's stage are routed to the next stage's question list, not filed as blockers.
+6. **`skills/spec-review-cycle.md` (T09).** A re-gate disposes findings and takes no new decisions; the agreement bar and gate cadence are stated at loop start; findings below the reviewed document's stage are routed to the next stage's question list, not filed as blockers. LANDED 2026-09-02 — cycle 11 (reviews/spec-review-cycle-cycle-11.md) closed into the converging-model branch; agreed at reviews/converging-model-cycle-2.md, reviewed document SHA 0cc7b8dd189be9eff24af083b1fc8c1540e6ff2e.
 7. **`skills/command-blocks.md` (T19).** No ``` fence inside a paste block — inner fences are `~~~` with a fence note; an expected-output line is observed in the environment the block runs in, or is qualitative; a block never pushes the default branch.
 8. **`skills/directive-authoring.md`, after the consolidation cycle (T20, T21, T22).** Reviewer Fix text carried verbatim unless the record states the departure; every fix names its seam and the sweep that checks it; position-bearing derived artifacts get a mechanical re-check; dispositions are intent — the executor verifies against the counterparty artifact and discloses deviation.
 9. **Trivial-additive fast lane (T25).** An owner-approved, additive, tool-verifiable-green change that neither the doc-only nor the expedited path covers: scope it or refuse it.
@@ -1409,6 +1428,10 @@ section is the record. The follow-up numbers below are the section above's.
    decision session mediating, dispositions are intent (the executor verifies
    against the counterparty artifact and discloses deviation). The
    "Convergence process — canonization owed" entry closes into this cycle.
+   LANDED 2026-09-02 — cycle 11 (reviews/spec-review-cycle-cycle-11.md)
+   closed into the converging-model branch; agreed at
+   reviews/converging-model-cycle-2.md, reviewed document SHA
+   0cc7b8dd189be9eff24af083b1fc8c1540e6ff2e.
 4. **Chief of Staff role cycle** (T05, T23). The one-chat-holds-the-connector
    constraint stated where decision sessions read it; a decision session
    assumes sole hold unless the baton or Dave says otherwise, and treats a
@@ -1438,7 +1461,10 @@ section is the record. The follow-up numbers below are the section above's.
    instructs the executor to confirm the artifact path absent at the base
    before writing. Two instances 2026-09-01: conversation-retro cycle 3,
    decision-layer cycle 14 — both stopped by the executor, neither reached a
-   record.
+   record. The invariants skeleton emits no Cleanup region; worktree removal
+   is an author-region obligation and one 2026-09-02 directive omitted it,
+   leaving $TMPDIR/fiducial-converging-model-fix-2 on disk. Candidate: a
+   committed Cleanup region in skills/directive-invariants.md.
 6. **`specs/directive-tooling-trd.md` rider queue:** M2's citation pattern
    captures an enclosing backtick or quote as part of the path (observed
    twice, 2026-08-31: backticked citation; the flip directive's quoted
@@ -1525,14 +1551,19 @@ human-reviewed 2026-09-01, pull request #275; OQ-5, OQ-6, OQ-10 resolved
 in-document; Spec Reviewer gate still owed; AGREED 2026-09-02 at cycle 2
 (reviews/bundle-system-cycle-2.md; reviewed document SHA
 7c50f0fd1c8f648d3e95a527edaf7125b7b07ab4; flip pull request #283). Build
-packages remain queued.), the spec-review cycle, the
+packages remain queued.), the spec-review cycle (DONE 2026-09-02 —
+cycle 11, reviews/spec-review-cycle-cycle-11.md, closed into the
+converging-model branch; agreed at reviews/converging-model-cycle-2.md,
+reviewed document SHA 0cc7b8dd189be9eff24af083b1fc8c1540e6ff2e), the
 remote-write policy cycle, the Decision Layer cycle (DONE 2026-09-01, human
 review with Dave, agreed at cycle 15, reviews/decision-layer-cycle-15.md;
 reviewed document SHA 999dc9a1cfa8aa695e4a324f4cbd4c5320f200ec), the
 command-blocks cycle (follow-up 7, three changes), the Chief of Staff role
 cycle, and skills/conversation-retro.md's conforming revision — drop the
 chat-close auto-run and the rule-12 standing-obligation deference, per
-DEC-000310; full cycle, ineligible list; Tagging package (bundle-system
+DEC-000310; full cycle, ineligible list. Rider from pull request #273: the
+skill's 'routes' reuses the Lexicon's directive-sense term in another
+sense; conform. Tagging package (bundle-system
 PRD): the sre-critic rename and engagement retags per DEC-000350;
 skills/outline.md human-value removal per DEC-000340; order: on the
 copy-editor and critic role files (cycle-1 O-4). After the rename lands,
@@ -1540,4 +1571,21 @@ one PRD conform touch folds the two wording residues from pull request
 #282 (the six-further-files count includes the role file itself; §1's
 five measured ways against §5's seven baseline paragraphs); and
 prd-template cycle: the skeleton's [all-roles, human] audience default
-would violate the agreed PRD's AC-BS-5 (cycle-1 O-5).
+would violate the agreed PRD's AC-BS-5 (cycle-1 O-5); bin/ package —
+enforce the converging status (DEC-000360 precondition: lands before any
+document enters converging). ACs: bin/aimeta/frontmatter.py STATUSES
+admits converging; bin/migrate-frontmatter STATUS_MAP likewise; the
+pre-commit hook does not flip a converging document on a content edit;
+bin/flip-agreed accepts converging as a source status for --status agreed
+and as a --status target for the entry transition from in-review; status:
+converging requires no last-reviewed; tests red then green; the package
+removes the policy sentence 'enforcement lands as a bin/ change before any
+document enters it' (reviews/converging-model-cycle-1.md O-3) in the same
+change. Test Designer and Coder separate; and converging follow-up cycle —
+context-sets/spec-and-change-discipline.md and roles/chief-of-staff.md
+(reviews/converging-model-cycle-2.md N-6, N-7): N-6, the convergence
+suite's interface-contract source — the discipline still says 'from the
+architecture summary', which is now stage 6; Dave rules the source
+(candidate: the TRD's interface list). N-7, the Chief of Staff
+pending-gates read lists in-review and omits converging, which owes an
+exit gate.
