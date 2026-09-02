@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/agreeing-clusters-cycle-2.md @ ade5dad
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 order: 4
 depends-on: []
@@ -35,6 +35,9 @@ tests that run against a stub or an interface with deliberately wrong behavior,
 so the red-gate demonstrates the tests can actually fail on bad logic — not just
 on an absent import.
 
+The red-gate runs during convergence — while the spec is `converging`, before it
+is agreed — and its result is the exit gate's evidence for the tests.
+
 Spec and test discipline governs steps 1 through 5 of the change flow. The flow
 continues through quality review, skeptic/risk review, release package, and
 release gate — steps 6 through 9.
@@ -45,6 +48,9 @@ release gate — steps 6 through 9.
 exactly as before, and an agent that edits a spec document without being told to
 has not found a loophole here — what an open delta removes is the *gate* on the
 owner's own edits, not the rule about who authors canonical text.
+
+**An open spec delta is not convergence.** A delta is a branch interval on an
+agreed spec; converging is a status interval before the spec's first agreement.
 
 **Reconciliation may be invoked early.** Dave may invoke it mid-tranche, at
 will — frequent small reconciliations are the encouraged norm, and the tranche
