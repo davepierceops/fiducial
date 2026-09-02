@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/pass-2b-rulings-cycle-1.md @ be104cf2
+status: in-review
+last-reviewed: null
 audience: [spec-reviewer-agent, context-quality-reviewer, architect-agent, chief-of-staff, human]
 ---
 
@@ -40,6 +40,19 @@ interactive co-authoring or artifact-pane review.
 - the reviewed documents, at the commit the reviewer reviewed
 - prior cycle directive, for continuity
 
+## Loop start
+
+The loop is the run of cycles over one document, from its first gate to its
+agreement flip. At loop start, Dave states two things, and the opening
+directive records both; they stand for every cycle in the loop unless a later
+cycle directive restates them:
+
+- **The agreement bar** — which verdict satisfies the flip: `ready`, or
+  `ready-with-findings`. The document metadata policy admits either; the bar
+  says which this document takes.
+- **The gate cadence** — which revisions take a full-depth gate and which take
+  a confirmation-scoped re-gate, as step 9 defines them.
+
 ## Procedure
 
 ### 1. Triage
@@ -48,6 +61,16 @@ interactive co-authoring or artifact-pane review.
    commit SHA per document.
 2. Triage each finding with Dave: **accept / reject / modify**. One finding
    at a time where judgment is required; batch the mechanical ones.
+   - **A named defect class is triaged before its instances.** When the
+     reviewer names a class and lists its instances, the class takes one
+     ruling, and the instances dispose under it. No instance is triaged on
+     its own ahead of the class ruling.
+   - **A finding below the reviewed document's stage routes forward.** A
+     PRD gate raising a TRD question, or a spec gate raising an
+     implementation question, routes the finding to the next stage's
+     question list — the TRD's open questions, the implementation package's
+     open questions. It is not filed as a blocking finding against the
+     reviewed document, and it does not bar the flip.
 3. Record any wording or constraints Dave dictates verbatim.
 
 ### 2. Directive
@@ -70,9 +93,48 @@ interactive co-authoring or artifact-pane review.
 8. Dave reviews the git diff — the human control surface.
 9. Hand the revised documents back for the gate re-check, which is run by the
    role that gated. Findings from that re-check open the next cycle at step 1.
+   - **A re-gate disposes the findings of the cycle it closes and takes no
+     new decision.** A ruling that appears only in a review artifact is a
+     decision lost; a new decision — a ruling, a change of bar, a change of
+     scope — opens its own cycle at step 1, where the directive records it.
+   - **A re-gate takes one of two forms**, and its directive and its artifact
+     each state which. *Full-depth*: the whole document is read again.
+     *Confirmation-scoped*: the gate confirms that the named resolutions of
+     the cycle it closes landed as ruled, and reads nothing else; a finding
+     outside that scope is filed only when it is a new blocking contradiction
+     the revision introduced.
 10. On Dave's go, the agreement flip lands as a frontmatter-only
     status-transition commit, `last-reviewed` naming the review artifact and
     the reviewed SHA.
+
+## Convergence — spec and tests revised together
+
+When tests are written against the document under review — a TRD and its
+test suite — the document and the tests converge, and the loop runs in this
+shape:
+
+1. The spec stays open while the Test Designer writes tests against it.
+   Neither is final until they cohere: every testable claim the spec makes
+   has a test asserting it, and every test asserts something the spec states.
+   A test that had to invent a contract the spec does not state is a spec
+   finding; a spec claim no test can be derived from is a test-side gap.
+2. Findings flow both ways. A gate over the spec files findings against the
+   tests where the tests encode something the spec does not say; the Test
+   Designer's report files findings against the spec where the spec leaves a
+   test underivable. Both go to triage at step 1 of the Procedure.
+3. The decision session is the mediating agent between the two execution
+   sessions — the one revising the spec and the one writing the tests.
+   Findings pass between them only through the decision session's triage and
+   directives; neither execution session edits the other's artifact on its
+   own judgment.
+4. Dispositions are intent. The executor of a disposition verifies its edit
+   against the counterparty's artifact — the tests when revising the spec,
+   the spec when revising the tests — and discloses any deviation from the
+   disposition in its report. A disposition found wrong on verification is
+   corrected with disclosure, not absorbed.
+5. When they cohere, both flip agreed together, on one ruling by Dave: the
+   spec's agreement flip and the acceptance of the tests as its red-gate
+   evidence land together, and neither is agreed while the other is open.
 
 ## Reconciliation — the cycle that closes an open spec delta
 
