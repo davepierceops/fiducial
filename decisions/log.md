@@ -559,3 +559,17 @@ off in the bundle-system tagging package. A human does not need the
 outline skill.
 Context: Owner decision (Dave), 2026-09-01, bundle-system PRD human
 review, resolving the PRD's OQ-10.
+
+## DEC-000350 — Audience value critic is the writing Critic's alone; the SRE engagement role becomes sre-critic
+Date: 2026-09-02
+Decision: The SRE engagement's critic role document is renamed
+sre-critic (basename, and therefore audience value), and the
+engagement files tagged critic are retagged sre-critic; the rename
+lands in the bundle-system tagging package. Role-document basenames
+are unique across roles/ and engagements/; a future collision is a
+detectable defect.
+Context: Owner decision (Dave), 2026-09-02, disposing
+reviews/bundle-system-cycle-1.md finding B-1: the value critic named
+two role documents, emitting a 28-file critic bundle against a
+five-file target. The uniqueness rule is stated in
+specs/bundle-system.md, agreed at cycle 2.

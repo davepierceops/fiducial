@@ -1243,6 +1243,10 @@ a companion marker preceding FIRST ACT and fails first-act-missing; observed
 2026-09-01 on this flush directive, in both scope-line orders. Classified,
 not worked around, per the M2 precedent.
 
+directive-tooling TRD lines ~808-810 quote old Decision Layer rule 14
+verbatim — the TRD's own B3/G6 defect class; recorded as DL-4 in
+reviews/decision-layer-cycle-14.md.
+
 ---
 
 ## Convergence process — canonization owed
@@ -1346,7 +1350,7 @@ The `retros/` untracked files in the main clone were not touched.
 9. **Trivial-additive fast lane (T25).** An owner-approved, additive, tool-verifiable-green change that neither the doc-only nor the expedited path covers: scope it or refuse it.
 10. **Session rotation and the autonomous run (T23).** A stated trigger for the Chief of Staff to propose handoff and take an ack; a named skill for the autonomous overnight run if it is to recur — two instances exist as its evidence.
 11. **Files handed to Dave (T26).** `~/Downloads`, named to sort to the top; long documents presented rendered and navigable. One line in the Decision Layer; today it lives in memory only.
-12. **Tooling-facts artifact (T30, T04).** A dated, falsifiable record of connector and sandbox behaviour — or the decision that the bundle-system PRD's lore-home requirement is that artifact. `git push -u` in the executor sandbox lands the ref, then fails only the upstream-config write (`.git/config`: Operation not permitted); push without `-u`. Connector whole-file writes drift when content is retyped: precompute the target blob locally and compare after the write; one caught instance 2026-09-01 (a one-word regression, corrected before merge).
+12. **Tooling-facts artifact (T30, T04).** A dated, falsifiable record of connector and sandbox behaviour — or the decision that the bundle-system PRD's lore-home requirement is that artifact. `git push -u` in the executor sandbox lands the ref, then fails only the upstream-config write (`.git/config`: Operation not permitted); push without `-u`. Connector whole-file writes drift when content is retyped: precompute the target blob locally and compare after the write; one caught instance 2026-09-01 (a one-word regression, corrected before merge). Process substitution (<(...)) is refused by the executor sandbox; use temp files. Observed by two executors 2026-09-02.
 13. **SLO gate hole (T29, open since 2026-08-05).** The consequential class and the change package reference Top K journeys and SLO budgets that nothing defines or maintains, so a gate criterion cannot fire: define them or remove the criterion and the field.
 14. **The 2026-08-05 board pass (T33).** One disposition — landed, superseded, or still open — per action item AI-1 through AI-15 of `retros/retro-triage-board.md`, recorded so the board can be called synthesized.
 15. **Test counts carry their environment (T06).** A count reported by an executor states the environment it was observed in (clone, worktree, sandbox); a count measured elsewhere is not an expectation. **LANDED 2026-08-31** — the invariants Report region bullet (amendment b, refined by amendment d's arc to the tree axis with a sandbox clause), agreed at cycle 7.
@@ -1518,11 +1522,22 @@ rest read against main); then the retro-skill cycle (follow-up 1, five
 changes; DONE 2026-09-01, agreed at cycle 4,
 reviews/conversation-retro-cycle-4.md), the bundle PRD cycle 1 (PRD
 human-reviewed 2026-09-01, pull request #275; OQ-5, OQ-6, OQ-10 resolved
-in-document; Spec Reviewer gate still owed), the spec-review cycle, the
+in-document; Spec Reviewer gate still owed; AGREED 2026-09-02 at cycle 2
+(reviews/bundle-system-cycle-2.md; reviewed document SHA
+7c50f0fd1c8f648d3e95a527edaf7125b7b07ab4; flip pull request #283). Build
+packages remain queued.), the spec-review cycle, the
 remote-write policy cycle, the Decision Layer cycle (DONE 2026-09-01, human
 review with Dave, agreed at cycle 15, reviews/decision-layer-cycle-15.md;
 reviewed document SHA 999dc9a1cfa8aa695e4a324f4cbd4c5320f200ec), the
 command-blocks cycle (follow-up 7, three changes), the Chief of Staff role
 cycle, and skills/conversation-retro.md's conforming revision — drop the
 chat-close auto-run and the rule-12 standing-obligation deference, per
-DEC-000310; full cycle, ineligible list.
+DEC-000310; full cycle, ineligible list; Tagging package (bundle-system
+PRD): the sre-critic rename and engagement retags per DEC-000350;
+skills/outline.md human-value removal per DEC-000340; order: on the
+copy-editor and critic role files (cycle-1 O-4). After the rename lands,
+one PRD conform touch folds the two wording residues from pull request
+#282 (the six-further-files count includes the role file itself; §1's
+five measured ways against §5's seven baseline paragraphs); and
+prd-template cycle: the skeleton's [all-roles, human] audience default
+would violate the agreed PRD's AC-BS-5 (cycle-1 O-5).
