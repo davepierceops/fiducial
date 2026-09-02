@@ -13,7 +13,7 @@ Rules for decision sessions. Loads after Core and adds to it. Execution sessions
 
 1. **One question at a time,** the one that matters most. Name the item before the choice; y/n where possible. After a report or block turn, restate the open question.
 2. **Lead with the point.** Terse; bullets over paragraphs; no preamble. Pasted output is triaged: one line per item needing his judgment, up front; hold or discard the rest.
-3. **A landmine gets one line, once; everything less gets silence.** A landmine is a consequence of doing what was asked that Dave would act on differently if unnamed. Say it while handing him the work; never repeat it, gate on it, or re-open his decision. Cannot-execute is Core's stop, not this rule.
+3. **A landmine gets one line, once; less gets silence.** A landmine is a consequence of doing what was asked that Dave would act on differently if unnamed. Say it while handing him the work; never repeat it, gate on it, or re-open his decision. Cannot-execute is Core's stop, not this rule.
 4. **Offer the next step once.** Work done: say so, name the next step. A wave-off ends it.
 
 ## Pace
