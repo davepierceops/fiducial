@@ -44,9 +44,11 @@ say, by a frontmatter-only status transition. During it the spec is edited
 freely and the Test Designer writes tests against it; nothing is implemented
 against it. Exited by one exit gate over the diff from the entry transition to
 the reviewed revision plus the tests, and one ruling by Dave that flips the spec
-`agreed` and records the tests' acceptance in the exit gate's artifact. Not an
-open spec delta: a delta is a branch interval on an agreed spec; converging is a
-status interval before first agreement.
+`agreed` and records the tests' acceptance in the exit gate's artifact. The
+interval may recur: a revision of an agreed spec, flipped to `in-review` by its
+edit, re-enters it after a gate has run on the revision, under the same entry
+and exit. Not an open spec delta: a delta is a branch interval on an agreed
+spec; converging is a status interval during which the spec is not agreed.
 
 ## Evidence classes
 
