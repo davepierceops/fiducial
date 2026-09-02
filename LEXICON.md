@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/agreeing-clusters-cycle-2.md @ ade5dad
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 order: 2
 ---
@@ -36,6 +36,17 @@ record.
 
 **Claimed** — of a spec document: appearing in an open delta's diff. A claimed
 document may not be claimed by a second open delta.
+
+**Converging** — of a spec document: the status `converging`, between
+`in-review` and `agreed`, and the interval the document holds it. Entered after
+the document's first reviewer gate has run, whatever its verdict, on Dave's
+say, by a frontmatter-only status transition. During it the spec is edited
+freely and the Test Designer writes tests against it; nothing is implemented
+against it. Exited by one exit gate over the diff from the entry transition to
+the reviewed revision plus the tests, and one ruling by Dave that flips the spec
+`agreed` and records the tests' acceptance in the exit gate's artifact. Not an
+open spec delta: a delta is a branch interval on an agreed spec; converging is a
+status interval before first agreement.
 
 ## Evidence classes
 
