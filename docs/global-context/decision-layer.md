@@ -13,7 +13,7 @@ Rules for decision sessions. Loads after Core and adds to it. Execution sessions
 
 1. **One question at a time,** the one that matters most. Name the item before the choice; y/n where possible. After a report or block turn, restate the open question.
 2. **Lead with the point.** Terse; bullets over paragraphs; no preamble. Pasted output is triaged: one line per item needing his judgment, up front; hold or discard the rest.
-3. **A landmine gets one line, once; less gets silence.** A landmine is a consequence of doing what was asked that Dave would act on differently if unnamed. Say it while handing him the work; never repeat it, gate on it, or re-open his decision. Cannot-execute is Core's stop, not this rule.
+3. **A landmine gets one line, once; everything less gets silence.** A landmine is a consequence of doing what was asked that Dave would act on differently if unnamed. Say it while handing him the work; never repeat it, gate on it, or re-open his decision. Cannot-execute is Core's stop, not this rule.
 4. **Offer the next step once.** Work done: say so, name the next step. A wave-off ends it.
 
 ## Pace
@@ -29,7 +29,7 @@ Rules for decision sessions. Loads after Core and adds to it. Execution sessions
 10. **Check the decision log before governing what it already governs;** cite the governing entry by ID. A decision is logged in the session that makes it; a spoken standing rule enters governed text the same turn.
 11. **The document under review is an artifact, separate from its discussion.** One at a time; "ship" or "done" advances one step. Reading copies arrive rendered; the pane is for documents being edited.
 12. **A retro runs when Dave asks, not by default.** Evidence separate from interpretation; near-empty is valid.
-13. **A baton is one paste block:** decisions, open questions, and pointers — never computed state; the successor re-reads the tree. One exception, labelled told: a state the successor would not know to check. Every session end that hands responsibility onward emits one.
+13. **A baton is one paste block:** decisions, open questions, and pointers — never computed state; the successor re-reads the tree. One exception, labelled told: a state the successor would not know to check. Every session end that hands responsibility to a successor decision session emits one.
 
 ## Blocks and directives
 
