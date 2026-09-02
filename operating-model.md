@@ -116,24 +116,40 @@ substance. Trivial changes — typo fixes, comment edits, mechanical formatting 
 are not meaningful in this sense, and use a lighter shape. Each stage completes
 before the next begins; no skipping or working ahead.
 
-1. **Specs gated, then converging** — PRD/TRD and the acceptance criteria derived from them written and reviewed by the Spec Reviewer Agent (hard gate); the Spec Reviewer's gate reaches nothing else. After that first gate, whatever its verdict, the spec enters `converging` on Dave's say, by a frontmatter-only status transition. Methodology and other governed context documents are gated by the Context Quality Reviewer. *(PM/EM/Owner + Architect + Spec Reviewer for specs; Context Quality Reviewer for governed context documents)*
-   While a tranche is executing, spec edits may land ungated on its spec branch and are gated together at reconciliation; the default branch never carries unreviewed spec text.
-2. **Acceptance criteria** — explicit, written ACs for the unit of work. *(PM/EM/Owner)*
-3. **Architecture summary** — per-change design derived from the TRD; the tracker issue is cut from this. *(Architect)*
-4. **Test plan, confirmed red; spec and tests converge; specs agreed** — ACs and the converging spec's testable claims translated into test code, run, and confirmed to fail on bad logic — not just on an absent import — before any implementation. While the spec is `converging` it is edited freely, and findings flow both ways between spec and tests through the decision session. When they cohere, an exit gate reviews the spec's diff from the transition that set `converging` to the reviewed revision, together with the tests; Dave reads that diff; and one ruling by Dave agrees the spec — a frontmatter-only status transition — and accepts the tests as its red-gate evidence, recorded in the exit gate's review artifact. *(Test Designer; Spec Reviewer for the exit gate; Dave for the ruling)*
-5. **Implement to green** — begins only after the spec is agreed and the tests accepted; minimum code to turn the failing tests green; mechanical checks (lint, types, static analysis) pass as part of "green." *(Coder — a different agent from the Test Designer for this unit)*
-6. **Quality review** — judgment on maintainability, correctness, consistency, and test adequacy, over the diff and the mechanical results. *(Reviewer — hard gate)*
-7. **Skeptic/risk review** — judgment on false confidence, mocked-boundary and live-integration gaps, config/deploy risk, and release overclaims, over the whole evidence chain. *(Skeptic/Risk)*
-8. **Release package** — assemble evidence and a ship recommendation. *(Release Manager)*
-9. **Release gate** *(Dave)*
+The flow has two parts. The spec lifecycle (stages 1–4) runs once per spec,
+before its first agreement, and again for a revision of an agreed spec that
+re-enters `converging`; for every change against the spec after that, it stands
+as a satisfied precondition. The per-change stages (5–12) run once per
+meaningful change, each after the spec is agreed, and never against a
+`converging` spec.
 
-The red-gate at step 4 is mandatory and behavioral: the tests demonstrably fail
-on bad logic, not just on an absent import. Quality review (6) and skeptic/risk review
-(7) are deliberately separate — quality review asks "is this good?"; skeptic/risk
-asks "where is this lying to us?" — and a change can pass one and fail the other.
-Mechanical checks (lint/types/static analysis) are deterministic evidence folded
-into "green," not a review step. Use a lighter process for routine changes, but
-do not omit necessary evidence and do not skip the red-gate.
+### Spec lifecycle — once per spec
+
+1. **First gate** — PRD/TRD and the acceptance criteria derived from them written and reviewed by the Spec Reviewer Agent (hard gate); the Spec Reviewer's gate reaches nothing else. Methodology and other governed context documents are gated by the Context Quality Reviewer. *(PM/EM/Owner + Architect + Spec Reviewer for specs; Context Quality Reviewer for governed context documents)*
+   While a tranche is executing, spec edits may land ungated on its spec branch and are gated together at reconciliation; the default branch never carries unreviewed spec text.
+2. **Converging** — after the first gate, whatever its verdict, the spec enters `converging` on Dave's say, by a frontmatter-only status transition. While it is `converging` the spec is edited freely, and findings flow both ways between spec and tests through the decision session. *(Dave for the transition)*
+3. **The spec's test suite, confirmed red** — the `converging` spec's testable claims translated into test code, run, and confirmed to fail on bad logic — not just on an absent import. The suite is the spec's, not any unit's: it is written under a convergence directive the Chief of Staff directs from the `converging` spec, not under a change package. *(Chief of Staff for the directive; Test Designer)*
+4. **Exit gate; spec agreed** — when spec and tests cohere, an exit gate reviews the spec's diff from the transition that set `converging` to the reviewed revision, together with the tests; Dave reads that diff; and one ruling by Dave agrees the spec — a frontmatter-only status transition — and accepts the tests as its red-gate evidence, recorded in the exit gate's review artifact. *(Spec Reviewer for the exit gate; Dave for the ruling)*
+
+### Per-change stages — once per change, after the spec is agreed
+
+5. **Acceptance criteria** — explicit, written ACs for the unit of work. *(PM/EM/Owner)*
+6. **Architecture summary** — per-change design derived from the TRD; the tracker issue is cut from this. *(Architect)*
+7. **The unit's tests, confirmed red** — the unit's tests selected from the spec's suite, run, and confirmed to fail on bad logic — not just on an absent import — before any implementation. *(Test Designer)*
+8. **Implement to green** — minimum code to turn the failing tests green; mechanical checks (lint, types, static analysis) pass as part of "green." *(Coder — a different agent from the Test Designer for this unit)*
+9. **Quality review** — judgment on maintainability, correctness, consistency, and test adequacy, over the diff and the mechanical results. *(Reviewer — hard gate)*
+10. **Skeptic/risk review** — judgment on false confidence, mocked-boundary and live-integration gaps, config/deploy risk, and release overclaims, over the whole evidence chain. *(Skeptic/Risk)*
+11. **Release package** — assemble evidence and a ship recommendation. *(Release Manager)*
+12. **Release gate** *(Dave)*
+
+The red-gate at stages 3 and 7 is mandatory and behavioral: the tests demonstrably
+fail on bad logic, not just on an absent import. Quality review (9) and
+skeptic/risk review (10) are deliberately separate — quality review asks "is this
+good?"; skeptic/risk asks "where is this lying to us?" — and a change can pass one
+and fail the other. Mechanical checks (lint/types/static analysis) are
+deterministic evidence folded into "green," not a review step. Use a lighter
+process for routine changes, but do not omit necessary evidence and do not skip
+the red-gate.
 
 ## Release gate
 
@@ -155,7 +171,8 @@ A meaningful change should produce a change package containing:
 
 1. Intent / problem statement
 2. Acceptance criteria
-3. Test plan, and the exit-gate review artifact recording the tests' acceptance
+3. Test plan — the unit's tests, selected from the spec's suite — and the
+   exit-gate review artifact recording the suite's acceptance
 4. Implementation summary
 5. Test results — including the test commands run, any skipped tests, and a
    recommendation on whether the testing evidence is sufficient
@@ -189,8 +206,8 @@ A change is not done merely because code was written or tests are green.
 A change is done when:
 
 - intended behavior is implemented
-- the spec was agreed and the tests accepted as its red-gate evidence before implementation began
-- the pre-written tests were confirmed failing on bad logic — not just on an absent import — then turned green
+- the spec was agreed and its test suite accepted as its red-gate evidence before implementation began
+- the unit's pre-written tests were confirmed failing on bad logic — not just on an absent import — then turned green
 - mechanical checks (lint, types, static analysis) pass
 - relevant verification has run
 - evidence is summarized
