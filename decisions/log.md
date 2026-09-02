@@ -573,3 +573,24 @@ reviews/bundle-system-cycle-1.md finding B-1: the value critic named
 two role documents, emitting a 28-file critic bundle against a
 five-file target. The uniqueness rule is stated in
 specs/bundle-system.md, agreed at cycle 2.
+
+## DEC-000360 — Convergence is the standard change flow; `converging` is a status
+Date: 2026-09-02
+Decision: Spec and tests converge before agreement, as the standard change
+flow, not an exception. A fourth agreed-route status, `converging`, sits
+between `in-review` and `agreed`: entered after the first reviewer gate on
+Dave's say by a frontmatter-only transition; while converging the spec is
+edited freely and the Test Designer writes tests against it, and content
+edits change neither status nor `last-reviewed`; exited by one exit gate
+over the diff from the entry transition commit to the reviewed SHA plus the
+tests, Dave's read of that diff, and one ruling that flips the spec agreed
+and records the tests' acceptance in the exit artifact. Building against a
+document is three-valued: draft/in-review nothing; converging tests only;
+agreed implementation. Enforcement of the value lands as a bin/ package
+before the first document enters it.
+Context: Owner decision (Dave), 2026-09-02, triaging
+reviews/spec-review-cycle-cycle-11.md N-1, which found the cycle-11
+Convergence section contradicting the metadata policy, the operating model,
+and the Test Designer role. Dave refused an exception-shaped fix: the rules
+say convergence is how it is done, and the three texts yield. Landed by
+docs/cycles/converging-model-editor-directive.md as one branch-scoped cycle.
