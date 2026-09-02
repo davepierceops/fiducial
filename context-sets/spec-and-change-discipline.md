@@ -38,9 +38,10 @@ on an absent import.
 The red-gate runs during convergence — while the spec is `converging`, before it
 is agreed — and its result is the exit gate's evidence for the tests.
 
-Spec and test discipline governs steps 1 through 5 of the change flow. The flow
-continues through quality review, skeptic/risk review, release package, and
-release gate — steps 6 through 9.
+Spec and test discipline governs the spec lifecycle (stages 1–4) and the
+per-change stages through implement-to-green (stages 5–8). The flow continues
+through quality review, skeptic/risk review, release package, and release gate
+(stages 9–12).
 
 ## Open spec delta
 
@@ -49,8 +50,9 @@ exactly as before, and an agent that edits a spec document without being told to
 has not found a loophole here — what an open delta removes is the *gate* on the
 owner's own edits, not the rule about who authors canonical text.
 
-**An open spec delta is not convergence.** A delta is a branch interval on an
-agreed spec; converging is a status interval before the spec's first agreement.
+**An open spec delta is not convergence.** The two differ by kind: a delta is a
+branch interval on an agreed spec; converging is a status interval, before the
+spec's first agreement or on a revision of an agreed spec that re-enters it.
 
 **Reconciliation may be invoked early.** Dave may invoke it mid-tranche, at
 will — frequent small reconciliations are the encouraged norm, and the tranche
