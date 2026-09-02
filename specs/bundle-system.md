@@ -10,55 +10,20 @@ audience: [human]
 
 Every agent session — decision or execution, any model, any vendor — starts
 from a bundle: the governed text it needs and nothing else. The bundle is the
-product; the repository is where it is made. Today the product is wrong in
-five ways, each observed at `main` 6e77040 unless stated otherwise.
+product; the repository is where it is made.
 
-**The unit of authoring is the file, and a file is a bag of rules.** A bundle
-that needs one rule from a file gets the whole file. The rule register from
-the dedup passes counted 878 rules across the corpus; a bundle is assembled at
-file granularity, so review-rubric criterion 10 — every member earns its
-place — is applied per file, never per rule.
+The bundle system emits, on one command from Dave's Mac, the bundle for any
+audience: each governed rule once, only what that audience needs, in load
+order, carrying what a consumer needs to judge its freshness. A writer or an
+adopting project obtains the same file from a release without touching the
+repository. Nothing built now forecloses a rule-granular end state.
 
-**Selection by `audience:` alone over-selects.** `bin/bundle --audience
-writer` emits 22 files and about 15,000 words. The set Dave ruled for the
-Writer is 6 files and about 3,800 words: Core, the Decision Layer, the role,
-the Public Prose Criteria, the Voice document, the Outline skill. The other 16
-are software-delivery material carried in by the `all-roles` floor — 17
-files that every audience receives, including the release-readiness policy,
-the project-setup policy, and three engineering context sets — which a
-writer never uses. The Chief of Staff bundle is 33 files. Size degrades the
-bundle: a rule nobody follows because it is one of a thousand is not a rule;
-it is noise degrading the others.
+Today's tool falls short of that in five measured ways — it selects whole
+files by `audience:` alone and over-selects, carries no provenance a consumer
+can act on, describes one output under two conventions, and reaches only
+repository users. The measurements are the baselines in §5.
 
-**The bundle carries no provenance a consumer can act on.** The header names
-the repository, the HEAD, and a generation time. It does not say how far
-behind the default branch the bundle is, and nothing says when a bundle must
-be regenerated. A gate directive in August cited a path from a bundle three
-weeks stale, and the stale path was the reviewer's first finding. Two of the
-retrospectives in this repository's corpus ask for the stamp; six ask for
-regeneration on rename, flip, or audience change.
-
-**Two conventions describe one output.** The decision that fixed the file-set
-rule carried forward a filename and header from the prior hand procedure —
-`methodology-context-bundle-<stamp>.md`, a `Source: @ <HEAD>` line — while
-`bin/bundle` writes `bundle-<audience>-<stamp>.md` with `# bundle-<audience>`.
-The writing bundles hand-built on 2026-08-30 were built to the tool's header
-so that hand-built and generated bundles interchange. One output cannot
-satisfy both; the conflict is a decision this document must record.
-
-**The corpus is portable; its edges are not.** The governed text is
-vendor-neutral. What is not neutral is how a session reaches it: sandbox
-mechanics and connector behaviour are carried per directive because they have
-no home, a writer who is not a repository user has no way to obtain a bundle
-except by asking Dave, and an adopting project has no stated way to reach
-the corpus at all — the one adapter that existed restated ten rules and was
-deleted for it.
-
-The intent: one command on Dave's Mac emits the right bundle for any role in
-any audience, small enough to be followed, carrying what a consumer needs to
-judge its freshness; a writer or an adopting project obtains the same file
-from a release without touching the repository; and nothing built now
-forecloses a rule-granular end state.
+Why now (2026-09-01): we need well-organized and pre-defined bundles.
 
 ## 2. Users and use cases
 
@@ -72,6 +37,10 @@ forecloses a rule-granular end state.
   nothing else. Download one file from one URL and paste it; never see git.
 - **Adopting projects.** A project repository applying this methodology
   needs a stated way to reach the corpus that restates no rule.
+- **Users of a specific harness.** Dave today runs Claude (chat and Claude
+  Code) and ChatGPT (chat and Codex). Each harness user needs instructions
+  for using the methodology in that harness; a user of neither needs the
+  files-only instructions and any tool.
 - **Methodology authors.** Add a governed file, or a rule, and expect it to
   join the right bundles by tagging — one change in one place.
 
@@ -83,8 +52,10 @@ forecloses a rule-granular end state.
 - **Trigger:** a governed file was agreed, renamed, or re-tagged; a project's
   uploaded bundle is stale.
 - **Steps:** one command names the audience; the tool syncs or refuses on an
-  unsynced tree, assembles the set, and writes one file to `~/Downloads`
-  named to sort to the top. Dave uploads it to the project, deleting the
+  unsynced tree, assembles the set, and writes one file to the delivery
+  directory DEC-000200 defines, named
+  `fiducial-bundle-<audience>-<timestamp>`, the timestamp per DEC-000290
+  (ISO 8601 basic, UTC, `Z` required). Dave uploads it to the project, deleting the
   prior one.
 - **Expected outcome:** the file is the audience's set and nothing else, and
   its header names the repository, the HEAD, the generation time, and every
@@ -174,8 +145,9 @@ companion with a `human` audience, never to nowhere.
 ### Functional goals
 
 - **G1 — One command.** From a synced clone on Dave's Mac, one command emits
-  the bundle for any audience value and writes it to `~/Downloads`, named to
-  sort to the top. An unsynced tree is refused, not silently bundled.
+  the bundle for any audience value and writes it to the delivery directory
+  DEC-000200 defines, named `fiducial-bundle-<audience>-<timestamp>` per
+  DEC-000290. An unsynced tree is refused, not silently bundled.
 - **G2 — Each rule once.** Every governed rule lives in exactly one file; a
   bundle never carries a rule twice; a rule that must be referenced from a
   second file is referenced by identity.
@@ -210,6 +182,15 @@ companion with a `human` audience, never to nowhere.
 - **G10 — Reach.** An adopting project reaches the corpus through a stated
   route that restates no rule and works for a consumer with a document and a
   chat and nothing else.
+- **G12 — Harness instructions.** The product includes named instruction
+  sets for using the methodology: one for Claude (chat and Claude Code), one
+  for ChatGPT (chat and Codex), and one for files-only use with any tool.
+  The files-only set is the vendor-neutral base; the vendor sets are
+  adapters over it, per the source-of-truth policy — they say how to load
+  and run bundles in that harness and restate no rule (the deleted-adapter
+  lesson). If review shows the Claude and ChatGPT sets identical in
+  substance, they merge and the product ships two sets, not three; the
+  files-only set never merges away.
 - **G11 — A home for lore.** Sandbox, connector, and environment facts that
   directives carry today have one governed home with a stated audience, so a
   directive cites it rather than restating it.
@@ -249,6 +230,53 @@ companion with a `human` audience, never to nowhere.
 
 ## 5. User outcomes and measurement
 
+### Baseline at `main` 6e77040
+
+As observed at 6e77040 unless stated otherwise.
+
+**The unit of authoring is the file, and a file is a bag of rules.** A bundle
+that needs one rule from a file gets the whole file. The rule register from
+the dedup passes counted 878 rules across the corpus; a bundle is assembled at
+file granularity, so review-rubric criterion 10 — every member earns its
+place — is applied per file, never per rule.
+
+**Selection by `audience:` alone over-selects.** `bin/bundle --audience
+writer` emits 22 files and about 15,000 words. The set Dave ruled for the
+Writer is 6 files and about 3,800 words: Core, the Decision Layer, the role,
+the Public Prose Criteria, the Voice document, the Outline skill. The other 16
+are software-delivery material carried in by the `all-roles` floor — 17
+files that every audience receives, including the release-readiness policy,
+the project-setup policy, and three engineering context sets — which a
+writer never uses. The Chief of Staff bundle is 33 files. Size degrades the
+bundle: a rule nobody follows because it is one of a thousand is not a rule;
+it is noise degrading the others.
+
+**The bundle carries no provenance a consumer can act on.** The header names
+the repository, the HEAD, and a generation time. It does not say how far
+behind the default branch the bundle is, and nothing says when a bundle must
+be regenerated. A gate directive in August cited a path from a bundle three
+weeks stale, and the stale path was the reviewer's first finding. Two of the
+retrospectives in this repository's corpus ask for the stamp; six ask for
+regeneration on rename, flip, or audience change.
+
+**Two conventions describe one output.** The decision that fixed the file-set
+rule carried forward a filename and header from the prior hand procedure —
+`methodology-context-bundle-<stamp>.md`, a `Source: @ <HEAD>` line — while
+`bin/bundle` writes `bundle-<audience>-<stamp>.md` with `# bundle-<audience>`.
+The writing bundles hand-built on 2026-08-30 were built to the tool's header
+so that hand-built and generated bundles interchange. One output cannot
+satisfy both; the conflict is a decision this document must record.
+
+**The corpus is portable; its edges are not.** The governed text is
+vendor-neutral. What is not neutral is how a session reaches it: sandbox
+mechanics and connector behaviour are carried per directive because they have
+no home, a writer who is not a repository user has no way to obtain a bundle
+except by asking Dave, and an adopting project has no stated way to reach
+the corpus at all — the one adapter that existed restated ten rules and was
+deleted for it.
+
+### Outcomes
+
 - **Bundle size per audience.** Baselines at 6e77040: Chief of Staff 33
   files; Writer 22 files, about 15,000 words; the `all-roles` floor 17
   files. Targets: the Writer, Copy Editor, and Critic bundles at the sets in
@@ -281,16 +309,18 @@ Each is testable against the tool, the tree, or a release. `AC-BS-n` are this
 document's; the TRD derives its tests from them.
 
 - **AC-BS-1 — One command, one directory.** One invocation naming an audience
-  value writes exactly one file to `~/Downloads`, named to sort to the top,
+  value writes exactly one file to the delivery directory DEC-000200
+  defines, named `fiducial-bundle-<audience>-<timestamp>` per DEC-000290,
   and exits non-zero with a stated reason on an unsynced tree, an unknown
   audience value, or an invariant violation, writing nothing.
 - **AC-BS-2 — Header.** Every bundle opens with the repository, the HEAD
   SHA, the generation time, and a numbered list of every member with its
   path and blob SHA, in load order; every member is delimited by a marker
-  carrying its path and blob. Whether the filename and header take the
-  tool's present form or the form carried forward in DEC-000210 is OQ-5;
-  whichever is chosen, hand-built and generated bundles are interchangeable
-  under it, and the other form is retired in the same package.
+  carrying its path and blob. Filename and header form are the ruled ones
+  (OQ-5, resolved): the filename §4 states, over the tool's present header
+  fields; DEC-000210's carried form is retired in the header package.
+  Hand-built and generated bundles are interchangeable under the ruled
+  form.
 - **AC-BS-3 — Computed membership.** Adding a governed file with a complete
   `audience:` (and `order:` where needed) places it in every bundle whose
   audience it names and in no other, with no edit to the tool and no edit
@@ -329,8 +359,9 @@ document's; the TRD derives its tests from them.
 - **AC-BS-9 — Releases.** A release attaches one bundle per audience the
   release carries, each pinned to the release's SHA and generated from it;
   no bundle is committed to the tree; a new audience value appears in the
-  next release with no code change. Which audiences a release carries —
-  all, or a stated subset — is OQ-6.
+  next release with no code change. A release carries every audience's
+  bundle, regenerated whole at the release's SHA (OQ-6, resolved), and its
+  notes name the audiences whose member set or member content changed.
 - **AC-BS-10 — Voice template delivery.** `voice-template.md`, audience
   `[human]`, is attached to every release that carries a writing bundle and
   is in none of the role bundles.
@@ -345,8 +376,14 @@ document's; the TRD derives its tests from them.
 - **AC-BS-13 — Two forms.** Where a rule carries a human form, the agent
   bundle omits it and a human-audience artifact carries it; a rule's human
   form is never deleted by a cut that shortens the agent form.
-- **AC-BS-14 — Dual-corpus invariant.** A rule both the software corpus and
-  the writing corpus hold has one canonical home; the other cites it.
+- **AC-BS-14 — Dual-corpus invariant.** Where the software corpus and the
+  writing corpus hold the same rule — the same rule verbatim in intent, not
+  merely similar or related rules (the Lexicon's claim-strength and
+  provenance axes are the standing counterexample: alike, and deliberately
+  distinct) — that rule has one canonical home and the other corpus cites
+  it. The canonical file joins every bundle that carries a citing file, by
+  tagging, so the citation never dangles in any bundle a writer or an
+  adopting project receives (G9).
 
 ## 7. Risk tolerance
 
@@ -387,28 +424,47 @@ confidently on a stale or over-full text. So:
 - **OQ-4 — Canonical corpus for shared rules.** Which corpus is canonical for
   a rule both hold — claim classes in Core and in the writing claims
   taxonomy? Resolved by AC-BS-14's first instance, Dave ruling.
-- **OQ-5 — Filename and header.** The tool's present form (`# bundle-<name>`,
-  Repo, HEAD, Generated, numbered list with blobs) or DEC-000210's carried
-  form (`methodology-context-bundle-<stamp>.md`, `Source: @ <HEAD>`). The
-  writing bundles were built to the former so hand-built and generated
-  interchange; DEC-000210 carried the latter from the hand procedure it
-  retired. Dave's ruling; the losing form is retired in the header package.
-- **OQ-6 — Release contents.** Every audience's bundle, or a stated subset?
-  And cadence and ownership of releases, unconstrained so far. Dave's.
+- **OQ-5 — Filename and header.** Resolved (Dave, 2026-09-01, this review).
+  The filename and delivery directory are the ones §2, §4, and §6 state —
+  stated there once each, not restated here. Of the two forms this question
+  weighed, DEC-000210's carried form loses and is retired in the header
+  package; the header keeps the tool's present fields (Repo, HEAD,
+  Generated, numbered list with per-file blobs) under the ruled filename.
+  Owed to the decision log at the next flush: an entry superseding
+  DEC-000210's carried-forward naming clause.
+- **OQ-6 — Release contents; cadence and ownership.** Contents resolved
+  (Dave, 2026-09-01, this review): a release re-produces every audience's
+  bundle, regenerated whole at one HEAD — untouched audiences included, so
+  every asset in a release states the same SHA. The release notes name the
+  audiences whose member set or member content changed. Cadence resolved
+  (Dave, 2026-09-01, this review): event-driven, no calendar — when a
+  commit on the default branch changes any bundle member, the decision
+  session tells Dave a release is owed; the release is cut on his go.
+  Ownership resolved (Dave, 2026-09-01, this review): the go is Dave's; the
+  decision session owns the mechanics — generates the bundles, cuts the
+  release, attaches the assets, writes the notes — and the verification,
+  reading the release back and confirming every asset states the release's
+  SHA. A release found wrong after the fact returns to Dave as a triage
+  item, never a silent fix. Resolved whole; retained here as the record
+  until the header package lands these rules in §4 and §6.
 - **OQ-7 — Selection mechanism.** What makes the writing sets derivable:
   an explicit per-bundle file list, a profile property on the role, or rows.
   A list is the thing G5 forbids unless it is itself a property read at
   generation; a profile on the role document is one change in one place; rows
   are the end state. Resolved at the TRD, within G5.
-- **OQ-8 — Decision Layer in writing bundles.** In today, by ruling; the one
-  file a writer session could plausibly drop, about 570 of 3,800 words.
-  Resolved by the first writer session that misbehaves without it, or does
-  not.
+- **OQ-8 — Decision Layer in writing bundles.** It is in, by ruling, and
+  stays in; this question is only whether a later ruling drops it. It is
+  the one member a writer session could plausibly do without — about 570 of
+  the bundle's 3,800 words. Resolution is an experiment, run only when Dave
+  directs it: one writer session runs without the file; if that session
+  breaks the register rules the file carries, it stays for good; if the
+  session behaves, Dave rules on dropping it. Until that experiment runs,
+  in.
 - **OQ-9 — Writing bundle as a kind.** Is a writing bundle a first-class
   kind alongside role bundles, or one instance of a general per-role
   profile? Resolved with OQ-7.
-- **OQ-10 — Outline skill audience.** `skills/outline.md` is tagged
-  `[writer, human]`; whether `writer` alone suffices now that the skill is
-  in the writer bundle. Resolved by the tagging package.
+- **OQ-10 — Outline skill audience.** Resolved (Dave, 2026-09-01, this
+  review): `writer` alone; a human does not need the outline skill. The
+  `human` value comes off `skills/outline.md` in the tagging package.
 - **OQ-11 — The store.** Files with frontmatter or a database, decided on
   the row count and the dual-form evidence §5 names, after the audit.
