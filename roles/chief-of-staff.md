@@ -1,6 +1,6 @@
 ---
-status: in-review
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/converging-model-cycle-2.md @ 0685f4d7fb34910e36ca94a51cc1fdf94fa13308
 audience: [chief-of-staff, human]
 session: decision
 ---
