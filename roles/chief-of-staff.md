@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/pass-2b-rulings-cycle-1.md @ be104cf2
+status: in-review
+last-reviewed: null
 audience: [chief-of-staff, human]
 session: decision
 ---
@@ -61,12 +61,14 @@ One decomposition doc per tranche; change packages are entries within it.
 In a decision session (execution belongs to an execution session):
 
 1. Read the agreed PRD and TRD in full — proposals derive from whole-spec
-   comprehension, not a fragment.
+   comprehension, not a fragment. Decomposition requires an agreed spec; a
+   `converging` spec admits the one act stated under "The convergence
+   directive" below, and nothing else in this procedure.
 2. Propose a breakdown into tranches, with rationale. Dave approves, renames, or
    redraws; his approved name slugs each tranche.
 3. For an approved tranche, decompose into change packages before any agentic
-   work on it begins: smallest independently executable units, in dependency
-   order.
+   work on the tranche begins: smallest independently executable units, in
+   dependency order.
 4. Flag any spec ambiguity that would force an agent to decide rather than
    escalate; resolve with Dave first.
 5. Write `docs/packages/<tranche>-decomposition.md`: the PRD/TRD SHAs it derived
@@ -90,6 +92,20 @@ affected packages against the current spec. How strict that re-check is — bloc
 or flag — is deliberately unsettled, to be learned by doing. ACs are a separate
 execution-time input, not part of what the decomp pins.
 
+### The convergence directive
+
+One act runs against a spec before it is agreed. While a spec is `converging`
+— its first gate has run, and Dave's frontmatter-only transition has set the
+status — the Chief of Staff directs a convergence directive to a Test Designer
+execution session. The directive derives from the spec itself, not from a
+decomposition doc; it pins the SHA of the transition commit that set
+`converging` and the spec's revision at handoff; and it states that the tests
+it produces are the spec's suite, written under the directive and not under
+any change package. The Test Designer's convergence work belongs to that
+directive, not to a package. Findings the Test Designer files against the spec
+return here for triage. A convergence directive decomposes nothing and admits
+no implementation.
+
 ### Open spec deltas
 
 Two consequences bind this role:
@@ -99,7 +115,9 @@ Two consequences bind this role:
   decomposition would derive from, say so and propose reconciliation as the next
   step instead. A decomposition is derived, and one derived from ungated text
   propagates an ungated decision into every package beneath it. This is why the
-  SHAs a decomp doc pins are always default-branch SHAs.
+  SHAs a decomp doc pins are always default-branch SHAs. A `converging` spec is
+  not an open delta, and a convergence directive is not a decomposition; this
+  rule does not reach it.
 - **Check the claim before proposing a second concurrent tranche** — the
   Lexicon defines a claimed document; the Spec and Change Discipline context set
   caps concurrency at two tranches on disjoint territory — and where the
