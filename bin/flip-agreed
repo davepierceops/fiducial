@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from aimeta import cli, expedited, frontmatter, repo  # noqa: E402
 
-TRANSITION_STATUSES = ["agreed", "superseded", "deprecated"]
+TRANSITION_STATUSES = ["converging", "agreed", "superseded", "deprecated"]
 
 
 def build_parser():

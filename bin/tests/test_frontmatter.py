@@ -383,6 +383,23 @@ class TestValidate(unittest.TestCase):
         self.assertIn("invalid-status", found)
         self.assertNotIn("missing-status", found)
 
+    def test_cv1_converging_is_an_admitted_status(self):
+        """AC-CV-1: `status: converging` reports no status finding; a status
+        outside the six admitted values still does."""
+        converging = (
+            frontmatter_block(status="converging", last_reviewed=None, audience=["all-roles"])
+            + "\nbody\n"
+        )
+        found = code_set(validate(converging))
+        self.assertNotIn("invalid-status", found)
+        self.assertNotIn("missing-status", found)
+
+        outside_six = (
+            frontmatter_block(status="stable", last_reviewed=None, audience=["all-roles"])
+            + "\nbody\n"
+        )
+        self.assertIn("invalid-status", code_set(validate(outside_six)))
+
     def test_fm11_missing_last_reviewed_only_when_key_absent(self):
         """AC-FM-11: absence is a finding; an explicit null is permitted."""
         absent = frontmatter_block(status="draft", audience=["all-roles"]) + "\nbody\n"
@@ -393,6 +410,26 @@ class TestValidate(unittest.TestCase):
             + "\nbody\n"
         )
         self.assertNotIn("missing-last-reviewed", code_set(validate(explicit_null)))
+
+    def test_cv2_converging_requires_no_last_reviewed(self):
+        """AC-CV-2: `converging` validates clean with `last-reviewed` absent or
+        explicitly `null`; `agreed` with `last-reviewed: null` still fails."""
+        absent = (
+            frontmatter_block(status="converging", audience=["all-roles"]) + "\nbody\n"
+        )
+        self.assertNotIn("missing-last-reviewed", code_set(validate(absent)))
+
+        explicit_null = (
+            frontmatter_block(status="converging", last_reviewed=None, audience=["all-roles"])
+            + "\nbody\n"
+        )
+        self.assertNotIn("missing-last-reviewed", code_set(validate(explicit_null)))
+
+        agreed_null = (
+            frontmatter_block(status="agreed", last_reviewed=None, audience=["all-roles"])
+            + "\nbody\n"
+        )
+        self.assertIn("agreed-without-review", code_set(validate(agreed_null)))
 
     def test_fm11_invalid_last_reviewed_format(self):
         """AC-FM-11: a non-null value not matching LAST_REVIEWED_RE is invalid."""
@@ -554,9 +591,14 @@ class TestValidate(unittest.TestCase):
         )
 
     def test_fm16_constants_match_the_policy(self):
-        """AC-FM-16: the module constants encode the policy's field vocabulary."""
+        """AC-FM-16: the module constants encode the policy's field vocabulary.
+
+        AC-CV-1: the policy's `status:` vocabulary is six values, `converging`
+        among them (`policies/document-metadata-policy.md` "Required fields").
+        """
         self.assertEqual(
-            fm.STATUSES, {"draft", "in-review", "agreed", "superseded", "deprecated"}
+            fm.STATUSES,
+            {"draft", "in-review", "converging", "agreed", "superseded", "deprecated"},
         )
         self.assertEqual(
             fm.EXCLUDED_FIELDS, {"version", "last-modified", "author", "changelog"}

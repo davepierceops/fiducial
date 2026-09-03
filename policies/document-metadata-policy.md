@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/converging-model-cycle-2.md @ d96ef65a802fba5735aae432222cab44c976fdc6
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 ---
 
@@ -142,10 +142,6 @@ lines, before any content.
   transition from `in-review` to `converging`. It leaves `converging` the
   same way the first interval does. A revision whose tests do not change
   takes the ordinary route from `in-review` to `agreed`.
-- Enforcement of `converging` — the hook leaving a content edit
-  unflipped, and the flip tool accepting the value as a source and as
-  an entry target — lands as a `bin/` change before any document enters
-  the status.
 - The document returns to `agreed` when Dave agrees the revision, and
   `last-reviewed` points at the new review artifact.
 

@@ -17,6 +17,7 @@ from tests.helpers import (
     commit,
     commit_count,
     commit_paths,
+    converging_doc,
     frontmatter_block,
     git,
     in_review_doc,
@@ -94,6 +95,32 @@ class TestHappyPath(FlipAgreedTestCase):
         self.assertEqual(rc, 0, "stdout=%r stderr=%r" % (out, err))
         self.assertEqual(commit_count(self.repo, env=self.env), self.commits_before + 1)
         self.assertEqual(porcelain(self.repo, env=self.env).strip(), "")
+
+
+class TestConvergingTransitions(FlipAgreedTestCase):
+    def test_cv5_in_review_to_converging_needs_no_review(self):
+        """AC-CV-5: `--status converging` from `in-review` needs no `--review`
+        and lands a frontmatter-only commit whose `last-reviewed` is unchanged.
+        """
+        rc, out, err = self.flip(TARGET, "--status", "converging")
+        self.assertEqual(rc, 0, "stdout=%r stderr=%r" % (out, err))
+        committed = self.head_doc()
+        self.assertIn("status: converging", committed)
+        self.assertIn("last-reviewed: null", committed)
+        self.assertEqual(commit_paths(self.repo, env=self.env), [TARGET])
+        self.assertTrue(committed.endswith(BODY), "body changed: %r" % committed[-80:])
+
+    def test_cv6_converging_to_agreed_matches_the_in_review_flip(self):
+        """AC-CV-6: `--status agreed --review <pointer>` from `converging` lands
+        the agreement flip exactly as it does from `in-review` today."""
+        write(self.repo, TARGET, converging_doc(body=BODY))
+        commit(self.repo, "make converging", env=self.env)
+
+        rc, out, err = self.flip_target()
+        self.assertEqual(rc, 0, "stdout=%r stderr=%r" % (out, err))
+        committed = self.head_doc()
+        self.assertIn("status: agreed", committed)
+        self.assertIn("last-reviewed: %s" % self.review_value, committed)
 
 
 class TestSelfVerification(FlipAgreedTestCase):

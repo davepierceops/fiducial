@@ -24,6 +24,7 @@ from tests.helpers import (
     blob_bytes,
     bracket_codes,
     commit,
+    converging_doc,
     disposition_doc,
     draft_doc,
     filesystem_is_case_insensitive,
@@ -129,6 +130,15 @@ class TestDefaultMode(CheckFrontmatterTestCase):
         self.assertEqual(rc, 1)
         self.assertIn("context-sets/b.md", err)
         self.assertIn("boundaries/c.md", err)
+
+    def test_cv4_all_reports_no_finding_on_a_converging_document(self):
+        """AC-CV-4: `--all` over a repo with a `status: converging` doc exits 0."""
+        write(self.repo, "policies/a.md", converging_doc())
+        commit(self.repo, "seed", env=self.env)
+
+        rc, out, err = self.check("--all")
+        self.assertEqual(rc, 0, "stdout=%r stderr=%r" % (out, err))
+        self.assertNotIn("policies/a.md", out + err)
 
     def test_cf1_named_paths_limit_the_check(self):
         """AC-CF-1: naming a path checks only that path."""
@@ -244,6 +254,34 @@ class TestStagedFlip(CheckFrontmatterTestCase):
         self.assertEqual(rc, 0, "stdout=%r stderr=%r" % (out, err))
         git(self.repo, "commit", "-q", "--no-verify", "-m", "edit", env=self.env, check=True)
         self.assertIn("status: in-review", self.head_blob())
+
+    def test_cv3_converging_content_edit_is_unflipped_agreed_still_flips(self):
+        """AC-CV-3: a `converging` document's content edit is committed unflipped
+        (status and `last-reviewed` unchanged, no FLIPPED diagnostic), while an
+        `agreed` document's content edit still flips to `in-review` in the same
+        commit, in the same repository — the two cases differ on status alone.
+        """
+        self.seed_agreed()
+        converging_path = "policies/converging-sample.md"
+        write(self.repo, converging_path, converging_doc(body=BODY_V1))
+        commit(self.repo, "seed converging doc", env=self.env)
+
+        write(self.repo, TARGET, agreed_doc(body=BODY_V2))
+        write(self.repo, converging_path, converging_doc(body=BODY_V2))
+        stage(self.repo, TARGET, converging_path, env=self.env)
+
+        rc, out, err = self.check("--staged")
+        self.assertEqual(rc, 0, "stdout=%r stderr=%r" % (out, err))
+
+        agreed_staged = self.index_blob(TARGET)
+        self.assertIn("status: in-review", agreed_staged)
+        self.assertNotIn("status: agreed", agreed_staged)
+        self.assertIn("FLIPPED %s" % TARGET, out + err)
+
+        converging_staged = self.index_blob(converging_path)
+        self.assertIn("status: converging", converging_staged)
+        self.assertIn("last-reviewed: null", converging_staged)
+        self.assertNotIn("FLIPPED %s" % converging_path, out + err)
 
     def test_cf5_frontmatter_only_change_is_never_flipped(self):
         """AC-CF-5: a status-transition-shaped change is exempt from the flip.
