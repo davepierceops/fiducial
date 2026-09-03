@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/remote-write-verification-policy-cycle-7.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 ---
 
@@ -34,7 +34,7 @@ failure as another retry.
   mid-session).
 - **Not qualifying:** auth/permission errors; not-found errors (almost always a
   wrong path or ref); any failure from the agent's own malformed call —
-  including a write that lands but commits wrong content (Known gap, below).
+  including a write that lands but commits wrong content (rule 3).
 
 **Counting.** Timed-out-but-confirmed-landed is not a failure; it resets the
 count. Timed-out-and-confirmed-not-landed is one. A read-back that itself times
@@ -45,15 +45,65 @@ The detector is kept for what it **detects**: a two-failure fire is how
 contention between concurrent sessions gets noticed at all, and that diagnostic
 value holds whatever the underlying cause turns out to be.
 
-## Known gap — landing is verified, content is not
+### 3. Landing and content are verified separately
 
-These rules verify that a write **landed**. They do not verify that what landed
-is what was intended. The mirror failure is a write whose response is truthful
-and whose commit is real, because the *request* was wrong: a call carrying a
-placeholder string as its content parameter replaced a ~64KB file on the default
-branch with 19 bytes. Landing-verification alone would have confirmed the
-destroyed file as a successful commit; what caught it was the response `size`
-field.
+Rules 1 and 2 verify that a write **landed**. Before reporting any
+tool-mediated write, also verify that what landed is what was intended:
 
-Closing this gap means a content-expectation check alongside the landing check.
-It is **not** specified here — it is open work.
+- compare the response's `size` field against the expected size of the content
+  sent;
+- read the landed commit's stats — files changed, insertions, deletions —
+  against the expected blast radius of the change.
+
+A mismatch on either is reported as a failed write, whatever the response said.
+The case this catches: a call carrying a placeholder string as its content
+parameter replaced a ~64KB file on the default branch with 19 bytes. The
+response was success-shaped, the commit was real, and only the `size` field
+disagreed with expectation.
+
+### 4. A connector write is a create or a small verified diff
+
+A **connector write** is a write made from a decision session through a tool
+that commits directly to the remote, with no working tree. A connector write
+creates a file or applies a small diff verified under rule 3. An existing
+governed document is never regenerated whole over the connector. A change too
+large for a small verified diff goes to an execution session against a working
+tree.
+
+### 5. A connector write of an in-scope file sets its frontmatter explicitly
+
+The pre-commit hook does not run on a connector write. Any connector write of a
+file in the document metadata policy's in-scope set — the set that policy's
+Scope section names as frontmatter-required — sets every frontmatter field
+explicitly, to the values that policy requires after the edit. Before the pull
+request merges, an execution session runs `bin/check-frontmatter --all` on the
+branch.
+
+### 6. After a timeout, read state before re-creating
+
+After a timeout or an unconfirmable response on any write, read the pull
+request or commit state before re-creating anything. The re-create is
+conditional on what the read shows: landed — continue from the landed state;
+not landed — re-create once; the read itself fails — state is unknown, the
+case rule 2's counting names. This is the per-write procedure rule 2's count is
+built on.
+
+### 7. A reported tool failure is classified before any remedy
+
+Treat a reported tool failure as a claim by the session reporting it, not as
+telemetry. Classify it before choosing any remedy, and let the remedy follow
+the class:
+
+- **Lost response** — the call may have reached the remote, and the write may
+  have landed. Remedy: rule 6.
+- **Never sent** — the call did not reach the remote; nothing landed. Remedy:
+  send it again, counted under rule 2.
+- **Caller error** — a malformed call, a wrong path, a wrong ref. Remedy:
+  correct the call. A corrected call is a new write, not a retry.
+- **Tool defect** — a well-formed call, and the tool did something other than
+  what it reported. Remedy: stop and report; the session does not choose a
+  workaround.
+
+Lost response and never sent are what rule 2 counts. Caller error is what it
+does not. A tool defect is a fact about the environment on its first instance
+and needs no second.
