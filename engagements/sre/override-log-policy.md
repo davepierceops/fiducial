@@ -1,7 +1,7 @@
 ---
 status: agreed
 last-reviewed: reviews/sre-override-log-policy-cycle-2.md @ cd7db71
-audience: [assistant, cartographer, critic, implementer, human]
+audience: [assistant, cartographer, sre-critic, implementer, human]
 ---
 
 # Policy: Override Log

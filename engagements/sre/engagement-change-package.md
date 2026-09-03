@@ -1,7 +1,7 @@
 ---
 status: agreed
 last-reviewed: reviews/sre-engagement-change-package-cycle-3.md @ cd7db71
-audience: [implementer, critic, assistant, human]
+audience: [implementer, sre-critic, assistant, human]
 ---
 
 # Skill: Engagement Change Package

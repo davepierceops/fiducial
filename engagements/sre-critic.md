@@ -1,7 +1,7 @@
 ---
 status: agreed
 last-reviewed: reviews/critic-cycle-3.md @ cd7db71
-audience: [critic, human]
+audience: [sre-critic, human]
 session: execution
 ---
 

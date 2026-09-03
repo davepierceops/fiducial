@@ -1,7 +1,7 @@
 ---
 status: agreed
 last-reviewed: reviews/converging-model-cycle-2.md @ 96a18367a5d316ecc29032e5692bda60b314eede
-audience: [spec-reviewer-agent, context-quality-reviewer, reviewer-agent, skeptic-risk-agent, release-manager-agent, chief-of-staff, critic, human]
+audience: [spec-reviewer-agent, context-quality-reviewer, reviewer-agent, skeptic-risk-agent, release-manager-agent, chief-of-staff, sre-critic, human]
 ---
 
 # Skill: Review Artifact
