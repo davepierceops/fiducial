@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/conversation-retro-cycle-4.md @ ac286022bb01a0f04e5c402f6b9e379213ff5030
+status: in-review
+last-reviewed: null
 audience: [all-decision-roles, human]
 ---
 
@@ -10,7 +10,7 @@ This procedure runs in a decision session.
 
 ## Purpose
 
-Produce one retrospective per LLM conversation about a software project,
+Produce a retrospective of an LLM conversation about a software project,
 in a fixed schema, grounded in evidence from that conversation. The
 retrospectives form a per-project corpus for later synthesis into
 methodology changes and published writing.
@@ -21,16 +21,7 @@ lighter path it would otherwise be eligible for.
 
 ## Use when
 
-Each route below runs this procedure unchanged. The routes are not the whole
-of when a retro is owed: the Decision Layer's rule 12 states that obligation,
-the condition under which a session may skip it, and the ordering when a baton
-is also owed. Rule 12 governs whether a retro is owed; this document governs
-how to produce one.
-
-- Dave directs a retro explicitly.
-- The Chief of Staff recommends ending the session and Dave acks.
-- The conversation is closing — Dave signals the end of the chat. Run the
-  retro.
+Run this procedure when Dave directs a retro explicitly.
 
 ## Principles
 
@@ -155,7 +146,7 @@ inputs to a future review cycle — not as decisions>
 
 ## Output
 
-- One Markdown file per conversation, handed in the chat that produced it:
+- One Markdown file per retro, handed in the chat that produced it:
   delivered as a downloadable artifact where the client supports it;
   otherwise exactly one fenced Markdown block containing the entire document
   and nothing else.
