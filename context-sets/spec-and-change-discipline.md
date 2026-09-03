@@ -1,6 +1,6 @@
 ---
-status: in-review
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/chief-of-staff-cycle-7.md @ 0c1a51dcede20c823c4cea85796fb362cfb9f2a8
 audience: [all-roles, human]
 order: 4
 depends-on: []
