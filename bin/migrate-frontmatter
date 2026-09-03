@@ -20,7 +20,7 @@ USAGE_ERROR = cli.EXIT_USAGE
 
 #: Legacy status values the policy also defines. Anything else is a judgment
 #: call: the transform never guesses, and never proposes `agreed`.
-STATUS_MAP = {"draft": "draft", "in-review": "in-review"}
+STATUS_MAP = {"draft": "draft", "in-review": "in-review", "converging": "converging"}
 
 STATUS_LINE_RE = re.compile(r"^Status:\s*(\S+)")
 SEARCH_WINDOW = 20

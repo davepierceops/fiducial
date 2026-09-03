@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import re
 
-STATUSES = {"draft", "in-review", "agreed", "superseded", "deprecated"}
+STATUSES = {"draft", "in-review", "converging", "agreed", "superseded", "deprecated"}
 EXCLUDED_FIELDS = {"version", "last-modified", "author", "changelog"}
 #: The three reserved `audience:` values the metadata policy names. Kept in
 #: step with `bin/bundle`'s `RESERVED_AUDIENCES`, which reads the same policy
@@ -280,9 +280,10 @@ def validate(doc, *, path=None, role_slugs=None, grandfathered=False):
 
     review = fields.get("last-reviewed")
     if "last-reviewed" not in fields:
-        findings.append(
-            Finding("missing-last-reviewed", "`last-reviewed` is required (null is allowed)")
-        )
+        if status != "converging":
+            findings.append(
+                Finding("missing-last-reviewed", "`last-reviewed` is required (null is allowed)")
+            )
     elif review is not None:
         if not isinstance(review, str) or not re.match(LAST_REVIEWED_RE, review):
             findings.append(
