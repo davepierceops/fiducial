@@ -178,6 +178,18 @@ class TestPlan(MigrateTestCase):
             self.block_for(plan, LEGACY_IN_REVIEW), r"(?m)^- status: in-review\s*$"
         )
 
+    def test_cv7_converging_maps_on_the_same_footing_as_draft_and_in_review(self):
+        """AC-CV-7: STATUS_MAP admits `converging` as a preserving mapping, the
+        same as `draft` and `in-review` — expressed against the tool's real
+        input form, a legacy `Status: converging` body line."""
+        path = "policies/legacy-converging.md"
+        write(self.repo, path, legacy_doc("Legacy Converging", "converging"))
+        commit(self.repo, "add legacy converging doc", env=self.env)
+        self.doc_paths.append(path)
+
+        block = self.block_for(self.plan_text(), path)
+        self.assertRegex(block, r"(?m)^- status: converging\s*$")
+
     def test_mg3_unmapped_legacy_values_become_todo_with_a_reason(self):
         """AC-MG-3: `stable` has no policy mapping, so it becomes TODO."""
         block = self.block_for(self.plan_text(), LEGACY_STABLE)

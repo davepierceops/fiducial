@@ -465,6 +465,19 @@ def in_review_doc(body=DEFAULT_BODY, audience=("all-roles",)):
     )
 
 
+def converging_doc(body=DEFAULT_BODY, audience=("all-roles",)):
+    """AC-CV-*: a `converging` document — no `last-reviewed` (DEC-000360)."""
+    return (
+        frontmatter_block(
+            status="converging",
+            last_reviewed=None,
+            audience=list(audience),
+            superseded_by=None,
+        )
+        + body
+    )
+
+
 def legacy_doc(title="Legacy Document", status_word="stable", body_extra=""):
     """A pre-frontmatter document carrying a body `Status:` line."""
     return "# %s\n\nStatus: %s\n\nSome legacy prose.\n%s" % (title, status_word, body_extra)
