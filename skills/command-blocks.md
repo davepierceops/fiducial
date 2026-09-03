@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/command-blocks-cycle-6.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 ---
 
@@ -45,6 +45,11 @@ exit), so nothing downstream may act on the tree the sync produced without that
 exit status having been checked. An unverified sync followed by unconditional
 work is how a stale tree gets reported as current.
 
+**A block never pushes the default branch.** It pushes a branch, and the
+decision session merges that branch through a pull request. The ground is the
+Commit and Change Control policy: a change lands through a pull request, and
+branch protection on the default branch rejects a direct push.
+
 **The block must be copyable in the surface that delivers it.** A block the
 reader cannot copy whole is not a paste block at all — a paste block is copied
 whole and pasted whole, and a block that cannot be copied whole fails that
@@ -55,6 +60,12 @@ known to break the surface in use.
 
 *Known instance, not the rule:* heredocs (`<<'EOF'`) suppress the desktop copy
 control. Prefer repeated `-m` flags for multi-paragraph commit messages.
+
+**A paste block never contains a `` ``` `` fence.** The delivery surface reads
+the first inner `` ``` `` as the block's end and renders two blocks with loose
+text between them. A block nested inside a paste block is fenced with `~~~` and
+is preceded by a one-line fence note stating that the inner fence is `~~~` and
+why.
 
 **Send one block per turn when a human must relay output between blocks.** Wait
 for the output, then compose the next. A second block written before the first
@@ -78,11 +89,14 @@ multi-command block.
 asked above the block, not a token the reader is expected to substitute.
 
 **State the expected output in one line below the block**, and where the block
-is destructive, state its blast radius above it.
+is destructive, state its blast radius above it. The expected-output line
+states what was observed in the environment the block will run in, or is
+qualitative — what to look for, with no number. A count measured in any other
+environment is not an expectation.
 
 ## Conformance criteria
 
-Every command block satisfies all nine. An untested block is still a command
+Every command block satisfies all eleven. An untested block is still a command
 block, and still non-conformant.
 
 - Every command is valid and non-harmful.
@@ -95,11 +109,16 @@ block, and still non-conformant.
 - Any command producing evidence captures its output to a named path, where
   *evidence* is output cited later or leaving the session.
 - The block renders with its delivery surface's copy control intact.
+- The block contains no `` ``` `` fence; a nested block is fenced with `~~~`
+  and preceded by a one-line fence note.
 - The block cannot terminate the shell it is pasted into — no construct with
   that effect. Known instances: `exit`, `exec`, `logout`, `|| { …; exit; }`,
   `set -e`. Preconditions fall through via `if…elif…else…fi`.
 - Every sync or remote command names its remote and ref, and its exit status is
   checked before anything downstream acts on the result.
+- No command pushes the default branch; a push names a branch, and the branch
+  reaches the default branch through a pull request.
 - The block has one purpose and carries no placeholders.
-- The expected output is stated in one line below the block, and the blast
-  radius above it where the block is destructive.
+- The expected output is stated in one line below the block — observed in the
+  environment the block will run in, or qualitative, with no count measured
+  elsewhere — and the blast radius above it where the block is destructive.
