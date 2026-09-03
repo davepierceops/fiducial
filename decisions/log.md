@@ -594,3 +594,8 @@ Convergence section contradicting the metadata policy, the operating model,
 and the Test Designer role. Dave refused an exception-shaped fix: the rules
 say convergence is how it is done, and the three texts yield. Landed by
 docs/cycles/converging-model-editor-directive.md as one branch-scoped cycle.
+
+## DEC-000370 — The interface contract has a source per stage
+Date: 2026-09-02
+Decision: The spec's convergence suite takes its interface contract from the TRD's stated interface list — the list the Spec Reviewer's TRD check confirms complete. A unit's tests, at the per-change stage, take theirs from the architecture summary. The discipline context set names both sources, each with its stage.
+Context: reviews/converging-model-cycle-2.md N-6: under DEC-000360 the spec's suite is written at stage 3, before any architecture summary exists at stage 6, and context-sets/spec-and-change-discipline.md named only the architecture summary. Ruled 2026-09-02; landed by docs/cycles/chief-of-staff-cycle-7-editor-directive.md SD-1, agreed at reviews/chief-of-staff-cycle-7.md.
