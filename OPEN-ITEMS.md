@@ -1362,7 +1362,7 @@ The `retros/` untracked files in the main clone were not touched.
 - **Retire `davepierceops/writing`** after the agreements above land and Dave confirms nothing is missing. Its `pieces/converging-on-intent/` directory (arc, outline, six pass reports at `387bde6`) is piece record, not methodology, and is Dave's to keep outside fiducial per DEC-000250.
 - **Candidate Core line** (later cycle): a role that names a document absent from its context asks for it before acting on what it governs, and never proceeds from memory of it.
 - **`voice-template.md` audience is `[human]`**; how it reaches a writing bundle is the bundle-system PRD's decision (DEC-000260).
-- **`review-artifact.md` lists `critic` in its audience**; that slug now resolves to `roles/critic.md`. Whether the review-artifact skill should reach the Critic at all is open — the Critic emits comments in a document, not a review artifact.
+- **`review-artifact.md` lists `critic` in its audience**; that slug now resolves to `roles/critic.md`. Whether the review-artifact skill should reach the Critic at all is open — the Critic emits comments in a document, not a review artifact. Closed by tagging 2026-09-03 (pull request #309): the value now reads `sre-critic`, so the skill no longer reaches the writing Critic; see the Queued-next tagging entry for the basis.
 
 ---
 
@@ -1606,7 +1606,17 @@ findings. Observation CR5-3 for the metadata policy's cycle, recorded on that
 entry.) Tagging package (bundle-system
 PRD): the sre-critic rename and engagement retags per DEC-000350;
 skills/outline.md human-value removal per DEC-000340; order: on the
-copy-editor and critic role files (cycle-1 O-4). After the rename lands,
+copy-editor and critic role files (cycle-1 O-4). (DONE 2026-09-03 — pull request #309, merge commit
+42e34ba5054513cf2b9f14e2b5e666f8de73eecb; all three rulings landed,
+frontmatter-only, no document flipped, bin/tests/run OK. Bundles after the
+retag: critic 21 files, sre-critic 23 — expected until the selection build
+lands. skills/review-artifact.md's audience value critic was retagged
+sre-critic as an inferred extension of DEC-000350 — the file cites the
+review-artifact schema, which the SRE critic uses, and AC-BS-4 excludes
+skills from the writing Critic's set; Dave told, no objection, not
+separately ruled. Rider for engagements/sre-critic.md's next cycle: its H1
+still reads "# Role: Critic" — the package left the body untouched by
+instruction.) After the rename lands,
 one PRD conform touch folds the two wording residues from pull request
 #282 (the six-further-files count includes the role file itself; §1's
 five measured ways against §5's seven baseline paragraphs); and
