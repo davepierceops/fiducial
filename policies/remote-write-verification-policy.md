@@ -1,6 +1,6 @@
 ---
-status: in-review
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/remote-write-verification-policy-cycle-8.md @ 21e0c1e729a689bf7e4687f7e5910f86f972ac48
 audience: [all-roles, human]
 ---
 
