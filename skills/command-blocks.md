@@ -1,6 +1,6 @@
 ---
-status: in-review
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/command-blocks-cycle-7.md @ 1c86595f0bcd89c6ddb6ae38ed637f1e5b180d8c
 audience: [all-roles, human]
 ---
 
