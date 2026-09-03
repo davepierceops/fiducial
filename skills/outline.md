@@ -1,7 +1,7 @@
 ---
 status: agreed
 last-reviewed: reviews/expedited-log.md @ cfe9977a1c88d91b17d7bb05f76c2ccc513edf64
-audience: [writer, human]
+audience: [writer]
 ---
 
 # Skill: Outline

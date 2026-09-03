@@ -1,7 +1,7 @@
 ---
 status: agreed
 last-reviewed: reviews/working-with-dave-cycle-5.md @ cd7db71
-audience: [assistant, cartographer, critic, implementer, human]
+audience: [assistant, cartographer, sre-critic, implementer, human]
 order: 10
 ---
 

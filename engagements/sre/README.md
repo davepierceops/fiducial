@@ -1,7 +1,7 @@
 ---
 status: agreed
 last-reviewed: reviews/sre-README-cycle-2.md @ cd7db71
-audience: [assistant, cartographer, critic, implementer, human]
+audience: [assistant, cartographer, sre-critic, implementer, human]
 ---
 
 # Engagement Pack
