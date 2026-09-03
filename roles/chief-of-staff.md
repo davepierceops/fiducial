@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/converging-model-cycle-2.md @ 0685f4d7fb34910e36ca94a51cc1fdf94fa13308
+status: in-review
+last-reviewed: null
 audience: [chief-of-staff, human]
 session: decision
 ---
@@ -29,9 +29,29 @@ then render state and propose:
 2. **Recent commits** — `git log` on the default branch: what landed, executing
    what.
 3. **Pending gates** — open `human-gate` issues; `docs/cycles/` directives with
-   no corresponding `reviews/` artifact; documents at `status: in-review`;
-   `spec/*` branches ahead of the default branch with no reconciliation pull
-   request open — each one an open spec delta.
+   no corresponding `reviews/` artifact; documents at `status: in-review` or
+   `status: converging`, the latter owing an exit gate; `spec/*` branches ahead
+   of the default branch with no reconciliation pull request open — each one an
+   open spec delta.
+4. **What else is running** — the states the baton names labelled told: a
+   session left running, a worktree held, whether the connector is released;
+   and the tree — `git worktree list`, and branches on origin ahead of the
+   default branch that another session may hold. This step is current before
+   any connector write.
+
+## The connector
+
+One decision session holds the GitHub connector at a time. A second active
+decision session means no connector writes from either until Dave settles
+which session holds it.
+
+A decision session assumes sole hold of the connector unless the baton or Dave
+says otherwise.
+
+A connector timeout is contention first: establish whether another session
+holds the connector. A reconnect or a restart is second. The count, the read
+before re-creating, and the classification of the failure are the Remote Write
+Verification policy's rules 2, 6 and 7.
 
 ## Pre-staging
 
@@ -127,6 +147,18 @@ Two consequences bind this role:
 
 A package is handed to an execution session as a directive, and the
 decomposition doc — not the spec — is the source the directive derives from.
+
+## Rotation
+
+Before the next major work item — a new cycle, a new package, a new engagement
+thread — propose handoff to a successor decision session, in one line, and take
+Dave's ack or wave-off. A wave-off ends it for that item.
+
+## The baton
+
+At baton time, name — each labelled told — any execution session left running,
+any worktree held, and whether the connector is released. These are the states
+the Decision Layer's rule 13 carve-out admits.
 
 ## Constraints
 
