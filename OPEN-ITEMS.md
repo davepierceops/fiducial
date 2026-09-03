@@ -1052,6 +1052,12 @@ take the full reviewer cycle:
   agreement covers exactly one in-scope document") lacks the F-10 clause the
   expedited path's sentence carries; fold in with F-10 at the policy's next
   cycle.
+- CR5-3 (reviews/conversation-retro-cycle-5.md, observation): the sentence
+  "a document may exclude its own revisions from this path, and the retro
+  skill does" is false at skills/conversation-retro.md @ 649809aa — the skill
+  excludes retro-surfaced methodology revisions from lighter paths, not its
+  own revisions; what binds the skill's revisions to the full cycle is this
+  policy's condition 3 list. Correct the sentence at the policy's next cycle.
 
 ## bin/aimeta/expedited.py is path-blind (benign under the single-document rule)
 
@@ -1370,7 +1376,7 @@ The `retros/` untracked files in the main clone were not touched.
 4. **Decision Layer 5 or the Chief of Staff role (T08).** The baton's ordered next-step list is Dave's ruling; the successor session's first response dispatches item one and does not ask whether to.
 5. **Decision Layer register (T16, T17).** "Say what the item is before the choice" and "y/n where possible" — repeated across sessions, in no governed text.
 6. **`skills/spec-review-cycle.md` (T09).** A re-gate disposes findings and takes no new decisions; the agreement bar and gate cadence are stated at loop start; findings below the reviewed document's stage are routed to the next stage's question list, not filed as blockers. LANDED 2026-09-02 — cycle 11 (reviews/spec-review-cycle-cycle-11.md) closed into the converging-model branch; agreed at reviews/converging-model-cycle-2.md, reviewed document SHA 0cc7b8dd189be9eff24af083b1fc8c1540e6ff2e.
-7. **`skills/command-blocks.md` (T19).** No ``` fence inside a paste block — inner fences are `~~~` with a fence note; an expected-output line is observed in the environment the block runs in, or is qualitative; a block never pushes the default branch.
+7. **`skills/command-blocks.md` (T19).** No ``` fence inside a paste block — inner fences are `~~~` with a fence note; an expected-output line is observed in the environment the block runs in, or is qualitative; a block never pushes the default branch. LANDED 2026-09-03 — cycle 7 (CB-1, CB-2, CB-3; criteria nine → eleven), pull requests #302–#304; agreed at reviews/command-blocks-cycle-7.md, reviewed document SHA 1c86595f0bcd89c6ddb6ae38ed637f1e5b180d8c, verdict ready. Riders to the skill's next cycle, recorded in the artifact: CB7-1, the never-push rule says "the decision session merges" — narrower than the commit and change control policy, which grants routine open-and-merge to agents without naming a session kind; Dave to inspect, not yet ruled. CB7-2, the one-block-per-turn rule has no conformance criterion, and criteria 1 and 3 have no body rule — predates cycle 7.
 8. **`skills/directive-authoring.md`, after the consolidation cycle (T20, T21, T22).** Reviewer Fix text carried verbatim unless the record states the departure; every fix names its seam and the sweep that checks it; position-bearing derived artifacts get a mechanical re-check; dispositions are intent — the executor verifies against the counterparty artifact and discloses deviation.
 9. **Trivial-additive fast lane (T25).** An owner-approved, additive, tool-verifiable-green change that neither the doc-only nor the expedited path covers: scope it or refuse it.
 10. **Session rotation and the autonomous run (T23).** A stated trigger for the Chief of Staff to propose handoff and take an ack; a named skill for the autonomous overnight run if it is to recur — two instances exist as its evidence. First half LANDED 2026-09-02 in Chief of Staff cycle 7 (CS-5, the rotation trigger); the autonomous-run skill remains open.
@@ -1411,7 +1417,11 @@ section is the record. The follow-up numbers below are the section above's.
    (reviews/decision-layer-cycle-15.md; reviewed document SHA
    999dc9a1cfa8aa695e4a324f4cbd4c5320f200ec). Rider for the next Decision
    Layer cycle: cycle 14's DL-2, the pane named inconsistently across
-   documents. Follow-ups 3, 4, 5, and 11 closed.
+   documents; and the command-blocks pointer — the rule binding decision
+   sessions to skills/command-blocks.md was deleted at 3e89a21, and nothing
+   in the Decision Layer now points a decision session at that skill
+   (observed by the Reviewer, reviews/command-blocks-cycle-7.md cross-check
+   text). Follow-ups 3, 4, 5, and 11 closed.
 2. **Remote-write verification policy cycle** (`policies/remote-write-verification-policy.md`).
    Four rules: the content-expectation check (size and stats, closing the
    policy's own Known gap); connector writes are creates or small verified
@@ -1584,12 +1594,16 @@ reviewed document SHA 0cc7b8dd189be9eff24af083b1fc8c1540e6ff2e), the
 remote-write policy cycle (DONE 2026-09-02 — cycle 8, ruling 2 above), the Decision Layer cycle (DONE 2026-09-01, human
 review with Dave, agreed at cycle 15, reviews/decision-layer-cycle-15.md;
 reviewed document SHA 999dc9a1cfa8aa695e4a324f4cbd4c5320f200ec), the
-command-blocks cycle (follow-up 7, three changes), the Chief of Staff role
+command-blocks cycle (DONE 2026-09-03 — cycle 7, follow-up 7 above), the Chief of Staff role
 cycle (DONE 2026-09-02 — cycle 7, ruling 4 above), and skills/conversation-retro.md's conforming revision — drop the
 chat-close auto-run and the rule-12 standing-obligation deference, per
 DEC-000310; full cycle, ineligible list. Rider from pull request #273: the
 skill's 'routes' reuses the Lexicon's directive-sense term in another
-sense; conform. Tagging package (bundle-system
+sense; conform. (DONE 2026-09-03 — cycle 5, CR5-1 and CR5-2, both landed; pull
+requests #305–#307; agreed at reviews/conversation-retro-cycle-5.md, reviewed
+document SHA 649809aa28b24f40af38441b93f945dde103cd7e, verdict ready, zero
+findings. Observation CR5-3 for the metadata policy's cycle, recorded on that
+entry.) Tagging package (bundle-system
 PRD): the sre-critic rename and engagement retags per DEC-000350;
 skills/outline.md human-value removal per DEC-000340; order: on the
 copy-editor and critic role files (cycle-1 O-4). After the rename lands,
