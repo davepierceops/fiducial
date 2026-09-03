@@ -88,7 +88,9 @@ first validation before it gates.
 
 ---
 
-## MCP write verification must cover content, not just landing — a success-shaped response can commit malformed content
+## ~~MCP write verification must cover content, not just landing — a success-shaped response can commit malformed content~~
+
+**RESOLVED** 2026-09-02 by remote-write verification policy cycle 8 (pull requests #295–#297; agreed at reviews/remote-write-verification-policy-cycle-8.md, reviewed document SHA 21e0c1e729a689bf7e4687f7e5910f86f972ac48): rule 3 makes the content check — response size against expectation, landed-commit stats against the expected blast radius — a rule, with this entry's incident as its example.
 
 **Source:** wne-crm OPEN-ITEMS update, 2026-08-03 (chat cos session).
 A `create_or_update_file` call intended to append one item to
@@ -865,7 +867,9 @@ is retired or narrowed.
 
 ---
 
-## Write-verification covers landing, not content
+## ~~Write-verification covers landing, not content~~
+
+**RESOLVED** 2026-09-02 by remote-write verification policy cycle 8, as the entry above: the policy's Known gap section is gone and rule 3 states the content check.
 
 **Source:** Trivium, 2026-08-06, on moving the policy out of `vendors/`.
 Duplicates the substance of the success-shaped-response item above; recorded
@@ -1261,6 +1265,8 @@ directive-tooling TRD lines ~808-810 quote old Decision Layer rule 14
 verbatim — the TRD's own B3/G6 defect class; recorded as DL-4 in
 reviews/decision-layer-cycle-14.md.
 
+Riders from the 2026-09-02 session-2 directives, for bin/directive and the skeleton (skills/directive-invariants.md): (a) the FIRST ACT region says "before touching any other file" and precedes the disposition, so an executor wrote the directive commit on local main and hit branch protection — the region must say "create the worktree named in the disposition below first, then write"; (b) cycle mode appends " Directive" to --title, producing "Directive Directive" when the title already ends in the word; (c) --cycle N alone collides with the generic docs/cycles/cycle-N-directive.md already present — the --name selector avoids it, and the collision is the same class as the candidate M-rule above; (d) the skeleton has no Cleanup region, so the worktree-removal line is hand-written into every directive. Authoring rule, for the same skill: a directive must not state a stop condition on a fact it has only been told — a told count of untracked files stopped an executor when a retro appeared in the clone mid-run. Sandbox lore for the same queue: heredoc-fed while-read loops lose PATH; zsh does not word-split unquoted variables; a bare echo of equals signs is refused by zsh; an ~/.ssh deny rule false-matches a cd-relative path containing roles/chief-of-staff.md.
+
 ---
 
 ## ~~Convergence process — canonization owed~~
@@ -1359,7 +1365,7 @@ The `retros/` untracked files in the main clone were not touched.
 **Source:** retros/retro-synthesis-20260831T163000.md @ b615d0d04da9421941c47fd789d3690ad7849203, the first synthesis over this repository's `retros/` (29 files, 33 deduplicated topics, each with count, most recent session, and state against `main` at 37c6818). Topic numbers below are that document's. Each item is a candidate for a review cycle on the named document; none is decided. The prior retrospective session, 2026-08-05, ran over wne-crm's corpus; its board is `retros/retro-triage-board.md` and its action items have no recorded disposition (item 14).
 
 1. **`skills/conversation-retro.md` — one cycle, five changes (T17, T18).** The retro reads nothing from and writes nothing to any remote — the file is handed in chat, placement is a separate command-block step from a decision session; `date:` is the session's last interaction, derived from the last dated artifact the session touched, with `generated:` added and the filename timestamp kept as the opaque handle; a synthesis lists the retro filenames it covers, so unsynthesized retros are computed; a prompt for standing preferences repeated across sessions, held separate from in-session corrections (the 08-05 board's AI-15, never landed). The document is on the expedited path's ineligible list; full gate. LANDED 2026-09-01 — agreed at cycle 4, reviews/conversation-retro-cycle-4.md.
-2. **`roles/chief-of-staff.md` read-sequence — "what else is running" (T05).** A check for other chats holding the connector and other worktrees before any connector write; and the constraint itself — one chat holds GitHub at a time — stated where decision sessions read it.
+2. **`roles/chief-of-staff.md` read-sequence — "what else is running" (T05).** A check for other chats holding the connector and other worktrees before any connector write; and the constraint itself — one chat holds GitHub at a time — stated where decision sessions read it. LANDED 2026-09-02 in Chief of Staff cycle 7 (CS-1, CS-2, CS-3).
 3. **Decision Layer 13 vs the 2026-08-24 recovery retro (T08).** Rule 13 says a baton carries "pointers and state"; the retro says a baton carries never computed state, which is re-read from the repo. Two governed-adjacent sources disagree; Dave's ruling, then the losing text moves.
 4. **Decision Layer 5 or the Chief of Staff role (T08).** The baton's ordered next-step list is Dave's ruling; the successor session's first response dispatches item one and does not ask whether to.
 5. **Decision Layer register (T16, T17).** "Say what the item is before the choice" and "y/n where possible" — repeated across sessions, in no governed text.
@@ -1367,7 +1373,7 @@ The `retros/` untracked files in the main clone were not touched.
 7. **`skills/command-blocks.md` (T19).** No ``` fence inside a paste block — inner fences are `~~~` with a fence note; an expected-output line is observed in the environment the block runs in, or is qualitative; a block never pushes the default branch.
 8. **`skills/directive-authoring.md`, after the consolidation cycle (T20, T21, T22).** Reviewer Fix text carried verbatim unless the record states the departure; every fix names its seam and the sweep that checks it; position-bearing derived artifacts get a mechanical re-check; dispositions are intent — the executor verifies against the counterparty artifact and discloses deviation.
 9. **Trivial-additive fast lane (T25).** An owner-approved, additive, tool-verifiable-green change that neither the doc-only nor the expedited path covers: scope it or refuse it.
-10. **Session rotation and the autonomous run (T23).** A stated trigger for the Chief of Staff to propose handoff and take an ack; a named skill for the autonomous overnight run if it is to recur — two instances exist as its evidence.
+10. **Session rotation and the autonomous run (T23).** A stated trigger for the Chief of Staff to propose handoff and take an ack; a named skill for the autonomous overnight run if it is to recur — two instances exist as its evidence. First half LANDED 2026-09-02 in Chief of Staff cycle 7 (CS-5, the rotation trigger); the autonomous-run skill remains open.
 11. **Files handed to Dave (T26).** `~/Downloads`, named to sort to the top; long documents presented rendered and navigable. One line in the Decision Layer; today it lives in memory only.
 12. **Tooling-facts artifact (T30, T04).** A dated, falsifiable record of connector and sandbox behaviour — or the decision that the bundle-system PRD's lore-home requirement is that artifact. `git push -u` in the executor sandbox lands the ref, then fails only the upstream-config write (`.git/config`: Operation not permitted); push without `-u`. Connector whole-file writes drift when content is retyped: precompute the target blob locally and compare after the write; one caught instance 2026-09-01 (a one-word regression, corrected before merge). Process substitution (<(...)) is refused by the executor sandbox; use temp files. Observed by two executors 2026-09-02.
 13. **SLO gate hole (T29, open since 2026-08-05).** The consequential class and the change package reference Top K journeys and SLO budgets that nothing defines or maintains, so a gate criterion cannot fire: define them or remove the criterion and the field.
@@ -1417,7 +1423,14 @@ section is the record. The follow-up numbers below are the section above's.
    tool failure is classified — lost response, never dispatched, caller
    error, tool defect — before any remedy (T30). The 2026-08-03
    success-shaped-response entry and the 2026-08-06 landing-not-content entry
-   fold into this cycle and close when it lands.
+   fold into this cycle and close when it lands. LANDED 2026-09-02 — cycle 8,
+   five rules added (rules 3–7); agreed at
+   reviews/remote-write-verification-policy-cycle-8.md, reviewed document SHA
+   21e0c1e729a689bf7e4687f7e5910f86f972ac48, verdict ready-with-findings.
+   Riders to the policy's next cycle: RW8-1, rule 7's tool-defect class
+   overlaps the nothing-landed case that "never sent" counts — narrow tool
+   defect to exclude it; RW8-2, "small verified diff" carries no bound (a
+   candidate ruling, not a defect).
 3. **Spec-review-cycle skill cycle** (follow-up 6 + convergence, T09, T20).
    A re-gate disposes findings and takes no new decisions — a new decision
    opens its own cycle; the agreement bar and gate cadence are stated at loop
@@ -1438,7 +1451,20 @@ section is the record. The follow-up numbers below are the section above's.
    timeout as contention first, restart second; the baton names any session
    left running, labelled told; and the rotation trigger — the Chief of Staff
    proposes handoff before the next major work item, one line, taking an ack.
-   Follow-ups 2 and 10's first half close into this cycle.
+   Follow-ups 2 and 10's first half close into this cycle. LANDED 2026-09-02 —
+   cycle 7, two documents on one branch (pull requests #298–#300; agreed at
+   reviews/chief-of-staff-cycle-7.md; role reviewed at
+   00bdd4648f8e0efdc687886b341c1ef71b259393, context set at
+   0c1a51dcede20c823c4cea85796fb362cfb9f2a8). N-7 closed in the role; N-6
+   closed in context-sets/spec-and-change-discipline.md under DEC-000370.
+   Ruling owed, Dave's: CS7-1 — the role says a connector timeout is
+   contention first, the remote-write policy's rule 2 says a single failure
+   is noise and contention is what the second failure detects; one sentence
+   in one document yields, which one is the ruling. Rider to the role's next
+   cycle: CS7-2, "the states rule 13's carve-out admits" closes a class
+   rule 13 leaves open — "among". Observation on the context set: O-8,
+   stage-7 "take theirs from the architecture summary" against the operating
+   model's "selected"; a reconciling reading is stated in the artifact.
 
 **Riders recorded on existing entries and queues:**
 
@@ -1555,11 +1581,11 @@ packages remain queued.), the spec-review cycle (DONE 2026-09-02 —
 cycle 11, reviews/spec-review-cycle-cycle-11.md, closed into the
 converging-model branch; agreed at reviews/converging-model-cycle-2.md,
 reviewed document SHA 0cc7b8dd189be9eff24af083b1fc8c1540e6ff2e), the
-remote-write policy cycle, the Decision Layer cycle (DONE 2026-09-01, human
+remote-write policy cycle (DONE 2026-09-02 — cycle 8, ruling 2 above), the Decision Layer cycle (DONE 2026-09-01, human
 review with Dave, agreed at cycle 15, reviews/decision-layer-cycle-15.md;
 reviewed document SHA 999dc9a1cfa8aa695e4a324f4cbd4c5320f200ec), the
 command-blocks cycle (follow-up 7, three changes), the Chief of Staff role
-cycle, and skills/conversation-retro.md's conforming revision — drop the
+cycle (DONE 2026-09-02 — cycle 7, ruling 4 above), and skills/conversation-retro.md's conforming revision — drop the
 chat-close auto-run and the rule-12 standing-obligation deference, per
 DEC-000310; full cycle, ineligible list. Rider from pull request #273: the
 skill's 'routes' reuses the Lexicon's directive-sense term in another
@@ -1588,4 +1614,13 @@ suite's interface-contract source — the discipline still says 'from the
 architecture summary', which is now stage 6; Dave rules the source
 (candidate: the TRD's interface list). N-7, the Chief of Staff
 pending-gates read lists in-review and omits converging, which owes an
-exit gate.
+exit gate. Both DONE 2026-09-02: the bin/ package landed as pull request #294
+(Test Designer at c2fc39fedb4e3b865fd171fd255053c475375480 red, Coder at
+2e23b84 green; STATUSES, TRANSITION_STATUSES and STATUS_MAP admit converging;
+the policy's enforcement-precedes-use sentence removed, flipping
+policies/document-metadata-policy.md to in-review — it owes a full cycle, a
+gate document; one reading to confirm at that cycle: validate() now lets a
+converging document omit the last-reviewed key entirely, not only carry
+null, the Test Designer's reading of "requires no last-reviewed"). The
+converging follow-up cycle landed as Chief of Staff cycle 7 (ruling 4 above;
+N-6 under DEC-000370).
