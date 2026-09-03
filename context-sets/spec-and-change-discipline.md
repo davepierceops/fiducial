@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/converging-model-cycle-2.md @ 468798e83dd076b2f5772faa03e1749b3ead9176
+status: in-review
+last-reviewed: null
 audience: [all-roles, human]
 order: 4
 depends-on: []
@@ -28,12 +28,15 @@ only because the module under test doesn't exist yet (`Cannot find package
 '@/lib/services/x'`) proves nothing about whether the test's assertions are
 correct — a wrong assertion fails the same way as a right one. This defeats
 the purpose of Test Designer / Coder separation: both agents can share the same
-blind spot, and the shared blind spot survives to green. For any package where
-that separation matters (anything beyond trivial fixes), the Test Designer must
-have enough of the interface contract, from the architecture summary, to write
-tests that run against a stub or an interface with deliberately wrong behavior,
-so the red-gate demonstrates the tests can actually fail on bad logic — not just
-on an absent import.
+blind spot, and the shared blind spot survives to green. Wherever that
+separation matters (anything beyond trivial fixes), the Test Designer must have
+enough of the interface contract to write tests that run against a stub or an
+interface with deliberately wrong behavior, so the red-gate demonstrates the
+tests can actually fail on bad logic — not just on an absent import. The spec's
+suite, written at stage 3 while the spec is `converging`, takes its interface
+contract from the TRD's stated interface list — the one the Spec Reviewer's TRD
+check confirms; the unit's tests, at stage 7, take theirs from the architecture
+summary of stage 6.
 
 The red-gate runs during convergence — while the spec is `converging`, before it
 is agreed — and its result is the exit gate's evidence for the tests.
