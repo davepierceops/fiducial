@@ -1,6 +1,6 @@
 ---
-status: in-review
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/prd-template-cycle-3.md @ 6d05d0156511527bb00e27e1e905e6cbbdebe695
 audience: [chief-of-staff, spec-reviewer-agent, human]
 ---
 
