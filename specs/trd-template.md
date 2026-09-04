@@ -1,6 +1,6 @@
 ---
-status: in-review
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/trd-template-cycle-3.md @ 473c1c81b004db9c981e48c516d9961fc8454e26
 audience: [architect-agent, spec-reviewer-agent, human]
 ---
 
