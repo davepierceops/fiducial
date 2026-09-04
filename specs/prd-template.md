@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/prd-template-cycle-2.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [chief-of-staff, spec-reviewer-agent, human]
 ---
 
@@ -95,7 +95,7 @@ Standing product unknowns, each naming what would resolve it.
 ---
 status: draft
 last-reviewed: null
-audience: [all-roles, human]
+audience: [human]
 ---
 
 # PRD: <project name>

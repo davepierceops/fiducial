@@ -1,6 +1,6 @@
 ---
-status: agreed
-last-reviewed: reviews/trd-template-cycle-2.md @ cd7db71
+status: in-review
+last-reviewed: null
 audience: [architect-agent, spec-reviewer-agent, human]
 ---
 
@@ -134,7 +134,7 @@ Keep them as loose ends rather than relying on memory.
 ---
 status: draft
 last-reviewed: null
-audience: [all-roles, human]
+audience: [human]
 ---
 
 # TRD: <project name>
