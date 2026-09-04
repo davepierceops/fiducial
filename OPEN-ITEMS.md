@@ -1474,7 +1474,8 @@ section is the record. The follow-up numbers below are the section above's.
    Ruling owed, Dave's: CS7-1 — the role says a connector timeout is
    contention first, the remote-write policy's rule 2 says a single failure
    is noise and contention is what the second failure detects; one sentence
-   in one document yields, which one is the ruling. Rider to the role's next
+   in one document yields, which one is the ruling. RULED 2026-09-04, the
+   role yields: a first connector timeout is noise — read state and re-create once, per the remote-write policy's rules 6 and 7; the contention check is on the second failure, per rule 2. Rule 2 stands unchanged; no decision-log entry. One-sentence rider for roles/chief-of-staff.md @ 0154e2ab4a6db29fc84da47100b62ceca5c85a57, lines 51-54, at the role's next cycle, alongside CS7-2. Rider to the role's next
    cycle: CS7-2, "the states rule 13's carve-out admits" closes a class
    rule 13 leaves open — "among". Observation on the context set: O-8,
    stage-7 "take theirs from the architecture summary" against the operating
