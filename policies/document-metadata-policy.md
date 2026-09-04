@@ -1,6 +1,6 @@
 ---
-status: in-review
-last-reviewed: null
+status: agreed
+last-reviewed: reviews/document-metadata-policy-cycle-22.md @ d185baf33fdf41905e1789db388eaa2498410884
 audience: [all-roles, human]
 ---
 
