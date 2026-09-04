@@ -1035,7 +1035,9 @@ premise is stale. Not a flake, not a reason to hold any flip. Fix is a `bin/`
 change (Reviewer Agent territory): correct the AC, or confirm the citation-closure
 behavior is intended and rewrite the assertion.
 
-## document-metadata-policy.md doc-only cycle — advisory clarity items (cycle-12)
+## ~~document-metadata-policy.md doc-only cycle — advisory clarity items (cycle-12)~~ — RESOLVED
+
+RESOLVED 2026-09-04 at cycle 21 (pull request #316): N1 as DMP21-2, N3 as DMP21-3 (the single-document rule is now doc-only condition 6), the #273 rider and CR5-3 together as DMP21-4; agreed at cycle 22.
 
 Accepted as advisory at the cycle-12 agreement, deferred rather than spun into a
 cycle 13. Each is a clarity edit to the now-agreed gate document, so each would
@@ -1526,7 +1528,8 @@ section is the record. The follow-up numbers below are the section above's.
    surviving a green suite is a finding; the code's author does not write
    the closing test). The orchestrator question is closed by the
    spec-review-cycle cycle; the expedited-stretch question becomes a
-   one-line check at `policies/document-metadata-policy.md`'s next cycle.
+   one-line check at `policies/document-metadata-policy.md`'s next cycle
+   (DONE 2026-09-04, cleared at cycle 21: no finding).
 10. **`policies/commit-and-change-control-policy.md` next cycle** (T29,
     follow-up 13): remove the Top K / SLO-budget criterion and the change
     package's SLO field — a criterion nothing defines cannot fire and reads
@@ -1657,7 +1660,7 @@ the policy's enforcement-precedes-use sentence removed, flipping
 policies/document-metadata-policy.md to in-review — it owes a full cycle, a
 gate document; one reading to confirm at that cycle: validate() now lets a
 converging document omit the last-reviewed key entirely, not only carry
-null, the Test Designer's reading of "requires no last-reviewed"). The
+null, the Test Designer's reading of "requires no last-reviewed"). (DONE 2026-09-04 — full cycle 21-22: Editor #316, Context Quality Reviewer gate #317 changes-required, fix #318, confirmation re-gate #319 ready with zero findings, flip #320, merge commit be2dabc35fa54295af93ac720898aab7c3c8a5b1; agreed at reviews/document-metadata-policy-cycle-22.md, reviewed document SHA d185baf33fdf41905e1789db388eaa2498410884. The absent-key reading is confirmed and stated in the policy: converging does not require last-reviewed, absent or null. Dave ruled 2026-09-04, at DMP21-5: converging reaches documents under specs/ only, conforming the policy to LEXICON.md and DEC-000360; no decision-log entry, the Lexicon already records the scope. Riders from that ruling, for each file's next cycle: roles/chief-of-staff.md:33, skills/spec-review-cycle.md:126 and :135, and skills/review-artifact.md:80 say "document" where the status is spec-only. The expedited-stretch one-line check (item 9 of the topic-walk rulings) cleared at cycle 21: conditions 1, 2 and 4 each foreclose the 2026-08-24 TRD agreement independently.) The
 converging follow-up cycle landed as Chief of Staff cycle 7 (ruling 4 above;
 N-6 under DEC-000370).
 
@@ -1677,3 +1680,6 @@ Recorded 2026-09-04 (observed by the decision session). The only corpus-wide ded
 - bin/check-directive M2 flip-pointer false positive fired again on the templates cycle-3 flip directive, 2026-09-04; classified, not worked around, per precedent.
 - Directive authoring: a directive that enumerates items must state the count it lists or none — the 2026-09-04 flush said "two sections" over three and the third was dropped (observed, pull request #314). Candidate for bin/check-directive or the authoring skill.
 - engagements/sre-critic.md H1 rider stands (recorded 2026-09-03).
+- Executor tracker writes: the 2026-09-04 flush (#314) silently truncated an appended paragraph mid-sentence and its report did not say so. Rule for every directive that appends dictated text: the executor reads each appended span back byte-for-byte against the dictated text, not by heading, and reports matched or not per span. Applied from docs/cycles/open-items-flush-20260904T181500Z.md onward.
+- Dictation defect class: a decision session dictating a sentence adjacent to retained text can restate it — cycle 21's DMP21-2 wording duplicated the companion-path sentence it sat beside and cost a finding (DMP21-6). Before dictating, read the sentence on either side of the insertion point at the reviewed ref.
+- docs/rule-register/rule-register-20260825T1435.md:413 quotes the pre-cycle-21 expedited-path sentence verbatim; a derived artifact pinned to f9a7a5e8 by its own header and out of the in-scope set. Stale, recorded, not touched; the selection build's re-extraction supersedes it.
