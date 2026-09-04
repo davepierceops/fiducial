@@ -68,9 +68,10 @@ lines, before any content.
 ## Required fields
 
 - `status:` one of `draft | in-review | converging | agreed | superseded | deprecated`
-  - `converging` = the document's first reviewer gate has run and, on
-    Dave's say, the document is edited freely while tests are written
-    against it; nothing in it is agreed.
+  - `converging` = of a document under `specs/` only: its first
+    reviewer gate has run and, on Dave's say, the spec is edited
+    freely while tests are written against it; nothing in it is
+    agreed. No other document holds this status.
   - `agreed` = Dave has agreed this document. This is the repo's
     standing verb; "approved" is not used.
   - `superseded` = replaced; a successor exists.
@@ -131,18 +132,18 @@ lines, before any content.
   edit-flips-in-review rule; content edits alone trigger it.
   A status-transition commit contains nothing but the frontmatter
   transition.
-- **Dave's.** A document enters `converging` after its first reviewer
-  gate has run, whatever the verdict, on Dave's say. A content edit to a
-  `converging` document changes neither its status nor its
-  `last-reviewed`. The document leaves `converging` only by the
-  agreement flip, on Dave's ruling at the exit gate.
-- **Dave's.** A revision of an `agreed` document — flipped to
-  `in-review` by its edit — may enter `converging` under the same entry
-  rule: a reviewer gate has run on the revision, whatever its verdict;
-  Dave says so; and the transition is a frontmatter-only status
-  transition from `in-review` to `converging`. It leaves `converging` the
-  same way the first interval does. A revision whose tests do not change
-  takes the ordinary route from `in-review` to `agreed`.
+- **Dave's.** A spec enters `converging` after its first reviewer gate
+  has run, whatever the verdict, on Dave's say. A content edit to a
+  `converging` spec changes neither its status nor its `last-reviewed`.
+  The spec leaves `converging` only by the agreement flip, on Dave's
+  ruling at the exit gate.
+- **Dave's.** A revision of an `agreed` spec — flipped to `in-review` by
+  its edit — may enter `converging` under the same entry rule: a reviewer
+  gate has run on the revision, whatever its verdict; Dave says so; and
+  the transition is a frontmatter-only status transition from `in-review`
+  to `converging`. It leaves `converging` the same way the first interval
+  does. A revision whose tests do not change takes the ordinary route
+  from `in-review` to `agreed`.
 - The document returns to `agreed` when Dave agrees the revision, and
   `last-reviewed` points at the new review artifact.
 
@@ -255,12 +256,10 @@ The path reaches only documents in the frontmatter in-scope set above.
    one consistency sweep is run; Dave signs off with no open findings.
 
    A **consistency sweep** checks the document — and the documents it
-   cross-references and that reference it — for any value or cross-reference
-   the change has made stale. It extends the within-document consistency check
-   already required to the document's neighbours. The co-authoring agent runs
-   it before sign-off; "at least one" means the most recent sweep post-dates the
-   final edit. Completion is attested by Dave's sign-off, not a separate
-   artifact.
+   cross-references and that reference it — for any value or cross-reference the
+   change has made stale. The co-authoring agent runs it before sign-off; "at
+   least one" means the most recent sweep post-dates the final edit. Completion
+   is attested by Dave's sign-off, not a separate artifact.
 5. **Not under `specs/`**, per the expedited path's condition 4.
 6. **One document.** The agreement covers exactly one in-scope document, as the
    expedited path's condition 1 does; several documents co-authored in one
@@ -283,9 +282,9 @@ span several commits, because this path carries a document of any size — the
 log entry and `last-reviewed` then name the final content commit, and every
 content commit touches only that document.
 
-The content commit touches only that document — a companion tracked path (a
-`decisions/log.md` entry, an `OPEN-ITEMS.md` update) lands in its own commit,
-per the expedited path's "no other tracked path" rule.
+A companion tracked path (a `decisions/log.md` entry, an `OPEN-ITEMS.md`
+update) lands in its own commit, per the expedited path's "no other tracked
+path" rule.
 
 ## Excluded fields (do not add)
 
