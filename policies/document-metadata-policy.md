@@ -79,7 +79,8 @@ lines, before any content.
   the reviewed commit SHA — or `null` if never reviewed.
   - Format: `<reviews/path.md> @ <sha>`
   - `status: agreed` requires a non-null `last-reviewed`.
-  - `status: converging` requires no `last-reviewed`.
+  - `status: converging` does not require `last-reviewed`; the key may
+    be absent or carry `null`.
   - The cited artifact must state, in its own scope, that it reviewed
     this document at the cited SHA.
   - `status: agreed` requires that artifact's verdict to be `ready` or
@@ -198,8 +199,11 @@ round-trip, the cycle directive, and the per-cycle review artifact.
 *Any* finding escalates, however small; an edit that acquires one does
 not get a second attempt at this path and becomes a full cycle.
 
-The five conditions are necessary, not sufficient. A document may
-exclude its own revisions from this path, and the retro skill does.
+The five conditions are necessary, not sufficient. Condition 3's class
+is this policy's own exclusion; a document may exclude a further class
+of revisions from this path, and skills/conversation-retro.md does —
+any methodology revision a retro or a synthesis surfaces takes the
+full cycle, whatever lighter path it would otherwise be eligible for.
 
 ### The record
 
@@ -237,7 +241,7 @@ revised**, where the expedited path is capped at a ten-line revision.
 
 The path reaches only documents in the frontmatter in-scope set above.
 
-### Eligible when all five hold
+### Eligible when all six hold
 
 1. **Prose, not a program.** Methodology or governance text in any format; a
    script or executable is out.
@@ -258,25 +262,30 @@ The path reaches only documents in the frontmatter in-scope set above.
    final edit. Completion is attested by Dave's sign-off, not a separate
    artifact.
 5. **Not under `specs/`**, per the expedited path's condition 4.
+6. **One document.** The agreement covers exactly one in-scope document, as the
+   expedited path's condition 1 does; several documents co-authored in one
+   session are agreed as separate, sequential agreements.
 
 Enforcement checks none of this: it verifies the pointer's format, that
 the cited SHA resolves to an entry in the log, and that the transition commit is
 frontmatter-only — it cannot see whether a document was co-authored, swept, or
-asked for. The five conditions are necessary, not sufficient, here as on the
-expedited path, and a document may exclude its own revisions from this path.
+asked for. The six conditions are necessary, not sufficient, here as on the
+expedited path, and the same further exclusions reach this path:
+skills/conversation-retro.md's, and any other a document states.
 
 ### Sequence
 
 As the expedited path — content commit, then the log entry naming that SHA, then
-a frontmatter-only flip to `agreed`, log entry before flip. One difference: a new
-document's content commit lands it at `draft`, where an edit to an already-agreed
-document flips it to `in-review`.
+a frontmatter-only flip to `agreed`, log entry before flip. Two differences: a
+new document's content commit lands it at `draft`, where an edit to an
+already-agreed document flips it to `in-review`; and the content revision may
+span several commits, because this path carries a document of any size — the
+log entry and `last-reviewed` then name the final content commit, and every
+content commit touches only that document.
 
-A doc-only agreement covers exactly one in-scope document, as the expedited path
-does; several documents co-authored in one session are agreed as separate,
-sequential agreements. The content commit touches only that document — a
-companion tracked path (a `decisions/log.md` entry, an `OPEN-ITEMS.md` update)
-lands in its own commit, per the expedited path's "no other tracked path" rule.
+The content commit touches only that document — a companion tracked path (a
+`decisions/log.md` entry, an `OPEN-ITEMS.md` update) lands in its own commit,
+per the expedited path's "no other tracked path" rule.
 
 ## Excluded fields (do not add)
 
