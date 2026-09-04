@@ -1283,9 +1283,11 @@ Ruled ad hoc for the directive-tooling TRD, canonization after from the retro (D
 
 ---
 
-## PRD and TRD templates carry the wrong audience — directed fix
+## ~~PRD and TRD templates carry the wrong audience — directed fix~~ — RESOLVED
 
 Dave, 2026-08-28: PRDs and TRDs are audience `[human]` (the narrowing of `specs/directive-tooling.md` from `[all-roles, human]` was deliberate and kept, cycle 21 O1). Both templates (`prd-template`, `trd-template`) still say otherwise and are wrong. A directed change awaiting its review cycle, not a candidate.
+
+**RESOLVED** 2026-09-04 by templates audience cycle 3 (pull requests #311, #312, #313; merge d1864d00ce52e2b0c8a9b11d657194351e5413b5). Both skeleton blocks read `audience: [human]`; both templates agreed at cycle 3.
 
 ---
 
@@ -1616,12 +1618,22 @@ review-artifact schema, which the SRE critic uses, and AC-BS-4 excludes
 skills from the writing Critic's set; Dave told, no objection, not
 separately ruled. Rider for engagements/sre-critic.md's next cycle: its H1
 still reads "# Role: Critic" — the package left the body untouched by
-instruction.) After the rename lands,
-one PRD conform touch folds the two wording residues from pull request
-#282 (the six-further-files count includes the role file itself; §1's
-five measured ways against §5's seven baseline paragraphs); and
-prd-template cycle: the skeleton's [all-roles, human] audience default
-would violate the agreed PRD's AC-BS-5 (cycle-1 O-5); bin/ package —
+instruction.) After the rename lands, one PRD conform touch folds the two
+wording residues from pull request #282 (the six-further-files count includes
+the role file itself; §1's five measured ways against §5's seven baseline
+paragraphs); (Dave ruled 2026-09-03: fold — no cycle now; these two residues,
+plus the §5 paragraph that still describes engagements/critic.md and its shared
+value in the present tense after the #309 rename, ride into the PRD's next
+substantive opening, the selection build) and prd-template cycle: the
+skeleton's [all-roles, human] audience default would violate the agreed PRD's
+AC-BS-5 (cycle-1 O-5); (DONE 2026-09-04 — both templates, cycle 3, on Dave's
+2026-08-28 ruling: Editor pull request #311, Spec Reviewer gate #312 with both
+verdicts ready and zero findings, flips #313, merge commit
+d1864d00ce52e2b0c8a9b11d657194351e5413b5; artifacts
+reviews/prd-template-cycle-3.md and reviews/trd-template-cycle-3.md; pointers
+reviews/prd-template-cycle-3.md @ 6d05d0156511527bb00e27e1e905e6cbbdebe695 and
+reviews/trd-template-cycle-3.md @ 473c1c81b004db9c981e48c516d9961fc8454e26)
+bin/ package —
 enforce the converging status (DEC-000360 precondition: lands before any
 document enters converging). ACs: bin/aimeta/frontmatter.py STATUSES
 admits converging; bin/migrate-frontmatter STATUS_MAP likewise; the
@@ -1648,3 +1660,11 @@ converging document omit the last-reviewed key entirely, not only carry
 null, the Test Designer's reading of "requires no last-reviewed"). The
 converging follow-up cycle landed as Chief of Staff cycle 7 (ruling 4 above;
 N-6 under DEC-000370).
+
+## Context Quality Reviewer corpus pass — queued program
+
+Dave, 2026-09-04: yes, queue it. The tree at d1864d00ce52e2b0c8a9b11d657194351e5413b5 (observed by the decision session): of 62 in-scope documents, about 25 have been read whole by a reviewer with a per-document artifact; 26 read `agreed` on diff-only reconciliation passes (16 cite reviews/agreeing-clusters-cycle-2.md, whose own "Not inspected" line excludes the unedited bodies of all 26 documents; the rest cite converging-model, corpus-regate, or rule-divergence-rulings, each likewise scoped to a diff); 8 reached `agreed` through the expedited or doc-only path with no reviewer. No whole-corpus quality read has happened. The program: one full-depth Context Quality Reviewer gate per document (Spec Reviewer for specs/), in bundle order, the 16 agreeing-clusters documents first as the floor every session loads; a document returning ready with zero findings needs only its pointer updated; batch flips per the nine-flip precedent. Sequenced after the document-metadata-policy cycle and after the selection build, because each gate should receive the AC-BS-6 duplicate check's output for its document as an input rather than rediscover duplicates from memory. Parallelism: gates are read-only and each writes one new file, so they cannot conflict; the decision session proposed a fan-out through subagents in one Claude Code session, each in its own worktree and branch with its own directive file, merged additively into one integration branch. Unruled: whether an execution session may spawn sub-sessions at all — nothing governs it, Core 15 and the disposition rule assume one session per tree, and it multiplies the ungated-directive risk. Dave has not chosen between fan-out and independent executors; ask alone when the program opens.
+
+## Semantic deduplication has run once, as a sample, and is stale
+
+Recorded 2026-09-04 (observed by the decision session). The only corpus-wide dedup is the 2026-08-25 pair docs/rule-register/rule-register-20260825T1435.md (878 rows, extraction only, at f9a7a5e8) and docs/rule-register/rule-clusters-20260825T1600.md (220 rows clustered into 77 clusters by one session in one sitting; 658 rows never compared to anything). The
