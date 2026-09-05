@@ -6,10 +6,11 @@ corpus: [software, methodology]
 
 # Process: Change Flow
 
-**Status of this draft:** revision 3, 2026-09-05, after two frontier reads
+**Status of this draft:** revision 4, 2026-09-05, after three frontier reads
 (reviews/change-flow-read-20260905T195000Z.md,
-reviews/change-flow-read-2-20260905T204500Z.md) and Dave's rulings on the
-first read's F-2, F-4, F-8, F-11. Gate: one frontier read over the whole
+reviews/change-flow-read-2-20260905T204500Z.md,
+reviews/change-flow-read-3-20260905T214500Z.md) and Dave's rulings on the
+first read's F-2, F-4, F-8, F-11 and the third read's F-2. Gate: one frontier read over the whole
 document — not the diff, because the diff-only rule below is this document's
 own proposal and binds only after sign-off — then Dave's sign-off, recorded as
 a decision-log entry naming the SHA. Rows are cited by register id until the
@@ -19,16 +20,16 @@ or retires".
 
 ## The principle
 
-**Review is charged once per delta, and a delta is whatever one reviewer can
-read whole.**
+**Review is charged once per delta, and a delta should be no larger than one
+reviewer can read whole.**
 
 A delta is the accumulated difference between a thing as it stands and the
 thing as it will stand when the work is done. Review attaches to the delta at
 its close — never to a document, never to an edit. A typo fix is a one-row
 delta and closes in one commit. A rebuild is one delta too; if a reader
-finds it cannot be read whole, that summons a second reader (below), and the
-lesson for next time is that it should have been planned as more than one.
-What sets the depth of the review is the size and reach of the delta, not
+finds it cannot be read whole, that summons a second reader (below) — the
+norm's enforcement — and the Chief of Staff plans the next delta of that
+shape as more than one. What sets the depth of the review is the size and reach of the delta, not
 the number of documents it touched.
 
 This is the rule the corpus already stated twice in narrower forms — for spec
@@ -101,24 +102,25 @@ class decides is whether they are two *sessions*:
   consequential for release purposes, and R0535's exhaustive list is unchanged
   by it.
 
-**Scan depth follows the delta's reach.** This changes R1104, R1105, R1136
-and R1137: Depth 1 (the spine) always runs, its trigger moved from every spec
-revision to the delta's close, because review is charged once per delta; a
-delta whose diff touches a policy or boundary document gets Depth 2 in the
-same read, no longer on demand; Depth 3 — everything against everything —
-becomes the deep read below, which is its successor, and over the methodology
-it becomes intake's sweep once the rules store exists. Until then R1137 stays
-in force as written. A scan nobody asked for is the point; a scan nobody knew
-to ask for was the defect.
+**Scan depth follows the delta's reach.** This changes R1104 and R1136:
+Depth 1 (the spine) always runs, its trigger moved from every spec revision to
+the delta's close, because review is charged once per delta; a delta whose
+diff touches a policy or boundary document gets Depth 2 in the same read, no
+longer only through R1105's on-demand route. Depth 3 — everything against
+everything, R1137 — is unchanged until the rules store exists, at which point
+intake's sweep succeeds it over the methodology; the deep read below is its
+equivalent for anything else. A scan nobody
+asked for is the point; a scan nobody knew to ask for was the defect.
 
 **Dimensions are an open set.** The three above are the ones the corpus has
 today. A new one — a reliability review, a security review, whatever the next
 year shows is missing — is added by intake, not by editing this document: its
-rules land as rows keyed `dimension: [security]` with the other keys naming
-the delta kinds it applies to, and a read includes every dimension that has a
-row matching the delta. The query is a selection over rows with `dimension`
-set; the `--keys` listing DEC-000400 specifies is pending the Store and Tool
-packages, and until it lands the intake session names the dimensions in force.
+rules land as rows keyed on the dimension — `dimension: [security]` being the
+form intake would normalize to, per DEC-000400, not a reserved key — with the
+other keys naming the delta kinds it applies to, and a read includes every
+dimension that has a row matching the delta. The listing of keys in use that
+DEC-000400 specifies is pending the Store and Tool packages; until it lands
+the intake session names the dimensions in force.
 
 Two separations hold whatever the delta's size (R0462, R0463): whoever produced
 the delta does not read it; whoever drafted a document does not gate it.
@@ -126,17 +128,17 @@ the delta does not read it; whoever drafted a document does not gate it.
 **A deep read, on demand, at any time.** Dave — or the Chief of Staff on his
 behalf — may call for a full read of anything, at any point, whether or not a
 delta is closing: every dimension, two sessions, continuity at its widest
-reach (this is Depth 3's successor, R1137), over the whole thing rather than a
-diff. It is a directive like any
-other, with the object named (a spec, a project's code, the rules store); its
-verdict is input to Dave. The Chief of Staff proposes one at milestone moments
-without being asked; the row that grants it is keyed so it shows on the list of
-things Dave can call for.
+reach (Depth 3's equivalent, R1137), over the whole thing rather than a
+diff. It is a directive like any other, with the object named (a spec, a
+project's code, the rules store); its verdict is input to Dave. The Chief of
+Staff proposes one at milestone moments without being asked. How Dave sees
+the list of things he can call for is the Store package's to design.
 
 The read's output is a review artifact in the review-artifact schema, amended
 by this document in one respect: the header's single `Verdict:` line is the
 overall call, and each pass section opens with its own `Verdict (<pass>):`
-line. Findings are triaged by the decision session; blocking
+line; the overall verdict is the most severe of the pass verdicts, on the order
+ready, ready-with-findings, changes-required. Findings are triaged by the decision session; blocking
 findings reopen the delta, which then closes again with one more read over
 the diff since the last read — not over the whole delta again. (Working rule;
 it is revised if a reopened delta's second read ever misses a contradiction the
@@ -148,15 +150,18 @@ A spec has two states and no status field: its branch is **open** (has commits
 the default branch does not) or **closed** (agreed; the default branch is the
 version of record).
 
-1. **Open.** A spec branch is cut, `spec/<tranche-slug>` (R0004). While it is
-   open, Dave edits the spec freely with no per-edit gate (R0007); the Test
-   Designer writes the spec's test suite against it and confirms the suite red
-   on bad logic, not on an absent import (R0016, R1152); findings flow both
-   ways through the decision session. Nothing is *implemented* against an open
-   spec, and none of the per-change stages runs against one (DEC-000360,
-   R0470: draft/in-review nothing; converging tests only; agreed
-   implementation — the three values, with "converging" now meaning "open").
-   At most two tranches execute concurrently, over disjoint spec territory; a
+1. **Open.** A spec branch is open from the commit that cuts it,
+   `spec/<tranche-slug>` (R0004). While it is open, Dave edits the spec freely
+   with no per-edit gate (R0007). The Test Designer begins once one reader has
+   been over the spec and Dave has said to proceed (DEC-000360's entry
+   condition, kept: R0015 restated without the status flip); from then on it
+   writes the spec's test suite against the spec as it stands (R0016, R1152),
+   holding enough of the interface contract to make the tests fail on bad
+   logic rather than on an absent import (R0084), and runs that red-gate while
+   the branch is open so its result is the close's evidence (R0087, R0478);
+   findings flow both ways through the decision session. Nothing is
+   *implemented* against an open spec (R0017), and none of the per-change
+   stages runs against one (R0470). At most two tranches execute concurrently, over disjoint spec territory; a
    document appearing in one open delta's diff may not appear in a second
    (R0012, R0013); nothing decomposes from an open spec (DEC-000170).
 2. **Close.** When spec and tests cohere, the Spec Reviewer reads the
@@ -172,9 +177,12 @@ version of record).
    one-line delta, read in a minute.
 
 What retires here: the `converging` status and both its frontmatter
-transitions (DEC-000360's mechanism, not its substance); the expedited and
-doc-only paths; per-document cycle numbering and `last-reviewed` pointers
-(DEC-000380). The rows are listed in the closing section.
+transitions (DEC-000360's mechanism; its substance — the entry condition, the
+test-only licence, the red-gate as close evidence — is kept above); the
+expedited and doc-only paths; per-document cycle numbering and `last-reviewed`
+pointers (DEC-000380). The rows are listed in the closing section, which
+distinguishes rows *retired* from rows *restated* in the open/closed
+vocabulary.
 
 ## The per-change stages, unchanged in substance
 
@@ -195,20 +203,30 @@ Standing rows this document amends, each with the change, for the Store
 package to map and for the decision-log entry that agrees this document to
 supersede:
 
-- R0492, R0517 — quality and skeptic passes stay separate; whether they are
-  separate *sessions* is decided by class or size call (above).
 - R1104 — Depth 1's trigger moves from every spec revision to the delta's
-  close. R1105, R1136 — Depth 2 by reach, not on demand. R1137 — Depth 3
-  succeeded by the deep read, and by intake's sweep once the store exists.
+  close. R1136 — Depth 2 by the delta's reach, no longer only on demand
+  through R1105.
 - skills/review-artifact.md — one overall `Verdict:` plus one verdict line per
-  pass.
-- R0480, R0481 — restated without the status transition, as above.
-- Retired: R0476 (the entry transition), R0481's frontmatter flip, R0018 and
-  every other row carrying the `converging` status or a status transition;
-  the Store package lists them by id from the register.
+  pass, overall being the most severe.
 
-Unchanged and in force: R0535's exhaustive consequential class; DEC-000170's
-two-tranche cap and claiming rule; DEC-000300's refusal and its trigger.
+**Restated** in the open/closed vocabulary — the obligation is unchanged, the
+words `converging`, `status`, or `flip` are replaced: R0015 (entry condition),
+R0016, R0017, R0084, R0087, R0478, R1152 (the test-only licence and the
+red-gate), R0480, R0481 (the close, without the frontmatter flip), R0470 (the
+precondition on the per-change stages).
+
+**Retired** — the obligation itself was the status transition and nothing
+survives it: R0014 (the definition of the `converging` status), R0018 (the
+exit transition), R0019 (the re-entry flip), R0020 (converging as a status
+interval distinct from a delta — the two are now one), R0476 (the entry
+transition). Nothing else is retired by this document; the Store package
+retires by this list, not by searching the register for the word.
+
+Unchanged and in force: R0492 and R0517 — the quality and skeptic passes stay
+separate, and the number of sessions was never theirs to set; R1105 and R1137
+as written until the store exists; R0535's exhaustive consequential class;
+DEC-000170's two-tranche cap and claiming rule; DEC-000300's refusal and its
+trigger; DEC-000360's substance.
 
 ## What this document does not decide
 
