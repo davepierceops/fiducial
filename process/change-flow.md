@@ -6,16 +6,14 @@ corpus: [software, methodology]
 
 # Process: Change Flow
 
-**Status of this draft:** revision 5, 2026-09-05, after four frontier reads
+**Record:** agreed by Dave 2026-09-05 after five frontier reads
 (reviews/change-flow-read-20260905T195000Z.md through
-reviews/change-flow-read-4-20260905T225000Z.md) and Dave's rulings on the
-first read's F-2, F-4, F-8, F-11 and the third read's F-2. Gate: one frontier read over the whole
-document — not the diff, because the diff-only rule below is this document's
-own proposal and binds only after sign-off — then Dave's sign-off, recorded as
-a decision-log entry naming the SHA. Rows are cited by register id until the
-store assigns ids; the Store package maps them. Every standing row this
-document changes is named in the closing section "What this document changes
-or retires".
+reviews/change-flow-read-5-20260905T233000Z.md); the decision-log entry that
+records the agreement names this document's SHA. Register ids (`R0000`) in
+the body are pointers to the rule being restated, for the Store package to
+map to store ids; they are not the record of what this document changes —
+that is the closing section, in prose, and the Store package's row-by-row
+mapping.
 
 ## The principle
 
@@ -86,9 +84,9 @@ document:
   the whole evidence chain (R0488).
 
 **Every dimension is a pass with its own verdict line**, continuity included.
-Quality and skepticism are always two passes (R0492, R0517): a change can
-pass one and fail the other, so the second question is asked after the first
-has been answered. What the delta's class decides is whether quality and
+Quality and skepticism are never merged into one pass (R0492, R0517): a
+change can pass one and fail the other, so the second question is asked after
+the first has been answered. What the delta's class decides is whether quality and
 skepticism are two *sessions*; continuity runs in the first session either
 way:
 
@@ -201,7 +199,8 @@ Once a spec is closed, each meaningful change against it runs the per-change
 stages (R0470 for the span and the precondition; R0482–R0490 for the stages):
 acceptance criteria; an architecture summary derived from the TRD; the unit's
 tests confirmed red; implement to green with mechanical checks; then **the one
-read** — quality and skepticism as two passes, one session or two by class;
+read** — continuity, quality, and skepticism as three passes, one session or
+two by class;
 then the release package and Dave's release gate. Mechanical checks are
 evidence folded into green, not a review step (R0493).
 
@@ -210,43 +209,33 @@ one line of it, not a separate lifecycle.
 
 ## What this document changes or retires
 
-The lists below name **obligations** by the register row that states them.
-The register is not deduplicated, so the Store package resolves each named
-row to every register row stating the same obligation — the clusters artifact
-is what that resolution reads — and treats the whole cluster as the list says.
-That is how the lists are complete without a word search over the register.
+In plain words, for the Store package to carry out row by row when it writes
+the store; the mapping of old rules to their disposition lives there, not
+here.
 
-Standing obligations this document amends, each with the change, for the
-Store package to map and for the decision-log entry that agrees this document
-to supersede:
+- **Changed:** the Depth 1 continuity scan runs at a spec delta's close, not
+  on every spec revision; Depth 2 runs when the delta's reach warrants it,
+  not only on demand; the review artifact carries one overall verdict and one
+  verdict line per pass, overall being the most severe.
+- **Restated, obligation unchanged:** everything DEC-000360 requires of a spec
+  while it is being tested — the entry read before the Test Designer starts,
+  tests only and no implementation, the red-gate run while open and handed
+  to the close as evidence, the close's read and Dave's one ruling — now said
+  in open/closed vocabulary, with the ruling recorded in the decision log.
+- **Retired:** the `converging` status itself, its entry, exit, and re-entry
+  frontmatter transitions, and the definition of converging as an interval
+  distinct from a delta. Where an old rule states both a transition and an
+  obligation, the obligation survives and the transition does not.
+- **Unchanged and in force:** the consequential class and its exhaustive
+  list; the two-tranche cap and the claiming rule (DEC-000170); the refusal
+  of a trivial-change lane and its revisit trigger (DEC-000300); the
+  interface contract the red-gate needs; Depth 3 as written until the store
+  exists.
 
-- R1104, R1135 — Depth 1's trigger moves from every spec revision to the
-  delta's close. R1136 — Depth 2 by the delta's reach, no longer only on
-  demand through R1105.
-- skills/review-artifact.md — one overall `Verdict:` plus one verdict line per
-  pass, overall being the most severe.
-
-**Restated** in the open/closed vocabulary — the obligation is unchanged, the
-words `converging`, `status`, or `flip` are replaced: R0015 (entry condition),
-R0016, R0017, R0087, R0478, R1152 (the test-only licence and the red-gate),
-R0480, R0481, R1158 (the close, without the frontmatter flip), R0470 (the
-precondition on the per-change stages), R0019's re-entry condition (carried by
-the reopen step).
-
-**Retired** — the row's own obligation is a status transition; where the row
-also carried something that survives, the restated row carrying it is named:
-R0014 (the definition of the `converging` status); R0018 (the exit transition
-— its read-and-ruling survive through R0480 and R0481); R0019 (the re-entry
-flip — its re-entry condition survives through the reopen step); R0020
-(converging as a status interval distinct from a delta — the two are now one);
-R0476 (the entry transition). Nothing else is retired by this document.
-
-Unchanged and in force: R0084 (the interface contract the red-gate needs, no
-vocabulary to change); R0492 and R0517 — the quality and skeptic passes stay
-separate, and the number of sessions was never theirs to set; R1105 and R1137
-as written until the store exists; R0535's exhaustive consequential class;
-DEC-000170's two-tranche cap and claiming rule; DEC-000300's refusal and its
-trigger; DEC-000360's substance.
+The decision-log entry recording this document's agreement supersedes
+DEC-000360's mechanism, not its substance. DEC-000370 (the interface
+contract's source per stage) is unchanged; "convergence suite" there reads as
+the open spec's test suite.
 
 ## What this document does not decide
 
