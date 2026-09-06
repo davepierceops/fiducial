@@ -30,3 +30,5 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md. Topic renamed from 
 | R0285 | docs/global-context/review-rubric.md | written | R0285 |
 
 Counts: rows consumed 23; rows written 22; definitions 5; merged away 0; split 0; retired 1 (R0277, C019 strictest form settled by DEC-000290 and carried by core R0196; this file's filename criterion states no obligation R0196 does not carry).
+
+Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 1 define row (R0267), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 4 `define` rows carrying a null term (R0265, R0271, R0280, R0282), each body restated as the instruction it carries.

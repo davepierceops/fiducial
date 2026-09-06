@@ -69,3 +69,5 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 Counts: rows consumed 60; rows written 13 here; definitions 1; merged away 7; split 2 (R1483 into two written halves; R1486 into one written half and one retired half); retired 37 (plus the retired half of R1486); moved to another topic 4 (R1448-R1451 -> `review-artifact-schema`, 2 rows).
 
 Amended by `docs/cycles/store-fix-1-20260906T040000Z.md` item 2: R1448-R1451 leave this map's retired set and are written under topic `review-artifact-schema` as two rows, R1448 (absorbing R1449) and R1450 (absorbing R1451).
+
+Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 1 define row (R1474), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms.

@@ -49,3 +49,5 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 Counts: rows consumed 40; rows written 20; definitions 1; merged away 16; split 1 (R0248 → R0248a, R0248b); retired 5 (R0223, R0224, R0250, R0251, R0258).
 
 Amended by `docs/cycles/store-fix-1-20260906T040000Z.md` item 1: R0256 and R0257 restored; R0259 and R0262 renumbered to orders 190 and 200 to seat them.
+
+Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 1 define row (R0247), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms.

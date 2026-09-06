@@ -60,3 +60,5 @@ Notes on the rulings applied:
   ("before a spec is agreed" → before the spec delta closes).
 
 Store fix pass 2 item 4 replaces `role: [all]` on 19 rows of this topic with an explicit role list, decided per row: 8 rows to `[architect-agent, chief-of-staff, coder-agent, context-quality-reviewer, copy-editor, critic, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent, test-designer-agent, writer]`; 6 rows to `[chief-of-staff]`; 3 rows to `[test-designer-agent]`; 1 row to `[coder-agent]`; 1 row to `[coder-agent, release-manager-agent, reviewer-agent]`. `all` is not a value; the lists are the role documents' own basename slugs at fd54448.
+
+Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 2 define rows (R0083, R0092), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms.

@@ -37,3 +37,5 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 Counts: rows consumed 27; rows written 14; definitions 7; merged away 6; split 0; retired 7 (R0532 C004 scope statement; R0578; R0710–R0714 document-lifecycle machinery — all DEC-000380).
 
 Store fix pass 2 item 4 replaces `role: [all]` on 10 rows of this topic with an explicit role list, decided per row: 5 rows to `[architect-agent, chief-of-staff, coder-agent, context-quality-reviewer, copy-editor, critic, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent, test-designer-agent, writer]`; 2 rows to `[chief-of-staff]`; 2 rows to `[chief-of-staff, spec-reviewer-agent]`; 1 row to `[chief-of-staff, release-manager-agent]`. `all` is not a value; the lists are the role documents' own basename slugs at fd54448.
+
+Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 2 define rows (R0533, R0705), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 1 `define` row carrying a null term (R0564), each body restated as the instruction it carries.

@@ -25,3 +25,5 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 Counts: rows consumed 16; rows written 10; definitions 3 (R0580, R0589, R0594); merged away 5 (R0582, R0584, R0587, R0590, R0593); split 0; retired 1 (R0579, scope statement).
 
 Store fix pass 2 item 4 replaces `role: [all]` on 10 rows of this topic with an explicit role list, decided per row: 6 rows to `[chief-of-staff, writer, copy-editor, critic]`; 4 rows to `[architect-agent, chief-of-staff, coder-agent, context-quality-reviewer, copy-editor, critic, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent, test-designer-agent, writer]`. `all` is not a value; the lists are the role documents' own basename slugs at fd54448.
+
+Store fix pass 2 item 7 re-verbs 3 `define` rows carrying a null term (R0580, R0589, R0594), each body restated as the instruction it carries.

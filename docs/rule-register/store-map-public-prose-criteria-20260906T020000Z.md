@@ -82,3 +82,5 @@ Notes on the rulings applied:
   merged in or quoted; every body here is written from this file's text only.
 - **DEC-000380**: nothing in this file retires under it, as the digest card
   predicted.
+
+Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 2 define rows (R0836, R0845), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 2 `define` rows carrying a null term (R0826, R0838), each body restated as the instruction it carries.

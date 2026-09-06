@@ -103,3 +103,5 @@ R1313, R1314), route and model vocabulary (R1312 — the lint's own UNCHECKED re
 agent), the masking and stripping definitions surviving rows use (R1340, R1341), the statement that a
 non-matching form is a lint miss rather than a violation (R1344), the marker grammar (R1347), the phrase-block
 rule (R1350), and the craft rows R1283, R1286-R1293, R1295-R1298.
+
+Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 7 define rows (R1296, R1305, R1314, R1340, R1341, R1344, R1347), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 2 `define` rows carrying a null term (R1311, R1350), each body restated as the instruction it carries.

@@ -13,3 +13,5 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R1494 | skills/spec-review-cycle.md | retired-DEC-000380 (order of the retired flip against the merge) | — |
 
 Counts: rows consumed 6; rows written 3; definitions 1; merged away 0; split 0; retired 3.
+
+Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 1 define row (R1490), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms.

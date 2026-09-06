@@ -51,3 +51,5 @@ Notes.
   `last-reviewed` lines carry no register row.
 
 Store fix pass 2 item 5 makes this topic's template a process document, `process/outline.md`, written from the source at fd54448 and conformed to the store's vocabulary. Every row stating what the document contains — its sections, fields, footer, form — retires with disposition `template`, and what stays is the obligations an agent performs. Retired here: R1368, R1369, R1371, R1372, R1377, R1378, R1381. The topic falls from 27 rows to 20.
+
+Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 2 define rows (R1384, R1391), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 2 `define` rows carrying a null term (R1375, R1385), each body restated as the instruction it carries.

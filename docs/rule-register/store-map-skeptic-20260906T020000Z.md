@@ -65,3 +65,5 @@ The digest's proposed merge of `engagements/sre-critic.md` into this topic is mo
 | R1365 | skills/evidence-review.md | merged into R1360 | R1360 |
 
 Counts: rows consumed 56; rows written 30; definitions 5 (R1057, R1075, R1089, R1092, R1093); merged away 24; split 0; retired 2 (R1087 under Dave's C025 ruling, the canonical row being verification-boundaries R0788; R1351 under ruling 9, its session-kind scope statement carried by the `session` key of every row in this topic).
+
+Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 1 define row (R1089), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 3 `define` rows carrying a null term (R1075, R1092, R1093), each body restated as the instruction it carries.

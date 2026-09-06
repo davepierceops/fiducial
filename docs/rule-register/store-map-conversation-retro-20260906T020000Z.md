@@ -57,3 +57,5 @@ Notes.
 - R1270 restates C197's surviving obligation in process/change-flow.md's vocabulary: a proposed methodology change is a finding for the delta it feeds (intake for a rules delta; one frontier read plus Dave's sign-off recorded in the decision log naming the SHA for a process delta), never a decision.
 - The obligations decision-layer shed are carried here where this file states them: evidence kept apart from interpretation (R1266, with R1251 and R1267), and a near-empty retro being valid (the empty-with-a-statement clauses in R1241 and R1250).
 - Digest card 15 predicted 33 surviving rows; this map writes 31. The two differences are R1236 (a session-scope statement, retired under ruling 9's C004 clause, which the digest did not count as a retirement) and R1254 (a bare negation, retired under ruling 5 and rewritten positive into R1253).
+
+Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 1 define row (R1274), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 1 `define` row carrying a null term (R1256), each body restated as the instruction it carries.

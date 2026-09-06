@@ -24,3 +24,5 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R1176 | roles/writer.md | written | R1176 |
 
 Counts: rows consumed 17; rows written 13; definitions 2; merged away 2 (C186 R1172, C187 R1175); split 0; retired 2 (R1166, R1170 — adjacent negations, ruling 5).
+
+Store fix pass 2 item 7 re-verbs 1 `define` row carrying a null term (R1173), each body restated as the instruction it carries.

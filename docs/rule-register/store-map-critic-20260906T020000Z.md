@@ -37,3 +37,5 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R1029 | roles/critic.md | written | R1029 |
 
 Counts: rows consumed 30; rows written 29; definitions 3; merged away 1 (R1025 into R1009, cluster C035 — the file's only intra-file pairing); split 0; retired 0.
+
+Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 1 define row (R1010), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms.

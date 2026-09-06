@@ -43,3 +43,5 @@ because it plainly binds the role that derives the architecture summary; R0493 t
 the definition-of-done row R0509.
 
 R0465 is added by `docs/cycles/store-fix-2-20260906T050000Z.md` item 1, which restores it; store fix pass 2 item 7 strips `role`, `session` and `corpus` from every define row, so it carries `term` and nothing else.
+
+Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 3 define rows (R0464, R0470, R0493), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms.

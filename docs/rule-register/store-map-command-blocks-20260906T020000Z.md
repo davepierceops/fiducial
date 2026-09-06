@@ -60,3 +60,5 @@ Notes.
 Amended by `docs/cycles/store-fix-1-20260906T040000Z.md`. Item 4 retired R1195 as a scope statement about the rule set. Item 5 retired R1211 as the negation of R1212. Item 7's tool-owned test retired nothing here: `bin/directive` emits no command block in any template region, and `bin/check-directive`'s M1-M8 test none — read from the generator's general-mode output and from `bin/aimeta/elements.py` at a184967. The fence rules (R1212), the expected-output rules (R1220-R1222) and the blast-radius rule survive as the authoring craft the tools cannot do.
 
 Store fix pass 2 item 4 replaces `role: [all]` on 24 rows of this topic with an explicit role list, decided per row: 24 rows to `[chief-of-staff]`. `all` is not a value; the lists are the role documents' own basename slugs at fd54448.
+
+Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 2 define rows (R1200, R1204), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 1 `define` row carrying a null term (R1217), each body restated as the instruction it carries.
