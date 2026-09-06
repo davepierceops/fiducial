@@ -230,3 +230,29 @@ or an author-region marking.
     REPORT — skills/directive-invariants.md @ 4c9cd22b01d3387bbc4d62e20a7d26bc5e0ab035
     CLAIM LABELS — skills/directive-invariants.md @ 4c9cd22b01d3387bbc4d62e20a7d26bc5e0ab035
     SOURCE MANIFEST — skills/directive-invariants.md @ 4c9cd22b01d3387bbc4d62e20a7d26bc5e0ab035
+
+AMENDMENT to docs/cycles/decision-log-flush-20260906T100000Z.md — continue in
+the existing worktree at "$TMPDIR/fiducial-decision-log-flush", branch
+decision-log-flush, HEAD 1c8e38e56bcec29e3dd3735172ce5b3bd3b7163c.
+
+1. COMPANIONS: strike the third entry (docs/cycles/store-all-topics-…). It
+   was cited at a ref that does not carry it; nothing in TASK depends on it.
+   The remaining two companions stand as read.
+
+2. Record the amendment: append this block verbatim to the end of the
+   directive file in the worktree, commit it alone
+   (`docs(cycles): amend decision-log-flush — strike unreachable companion`),
+   push plain to origin decision-log-flush, report the SHA.
+
+3. Proceed with TASK exactly as written: ten entries, one commit each,
+   DEC-000420 through DEC-000510, Decision lines verbatim, Context lines from
+   the pointers the directive gives.
+
+4. VERIFICATION runs unchanged. Expected changes in one place only: 12
+   commits, not 11 (the amendment adds one). Everything else as stated.
+
+5. The inert scratch file outside any git tree: leave it; name its path in
+   the report.
+
+All other sections — base ref, stop conditions, report, worktree removal at
+the end — unchanged.
