@@ -23,7 +23,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R1208 | skills/command-blocks.md | written | R1208 |
 | R1209 | skills/command-blocks.md | merged into R1208 | R1208 |
 | R1210 | skills/command-blocks.md | written | R1210 |
-| R1211 | skills/command-blocks.md | written | R1211 |
+| R1211 | skills/command-blocks.md | retired-ruling (store-fix-1 item 5: negation) | — |
 | R1212 | skills/command-blocks.md | written | R1212 |
 | R1213 | skills/command-blocks.md | written | R1213 |
 | R1214 | skills/command-blocks.md | merged into R1213 | R1213 |
