@@ -87,3 +87,9 @@ Notes on the rulings applied:
   report. No other baton content is restated here.
 - R0894 keeps a distinct trigger (pre-staging) from core R0166 and is written;
   R0166's "propose, do not decide" is not restated.
+
+Store fix pass 2 item 6 keeps this topic's standing rules only. Two procedures become process documents written in the form `process/change-flow.md` uses — principle, sequence, what it does not decide — keyed `role: [chief-of-staff]`, `session: [decision]`, `corpus: [software]`, and both are drafts for Dave's read.
+
+`process/decomposition.md` takes R0901-R0912, R0914, R0916 and R0925, R0926, R0928-R0930: tranches, the decomposition doc, package directives, staleness, concurrency and claiming. `process/spec-test-suite.md` takes R0917-R0920, R0922, R0923: directing the open spec's test suite after the entry read. All 25 retire with disposition `process`.
+
+R0883-R0888, the state-assessment reads, stay and each gains a `## Human` noting that it retires when `bin/state` lands. The topic falls from 48 rows to 23: the standing rules the directive names, the six state-assessment rows it keeps, and three it does not name — R0898 and R0899, which belong to the read-pasted-output family, and R0934, a standing prohibition rather than a step in either procedure.
