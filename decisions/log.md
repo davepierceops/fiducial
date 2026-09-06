@@ -661,3 +661,8 @@ Context: The register's methodology rows all keyed to a role and a session alrea
 Date: 2026-09-05
 Decision: A template or a schema is a `process/` document selected by key, not a set of rows. Rows are written only where an agent performs an act: the TRD, PRD, voice, outline, review-artifact, retro, decision-log entry form, and project setup are process documents.
 Context: A document's form is prose; rows that restated a template's sections were the restatement problem in another shape.
+
+## DEC-000500 — One decision per decision-log entry
+Date: 2026-09-05
+Decision: A decision-log entry records exactly one decision. Two decisions made together are two entries.
+Context: Dave's ruling of 2026-09-06 when the rebuild's entries were listed for the flush; an entry carrying several rulings cannot be superseded one at a time.
