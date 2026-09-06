@@ -620,3 +620,54 @@ Context: The bundle-system TRD's audience-and-corpus model resolved membership t
 Date: 2026-09-04
 Decision: Treat the filesystem representation as the initial persistence mechanism, not as an architectural dependency of the rule-processing logic. Define a narrow abstraction for obtaining rule rows. Code that selects, validates, orders, bundles, retires, or otherwise reasons about rules operates on row objects and does not know whether those rows came from individual files, a database, or another backing store. The initial implementation may read one rule per file from rules/, but filesystem traversal, filename conventions, frontmatter parsing, and file I/O stay inside the storage layer. The boundary makes it possible to replace the filesystem-backed implementation later with a database-backed implementation without changing the rule-processing logic. Do not introduce a database now merely to satisfy this abstraction. The goal is substitution, not premature infrastructure.
 Context: Files are an unusual store for something that is plainly rows — a fine choice for now, but one the project should be free to change, and changing it should touch one layer of the code and nothing else. Dave's wording, verbatim from fiducial-rebuild-shape-20260905T000500Z.md § "Storage boundary"; the PRD carries it as G7 and AC-RS-4.
+
+## DEC-000420 — Definitions are rows selected by term
+Date: 2026-09-05
+Decision: A definition is a row carrying a `term` key and no role, session, or corpus key. The bundle tool includes a definition when a selected row's body uses one of its terms, and scans the pulled definitions' bodies the same way, transitively.
+Context: The PRD's G12; a definition keyed to roles either duplicates across bundles or goes missing from one.
+
+## DEC-000430 — Engagement material waits for the next engagement
+Date: 2026-09-05
+Decision: No engagement material is written as rows now. `engagements/` stays as it is until the next engagement needs it, and is written then through intake.
+Context: Resolves the rule-store PRD's OQ-2; the 153 register rows from the engagement files were left untouched by the store migration.
+
+## DEC-000440 — A Test Designer edits tests only; a spec writer edits specs only
+Date: 2026-09-05
+Decision: A Test Designer edits tests and nothing else; a spec change it needs is a finding to the decision session. A spec writer edits specs and nothing else; a test change it needs is a finding to the decision session.
+Context: Register cluster C097; the positive wording Dave chose over the two prohibitions the source files carried.
+
+## DEC-000450 — Two register rows merge only on the same obligation and the same keys
+Date: 2026-09-05
+Decision: Two register rows become one store row only when they state the same obligation and would carry the same keys. Any difference in keys splits them, however close the wording.
+Context: The rule the store migration and every fix pass merged under; a merged row states the rule at its shortest, not the sum of its sources.
+
+## DEC-000460 — process/change-flow.md agreed at 81310de
+Date: 2026-09-05
+Decision: process/change-flow.md is agreed at 81310de105b0f0b4133117fa4c209baea9d84b09, the first document under the process gate DEC-000380 names. It supersedes DEC-000360's mechanism — the converging status and its transitions — and not its substance; DEC-000370 stands. Every pull request gets an agentic code review with no trivial-change exemption; quality and skepticism are always two passes, in one session or two by class or by a size call; the Reviewer rows stay in force until an adopted published code-review standard replaces them in the same commit.
+Context: Five frontier reads (reviews/change-flow-read-*.md), then Dave's agreement on 2026-09-05.
+Supersedes: DEC-000360
+
+## DEC-000470 — `all` is not a role value
+Date: 2026-09-05
+Decision: No row carries `role: [all]`. Every row's role list is decided for that row; the roles in use are the twelve role-document slugs at fd54448.
+Context: A blanket role list defeats selection by query, which is the store's whole mechanism.
+
+## DEC-000480 — Corpus values are software and writing
+Date: 2026-09-05
+Decision: The `corpus` key takes the values `software` and `writing`. `methodology` is not a value until a row needs it.
+Context: The register's methodology rows all keyed to a role and a session already; a third corpus value had nothing to select.
+
+## DEC-000490 — Templates and schemas are process documents
+Date: 2026-09-05
+Decision: A template or a schema is a `process/` document selected by key, not a set of rows. Rows are written only where an agent performs an act: the TRD, PRD, voice, outline, review-artifact, retro, decision-log entry form, and project setup are process documents.
+Context: A document's form is prose; rows that restated a template's sections were the restatement problem in another shape.
+
+## DEC-000500 — One decision per decision-log entry
+Date: 2026-09-05
+Decision: A decision-log entry records exactly one decision. Two decisions made together are two entries.
+Context: Dave's ruling of 2026-09-06 when the rebuild's entries were listed for the flush; an entry carrying several rulings cannot be superseded one at a time.
+
+## DEC-000510 — The intake checklist is the store's construction rule
+Date: 2026-09-05
+Decision: R0264, the intake checklist, is the rule every row is judged by on entry and the rule the store was built under. Its criteria are rows in topic intake, not decisions; a change to a criterion goes through intake like any row.
+Context: The criteria were ruled one at a time across the fix-pass reads of 2026-09-05 and 2026-09-06 and are recorded here once, as one rule.
