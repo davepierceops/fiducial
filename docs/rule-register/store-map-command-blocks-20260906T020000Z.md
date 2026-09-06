@@ -1,0 +1,76 @@
+# Store map — topic `command-blocks`
+
+Source file: `skills/command-blocks.md` @ fd54448. Register rows R1193–R1235 (43 rows).
+Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
+
+| register id | source file | disposition | store id |
+|---|---|---|---|
+| R1193 | skills/command-blocks.md | retired-DEC-000380 (C004: the file's session scope becomes the `session` key) | — |
+| R1194 | skills/command-blocks.md | retired-ruling (ruling 1: core R0208 defines command block and execution block; no distinct obligation here) | — |
+| R1195 | skills/command-blocks.md | retired-ruling (store-fix-1 item 4: describes) | — |
+| R1196 | skills/command-blocks.md | written | R1196 |
+| R1197 | skills/command-blocks.md | merged into R1196 | R1196 |
+| R1198 | skills/command-blocks.md | retired into R1196 (store-fix-5 item 4) | — |
+| R1199 | skills/command-blocks.md | written | R1199 |
+| R1200 | skills/command-blocks.md | written | R1200 |
+| R1201 | skills/command-blocks.md | retired into R1199 (store-fix-5 item 4) | — |
+| R1202 | skills/command-blocks.md | written | R1202 |
+| R1203 | skills/command-blocks.md | merged into R1202 | R1202 |
+| R1204 | skills/command-blocks.md | retired into R1202 (store-fix-5 item 4) | — |
+| R1205 | skills/command-blocks.md | written | R1205 |
+| R1206 | skills/command-blocks.md | written | R1206 |
+| R1207 | skills/command-blocks.md | merged into R1206 | R1206 |
+| R1208 | skills/command-blocks.md | written | R1208 |
+| R1209 | skills/command-blocks.md | merged into R1208 | R1208 |
+| R1210 | skills/command-blocks.md | retired into R1208 (store-fix-5 item 4) | — |
+| R1211 | skills/command-blocks.md | retired-ruling (store-fix-1 item 5: negation) | — |
+| R1212 | skills/command-blocks.md | written | R1212 |
+| R1213 | skills/command-blocks.md | written | R1213 |
+| R1214 | skills/command-blocks.md | merged into R1213 | R1213 |
+| R1215 | skills/command-blocks.md | written | R1215 |
+| R1216 | skills/command-blocks.md | retired into R1215 (store-fix-5 item 4) | — |
+| R1217 | skills/command-blocks.md| merged into R1215 (fix 3 item 2) | R1215 |
+| R1218 | skills/command-blocks.md | written | R1218 |
+| R1219 | skills/command-blocks.md | retired into R1218 (store-fix-5 item 4) | — |
+| R1220 | skills/command-blocks.md | written | R1220 |
+| R1221 | skills/command-blocks.md| merged into R1220 (fix 3 item 2) | R1220 |
+| R1222 | skills/command-blocks.md | retired into R1220 (store-fix-5 item 4) | — |
+| R1223 | skills/command-blocks.md | merged into R1221 | R1221 |
+| R1224 | skills/command-blocks.md | retired (store-fix-5 item 4: ruled — the container talking) | — |
+| R1225 | skills/command-blocks.md | merged into R1224 | R1224 |
+| R1226 | skills/command-blocks.md | retired into R1228 (store-fix-5 item 4) | — |
+| R1227 | skills/command-blocks.md | merged into R1196 | R1196 |
+| R1228 | skills/command-blocks.md | written | R1228 |
+| R1229 | skills/command-blocks.md | merged into R1199 | R1199 |
+| R1230 | skills/command-blocks.md | merged into R1208 | R1208 |
+| R1231 | skills/command-blocks.md | merged into R1215 | R1215 |
+| R1232 | skills/command-blocks.md | merged into R1202 | R1202 |
+| R1233 | skills/command-blocks.md | merged into R1206 | R1206 |
+| R1234 | skills/command-blocks.md | merged into R1218 | R1218 |
+| R1235 | skills/command-blocks.md | merged into R1220 | R1220 |
+
+Counts: rows consumed 43; rows written 26; definitions 4 (R1195, R1200, R1204, R1217); merged away 15; split 0; retired 2 (R1193 DEC-000380 / C004; R1194 ruling 1).
+
+Notes.
+
+- C046 (Dave's ruling, 2026-09-05) is written as three rows, consecutive orders 210–230, taking the three lowest available ids from the cluster in row order: R1220 (the expected-output line exists), R1221 (that line is observed in the target environment or qualitative; R1223 merged in), R1222 (blast radius above a destructive block). R1235, the conformance-criteria restatement of all three, merges into R1220.
+- C085 and C055 are cross-file clusters; under ruling 1 nothing from LEXICON.md, docs/global-context/core.md, or skills/directive-authoring.md appears in these bodies. R1194's whole content is core R0208's definition, so it is not restated here. C085's two intra-file rows (R1202, R1232) merge here; R1232's exit-status half is the obligation already carried by R1205, which stands as its own row because naming the remote and checking the sync's exit status are independent obligations (ruling 10).
+- The eleven conformance criteria (lines 102–124) restate the prose rules as a checklist; each restatement merges into the prose row it restates (ruling 2), except R1226 and R1228, whose obligations appear nowhere else in the file and are written. The criterion at lines 112–113 (no ``` fence, nested blocks fenced `~~~`) carries no register id and consumed none.
+
+Amended by `docs/cycles/store-fix-1-20260906T040000Z.md`. Item 4 retired R1195 as a scope statement about the rule set. Item 5 retired R1211 as the negation of R1212. Item 7's tool-owned test retired nothing here: `bin/directive` emits no command block in any template region, and `bin/check-directive`'s M1-M8 test none — read from the generator's general-mode output and from `bin/aimeta/elements.py` at a184967. The fence rules (R1212), the expected-output rules (R1220-R1222) and the blast-radius rule survive as the authoring craft the tools cannot do.
+
+Store fix pass 2 item 4 replaces `role: [all]` on 24 rows of this topic with an explicit role list, decided per row: 24 rows to `[chief-of-staff]`. `all` is not a value; the lists are the role documents' own basename slugs at fd54448.
+
+Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 2 define rows (R1200, R1204), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 1 `define` row carrying a null term (R1217), each body restated as the instruction it carries.
+
+Store fix pass 3 item 2 merges R1217 into R1215 (trigger: a block carries a construct that can end the shell; R1217 named instances of R1215's rule) and R1221 into R1220 (trigger: stating a block's expected output).
+
+Store fix pass 5 item 4 rules the topic to 13 rows. Eight merges each keep the general rule and fold the
+instance or the how-to into it: R1198 into R1196 (where a manual step goes), R1201 into R1199 (declaring the
+no-capture exemption), R1204 into R1202 (whose body gains "`origin` counts: it is a remote name"; the `origin`
+define retires with it and the meaning is now inline), R1210 into R1208 (the heredoc instance of the
+copyability rule), R1216 into R1215 (branching as the guard that does not end the shell), R1219 into R1218
+(no placeholders), R1222 into R1220 (blast radius beside expected output), and R1226 into R1228 — the one merge
+that does not keep the lower id, because the directive names R1228 as the survivor. R1224 retires: a rule
+saying that every command block satisfies the command-block rules is the container talking. Topic count: 22
+rows before, 13 after.

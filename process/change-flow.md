@@ -1,7 +1,8 @@
 ---
 order: 10
+role: [architect-agent, chief-of-staff, coder-agent, context-quality-reviewer, copy-editor, critic, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent, test-designer-agent, writer]
 session: [decision, execution]
-corpus: [software, methodology]
+corpus: [software]
 ---
 
 # Process: Change Flow
