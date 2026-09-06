@@ -5,7 +5,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 
 | register id | source file | disposition | store id |
 |---|---|---|---|
-| R1030 | roles/release-manager-agent.md | written | R1030 |
+| R1030 | roles/release-manager-agent.md| retired-ruling (fix 3 item 6: describes) | — |
 | R1031 | roles/release-manager-agent.md | written | R1031 |
 | R1032 | roles/release-manager-agent.md | written | R1032 |
 | R1033 | roles/release-manager-agent.md| merged into R1032 (fix 3 item 2) | R1032 |
@@ -27,3 +27,5 @@ Counts: rows consumed 16; rows written 15; definitions 0; merged away 1 (R1040 i
 Amended by `docs/cycles/store-fix-1-20260906T040000Z.md` item 6d, which moved seven rows in from the dissolved `operating-model` topic, at orders 160-220, corpus `software`: R0502-R0505 (the change package), R0506 (the shape of the reply, keyed also to `reviewer-agent` and `skeptic-risk-agent`), R0509 (the definition of done, merging R0512-R0520 with R0459 and R0508) and R0527 (escalate for human code inspection, keyed also to `chief-of-staff`).
 
 Store fix pass 3 item 2 merges R1033-R1038 into R1032 (trigger: assembling a release package) and R1043 into R1041 (trigger: writing a release readiness review).
+
+Store fix pass 3 item 6 retires R1030 as `describes`, on a re-read of the source file's opening section at fd54448: the opening of `roles/release-manager-agent.md` characterizes the role's two sittings; the `session` key carries that, and R1032 and R1031 carry the acts.

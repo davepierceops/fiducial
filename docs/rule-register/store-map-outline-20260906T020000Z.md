@@ -5,7 +5,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 
 | register id | source file | disposition | store id |
 |---|---|---|---|
-| R1366 | skills/outline.md | written | R1366 |
+| R1366 | skills/outline.md| retired-ruling (fix 3 item 6: describes) | — |
 | R1367 | skills/outline.md | written | R1367 |
 | R1368 | skills/outline.md | written | R1368 |
 | R1369 | skills/outline.md | written | R1369 |
@@ -55,3 +55,5 @@ Store fix pass 2 item 5 makes this topic's template a process document, `process
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 2 define rows (R1384, R1391), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 2 `define` rows carrying a null term (R1375, R1385), each body restated as the instruction it carries.
 
 Store fix pass 3 item 2 merges R1375 into R1374: both are the topic-inventory step, performed as one act.
+
+Store fix pass 3 item 6 retires R1366 as `describes`, on a re-read of the source file's opening section at fd54448: the opening of `skills/outline.md` routes the skill to a session kind; `writer` R1164 carries the trigger and R1367 the read.
