@@ -44,7 +44,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0848 | public-prose-criteria.md | merged into R0820 | R0820 |
 | R0849 | public-prose-criteria.md | written | R0849 |
 | R0850 | public-prose-criteria.md | retired-ruling (store-fix-1 item 4: describes) | — |
-| R0851 | public-prose-criteria.md | written | R0851 |
+| R0851 | public-prose-criteria.md| retired-never-observed (fix 3 item 4) | — |
 | R0852 | public-prose-criteria.md | retired-ruling (ruling 5: negation of R0851) | — |
 | R0853 | public-prose-criteria.md | written | R0853 |
 | R0854 | public-prose-criteria.md | written | R0854 |
@@ -84,3 +84,5 @@ Notes on the rulings applied:
   predicted.
 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 2 define rows (R0836, R0845), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 2 `define` rows carrying a null term (R0826, R0838), each body restated as the instruction it carries.
+
+Store fix pass 3 item 4 retires R0851 under the never-observed test, disposition `never-observed`: a ban with no incident behind it; voice R1600 already states the site-level disclosure positively (named by the directive).

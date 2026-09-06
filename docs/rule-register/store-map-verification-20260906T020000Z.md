@@ -57,7 +57,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0157 | context-sets/testing-and-verification.md | written | R0157 |
 | R0158 | context-sets/testing-and-verification.md | written | R0158 |
 | R0159 | context-sets/testing-and-verification.md | written | R0159 |
-| R0160 | context-sets/testing-and-verification.md | written | R0160 |
+| R0160 | context-sets/testing-and-verification.md| retired-never-observed (fix 3 item 4) | — |
 | R0161 | context-sets/testing-and-verification.md | written | R0161 |
 | R0070 | context-sets/production-grade-software.md | written | R0070 |
 | R0071 | context-sets/production-grade-software.md | retired-ruling (store-fix-1 item 4: describes) | — |
@@ -90,3 +90,5 @@ Store fix pass 2 item 3 re-keys every row in this topic off `role: [all]`. The 2
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 7 define rows (R0108, R0131, R0133, R0135, R0137, R0139, R0150), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 2 `define` rows carrying a null term (R0112, R0140), each body restated as the instruction it carries.
 
 Store fix pass 3 item 2 merges R0072 into R0070 (trigger: the change is meant to be production-grade) and R0153-R0155 into R0152 (trigger: the work is a small project or an early-stage feature).
+
+Store fix pass 3 item 4 retires R0160 under the never-observed test, disposition `never-observed`: a ban with no incident behind it; R0782 already states positively that a mock is a claim about our side with the other side verified elsewhere.

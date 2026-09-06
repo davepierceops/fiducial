@@ -25,7 +25,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R1156 | roles/test-designer-agent.md | written | R1156 |
 | R1157 | roles/test-designer-agent.md | written | R1157 |
 | R1158 | roles/test-designer-agent.md | written | R1158 |
-| R1159 | roles/test-designer-agent.md | written | R1159 |
+| R1159 | roles/test-designer-agent.md| retired-never-observed (fix 3 item 4) | — |
 | R1495 | skills/test-plan-review.md | retired-ruling (ruling 9 addendum: a scope statement of which session kind the procedure is for becomes the `session` key) | — |
 | R1496 | skills/test-plan-review.md | written | R1496 |
 | R1497 | skills/test-plan-review.md | written | R1497 |
@@ -48,3 +48,5 @@ Counts: rows consumed 36; rows written 29; definitions 1 (R1140); merged away 5 
 Cross-file clusters left unmerged, as ruled: C012 (R1150 run the red-gate / R1507 check the plan provides one) — different role and different obligation; C179 (R1143/R1503), C180 (R1145/R1505), C181 (R1146/R1506), C182 (R1148/R1508) — the designer builds, the reviewer checks, so the `role` key differs and ruling 1 splits them. C025 (R1151), C044 (R1157), C084 (R1154), C096 (R1158), C097 (R1156), C183 (R1155) cluster across topics and are never merged.
 
 Store fix pass 3 item 2 merges R1144-R1148 into R1143 (trigger: designing the test plan) and R1502-R1510 into R1496 (trigger: reviewing a test plan). R1146 and R1506 stated the same obligation on the two sides; each survives inside its own checklist.
+
+Store fix pass 3 item 4 retires R1159 under the never-observed test, disposition `never-observed`: a ban with no incident behind it; R0121 already states positively that the smallest test producing the evidence is the one to choose.

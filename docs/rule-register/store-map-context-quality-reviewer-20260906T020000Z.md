@@ -10,7 +10,9 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0946 | roles/context-quality-reviewer.md | written | R0946 |
 | R0947 | roles/context-quality-reviewer.md | written | R0947 |
 | R0948 | roles/context-quality-reviewer.md | written | R0948 |
-| R0949 | roles/context-quality-reviewer.md | written | R0949 |
+| R0949 | roles/context-quality-reviewer.md| retired-never-observed (fix 3 item 4) | — |
 | R0950 | roles/context-quality-reviewer.md | written | R0950 |
 
 Counts: rows consumed 7; rows written 6; definitions 0; merged away 0; split 0; retired 1 (R0945, the frontmatter in-scope set — named by DEC-000380; its replacement scope is Dave's to rule and none is invented here).
+
+Store fix pass 3 item 4 retires R0949 under the never-observed test, disposition `never-observed`: a ban with no incident behind it; core R0166 already states positively that agreement is Dave's.
