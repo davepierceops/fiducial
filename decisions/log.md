@@ -620,3 +620,8 @@ Context: The bundle-system TRD's audience-and-corpus model resolved membership t
 Date: 2026-09-04
 Decision: Treat the filesystem representation as the initial persistence mechanism, not as an architectural dependency of the rule-processing logic. Define a narrow abstraction for obtaining rule rows. Code that selects, validates, orders, bundles, retires, or otherwise reasons about rules operates on row objects and does not know whether those rows came from individual files, a database, or another backing store. The initial implementation may read one rule per file from rules/, but filesystem traversal, filename conventions, frontmatter parsing, and file I/O stay inside the storage layer. The boundary makes it possible to replace the filesystem-backed implementation later with a database-backed implementation without changing the rule-processing logic. Do not introduce a database now merely to satisfy this abstraction. The goal is substitution, not premature infrastructure.
 Context: Files are an unusual store for something that is plainly rows — a fine choice for now, but one the project should be free to change, and changing it should touch one layer of the code and nothing else. Dave's wording, verbatim from fiducial-rebuild-shape-20260905T000500Z.md § "Storage boundary"; the PRD carries it as G7 and AC-RS-4.
+
+## DEC-000420 — Definitions are rows selected by term
+Date: 2026-09-05
+Decision: A definition is a row carrying a `term` key and no role, session, or corpus key. The bundle tool includes a definition when a selected row's body uses one of its terms, and scans the pulled definitions' bodies the same way, transitively.
+Context: The PRD's G12; a definition keyed to roles either duplicates across bundles or goes missing from one.
