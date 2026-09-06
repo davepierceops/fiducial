@@ -35,7 +35,8 @@ terms = importlib.import_module("rulestore.terms")
 keys_mod = importlib.import_module("rulestore.keys")
 near_mod = importlib.import_module("rulestore.near")
 render = importlib.import_module("rulestore.render")
-FileRowSource = importlib.import_module("rulestore.store").FileRowSource
+store_mod = importlib.import_module("rulestore.store")
+FileRowSource = store_mod.FileRowSource
 
 EXIT_OK = 0
 EXIT_REFUSED = 2
@@ -101,7 +102,10 @@ def refuse(message):
 
 
 def cmd_keys(root):
-    rows = FileRowSource(root).rows()
+    try:
+        rows = FileRowSource(root).rows()
+    except store_mod.RowShapeError as exc:
+        return refuse("refused: %s" % exc)
     census = keys_mod.keys_in_use(rows)
     for key in sorted(census):
         for value in sorted(census[key]):
@@ -110,7 +114,11 @@ def cmd_keys(root):
 
 
 def cmd_near(root, text):
-    for row, score in near_mod.near(text, FileRowSource(root).rows()):
+    try:
+        rows = FileRowSource(root).rows()
+    except store_mod.RowShapeError as exc:
+        return refuse("refused: %s" % exc)
+    for row, score in near_mod.near(text, rows):
         print("%s %.2f" % (row.id, score))
     return EXIT_OK
 
@@ -127,7 +135,10 @@ def cmd_where(root, tokens, name, out):
     if not _synced_with_main(root):
         return refuse("refused: HEAD is not synced with origin/main")
 
-    rows = FileRowSource(root).rows()
+    try:
+        rows = FileRowSource(root).rows()
+    except store_mod.RowShapeError as exc:
+        return refuse("refused: %s" % exc)
     selected = query.select(rows, where)
     if not selected:
         return refuse("refused: the query selected no rows")
