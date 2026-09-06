@@ -39,8 +39,14 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R1426 | skills/review-artifact.md | written | R1426 |
 | R1427 | skills/review-artifact.md | written | R1427 |
 | R1428 | skills/review-artifact.md | written | R1428 |
+| R1448 | skills/spec-review-cycle.md | written (restored by store-fix-1 item 2) | R1448 |
+| R1449 | skills/spec-review-cycle.md | merged into R1448 | R1448 |
+| R1450 | skills/spec-review-cycle.md | written (restored by store-fix-1 item 2) | R1450 |
+| R1451 | skills/spec-review-cycle.md | merged into R1450 | R1450 |
 
-Counts: rows consumed 34; rows written 28; definitions 2; merged away 4; split 1 (R1395 → R1395a, R1395b); retired 3 (R1397 container rule; R1407, R1410 DEC-000380).
+Counts: rows consumed 38 (34 from `skills/review-artifact.md`, 4 from `skills/spec-review-cycle.md`); rows written 30; definitions 2; merged away 6; split 1 (R1395 → R1395a, R1395b); retired 3 (R1397 container rule; R1407, R1410 DEC-000380).
+
+Amended by `docs/cycles/store-fix-1-20260906T040000Z.md` item 2: the finding-triage rows R1448-R1451, retired by the store-all directive with the spec-review cycle, are restored here as two rows — R1448 (absorbing R1449) and R1450 (absorbing R1451) — in open/closed vocabulary. Their register ids sit outside this topic's R1395-R1428 span; the header's row range names the source file's span, not the topic's.
 
 Notes.
 

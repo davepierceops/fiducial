@@ -24,10 +24,10 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R1445 | skills/spec-review-cycle.md | retired-DEC-000380 (gate cadence) | — |
 | R1446 | skills/spec-review-cycle.md | retired-DEC-000380 (cycle step 1) | — |
 | R1447 | skills/spec-review-cycle.md | retired-DEC-000380 (cycle step 2) | — |
-| R1448 | skills/spec-review-cycle.md | retired-DEC-000380 (cycle step 2) | — |
-| R1449 | skills/spec-review-cycle.md | retired-DEC-000380 (cycle step 2) | — |
-| R1450 | skills/spec-review-cycle.md | retired-DEC-000380 (cycle step 2) | — |
-| R1451 | skills/spec-review-cycle.md | retired-DEC-000380 (cycle step 2) | — |
+| R1448 | skills/spec-review-cycle.md | moved to topic `review-artifact-schema` (store-fix-1 item 2) | R1448 |
+| R1449 | skills/spec-review-cycle.md | merged into R1448, topic `review-artifact-schema` (store-fix-1 item 2) | R1448 |
+| R1450 | skills/spec-review-cycle.md | moved to topic `review-artifact-schema` (store-fix-1 item 2) | R1450 |
+| R1451 | skills/spec-review-cycle.md | merged into R1450, topic `review-artifact-schema` (store-fix-1 item 2) | R1450 |
 | R1452 | skills/spec-review-cycle.md | retired-DEC-000380 (cycle step 3) | — |
 | R1453 | skills/spec-review-cycle.md | retired-DEC-000380 (cycle directive, step 4) | — |
 | R1454 | skills/spec-review-cycle.md | retired-DEC-000380 (cycle step 5) | — |
@@ -66,4 +66,6 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R1487 | skills/spec-review-cycle.md | retired-DEC-000380 (C002: what the flip commit and `last-reviewed` carry) | — |
 | R1488 | skills/spec-review-cycle.md | merged into R1468 | R1468 |
 
-Counts: rows consumed 60; rows written 13; definitions 1; merged away 7; split 2 (R1483 into two written halves; R1486 into one written half and one retired half); retired 41 (plus the retired half of R1486).
+Counts: rows consumed 60; rows written 13 here; definitions 1; merged away 7; split 2 (R1483 into two written halves; R1486 into one written half and one retired half); retired 37 (plus the retired half of R1486); moved to another topic 4 (R1448-R1451 -> `review-artifact-schema`, 2 rows).
+
+Amended by `docs/cycles/store-fix-1-20260906T040000Z.md` item 2: R1448-R1451 leave this map's retired set and are written under topic `review-artifact-schema` as two rows, R1448 (absorbing R1449) and R1450 (absorbing R1451).
