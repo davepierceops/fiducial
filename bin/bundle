@@ -101,8 +101,8 @@ def refuse(message):
 
 
 def cmd_keys(root):
-    rule_rows = [row for row in FileRowSource(root).rows() if row.kind == "rule"]
-    census = keys_mod.keys_in_use(rule_rows)
+    rows = FileRowSource(root).rows()
+    census = keys_mod.keys_in_use(rows)
     for key in sorted(census):
         for value in sorted(census[key]):
             print("%s=%s %d" % (key, value, census[key][value]))

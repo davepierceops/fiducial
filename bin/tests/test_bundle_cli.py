@@ -238,7 +238,7 @@ class TestBundleKeysAndNear(BundleCliTestCase):
         self.dirty_the_store()
 
     def test_ac_rs_3_keys_lists_every_key_value_with_its_count(self):
-        """AC-RS-3: `<key>=<value> <count>`, computed from the store, sorted."""
+        """AC-RS-3: `<key>=<value> <count>`, computed from the whole store — rules and process documents alike — sorted."""
         code, out, err = self.bundle("--keys")
         self.assertEqual(code, EXIT_OK, err)
         lines = out.strip().splitlines()
@@ -246,7 +246,7 @@ class TestBundleKeysAndNear(BundleCliTestCase):
         for line in lines:
             self.assertRegex(line, KEYS_LINE_RE)
         self.assertEqual(lines, sorted(lines))
-        self.assertIn("role=writer 2", lines)
+        self.assertIn("role=writer 3", lines)
         self.assertIn("topic=core 2", lines)
 
     def test_ac_rs_3_keys_excludes_the_two_typed_keys(self):
