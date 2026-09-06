@@ -45,3 +45,11 @@ the definition-of-done row R0509.
 R0465 is added by `docs/cycles/store-fix-2-20260906T050000Z.md` item 1, which restores it; store fix pass 2 item 7 strips `role`, `session` and `corpus` from every define row, so it carries `term` and nothing else.
 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 3 define rows (R0464, R0470, R0493), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms.
+
+Store fix pass 4 item 3 brings in R0090, R0091 and R0094 from the dissolved `spec-and-change-discipline`, orders
+260–280, corpus narrowed to `[software]`: propose a spec edit rather than making it; edit specs and nothing else
+under a spec-editing directive; pin the spec branch's SHA in a directive issued while its delta is open. Item 9's
+sweep retires R0480 as a duplicate of `convergence`'s R1481, which also names the role that gated the spec, and
+gives R0481 the "nothing else closes it" clause from `convergence`'s R1486a, which retires into it. R0017/R0471
+and R0091/R1156 are kept as pairs: running no per-change stage against an open spec is wider than implementing
+nothing against one, and the C097 mirror rows are deliberately two. Topic count: 25 rows before, 27 after.

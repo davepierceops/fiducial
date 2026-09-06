@@ -65,3 +65,9 @@ Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 3 define rows
 Store fix pass 3 item 2 merges R0810 into R0809 (trigger: before release) and R1185-R1189, R1191 into R1178 (trigger: running a boundary audit).
 
 Store fix pass 3 item 6 retires R0779 as `describes`, on a re-read of the source file's opening section at fd54448: the Purpose section states what the policy does; R0781 is the obligation underneath it.
+
+Store fix pass 4 item 9's cross-topic sweep retires three rows. R0787 is a duplicate of core's R0456 (core is
+loaded by every role, this topic by eight); R0788 of the lexicon's R0030, which names the four release-impact
+labels and is loaded by every role; R0808 of the Skeptic's stance row R1058, the pair the directive names. R0799
+survives its pair with `trd`'s R1556, which retires into it. R0110/R0787 is moot with R0787 gone. Topic count:
+21 rows before, 18 after.

@@ -9,7 +9,7 @@ in its bundles does*. A pair retires one row only where both hold — the two ro
 some role's query loads both. Where the two rows sit in different bundles, no bundle sees the repetition and
 both stay; where they state different obligations, both stay.
 
-**Pairs emitted: 55. Rows retired: 16. Pairs kept both: 39.**
+**Pairs emitted: 55. Rows retired: 16. Pairs touching a retirement: 22. Pairs kept both: 33.**
 
 ## Retired, with the survivor
 
@@ -34,22 +34,22 @@ both stay; where they state different obligations, both stay.
 
 ## Kept both
 
-The 39 pairs that stay, by why they stay.
+The 33 pairs where neither row retires, by why they stay.
 
-**No role's query loads both (19 pairs).** The Copy Editor, the Critic and the Writer carry parallel rows with
+**No role's query loads both (21 pairs).** The Copy Editor, the Critic and the Writer carry parallel rows with
 near-identical text, and each role loads only its own: R0954/R1002, R0954/R1162, R1002/R1162, R0957/R1006,
 R0955/R1004, R0991/R1023, R0975/R1019, R1001/R1161, R0953/R1001, R0953/R1161, R0997/R1027, R0997/R1174,
 R1027/R1174, R0998/R1028, R0956/R1005, R0990/R1021, R0988/R1022. Also R0505/R0555, R0505/R0551, R0551/R1039
-(release-manager-agent against change-control, disjoint role lists), R0091/R1156 (the C097 mirror pair — the
-spec-editing session and the Test Designer, deliberately two rows), R0480/R1485 (moot: R0480 retires above).
+— release-manager-agent against change-control, disjoint role lists — and R0091/R1156, the C097 mirror pair:
+the spec-editing session and the Test Designer, deliberately two rows.
 
-**Different obligations (20 pairs).** R1029/R1176 — each names its own role's tier. R0110/R0456 and R0110/R0787
-— the boundary of a claim is not the class of a claim. R0819/R0985, R0818/R0971, R0846/R0977, R0849/R0970 — the
-Criteria state what the prose must be; the Copy Editor's rows state the pass that finds where it is not.
-R0181/R0872 — a false positive of the normalizer. R0482/R1533 — when acceptance criteria are written against
-where they are derived from. R0499/R0573 — flags and canaries against where the go/no-go attaches. R0017/R0471
-and R0017/R1153 — implementing against an open spec is narrower than running no per-change stage against one.
-R1101/R1468 — the Spec Reviewer's two reads against the Test Designer's scope. R0478/R1150, R0484/R1150,
-R0016/R1152, R0016/R1154, R0015/R1152, R0018a/R1481, R0018a/R1485, R0018b/R1486a, R0481/R1486a, R1126/R1483a,
-R0030/R0788, R0456/R0787, R0799/R1556, R1157/R1479, R1152/R1468, R1154/R1473, R0010/R1491 — pairs whose second
-row retires above, listed by the generator before the sweep ran.
+**Different obligations (12 pairs).** R1029/R1176 — each names its own role's tier. R0110/R0456 — the boundary
+of a claim is not the class of a claim. R0819/R0985, R0818/R0971, R0846/R0977, R0849/R0970 — the Criteria state
+what the prose must be; the Copy Editor's rows state the pass that finds where it is not. R0181/R0872 — a false
+positive of the normalizer. R0482/R1533 — when acceptance criteria are written against where they are derived
+from. R0499/R0573 — flags and canaries against where the go/no-go attaches. R0017/R0471 and R0017/R1153 —
+implementing against an open spec is narrower than running no per-change stage against one. R1101/R1468 — the
+Spec Reviewer's two reads against the Test Designer's scope.
+
+The remaining 22 of the 55 emitted pairs each have one row in the retired column above; they are not listed
+again here.

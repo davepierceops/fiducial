@@ -73,3 +73,10 @@ Amended by `docs/cycles/store-fix-1-20260906T040000Z.md` item 2: R1448-R1451 lea
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 1 define row (R1474), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms.
 
 Store fix pass 3 item 2 merges R1483b and R1484 into R1483a: all three fire on one trigger — reading a spec branch at its close — and are the two checks that read makes, performed together. R1483's split (ruling 10) leaves one written half, R1483a.
+
+Store fix pass 4 item 9's cross-topic sweep leaves the topic two rows lighter and one clause heavier. R1483a
+retires as a duplicate of the Spec Reviewer's own close checklist R1126, which is fuller and carries the same
+role; R1486a retires into `change-flow`'s R0481, which takes its "nothing else closes it" clause. R1468 takes
+the "whatever its verdict" clause from the lexicon's R0015, which retires into it. R1481, R1473 and R1479
+survive the sweep as the broader-loaded rows of their pairs, taking R0480/R0018a, R1154 and R1157 respectively.
+Topic count: 11 rows before, 9 after.

@@ -56,3 +56,8 @@ Test Designer's own rows. R1496 — the merged test-plan-review checklist, keyed
 `reviewer` at order 120. R1497, its trigger row and also keyed `reviewer-agent`, moves with it at order 130: the
 item names R1496, and leaving R1497 behind would leave a reviewer-agent row in the Test Designer's topic, which
 is what the item removes. Item 3 moves R0083, R0085 and R0086 into this topic in the same pass.
+
+Store fix pass 4 item 9's cross-topic sweep retires four more of the topic's rows, each stated by a row the Test
+Designer's own bundle already loads: R1150 (duplicate of `change-flow`'s R0484), R1152 and R1154 (of
+`convergence`'s R1468 and R1473) and R1157 (of `convergence`'s R1479). Topic count: 13 rows before the pass,
+10 after — R1496 and R1497 out under item 8, R0083, R0085 and R0086 in under item 3, four out under item 9.

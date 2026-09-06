@@ -77,3 +77,13 @@ Store fix pass 2 item 4 replaces `role: [all]` on 42 rows of this topic with an 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 23 define rows (R0003, R0004, R0006, R0009, R0012, R0022, R0023, R0024, R0025, R0026, R0027, R0028, R0029, R0031, R0037, R0038, R0040, R0043, R0045, R0054, R0055, R0057, R0064), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 1 `define` row carrying a null term (R0011), each body restated as the instruction it carries.
 
 Store fix pass 2 item 9 notes, without changing anything: the topic name stays lowercase `lexicon`, though its source file is `LEXICON.md`. Topic names are the source basename without extension, lowercased like every other topic; the divergence from the filename is deliberate and is recorded here rather than fixed.
+
+Store fix pass 4 changes the topic on four counts. Item 3: R0006's body takes the second sentence of R0092,
+which retires as its duplicate — a revision of an agreed spec opens a new delta on a new branch. Item 4 brings
+in R0604 (`term: [version, versions]`) and R0611 (`term: [agreed]`) from the dissolved `spec-gating`, orders 430
+and 440. Item 7 brings in R0757 (`PRD`), R0758 (`TRD`), R0759 (`acceptance criteria`), R0760 (`architecture
+summary`) and R0761 (`tracker issue`) from the dissolved `source-of-truth-policy`, orders 450–490. Item 9's
+cross-topic sweep retires five obligation rows the topic carried from LEXICON.md, each stated by a row some role
+loads alongside it: R0010 (duplicate of `reconciliation`'s R1491), R0015 and R0016 (of `convergence`'s R1468,
+which takes R0015's "whatever its verdict" clause), R0018a (of `convergence`'s R1481) and R0018b (of
+`change-flow`'s R0481). Topic count: 42 rows before, 44 after.

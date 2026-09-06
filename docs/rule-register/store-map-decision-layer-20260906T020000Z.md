@@ -53,3 +53,8 @@ Amended by `docs/cycles/store-fix-1-20260906T040000Z.md` item 1: R0256 and R0257
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 1 define row (R0247), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms.
 
 Store fix pass 3 item 2 merges R0257 into R0256: both fire on one trigger — a directive is written — and constrain the same act.
+
+Store fix pass 4 item 3 brings in R0100 at order 210, keyed to the four decision roles: the loose-end tracker's
+five checkpoints as one checklist row, merging R0101–R0105 from the dissolved `spec-and-change-discipline`.
+Item 9's sweep emitted no pair between this topic and `core`: the operating-model rows store fix pass 1 merged
+into core have no surviving decision-layer twin. Topic count: 19 rows before, 20 after.

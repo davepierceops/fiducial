@@ -13,3 +13,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0943 | roles/coder-agent.md | written | R0943 |
 
 Counts: rows consumed 6; rows written 6; definitions 1 (R0938); merged away 0; split 0; retired 0.
+
+Store fix pass 4 item 3 brings in R0106 at order 70, keyed `[coder-agent, test-designer-agent]`: a write path
+maintains the entity's derived fields as every other write path does, and the package is not done until they are
+enumerated and each is checked. R0107 merges into it. Topic count: 5 rows before, 6 after.
