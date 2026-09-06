@@ -1,49 +1,42 @@
-"""RED-GATE STUB for definition pulling (DEC-000420). Deliberately wrong.
+"""Definition pulling by term (AC-RS-13, DEC-000420).
 
-Wrongness, on purpose:
-  * matches a term as a bare substring, so `row` pulls on `rowdy`;
-  * never scans a pulled definition's body, so nothing is transitive;
-  * adds a definition once per matching row, so a definition arrives twice;
-  * returns the definitions in discovery order, not the contract's order;
-  * imports `os` and names `process/` — AC-RS-4 boundary violations, on purpose.
+Contract: `docs/cycles/bundle-tool-tests-20260906T110000Z.md` § "INTERFACE
+CONTRACT", landed at `d5b643b48cf0285194d29b09f6755db1b8a16b34`.
 """
 
 from __future__ import annotations
 
-import os  # AC-RS-4 violation, on purpose
+import re
 
-from rulestore.store import Row, RowSource  # noqa: F401
-
-#: AC-RS-4 violation, on purpose: a processing module naming a storage path.
-PROCESS_DIR = "process/"
+from rulestore.query import sort_key
 
 
 def is_definition(row):
-    """A definition is a row with a `term` key and no `role` key (DEC-000420)."""
+    """A definition is a row with a `term` key and no `role` key."""
     return bool(row.keys.get("term")) and not row.keys.get("role")
 
 
-def terms_of(row):
-    """Every term phrase a definition row declares."""
-    return list(row.keys.get("term") or [])
+def _term_pattern(term):
+    return re.compile(r"(?<!\w)%s(?!\w)" % re.escape(term), re.IGNORECASE)
 
 
 def pull_definitions(selected, all_rows):
-    """STUB: substring matching, no transitivity, duplicates admitted."""
+    """Definitions pulled into `selected`, transitively, in `select`'s order."""
     definitions = [row for row in all_rows if is_definition(row)]
-    pulled = []
-    for row in selected:
-        haystack = (row.body or "").lower()
-        for definition in definitions:
-            if definition in selected:
-                continue
-            for term in terms_of(definition):
-                if term.lower() in haystack:
-                    pulled.append(definition)
-                    break
-    return pulled
-
-
-def _unused():
-    """Never called. Present only so `os` is genuinely imported."""
-    return os.sep + PROCESS_DIR
+    already = {row.id for row in selected}
+    pulled = {}
+    frontier = list(selected)
+    while frontier:
+        next_frontier = []
+        for row in frontier:
+            haystack = row.body or ""
+            for definition in definitions:
+                if definition.id in already or definition.id in pulled:
+                    continue
+                for term in definition.keys.get("term") or []:
+                    if _term_pattern(term).search(haystack):
+                        pulled[definition.id] = definition
+                        next_frontier.append(definition)
+                        break
+        frontier = next_frontier
+    return sorted(pulled.values(), key=sort_key)

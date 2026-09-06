@@ -1,23 +1,13 @@
-"""RED-GATE STUB for selection. Deliberately wrong.
+"""Selection and ordering over rows (AC-RS-2).
 
-Wrongness, on purpose:
-  * `parse_where` accepts a token with no `=`, an empty key and an empty value;
-  * `select` treats a missing key as a match;
-  * `select` returns its result reversed, ignoring order / topic / id;
-  * the module imports `os` and `pathlib`, imports `FileRowSource` from the
-    storage module, and names `rules/` — three AC-RS-4 boundary violations, so
-    `test_rulestore_boundary.py` reds on an assertion rather than on nothing.
+Contract: `docs/cycles/bundle-tool-tests-20260906T110000Z.md` § "INTERFACE
+CONTRACT", landed at `d5b643b48cf0285194d29b09f6755db1b8a16b34`.
 """
 
 from __future__ import annotations
 
-import os  # AC-RS-4 violation, on purpose
-import pathlib  # AC-RS-4 violation, on purpose
-
-from rulestore.store import FileRowSource, Row, RowSource  # noqa: F401
-
-#: AC-RS-4 violation, on purpose: a processing module naming a storage path.
-STORE_DIR = "rules/"
+#: `None` order sorts after every integer, however large.
+_NO_ORDER = float("inf")
 
 
 class QueryError(Exception):
@@ -25,35 +15,46 @@ class QueryError(Exception):
 
 
 def parse_where(args):
-    """STUB: never raises, and keeps the whole token as the value."""
+    """`{key: value}` from `k=v` tokens. Any other shape is a `QueryError`."""
     where = {}
     for token in args:
-        key, _, _value = token.partition("=")
-        where[key.strip()] = token
+        if "=" not in token:
+            raise QueryError("not a k=v token: %r" % (token,))
+        key, _, value = token.partition("=")
+        key = key.strip()
+        value = value.strip()
+        if not key or not value:
+            raise QueryError("empty key or value: %r" % (token,))
+        where[key] = value
     return where
 
 
+def _topic_sort_value(row):
+    """A row's tie-break value: its first `topic`, or a process row's stem."""
+    if row.kind == "process":
+        stem = (row.path or row.id).rsplit("/", 1)[-1]
+        if stem.endswith(".md"):
+            stem = stem[: -len(".md")]
+        return stem
+    return (row.keys.get("topic") or [""])[0]
+
+
 def sort_key(row):
-    """STUB: the contract's order/topic/id key, never applied by `select`."""
-    order = row.order if row.order is not None else 10**9
-    topic = (row.keys.get("topic") or [""])[0]
-    return (order, topic, row.id)
+    """Ascending `order` (`None` last), then first `topic`, then `id`."""
+    order = row.order if row.order is not None else _NO_ORDER
+    return (order, _topic_sort_value(row), row.id)
 
 
 def select(rows, where):
-    """STUB: a missing key matches, and the result comes back reversed."""
+    """Exactly the rows where every named key's list contains the value."""
     hits = []
     for row in rows:
         matched = True
         for key, value in where.items():
             values = row.keys.get(key)
-            if values is not None and value not in values:
+            if not values or value not in values:
                 matched = False
+                break
         if matched:
             hits.append(row)
-    return list(reversed(hits))
-
-
-def _unused(root):
-    """Never called. Present only so `os`/`pathlib` are genuinely imported."""
-    return os.path.join(str(pathlib.Path(root)), STORE_DIR)
+    return sorted(hits, key=sort_key)

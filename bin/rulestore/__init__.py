@@ -1,16 +1,10 @@
-"""RED-GATE STUB package for the rule-store bundle tool. Deliberately wrong.
+"""The rule-store package behind `bin/bundle`.
 
-`bin/rulestore/` is the package `docs/cycles/bundle-tool-tests-20260906T110000Z.md`
-specifies: `store.py` (the storage boundary, DEC-000410), and the processing
-modules `query.py`, `terms.py`, `keys.py`, `near.py`, `render.py`.
+`store.py` is the storage boundary (DEC-000410): the one module allowed to
+name `rules/` or `process/`, walk a directory, parse frontmatter, or open a
+file. `query.py`, `terms.py`, `keys.py`, `near.py` and `render.py` are the
+processing modules, working over `Row` objects handed to them in memory.
 
-Every module here has the interface contract's public names with the contract's
-signatures, and every one of them returns a **deliberately wrong value**, so
-that `bin/tests/test_rulestore*.py` and `bin/tests/test_bundle_cli.py` go red on
-an `AssertionError` rather than on an `ImportError` or an `AttributeError`. Each
-module's docstring names its wrongness. Nothing here is a head start on the
-implementation: no module decides anything the acceptance criteria ask for.
-
-The Coder replaces this package. See `bin/tests/stubs/README.md` for the same
-arrangement applied to `bin/directive` and `bin/check-directive`.
+Contract: `docs/cycles/bundle-tool-tests-20260906T110000Z.md` § "INTERFACE
+CONTRACT", landed at `d5b643b48cf0285194d29b09f6755db1b8a16b34`.
 """
