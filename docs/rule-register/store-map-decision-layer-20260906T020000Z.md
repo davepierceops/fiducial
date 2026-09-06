@@ -8,8 +8,8 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0223 | docs/global-context/decision-layer.md | retired-ruling (container rule 4: load order) | — |
 | R0224 | docs/global-context/decision-layer.md | retired-ruling (container rule 4: who receives the file) | — |
 | R0225 | docs/global-context/decision-layer.md | written | R0225 |
-| R0226 | docs/global-context/decision-layer.md | written | R0226 |
-| R0227 | docs/global-context/decision-layer.md | written | R0227 |
+| R0226 | docs/global-context/decision-layer.md | retired into R0225 (store-fix-5 item 5) | — |
+| R0227 | docs/global-context/decision-layer.md | retired into R0225 (store-fix-5 item 5) | — |
 | R0228 | docs/global-context/decision-layer.md | written | R0228 |
 | R0229 | docs/global-context/decision-layer.md | written | R0229 |
 | R0230 | docs/global-context/decision-layer.md | written | R0230 |
@@ -30,7 +30,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0245 | docs/global-context/decision-layer.md | written | R0245 |
 | R0246 | docs/global-context/decision-layer.md | written | R0246 |
 | R0247 | docs/global-context/decision-layer.md | written | R0247 |
-| R0248 | docs/global-context/decision-layer.md | split into R0248a, R0248b | R0248a, R0248b |
+| R0248 | docs/global-context/decision-layer.md | split into R0248a, R0248b; R0248b retires into R0248a (store-fix-5 item 5) | R0248a |
 | R0249 | docs/global-context/decision-layer.md | written | R0249 |
 | R0250 | docs/global-context/decision-layer.md | retired-ruling (conversation-retro owns the use-when row) | — |
 | R0251 | docs/global-context/decision-layer.md | retired-ruling (conversation-retro owns the retro's content rules) | — |
@@ -62,3 +62,10 @@ into core have no surviving decision-layer twin. Topic count: 19 rows before, 20
 Store fix pass 5 item 3 gives R0252's body the named told states from `chief-of-staff`'s R0933, which retires
 into it: any execution session left running, any worktree held, and whether the connector is released. The text
 is the directive's, verbatim.
+
+Store fix pass 5 item 5 rules three rows. R0226 and R0227 retire into R0225, one row on how a question is put:
+one at a time, the item before the choice, yes/no where it can be, and the open question restated after a
+report or a block. R0248b retires into R0248a: one document under review, and "ship" or "done" advances it
+exactly one step. R0100 re-keys to `role: [chief-of-staff]` alone — the tracker is the Chief of Staff's to keep
+— and its body states three checkpoints rather than five: the session's end, relevance, and the account before
+a release gate or a delta's close. Topic count: 20 rows before, 17 after.
