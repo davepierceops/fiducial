@@ -625,3 +625,8 @@ Context: Files are an unusual store for something that is plainly rows — a fin
 Date: 2026-09-05
 Decision: A definition is a row carrying a `term` key and no role, session, or corpus key. The bundle tool includes a definition when a selected row's body uses one of its terms, and scans the pulled definitions' bodies the same way, transitively.
 Context: The PRD's G12; a definition keyed to roles either duplicates across bundles or goes missing from one.
+
+## DEC-000430 — Engagement material waits for the next engagement
+Date: 2026-09-05
+Decision: No engagement material is written as rows now. `engagements/` stays as it is until the next engagement needs it, and is written then through intake.
+Context: Resolves the rule-store PRD's OQ-2; the 153 register rows from the engagement files were left untouched by the store migration.
