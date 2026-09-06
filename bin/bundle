@@ -1,9 +1,17 @@
 #!/usr/bin/env python3
-"""`bin/bundle --audience <value>` — audience-scoped governed-document bundle.
+"""`bin/bundle` — the rule-store bundle command.
 
-Contract: `docs/cycles/bundle-audience-tests-20260823T043025Z.md` and
-`docs/cycles/bundle-audience-coder-20260823T045135Z.md` (including its
-"Amendment 1"). AC-BA-1..8, as asserted by `bin/tests/test_bundle_audience.py`.
+Contract: `docs/cycles/bundle-tool-tests-20260906T110000Z.md` § "INTERFACE
+CONTRACT", landed at `d5b643b48cf0285194d29b09f6755db1b8a16b34`. Three modes:
+
+    bin/bundle --where k=v [k=v ...] [--name NAME] [--out DIR]
+    bin/bundle --keys
+    bin/bundle --near "TEXT"
+
+`--where` refuses (exit 2, one line on stderr, nothing written) on a
+malformed query, an unsynced working tree, or an empty selection; otherwise
+it writes exactly one file and prints its path (exit 0). `--keys` and
+`--near` need no sync and always exit 0.
 """
 
 from __future__ import annotations
@@ -12,309 +20,136 @@ import argparse
 import datetime
 import os
 import pathlib
+import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from aimeta import cli, frontmatter, repo  # noqa: E402
+from rulestore import keys as keys_mod  # noqa: E402
+from rulestore import near as near_mod  # noqa: E402
+from rulestore import query, render, terms  # noqa: E402
+from rulestore.store import FileRowSource  # noqa: E402
 
-REPO_NAME = "davepierceops/fiducial"
+EXIT_OK = 0
+EXIT_REFUSED = 2
 
-#: AC-BA-1: governed roots named explicitly rather than left to the globs.
-#: The metadata policy's in-scope set now names all three, so
-#: `cli.in_scope_files` already returns them and these are a subset of it in
-#: this repo. They stay because AC-BA-1 states the governed set as that union:
-#: a repo whose policy has not adopted the three roots still bundles them.
-GOVERNED_EXTRA_DIRS = ("docs/global-context", "engagements")
-GOVERNED_EXTRA_FILES = ("public-prose-criteria.md", "voice.md", "voice-template.md")
 
-#: AC-BA-5: the three reserved audience values.
-RESERVED_AUDIENCES = {"all-roles", "all-decision-roles", "human"}
+def _git(root, *args):
+    return subprocess.run(
+        ["git", *args], cwd=str(root), capture_output=True, text=True,
+    )
 
-BAR = "<!-- " + "=" * 60 + " -->"
+
+def _repo_root():
+    proc = _git(pathlib.Path.cwd(), "rev-parse", "--show-toplevel")
+    if proc.returncode != 0:
+        return pathlib.Path.cwd()
+    return pathlib.Path(proc.stdout.strip())
+
+
+def _repo_label(root):
+    proc = _git(root, "config", "--get", "remote.origin.url")
+    url = proc.stdout.strip()
+    if not url:
+        return str(root)
+    if url.endswith(".git"):
+        url = url[: -len(".git")]
+    parts = url.replace(":", "/").rstrip("/").split("/")
+    return "/".join(parts[-2:]) if len(parts) >= 2 else url
+
+
+def _head(root):
+    proc = _git(root, "rev-parse", "HEAD")
+    return proc.stdout.strip() if proc.returncode == 0 else None
+
+
+def _dirty_under(root, *dirs):
+    proc = _git(root, "status", "--porcelain", "--", *dirs)
+    return bool(proc.stdout.strip())
+
+
+def _synced_with_main(root):
+    """`HEAD` equals `origin/main` after a fetch."""
+    _git(root, "fetch", "-q", "origin", "main")
+    head = _head(root)
+    proc = _git(root, "rev-parse", "origin/main")
+    upstream = proc.stdout.strip() if proc.returncode == 0 else None
+    return head is not None and head == upstream
 
 
 def build_parser():
-    p = argparse.ArgumentParser(
-        prog="bundle",
-        description=(
-            "Render the governed-document bundle for an audience value, or "
-            "list every valid audience value."
-        ),
-    )
-    p.add_argument(
-        "entries", nargs="*", metavar="ENTRY", help=argparse.SUPPRESS
-    )
-    p.add_argument(
-        "--audience",
-        default=None,
-        metavar="VALUE",
-        help="emit the governed-document bundle for an audience value",
-    )
-    p.add_argument(
-        "--list",
-        action="store_true",
-        help="list every valid audience value, sorted, one per line",
-    )
-    p.add_argument(
-        "--out",
-        default=None,
-        metavar="DIR",
-        help="directory to write the bundle into (with --audience; default: stdout)",
-    )
-    return p
+    parser = argparse.ArgumentParser(prog="bundle")
+    mode = parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument("--where", nargs="+", metavar="K=V")
+    mode.add_argument("--keys", action="store_true")
+    mode.add_argument("--near", metavar="TEXT")
+    parser.add_argument("--name")
+    parser.add_argument("--out")
+    return parser
 
 
-# ------------------------------------------------------------- governed set
+def refuse(message):
+    print(message, file=sys.stderr)
+    return EXIT_REFUSED
 
 
-def _walk_md_files(root, reldir):
-    """Every `.md` file under `root/reldir`, repo-relative, slash-separated."""
-    base = pathlib.Path(root) / reldir
-    if not base.is_dir():
-        return []
-    found = []
-    for dirpath, dirnames, filenames in os.walk(str(base)):
-        dirnames[:] = [d for d in dirnames if d != ".git"]
-        for name in filenames:
-            if not name.endswith(".md"):
-                continue
-            rel = os.path.relpath(os.path.join(dirpath, name), str(root))
-            found.append(rel.replace(os.sep, "/"))
-    return found
+def cmd_keys(root):
+    rule_rows = [row for row in FileRowSource(root).rows() if row.kind == "rule"]
+    census = keys_mod.keys_in_use(rule_rows)
+    for key in sorted(census):
+        for value in sorted(census[key]):
+            print("%s=%s %d" % (key, value, census[key][value]))
+    return EXIT_OK
 
 
-def governed_files(ctx):
-    """AC-BA-1: the governed file set, sorted."""
-    files = set(cli.in_scope_files(ctx))
-    for reldir in GOVERNED_EXTRA_DIRS:
-        files.update(_walk_md_files(ctx.root, reldir))
-    for relfile in GOVERNED_EXTRA_FILES:
-        if (pathlib.Path(ctx.root) / relfile).is_file():
-            files.add(relfile)
-    return sorted(files)
+def cmd_near(root, text):
+    for row, score in near_mod.near(text, FileRowSource(root).rows()):
+        print("%s %.2f" % (row.id, score))
+    return EXIT_OK
 
 
-def _document(root, relpath):
-    """Parsed `frontmatter.Document` for `relpath`, or `None` if unreadable."""
-    text, finding = cli.read_document(pathlib.Path(root) / relpath)
-    if finding is not None:
-        return None
-    return frontmatter.parse_text(text)
-
-
-def audience_values(root, relpath):
-    """AC-BA-2: `relpath`'s `audience:` values, as a list."""
-    doc = _document(root, relpath)
-    if doc is None:
-        return []
-    value = doc.fields.get("audience")
-    if value is None:
-        return []
-    if isinstance(value, (list, tuple)):
-        return list(value)
-    return [value]
-
-
-def order_value(root, relpath):
-    """AC-BA-3: `relpath`'s `order:` value as an int, or `None`."""
-    doc = _document(root, relpath)
-    if doc is None:
-        return None
-    raw = doc.fields.get("order")
-    if raw is None:
-        return None
+def cmd_where(root, tokens, name, out):
     try:
-        return int(raw)
-    except (TypeError, ValueError):
-        return None
+        where = query.parse_where(tokens)
+    except query.QueryError as exc:
+        return refuse("refused: %s" % exc)
 
+    if _dirty_under(root, "rules", "process"):
+        return refuse("refused: uncommitted changes under rules/ or process/")
 
-# ---------------------------------------------------------------- AC-BA-2
+    if not _synced_with_main(root):
+        return refuse("refused: HEAD is not synced with origin/main")
 
+    rows = FileRowSource(root).rows()
+    selected = query.select(rows, where)
+    if not selected:
+        return refuse("refused: the query selected no rows")
 
-def _role_document_path(root, slug):
-    """The role document for `slug` under `roles/`/`engagements/`, or `None`.
-
-    Scans `root`'s own trees directly with `repo._is_role_document` rather
-    than going through `repo.role_slugs` — that helper only inspects a base's
-    `engagements/` when the same base also has a `roles/` dir, and falls back
-    to the methodology home otherwise, which would wrongly miss an
-    engagements-only role document in the invoking repo.
-    """
-    for candidate in (
-        pathlib.Path(root) / "roles" / ("%s.md" % slug),
-        pathlib.Path(root) / "engagements" / ("%s.md" % slug),
-        pathlib.Path(root) / "engagements" / "sre" / ("%s.md" % slug),
-    ):
-        if candidate.is_file() and repo._is_role_document(candidate):
-            return candidate
-    return None
-
-
-def local_role_slugs(root):
-    """AC-BA-5: basename slugs of every role document under `root`'s own
-    `roles/`/`engagements/`/`engagements/sre/`, independent of
-    `repo.role_slugs`'s methodology-home fallback (see `_role_document_path`)."""
-    root = pathlib.Path(root)
-    slugs = set()
-    roles_dir = root / "roles"
-    if roles_dir.is_dir():
-        slugs |= {p.stem for p in roles_dir.glob("*.md") if repo._is_role_document(p)}
-    for engagements_dir in (root / "engagements", root / "engagements" / "sre"):
-        if engagements_dir.is_dir():
-            slugs |= {
-                p.stem for p in engagements_dir.glob("*.md") if repo._is_role_document(p)
-            }
-    return slugs
-
-
-def _is_decision_role(ctx, slug):
-    """True when `slug` names a role document whose `session:` is `decision`."""
-    path = _role_document_path(ctx.root, slug)
-    if path is None:
-        return False
-    doc = _document(ctx.root, os.path.relpath(str(path), str(ctx.root)))
-    if doc is None:
-        return False
-    return doc.fields.get("session") == "decision"
-
-
-def is_member(ctx, relpath, value):
-    """AC-BA-2: whether `relpath` is a member of bundle `value`."""
-    values = audience_values(ctx.root, relpath)
-    if value in values:
-        return True
-    if "all-roles" in values:
-        return True
-    if "all-decision-roles" in values and _is_decision_role(ctx, value):
-        return True
-    return False
-
-
-# ---------------------------------------------------------------- AC-BA-3
-
-
-def _sort_key(root, relpath):
-    order = order_value(root, relpath)
-    if order is None:
-        return (1, 0, relpath)
-    return (0, order, relpath)
-
-
-def ordered_members(ctx, value):
-    return sorted(
-        (relpath for relpath in governed_files(ctx) if is_member(ctx, relpath, value)),
-        key=lambda relpath: _sort_key(ctx.root, relpath),
+    definitions = terms.pull_definitions(selected, rows)
+    generated = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    text = render.render(
+        selected, definitions,
+        repo=_repo_label(root), head=_head(root), generated=generated,
     )
 
-
-# ---------------------------------------------------------------- AC-BA-4
-
-
-def resolve_out_dir(argument):
-    """`--out DIR`, tilde-expanded then resolved against the invoking cwd."""
-    path = pathlib.Path(argument).expanduser()
-    if not path.is_absolute():
-        path = pathlib.Path.cwd() / path
-    return path
-
-
-def render_bundle(ctx, value, members):
-    """AC-BA-4: the self-contained bundle document for `value`."""
-    repo_sha = repo.git("rev-parse", "HEAD", cwd=ctx.root)
-    generated = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    count = len(members)
-
-    shas = {}
-    bodies = {}
-    for relpath in members:
-        sha = repo.short_blob_sha(ctx.root, "HEAD", relpath)
-        body = repo.file_at_rev(ctx.root, "HEAD", relpath)
-        shas[relpath] = sha if sha is not None else "uncommitted"
-        bodies[relpath] = body if body is not None else ""
-
-    lines = [
-        "# bundle-%s\n" % value,
-        "- Repo: %s" % REPO_NAME,
-        "- HEAD: %s" % repo_sha,
-        "- Generated: %s" % generated,
-        "- Files:\n",
-    ]
-    lines += [
-        "  %d. %s (blob %s)" % (i, relpath, shas[relpath])
-        for i, relpath in enumerate(members, 1)
-    ]
-    lines.append("")
-    for i, relpath in enumerate(members, 1):
-        lines += [
-            "",
-            BAR,
-            "<!-- FILE %d/%d: %s @ %s -->" % (i, count, relpath, shas[relpath]),
-            BAR,
-            "",
-            bodies[relpath].rstrip("\n"),
-            "",
-        ]
-    return "\n".join(lines) + "\n"
-
-
-# ---------------------------------------------------------------- AC-BA-5/6
-
-
-def known_audience_values(ctx):
-    """AC-BA-5 (Amendment 1): role-doc slugs, reserved values, and every
-    literal `audience:` value present in any governed file."""
-    values = set(RESERVED_AUDIENCES)
-    values |= local_role_slugs(ctx.root)
-    for relpath in governed_files(ctx):
-        values.update(audience_values(ctx.root, relpath))
-    return values
-
-
-def cmd_list(ctx):
-    for value in sorted(known_audience_values(ctx)):
-        print(value)
-    return cli.EXIT_OK
-
-
-def cmd_audience(ctx, value, out):
-    known = known_audience_values(ctx)
-    if value not in known:
-        raise cli.ToolError(
-            "unknown audience value %r (see `bundle --list`)" % value, cli.EXIT_USAGE
-        )
-    members = ordered_members(ctx, value)
-    text = render_bundle(ctx, value, members)
-    if out is None:
-        print(text, end="")
-        return cli.EXIT_OK
-    out_dir = resolve_out_dir(out)
+    bundle_name = name or "-".join("%s-%s" % (k, v) for k, v in where.items())
+    out_dir = pathlib.Path(out).expanduser() if out else pathlib.Path.home() / "Downloads"
     out_dir.mkdir(parents=True, exist_ok=True)
-    stamp = datetime.datetime.now().strftime("%Y%m%dT%H%M%S")
-    dest = out_dir / ("bundle-%s-%s.md" % (value, stamp))
-    dest.write_text(text, encoding=cli.ENCODING)
-    return cli.EXIT_OK
-
-
-# ---------------------------------------------------------------------- main
+    dest = out_dir / ("fiducial-bundle-%s-%s.md" % (bundle_name, generated))
+    dest.write_text(text, encoding="utf-8")
+    print(str(dest))
+    return EXIT_OK
 
 
 def main(argv=None):
     args = build_parser().parse_args(argv)
-
-    if args.list:
-        return cmd_list(cli.load_context())
-
-    if args.audience is not None:
-        return cmd_audience(cli.load_context(), args.audience, args.out)
-
-    # AC-BA-7: the positional path-following closure mode is removed.
-    raise cli.ToolError(
-        "an ENTRY is no longer accepted; use --audience VALUE or --list",
-        cli.EXIT_USAGE,
-    )
+    root = _repo_root()
+    if args.keys:
+        return cmd_keys(root)
+    if args.near is not None:
+        return cmd_near(root, args.near)
+    return cmd_where(root, args.where, args.name, args.out)
 
 
 if __name__ == "__main__":
-    sys.exit(cli.run(main))
+    sys.exit(main(sys.argv[1:]))
