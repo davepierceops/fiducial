@@ -25,11 +25,11 @@ class QueryError(Exception):
 
 
 def parse_where(args):
-    """STUB: never raises; a token with no `=` becomes a key with no value."""
+    """STUB: never raises, and keeps the whole token as the value."""
     where = {}
     for token in args:
-        key, _, value = token.partition("=")
-        where[key.strip()] = value.strip()
+        key, _, _value = token.partition("=")
+        where[key.strip()] = token
     return where
 
 

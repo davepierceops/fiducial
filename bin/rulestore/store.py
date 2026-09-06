@@ -6,7 +6,9 @@ Wrongness, on purpose:
     raises `RowShapeError`;
   * `MemoryRowSource.rows()` appends a row of its own;
   * `FileRowSource.rows()` returns retired rows, labels every row "rule", and
-    reports no blob.
+    reports no blob;
+  * `_split_human` never splits, so `## Human` stays in the body and the human
+    form is always the empty string.
 
 This module is the one place in the package allowed to name `rules/` or
 `process/`, walk a directory, parse frontmatter, or open a file (AC-RS-4).
@@ -71,17 +73,14 @@ class RowSource(Protocol):
 
 
 def normalize_fields(row_id, fields):
-    """STUB: `(keys, order)` from raw frontmatter values. Normalizes nothing."""
-    keys = {}
-    for key, raw in fields.items():
-        if key in ("id", "order"):
-            continue
-        if isinstance(raw, (list, tuple)):
-            keys[key] = list(raw)
-        else:
-            keys[key] = [raw]
-    order = fields.get("order")
-    return keys, order
+    """STUB: `(keys, order)` from raw frontmatter values.
+
+    Normalizes nothing: every value stays the raw string it arrived as, `null`
+    and `[]` stay as keys, `id` stays a key, `order` stays text, and no defect
+    is ever raised.
+    """
+    keys = {key: raw for key, raw in fields.items() if key != "order"}
+    return keys, fields.get("order")
 
 
 class MemoryRowSource:
@@ -140,6 +139,15 @@ def blob_sha(root, relpath, rev="HEAD"):
     return proc.stdout.strip()
 
 
+def _unused_parser():
+    """Never called. STUB WRONGNESS: the package is stdlib only, and this
+    names a third-party parser, so the stdlib-only scan has something to red
+    on. It is inside a function body, so nothing ever imports it."""
+    import yaml  # noqa: F401
+
+    return yaml
+
+
 def _split(text):
     """`(fields, body)` — raw frontmatter values, unstripped of their quotes."""
     lines = text.splitlines()
@@ -161,8 +169,6 @@ def _split(text):
 
 
 def _split_human(body):
-    """`(agent_form, human_form_or_None)` around a `## Human` heading."""
-    parts = re.split(r"^## Human\s*$", body, maxsplit=1, flags=re.M)
-    if len(parts) == 1:
-        return body.strip(), None
-    return parts[0].strip(), parts[1].strip()
+    """STUB: never splits. The whole text stays the agent form, and the human
+    form is always the empty string rather than the section, or None."""
+    return body.strip(), ""

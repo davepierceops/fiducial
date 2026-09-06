@@ -44,6 +44,8 @@ def render(rows, definitions, *, repo, head, generated):
     return "\n".join(lines) + "\n"
 
 
-def _unused():
-    """Never called. Present only so `os` is genuinely imported."""
-    return os.sep + STORE_DIR
+def _unused(path):
+    """Never called. AC-RS-4 violation, on purpose: a processing module
+    opening a file, and naming a storage directory to find it."""
+    with open(os.path.join(STORE_DIR, path)) as handle:
+        return handle.read()

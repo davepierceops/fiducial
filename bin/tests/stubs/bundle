@@ -11,7 +11,8 @@ Wrongness, on purpose:
     (`bundle-stub.md`, no `fiducial-bundle-` lead, no name, no timestamp);
   * prints nothing on stdout, so no path is reported;
   * emits a body with no header and no rows;
-  * `--keys` and `--near` print one fixed line each, computed from nothing.
+  * `--keys` prints fixed lines, counting the two typed keys AC-RS-3 excludes;
+  * `--near` prints one fixed line, computed from nothing.
 
 It reads no store, resolves no git object, and selects nothing, so it is not a
 head start on the implementation. It lives here, beside the two directive-tooling
@@ -30,6 +31,10 @@ def main(argv):
         out = argv[argv.index("--out") + 1]
 
     if "--keys" in argv:
+        # Wrong on purpose: `id` and `order` are counted, which AC-RS-3
+        # excludes, and every count is 1 whatever the store holds.
+        print("id=RSTUB 1")
+        print("order=10 1")
         print("stub=stub 1")
         return 0
 

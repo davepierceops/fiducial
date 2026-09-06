@@ -1187,3 +1187,178 @@ DT_M8_FAILING_NAMES = {
     "nested": "docs/cycles/sub/nested-directive.md",
     "escaped": "docs/escaped-directive.md",
 }
+
+
+# ================================================================ rule-store fixtures
+#
+# Fixture substrate for the rebuilt `bin/bundle` and the `bin/rulestore/`
+# package, per `docs/cycles/bundle-tool-tests-20260906T110000Z.md`. Everything
+# below is **additive**: no existing helper's behaviour changes, so the
+# pre-existing suite is untouched.
+#
+# The store fixture is a real bare `origin` plus a clone, because AC-RS-6's
+# refusal is about `HEAD` against `origin/main` after a fetch, and AC-RS-1's
+# header is about a blob SHA — neither is testable against a mock.
+
+#: Where `bin/tests/test_bundle_cli.py` looks for the command under test.
+#: The red-gate stub at `bin/tests/stubs/bundle` wins while it exists; the
+#: Coder's package deletes it, and the lookup falls through to `bin/bundle`
+#: with no test edit. `$RULESTORE_BUNDLE_BIN` overrides both.
+RS_BIN_ENV_VAR = "RULESTORE_BUNDLE_BIN"
+
+
+def rs_bin_dir():
+    """Directory the rule-store `bundle` command is invoked from."""
+    override = os.environ.get(RS_BIN_ENV_VAR)
+    if override:
+        return pathlib.Path(override)
+    if (DT_STUB_DIR / "bundle").exists():
+        return DT_STUB_DIR
+    return BIN_DIR
+
+
+def rs_using_stub_binary():
+    """True while the red-gate stub, not the real command, is what runs."""
+    return rs_bin_dir().resolve() != BIN_DIR.resolve()
+
+
+def run_bundle(*args, cwd, env=None, timeout=90):
+    """`run_cli` for the rule-store `bundle` command, honouring `rs_bin_dir()`."""
+    return run_cli("bundle", *args, cwd=cwd, env=env, timeout=timeout,
+                   script_dir=rs_bin_dir())
+
+
+def rs_row(row_id, body, *, order=None, human=None, **fields):
+    """One `rules/` row in the store's on-disk shape: frontmatter, then body.
+
+    Values are written the way the real rows are written — a bracketed list for
+    a list, a bare word for a scalar, `null` for an absent key.
+    """
+    lines = ["---", "id: %s" % row_id]
+    if order is not None:
+        lines.append("order: %s" % order)
+    for key, value in fields.items():
+        key = key.replace("_", "-")
+        if value is None:
+            lines.append("%s: null" % key)
+        elif isinstance(value, (list, tuple)):
+            lines.append("%s: [%s]" % (key, ", ".join(str(v) for v in value)))
+        else:
+            lines.append("%s: %s" % (key, value))
+    lines.append("---")
+    text = "\n".join(lines) + "\n\n" + body.strip() + "\n"
+    if human is not None:
+        text += "\n## Human\n\n" + human.strip() + "\n"
+    return text
+
+
+def rs_process(body, *, order=None, **fields):
+    """One `process/` document: the same frontmatter dialect, and no `id`."""
+    lines = ["---"]
+    if order is not None:
+        lines.append("order: %s" % order)
+    for key, value in fields.items():
+        key = key.replace("_", "-")
+        if isinstance(value, (list, tuple)):
+            lines.append("%s: [%s]" % (key, ", ".join(str(v) for v in value)))
+        else:
+            lines.append("%s: %s" % (key, value))
+    lines.append("---")
+    return "\n".join(lines) + "\n\n" + body.strip() + "\n"
+
+
+def rs_store_files():
+    """The fixture store, keyed by repo-relative path.
+
+    Three rules, one definition (a `term` key and no `role` key, DEC-000420),
+    one process document (DEC-000490), and one retired row that must never be
+    returned.
+    """
+    return {
+        "rules/R0001.md": rs_row(
+            "R0001",
+            "Open one tranche per delta, and close it at the end.",
+            order=10,
+            topic=["core"],
+            role=["writer", "critic"],
+            session=["decision"],
+            corpus=["writing"],
+            verb="require",
+            term=None,
+            human="DEC-000170: the branch is the state.",
+        ),
+        "rules/R0002.md": rs_row(
+            "R0002",
+            "State the obligation at its shortest.",
+            order=30,
+            topic=["core"],
+            role=["writer"],
+            session=["decision"],
+            corpus=["software"],
+            verb="require",
+            term=None,
+        ),
+        "rules/R0003.md": rs_row(
+            "R0003",
+            "Run the red gate before any implementation.",
+            order=40,
+            topic=["intake"],
+            role=["coder-agent"],
+            session=["execution"],
+            corpus=["software"],
+            verb="require",
+            term=None,
+        ),
+        "rules/R0100.md": rs_row(
+            "R0100",
+            "A tranche is one concurrent workstream of build work.",
+            order=20,
+            topic=["lexicon"],
+            verb="define",
+            term=["tranche", "tranches"],
+        ),
+        "rules/retired/R0900.md": rs_row(
+            "R0900",
+            "A retired row is never bundled.",
+            order=5,
+            topic=["core"],
+            role=["writer"],
+            session=["decision"],
+            corpus=["writing"],
+            verb="require",
+            term=None,
+        ),
+        "process/change-flow.md": rs_process(
+            "# Change flow\n\nEvery pull request gets an agentic code review.",
+            order=20,
+            role=["writer", "critic"],
+            session=["decision"],
+            corpus=["writing"],
+        ),
+    }
+
+
+def make_store_repo(case, files=None):
+    """`(origin, clone)` — a bare origin and a clone holding the fixture store.
+
+    The clone's `main` tracks `origin/main` and is level with it, which is the
+    synced precondition AC-RS-6's refusals are stated against.
+    """
+    env = base_env()
+    parent = temp_dir(case, "rulestore-work-")
+    origin = parent / "origin.git"
+    git(parent, "init", "--bare", "-q", "-b", "main", str(origin), env=env, check=True)
+
+    source = make_repo(case, name="seed", parent=parent, env=env)
+    for relpath, text in (rs_store_files() if files is None else files).items():
+        write(source, relpath, text)
+    commit(source, "store: the fixture rows", env=env)
+    git(source, "remote", "add", "origin", str(origin), env=env, check=True)
+    git(source, "push", "-q", "origin", "main", env=env, check=True)
+
+    clone = parent / "clone"
+    git(parent, "clone", "-q", str(origin), str(clone), env=env, check=True)
+    git(clone, "config", "user.email", "tests@example.invalid", env=env, check=True)
+    git(clone, "config", "user.name", "AI Methodology Tests", env=env, check=True)
+    git(clone, "config", "commit.gpgsign", "false", env=env, check=True)
+    return origin, clone
