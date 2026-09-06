@@ -630,3 +630,8 @@ Context: The PRD's G12; a definition keyed to roles either duplicates across bun
 Date: 2026-09-05
 Decision: No engagement material is written as rows now. `engagements/` stays as it is until the next engagement needs it, and is written then through intake.
 Context: Resolves the rule-store PRD's OQ-2; the 153 register rows from the engagement files were left untouched by the store migration.
+
+## DEC-000440 — A Test Designer edits tests only; a spec writer edits specs only
+Date: 2026-09-05
+Decision: A Test Designer edits tests and nothing else; a spec change it needs is a finding to the decision session. A spec writer edits specs and nothing else; a test change it needs is a finding to the decision session.
+Context: Register cluster C097; the positive wording Dave chose over the two prohibitions the source files carried.
