@@ -666,3 +666,8 @@ Context: A document's form is prose; rows that restated a template's sections we
 Date: 2026-09-05
 Decision: A decision-log entry records exactly one decision. Two decisions made together are two entries.
 Context: Dave's ruling of 2026-09-06 when the rebuild's entries were listed for the flush; an entry carrying several rulings cannot be superseded one at a time.
+
+## DEC-000510 — The intake checklist is the store's construction rule
+Date: 2026-09-05
+Decision: R0264, the intake checklist, is the rule every row is judged by on entry and the rule the store was built under. Its criteria are rows in topic intake, not decisions; a change to a criterion goes through intake like any row.
+Context: The criteria were ruled one at a time across the fix-pass reads of 2026-09-05 and 2026-09-06 and are recorded here once, as one rule.
