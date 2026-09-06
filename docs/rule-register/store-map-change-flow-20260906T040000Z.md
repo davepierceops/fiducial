@@ -53,3 +53,7 @@ sweep retires R0480 as a duplicate of `convergence`'s R1481, which also names th
 gives R0481 the "nothing else closes it" clause from `convergence`'s R1486a, which retires into it. R0017/R0471
 and R0091/R1156 are kept as pairs: running no per-change stage against an open spec is wider than implementing
 nothing against one, and the C097 mirror rows are deliberately two. Topic count: 25 rows before, 27 after.
+
+Store fix pass 5 item 1d keeps R0493 in this topic as the `mechanical check` define and restates its body to the
+directive's words: "Mechanical checks are lint, type, and static-analysis checks; they pass as part of green."
+No disposition changes.

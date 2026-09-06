@@ -7,7 +7,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 |---|---|---|---|
 | R0755 | policies/source-of-truth-policy.md | retired-DEC-000380 (C004: session scope becomes the `session` key) | — |
 | R0756 | policies/source-of-truth-policy.md | retired-ruling (ruling 4: purpose statement; its obligation is carried by R0757–R0762 and R0770) | — |
-| R0757 | policies/source-of-truth-policy.md | written | R0757 |
+| R0757 | policies/source-of-truth-policy.md | written; `prd-template`'s R1512 merges into it (store-fix-5 item 1c) | R0757 |
 | R0758 | policies/source-of-truth-policy.md | written | R0758 |
 | R0759 | policies/source-of-truth-policy.md | written | R0759 |
 | R0760 | policies/source-of-truth-policy.md | written | R0760 |

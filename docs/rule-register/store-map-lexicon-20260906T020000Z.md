@@ -87,3 +87,23 @@ cross-topic sweep retires five obligation rows the topic carried from LEXICON.md
 loads alongside it: R0010 (duplicate of `reconciliation`'s R1491), R0015 and R0016 (of `convergence`'s R1468,
 which takes R0015's "whatever its verdict" clause), R0018a (of `convergence`'s R1481) and R0018b (of
 `change-flow`'s R0481). Topic count: 42 rows before, 44 after.
+
+Store fix pass 5 item 1 makes the Lexicon the store's one home for definitions by term. Four rows arrive and one
+new row is written:
+
+- **R1601** (new, order 500) defines `known gap` / `known gaps`. It is the first row in the store whose register
+  id is not the register's: the register's highest id is R1600, and the three rows this pass writes take R1601,
+  R1602 and R1603 in order of writing. Its `source` names the directive that ordered it.
+- **R0083** arrives from `test-designer` (order 510), the `red-gate` define. It already carried `term` and
+  nothing else — store fix pass 2 item 7 stripped `role`, `session` and `corpus` from every define — so the
+  move changes only `topic` and `order`. This settles the question store fix pass 4 left open at its summary
+  item 3.
+- **R0580** and **R0594** arrive from `decision-log-policy` (orders 520 and 530) as defines, `term: [DEC ID,
+  decision ID]` and `term: [live decision, live decisions]`, their `verb` changed from `require` to `define`
+  and their `role`, `session` and `corpus` keys deleted. R0580's obligation to cite by DEC ID goes with the
+  form; what stays is what the ID *is*.
+- **R1512** (`prd-template`) retires into **R0757**, whose `term` list becomes the union of both —
+  `[PRD, PRDs, Product Requirements Document, standing product specification]` — and whose body states the one
+  PRD definition at its shortest. This settles the question store fix pass 4 left open at its summary item 4.
+
+The topic holds 48 rows.

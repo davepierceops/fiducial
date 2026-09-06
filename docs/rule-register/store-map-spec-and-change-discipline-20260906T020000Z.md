@@ -8,7 +8,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0080 | context-sets/spec-and-change-discipline.md | retired-DEC-000380 (C004: the file's session-kind scope becomes the `session` key) | — |
 | R0081 | context-sets/spec-and-change-discipline.md | written | R0081 |
 | R0082 | context-sets/spec-and-change-discipline.md | retired-ruling (store-fix-1 item 4: describes) | — |
-| R0083 | context-sets/spec-and-change-discipline.md | written | R0083 |
+| R0083 | context-sets/spec-and-change-discipline.md | moved to topic `lexicon` (store-fix-5 item 1b) | R0083 |
 | R0084 | context-sets/spec-and-change-discipline.md | written | R0084 |
 | R0085 | context-sets/spec-and-change-discipline.md | written | R0085 |
 | R0086 | context-sets/spec-and-change-discipline.md | written | R0086 |
