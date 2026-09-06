@@ -38,12 +38,14 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0253 | docs/global-context/decision-layer.md | merged into R0252 | R0252 |
 | R0254 | docs/global-context/decision-layer.md | merged into R0252 | R0252 |
 | R0255 | docs/global-context/decision-layer.md | merged into R0252 | R0252 |
-| R0256 | docs/global-context/decision-layer.md | retired-ruling (directive-invariants owns it) | — |
-| R0257 | docs/global-context/decision-layer.md | retired-ruling (directive-invariants owns it) | — |
+| R0256 | docs/global-context/decision-layer.md | written (restored by store-fix-1 item 1) | R0256 |
+| R0257 | docs/global-context/decision-layer.md | written (restored by store-fix-1 item 1) | R0257 |
 | R0258 | docs/global-context/decision-layer.md | retired-ruling (directive-invariants owns it) | — |
 | R0259 | docs/global-context/decision-layer.md | written | R0259 |
 | R0260 | docs/global-context/decision-layer.md | merged into R0259 | R0259 |
 | R0261 | docs/global-context/decision-layer.md | merged into R0259 | R0259 |
 | R0262 | docs/global-context/decision-layer.md | written | R0262 |
 
-Counts: rows consumed 40; rows written 18; definitions 1; merged away 16; split 1 (R0248 → R0248a, R0248b); retired 7 (R0223, R0224, R0250, R0251, R0256, R0257, R0258).
+Counts: rows consumed 40; rows written 20; definitions 1; merged away 16; split 1 (R0248 → R0248a, R0248b); retired 5 (R0223, R0224, R0250, R0251, R0258).
+
+Amended by `docs/cycles/store-fix-1-20260906T040000Z.md` item 1: R0256 and R0257 restored; R0259 and R0262 renumbered to orders 190 and 200 to seat them.
