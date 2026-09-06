@@ -1,17 +1,11 @@
-"""RED-GATE STUB for the storage boundary (DEC-000410). Deliberately wrong.
-
-Wrongness, on purpose:
-  * `Row` carries an extra `legacy` field the contract does not name;
-  * `normalize_fields` lower-cases nothing, keeps `null` as a key, and never
-    raises `RowShapeError`;
-  * `MemoryRowSource.rows()` appends a row of its own;
-  * `FileRowSource.rows()` returns retired rows, labels every row "rule", and
-    reports no blob;
-  * `_split_human` never splits, so `## Human` stays in the body and the human
-    form is always the empty string.
+"""The storage boundary (DEC-000410).
 
 This module is the one place in the package allowed to name `rules/` or
 `process/`, walk a directory, parse frontmatter, or open a file (AC-RS-4).
+Everything else works over `Row` objects handed to it in memory.
+
+Contract: `docs/cycles/bundle-tool-tests-20260906T110000Z.md` § "INTERFACE
+CONTRACT", landed at `d5b643b48cf0285194d29b09f6755db1b8a16b34`.
 """
 
 from __future__ import annotations
@@ -27,11 +21,9 @@ ORDER_RE = re.compile(r"^[+-]?[0-9]+$")
 
 #: A bare (unquoted) scalar that YAML would type as a number or a boolean. On
 #: any key other than `order` this is a defect; quoted, it is text.
-TYPED_SCALAR_RE = re.compile(r"^([+-]?[0-9]+(\.[0-9]+)?|true|false|yes|no)$", re.I)
+TYPED_SCALAR_RE = re.compile(r"^([+-]?[0-9]+(\.[0-9]+)?|true|false|yes|no)$", re.IGNORECASE)
 
-RULES_DIR = "rules/"
-PROCESS_DIR = "process/"
-RETIRED_DIR = "rules/retired/"
+HUMAN_MARKER = "## Human"
 
 
 class RowShapeError(Exception):
@@ -62,8 +54,6 @@ class Row:
     kind: str = "rule"
     path: str | None = None
     blob: str | None = None
-    # STUB WRONGNESS: not a field the interface contract names.
-    legacy: str = ""
 
 
 class RowSource(Protocol):
@@ -72,26 +62,88 @@ class RowSource(Protocol):
     def rows(self) -> list: ...
 
 
-def normalize_fields(row_id, fields):
-    """STUB: `(keys, order)` from raw frontmatter values.
+def _strip_quotes(raw):
+    if len(raw) >= 2 and raw[0] == raw[-1] and raw[0] in ("'", '"'):
+        return raw[1:-1]
+    return raw
 
-    Normalizes nothing: every value stays the raw string it arrived as, `null`
-    and `[]` stay as keys, `id` stays a key, `order` stays text, and no defect
-    is ever raised.
+
+def normalize_fields(row_id, fields):
+    """`(keys, order)` from raw frontmatter values.
+
+    Takes the **raw** value text as it stands after `key: `, quotes included:
+    whether "a quoted number on another key is text" is only decidable before
+    the quotes come off.
     """
-    keys = {key: raw for key, raw in fields.items() if key != "order"}
-    return keys, fields.get("order")
+    keys = {}
+    order = None
+    for key, raw in fields.items():
+        if key == "id":
+            continue
+        text = raw.strip() if isinstance(raw, str) else raw
+        if key == "order":
+            if not isinstance(text, str) or not ORDER_RE.match(text):
+                raise RowShapeError(row_id, key, "not an integer: %r" % (raw,))
+            order = int(text)
+            continue
+        if text is None or text == "null":
+            continue
+        if text.startswith("[") and text.endswith("]"):
+            inner = text[1:-1].strip()
+            if not inner:
+                continue
+            keys[key] = [
+                _strip_quotes(part.strip()).strip().lower()
+                for part in inner.split(",")
+            ]
+            continue
+        unquoted = _strip_quotes(text)
+        if unquoted == text and TYPED_SCALAR_RE.match(text):
+            raise RowShapeError(row_id, key, "typed value on a text key: %r" % (raw,))
+        keys[key] = [unquoted.strip().lower()]
+    return keys, order
+
+
+def _parse_frontmatter(text):
+    """`(fields, body)` — raw frontmatter values, unstripped of their quotes."""
+    lines = text.splitlines()
+    if not lines or lines[0].strip() != "---":
+        return {}, text
+    close = None
+    for index in range(1, len(lines)):
+        if lines[index].strip() == "---":
+            close = index
+            break
+    if close is None:
+        return {}, text
+    fields = {}
+    for line in lines[1:close]:
+        if ":" not in line:
+            continue
+        key, _, raw = line.partition(":")
+        fields[key.strip()] = raw.strip()
+    return fields, "\n".join(lines[close + 1 :])
+
+
+def _split_human(body):
+    """`(agent_form, human_form)` — everything above/below the `## Human` line."""
+    lines = body.split("\n")
+    for index, line in enumerate(lines):
+        if line.strip() == HUMAN_MARKER:
+            agent = "\n".join(lines[:index]).strip()
+            human = "\n".join(lines[index + 1 :]).strip()
+            return agent, (human or None)
+    return body.strip(), None
 
 
 class MemoryRowSource:
-    """A `RowSource` over rows already in memory."""
+    """A `RowSource` over rows already in memory. The identity over its rows."""
 
     def __init__(self, rows):
         self._rows = list(rows)
 
     def rows(self):
-        """STUB: appends a row the caller never handed it."""
-        return list(self._rows) + [Row(id="RSTUB", body="stub row")]
+        return list(self._rows)
 
 
 class FileRowSource:
@@ -100,75 +152,48 @@ class FileRowSource:
     def __init__(self, root):
         self.root = pathlib.Path(root)
 
-    def _read(self, relpath, kind):
-        text = (self.root / relpath).read_text(encoding="utf-8", errors="replace")
-        fields, body = _split(text)
-        keys, order = normalize_fields(fields.get("id", relpath), fields)
+    def _blob(self, relpath):
+        proc = subprocess.run(
+            ["git", "rev-parse", "HEAD:%s" % relpath],
+            cwd=str(self.root),
+            capture_output=True,
+            text=True,
+        )
+        if proc.returncode != 0:
+            return None
+        return proc.stdout.strip()
+
+    def _row(self, path, kind):
+        relpath = path.relative_to(self.root).as_posix()
+        text = path.read_text(encoding="utf-8", errors="replace")
+        fields, body = _parse_frontmatter(text)
+        row_id = fields.get("id") or path.stem
+        keys, order = normalize_fields(row_id, fields)
         agent, human = _split_human(body)
         return Row(
-            id=fields.get("id") or pathlib.PurePosixPath(relpath).stem,
+            id=row_id,
             body=agent,
             human=human,
             keys=keys,
             order=order,
             kind=kind,
             path=relpath,
-            blob=None,  # STUB WRONGNESS: the header's blob is never resolved.
+            blob=self._blob(relpath),
         )
 
     def rows(self):
-        """STUB: includes retired rows, calls every row a rule, blob is None."""
+        """Every `rules/*.md` (kind "rule") and `process/*.md` (kind "process").
+
+        `rules/retired/` is a subdirectory; a non-recursive glob over
+        `rules/*.md` never descends into it.
+        """
         found = []
-        for path in sorted((self.root / "rules").rglob("*.md")):
-            found.append(self._read(str(path.relative_to(self.root)), "rule"))
-        for path in sorted((self.root / "process").glob("*.md")):
-            found.append(self._read(str(path.relative_to(self.root)), "rule"))
+        rules_dir = self.root / "rules"
+        if rules_dir.is_dir():
+            for path in sorted(rules_dir.glob("*.md")):
+                found.append(self._row(path, "rule"))
+        process_dir = self.root / "process"
+        if process_dir.is_dir():
+            for path in sorted(process_dir.glob("*.md")):
+                found.append(self._row(path, "process"))
         return found
-
-
-def blob_sha(root, relpath, rev="HEAD"):
-    """The git blob SHA of `relpath` at `rev`, or None when it has none."""
-    proc = subprocess.run(
-        ["git", "rev-parse", "%s:%s" % (rev, relpath)],
-        cwd=str(root),
-        capture_output=True,
-        text=True,
-    )
-    if proc.returncode != 0:
-        return None
-    return proc.stdout.strip()
-
-
-def _unused_parser():
-    """Never called. STUB WRONGNESS: the package is stdlib only, and this
-    names a third-party parser, so the stdlib-only scan has something to red
-    on. It is inside a function body, so nothing ever imports it."""
-    import yaml  # noqa: F401
-
-    return yaml
-
-
-def _split(text):
-    """`(fields, body)` — raw frontmatter values, unstripped of their quotes."""
-    lines = text.splitlines()
-    if not lines or lines[0].strip() != "---":
-        return {}, text.strip()
-    for i in range(1, len(lines)):
-        if lines[i].strip() == "---":
-            head, body = lines[1:i], lines[i + 1 :]
-            break
-    else:
-        return {}, text.strip()
-    fields = {}
-    for line in head:
-        if ":" not in line:
-            continue
-        key, _, raw = line.partition(":")
-        fields[key.strip()] = raw.strip()
-    return fields, "\n".join(body).strip()
-
-
-def _split_human(body):
-    """STUB: never splits. The whole text stays the agent form, and the human
-    form is always the empty string rather than the section, or None."""
-    return body.strip(), ""
