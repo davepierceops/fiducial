@@ -640,3 +640,9 @@ Context: Register cluster C097; the positive wording Dave chose over the two pro
 Date: 2026-09-05
 Decision: Two register rows become one store row only when they state the same obligation and would carry the same keys. Any difference in keys splits them, however close the wording.
 Context: The rule the store migration and every fix pass merged under; a merged row states the rule at its shortest, not the sum of its sources.
+
+## DEC-000460 — process/change-flow.md agreed at 81310de
+Date: 2026-09-05
+Decision: process/change-flow.md is agreed at 81310de105b0f0b4133117fa4c209baea9d84b09, the first document under the process gate DEC-000380 names. It supersedes DEC-000360's mechanism — the converging status and its transitions — and not its substance; DEC-000370 stands. Every pull request gets an agentic code review with no trivial-change exemption; quality and skepticism are always two passes, in one session or two by class or by a size call; the Reviewer rows stay in force until an adopted published code-review standard replaces them in the same commit.
+Context: Five frontier reads (reviews/change-flow-read-*.md), then Dave's agreement on 2026-09-05.
+Supersedes: DEC-000360
