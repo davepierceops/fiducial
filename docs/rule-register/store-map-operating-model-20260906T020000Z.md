@@ -6,9 +6,9 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | register id | source file | disposition | store id |
 |---|---|---|---|
 | R0439 | operating-model.md | retired-ruling (9/C004: the session-kind scope becomes the `session` key) | — |
-| R0440 | operating-model.md | written | R0440 |
+| R0440 | operating-model.md | retired-ruling (store-fix-1 item 3: describes the team; the obligation is core R0166) | — |
 | R0441 | operating-model.md | retired-ruling (C125: R0464 is the one control-surfaces row) | — |
-| R0442 | operating-model.md | written | R0442 |
+| R0442 | operating-model.md | retired-ruling (store-fix-1 item 3: the double-negative form of R0482) | — |
 | R0443 | operating-model.md | written | R0443 |
 | R0444 | operating-model.md | written | R0444 |
 | R0445 | operating-model.md | written | R0445 |
@@ -20,7 +20,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0451 | operating-model.md | written | R0451 |
 | R0452 | operating-model.md | written | R0452 |
 | R0453 | operating-model.md | written | R0453 |
-| R0454 | operating-model.md | merged into R0440 | R0440 |
+| R0454 | operating-model.md | retired with R0440 (store-fix-1 item 3) | — |
 | R0455 | operating-model.md | written | R0455 |
 | R0456 | operating-model.md | written | R0456 |
 | R0457 | operating-model.md | written | R0457 |
