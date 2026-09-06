@@ -646,3 +646,8 @@ Date: 2026-09-05
 Decision: process/change-flow.md is agreed at 81310de105b0f0b4133117fa4c209baea9d84b09, the first document under the process gate DEC-000380 names. It supersedes DEC-000360's mechanism — the converging status and its transitions — and not its substance; DEC-000370 stands. Every pull request gets an agentic code review with no trivial-change exemption; quality and skepticism are always two passes, in one session or two by class or by a size call; the Reviewer rows stay in force until an adopted published code-review standard replaces them in the same commit.
 Context: Five frontier reads (reviews/change-flow-read-*.md), then Dave's agreement on 2026-09-05.
 Supersedes: DEC-000360
+
+## DEC-000470 — `all` is not a role value
+Date: 2026-09-05
+Decision: No row carries `role: [all]`. Every row's role list is decided for that row; the roles in use are the twelve role-document slugs at fd54448.
+Context: A blanket role list defeats selection by query, which is the store's whole mechanism.
