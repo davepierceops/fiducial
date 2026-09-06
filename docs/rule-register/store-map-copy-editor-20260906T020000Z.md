@@ -58,3 +58,5 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 Counts: rows consumed 49; rows written 44; definitions 3; merged away 4 (R0974, R0995 into R0973 per C080; R0996 into R0961 per C165; R0989 into R0975 per ruling 2, an in-file restatement by cross-reference inside cross-file cluster C081); split 0; retired 1 (R0978, C153 cut).
 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 1 define row (R0951), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 1 `define` row carrying a null term (R0986), each body restated as the instruction it carries.
+
+Store fix pass 2 item 8 retires R0951, the `copy` short-form define, as description — R0952 was already retired by store fix pass 1 item 4 under the same test. R0986 folds into R0971: how to treat speech introduced by a bare colon and how to mark it are one obligation under one trigger. R0999, the run-at-tier row, is re-keyed to `role: [chief-of-staff]` — it binds whoever summons the session, not the role that runs in it. The topic falls from 43 rows to 40.

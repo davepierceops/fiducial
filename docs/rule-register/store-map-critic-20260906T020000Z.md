@@ -39,3 +39,5 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 Counts: rows consumed 30; rows written 29; definitions 3; merged away 1 (R1025 into R1009, cluster C035 — the file's only intra-file pairing); split 0; retired 0.
 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 1 define row (R1010), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms.
+
+Store fix pass 2 item 8 re-keys R1029, the run-at-tier row, to `role: [chief-of-staff]`: it binds whoever summons the session, not the role that runs in it. The topic's other two checks — a short-form or runs-as-a-session define — find nothing here that store fix pass 1 item 4 did not already retire.
