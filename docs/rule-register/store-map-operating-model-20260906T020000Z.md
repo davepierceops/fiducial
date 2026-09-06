@@ -32,25 +32,25 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0463 | operating-model.md | merged into R0462, topic `core` (store-fix-1 item 6a) | R0462 |
 | R0464 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0464 |
 | R0465 | operating-model.md | restored by store-fix-2 item 1, landing in topic `change-flow` | R0465 |
-| R0466 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0466 |
-| R0467 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0467 |
+| R0466 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b), then retired (store-fix-5 item 2: ruled) | — |
+| R0467 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b), then retired into R0470 (store-fix-5 item 2) | — |
 | R0468 | operating-model.md | retired-ruling (5: negation of R0467) | — |
 | R0469 | operating-model.md | retired-DEC-000380 (C017: the `converging` status and its definition) | — |
 | R0470 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0470 |
-| R0471 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0471 |
+| R0471 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b), then retired into R0470 (store-fix-5 item 2) | — |
 | R0472 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0472 |
-| R0473 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0473 |
+| R0473 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b), then retired (store-fix-5 item 2: ruled) | — |
 | R0474 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0474 |
 | R0475 | operating-model.md | merged into R0474, topic `change-flow` (store-fix-1 item 6b) | R0474 |
 | R0476 | operating-model.md | retired-DEC-000380 | — |
-| R0477 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0477 |
+| R0477 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b), then retired into R0474 (store-fix-5 item 2) | — |
 | R0478 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0478 |
-| R0479 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0479 |
+| R0479 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b), then retired into R0474 (store-fix-5 item 2) | — |
 | R0480 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0480 |
 | R0481 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0481 |
-| R0482 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0482 |
+| R0482 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b), then retired into R0472 (store-fix-5 item 2) | — |
 | R0483 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0483 |
-| R0484 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0484 |
+| R0484 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b), then retired into R0478 (store-fix-5 item 2) | — |
 | R0485 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0485 |
 | R0486 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0486 |
 | R0487 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0487 |
@@ -121,3 +121,7 @@ Topic `change-flow` is new with this pass; its rows are `corpus: [software]` and
 Store fix pass 2 item 1 restores two of the ids this map had retired, as define rows carrying `term` and nothing else: R0465 to `change-flow` and R0531 to `verification`. Both terms are used by rows that survive, and the store-fix-1 summary recorded the loss.
 
 Store fix pass 3 item 2 merges two ids this map records into rows of their new topics: R0504 into `release-manager-agent` R0503 (trigger: a change package is assembled) and R0501a into `trd` R0500 (trigger: a feature flag is introduced).
+
+Store fix pass 5 item 2 retires eight of the ids this map sent to `change-flow`: R0466 and R0473 outright, R0467
+and R0471 into R0470, R0477 and R0479 into R0474, R0482 into R0472, R0484 into R0478. R0494, R0495 and R0510,
+which merged into R0466 and R0471 in store fix pass 1, retire with their survivors.

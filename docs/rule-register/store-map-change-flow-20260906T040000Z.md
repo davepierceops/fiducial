@@ -11,21 +11,21 @@ account for; this map records the landing, not a second consumption.
 |---|---|---|---|
 | R0464 | 10 | chief-of-staff, writer, copy-editor, critic | define: the seven primary controls |
 | R0465 | 250 | — (define rows carry no role key) | define: a meaningful change |
-| R0466 | 20 | chief-of-staff | the lighter shape for a trivial or routine change |
-| R0467 | 30 | chief-of-staff | each stage completes before the next begins |
+| R0466 | — | — | retired (store-fix-5 item 2: ruled — names no shape; R0465 and R0470 carry it) |
+| R0467 | — | — | retired into R0470 (store-fix-5 item 2) |
 | R0470 | 40 | chief-of-staff | define: the per-change stages |
-| R0471 | 50 | chief-of-staff | no per-change stage and no implementation against an open spec |
-| R0472 | 60 | spec-reviewer-agent | the spec read as a hard gate |
-| R0473 | 70 | context-quality-reviewer | the gate on methodology and governed context |
-| R0474 | 80 | chief-of-staff | spec edits land ungated on an open branch, gated at its close |
-| R0477 | 90 | chief-of-staff | findings route both ways through the decision session |
+| R0471 | — | — | retired into R0470 (store-fix-5 item 2) |
+| R0472 | 60 | chief-of-staff, spec-reviewer-agent | the acceptance criteria before a unit starts, and the Spec Reviewer's gate reaching specs alone |
+| R0473 | — | — | retired (store-fix-5 item 2: ruled — the container gate; intake replaced it under DEC-000380) |
+| R0474 | 80 | chief-of-staff | the one open-spec-branch row: ungated edits gated at the close, findings through the decision session, the test suite under a convergence directive, the branch SHA pinned in a mid-delta directive |
+| R0477 | — | — | retired into R0474 (store-fix-5 item 2) |
 | R0478 | 100 | test-designer-agent | confirm red while the branch is open |
-| R0479 | 110 | chief-of-staff | the test suite is directed under a convergence directive |
+| R0479 | — | — | retired into R0474 (store-fix-5 item 2) |
 | R0480 | 120 | spec-reviewer-agent | the close's read, from the branch point |
 | R0481 | 130 | chief-of-staff | the close's diff to Dave; one ruling agrees it |
-| R0482 | 140 | chief-of-staff | acceptance criteria before the unit starts |
+| R0482 | — | — | retired into R0472 (store-fix-5 item 2) |
 | R0483 | 150 | architect-agent | the architecture summary from the TRD |
-| R0484 | 160 | test-designer-agent | the unit's tests confirmed red |
+| R0484 | — | — | retired into R0478 (store-fix-5 item 2) |
 | R0485 | 170 | coder-agent | implement to green |
 | R0486 | 180 | coder-agent, test-designer-agent | implementation and tests by different agents |
 | R0487 | 190 | reviewer-agent | the quality pass |
@@ -57,3 +57,12 @@ nothing against one, and the C097 mirror rows are deliberately two. Topic count:
 Store fix pass 5 item 1d keeps R0493 in this topic as the `mechanical check` define and restates its body to the
 directive's words: "Mechanical checks are lint, type, and static-analysis checks; they pass as part of green."
 No disposition changes.
+
+Store fix pass 5 item 2 rules the topic to 18 rows. Nine ids leave it. R0467 and R0471 retire into the R0470
+define, whose body now carries the span, the order, and the precondition in one sentence. R0477, R0479 and R0094
+retire into R0474, the one row a Chief of Staff needs while a spec branch is open. R0484 retires into R0478, one
+Test Designer row from the open spec's claims to the unit's confirmed red. R0482 retires into R0472, now keyed
+`chief-of-staff` and `spec-reviewer-agent`. R0473 retires: it is the container gate DEC-000380 replaced with
+intake. R0466 retires: it names no shape, and R0465 (`meaningful change`) with R0470 carries what it meant.
+R0492 loses "and never merge them into one pass" — a negation of its own opening clause. Topic count: 27 rows
+before, 18 after.

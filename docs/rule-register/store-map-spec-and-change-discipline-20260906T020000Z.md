@@ -19,7 +19,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0091 | context-sets/spec-and-change-discipline.md | written | R0091 |
 | R0092 | context-sets/spec-and-change-discipline.md | written | R0092 |
 | R0093 | context-sets/spec-and-change-discipline.md | retired-ruling (store-fix-1 item 4: describes) | — |
-| R0094 | context-sets/spec-and-change-discipline.md | written | R0094 |
+| R0094 | context-sets/spec-and-change-discipline.md | retired into R0474, topic `change-flow` (store-fix-5 item 2) | R0474 |
 | R0095 | context-sets/spec-and-change-discipline.md| merged into R0094 (fix 3 item 2) | R0094 |
 | R0096 | context-sets/spec-and-change-discipline.md | written | R0096 |
 | R0097 | context-sets/spec-and-change-discipline.md | written | R0097 |
