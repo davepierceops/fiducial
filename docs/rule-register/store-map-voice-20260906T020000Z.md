@@ -6,8 +6,8 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | register id | source file | disposition | store id |
 |---|---|---|---|
 | R1576 | voice.md | retired-ruling (container rule 4: read-with and precedence of documents) | — |
-| R1577 | voice.md | retired-ruling (store-fix-1 item 4: describes) | — |
-| R1578 | voice.md | written | R1578 |
+| R1577 | voice.md | restored by store-fix-2 item 1, merging R1578 | R1577 |
+| R1578 | voice.md | merged into R1577 (store-fix-2 item 1) | R1577 |
 | R1579 | voice.md | written | R1579 |
 | R1580 | voice.md | written | R1580 |
 | R1581 | voice.md | written | R1581 |
@@ -31,4 +31,6 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R1599 | voice.md | written | R1599 |
 | R1600 | voice.md | written | R1600 |
 
-Counts: rows consumed 25; rows written 23; definitions 6; merged away 0; split 0; retired 2 (R1576, R1595 container rules).
+Counts: rows consumed 25; rows written 22; definitions 5; merged away 1 (R1578 into R1577); split 0; retired 2 (R1576, R1595 container rules).
+
+Store fix pass 1 item 4 retired R1577 as description and store fix pass 2 item 1 restores it, merged with R1578 into one `require` row: the readership and goal the register is set for, and the trigger that sends the register question back to Dave. The definition count drops to 5 because the restored row is a `require`, not a `define`.

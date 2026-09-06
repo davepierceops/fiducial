@@ -10,6 +10,7 @@ account for; this map records the landing, not a second consumption.
 | store id | order | role | stage |
 |---|---|---|---|
 | R0464 | 10 | chief-of-staff, writer, copy-editor, critic | define: the seven primary controls |
+| R0465 | 250 | — (define rows carry no role key) | define: a meaningful change |
 | R0466 | 20 | chief-of-staff | the lighter shape for a trivial or routine change |
 | R0467 | 30 | chief-of-staff | each stage completes before the next begins |
 | R0470 | 40 | chief-of-staff | define: the per-change stages |
@@ -40,3 +41,5 @@ Two rows are keyed against item 6b's own role list, and say so in their `## Huma
 because it plainly binds the role that derives the architecture summary; R0493 to `coder-agent` and
 `release-manager-agent` as well as `chief-of-staff`, because its term `mechanical check` is used by R0485 and by
 the definition-of-done row R0509.
+
+R0465 is added by `docs/cycles/store-fix-2-20260906T050000Z.md` item 1, which restores it; store fix pass 2 item 7 strips `role`, `session` and `corpus` from every define row, so it carries `term` and nothing else.

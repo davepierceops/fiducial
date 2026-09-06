@@ -82,3 +82,5 @@ Notes on the merges, by cluster:
 - R0141–R0143 are three items of one list under one trigger and merge to R0141; R0146 elaborates R0145's single obligation and merges into it.
 - R0123–R0129 are not merged: each names a different kind of behavior under test, so the triggers differ (ruling 3).
 - Nothing retires, as the two digest cards predict.
+
+R0531, from `operating-model.md` and consumed by `store-map-operating-model-20260906T020000Z.md`, lands here at order 440 as the definition of `production-grade`, restored by `docs/cycles/store-fix-2-20260906T050000Z.md` item 1. This map records the landing, not a second consumption.

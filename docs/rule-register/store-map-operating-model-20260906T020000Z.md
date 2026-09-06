@@ -31,7 +31,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0462 | operating-model.md | moved to topic `core` (store-fix-1 item 6a) | R0462 |
 | R0463 | operating-model.md | merged into R0462, topic `core` (store-fix-1 item 6a) | R0462 |
 | R0464 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0464 |
-| R0465 | operating-model.md | retired-ruling (store-fix-1 item 4: describes) | — |
+| R0465 | operating-model.md | restored by store-fix-2 item 1, landing in topic `change-flow` | R0465 |
 | R0466 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0466 |
 | R0467 | operating-model.md | moved to topic `change-flow` (store-fix-1 item 6b) | R0467 |
 | R0468 | operating-model.md | retired-ruling (5: negation of R0467) | — |
@@ -97,7 +97,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0528 | operating-model.md | merged into R0458, topic `core` (store-fix-1 item 6a) | R0458 |
 | R0529 | operating-model.md | merged into R0458, topic `core` (store-fix-1 item 6a) | R0458 |
 | R0530 | operating-model.md | merged into R0458, topic `core` (store-fix-1 item 6a) | R0458 |
-| R0531 | operating-model.md | retired-ruling (store-fix-1 item 4: describes) | — |
+| R0531 | operating-model.md | restored by store-fix-2 item 1, landing in topic `verification` | R0531 |
 
 Counts: rows consumed 93; rows written under this topic 0 — the topic ceases to exist; of the 67 rows the store-all pass wrote here, 13 retired under store-fix-1 items 3 and 4, 10 were absorbed by the merges below, and 44 moved to another topic.
 
@@ -108,11 +108,14 @@ Topic `operating-model` ceases to exist. `docs/cycles/store-fix-1-20260906T04000
 | destination | store rows | register ids |
 |---|---|---|
 | `core` (item 6a) | R0455, R0456, R0457, R0458, R0460, R0461, R0462 | R0455-R0458, R0460-R0463, R0521-R0526, R0528-R0530 |
-| `change-flow` (item 6b) | R0464, R0466, R0467, R0470-R0474, R0477-R0490, R0492, R0493 | R0464, R0466, R0467, R0470-R0475, R0477-R0490, R0492-R0495 |
+| `change-flow` (item 6b) | R0464, R0465, R0466, R0467, R0470-R0474, R0477-R0490, R0492, R0493 | R0464-R0467, R0470-R0475, R0477-R0490, R0492-R0495 |
 | `trd` (item 6c) | R0497-R0500, R0501a, R0501b | R0497-R0501 |
 | `release-manager-agent` (item 6d) | R0502-R0506, R0509, R0527 | R0502-R0520, R0527 |
-| retired | — | R0439-R0454, R0459, R0465, R0468, R0469, R0476, R0491, R0496, R0511, R0531 |
+| `verification` (store-fix-2 item 1) | R0531 | R0531 |
+| retired | — | R0439-R0454, R0459, R0468, R0469, R0476, R0491, R0496, R0511 |
 
 Two rows are merged in the move: R0530 into core's R0458 (the escalation rule and its routine-decision carve-out are one obligation), and R0512-R0520 with R0459 and R0508 into `release-manager-agent`'s R0509 (the definition of done as one list). Two rows are re-keyed against the item's own role list, and say so in their `## Human`: R0483 to `architect-agent`, because it plainly binds the role that derives the architecture summary; R0493 to `coder-agent` and `release-manager-agent` as well as `chief-of-staff`, because its term `mechanical check` is used by R0485 and R0509.
 
 Topic `change-flow` is new with this pass; its rows are `corpus: [software]` and each is keyed to the role that performs the stage.
+
+Store fix pass 2 item 1 restores two of the ids this map had retired, as define rows carrying `term` and nothing else: R0465 to `change-flow` and R0531 to `verification`. Both terms are used by rows that survive, and the store-fix-1 summary recorded the loss.
