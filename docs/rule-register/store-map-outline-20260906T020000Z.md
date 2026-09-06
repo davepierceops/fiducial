@@ -57,3 +57,12 @@ Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 2 define rows
 Store fix pass 3 item 2 merges R1375 into R1374: both are the topic-inventory step, performed as one act.
 
 Store fix pass 3 item 6 retires R1366 as `describes`, on a re-read of the source file's opening section at fd54448: the opening of `skills/outline.md` routes the skill to a session kind; `writer` R1164 carries the trigger and R1367 the read.
+
+Store fix pass 4 item 2 empties the topic. `process/outline.md` is the skill: it absorbs the sequence's
+obligations from the fd54448 text, and all 18 remaining rows retire with disposition `process` — R1367, R1370,
+R1374, R1376, R1379, R1380, R1382, R1383, R1384, R1385, R1386, R1388, R1389, R1390, R1391, R1392, R1393, R1394.
+Topic `outline` ceases. The general rule the item states — a skill that is a sequence of steps is a process
+document, and only a standing obligation the steps do not carry stays a row — was re-run over every remaining
+skill-derived topic (`convergence`, `reconciliation`, `command-blocks`, `directive-invariants`,
+`review-artifact-schema`, `verification-boundaries`, `skeptic`, `test-designer`) and caught nothing further:
+each of those topics states standing obligations rather than a sequence.
