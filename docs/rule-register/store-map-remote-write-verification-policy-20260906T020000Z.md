@@ -49,3 +49,12 @@ Store fix pass 2 item 4 replaces `role: [all]` on 25 rows of this topic with an 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 2 define rows (R0727, R0736), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 4 `define` rows carrying a null term (R0728, R0729, R0753, R0754), each body restated as the instruction it carries.
 
 Store fix pass 3 item 2 merges R0734 into R0733: both are checks of one act, verifying what a tool-mediated write landed.
+
+Store fix pass 4 item 1 rules the topic down to three rows. `R0720` states the read-back (merging R0722, R0732,
+R0733, R0735); `R0730` states the timed-out-or-unconfirmable branch (merging R0743, R0744, R0745, R0746);
+`R0725` states the second-failure stop with the exclusions inline (merging R0728). Every other row retires,
+disposition `ruled`: R0722, R0727, R0728, R0729, R0732, R0733, R0735, R0736, R0737, R0739, R0743, R0744, R0745,
+R0746, R0747, R0748, R0750, R0751, R0752, R0753, R0754 — 21 rows. The two define rows retire with them (R0727
+`qualifying failure`, R0736 `connector write`); R0725 states the exclusions inline instead. R0720 is keyed
+`chief-of-staff` plus every execution role; R0730 and R0725 are keyed `chief-of-staff` alone, the only role that
+makes connector writes. Topic count: 24 rows before, 3 after.
