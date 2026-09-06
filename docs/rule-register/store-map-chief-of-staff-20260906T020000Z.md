@@ -95,3 +95,5 @@ Store fix pass 2 item 6 keeps this topic's standing rules only. Two procedures b
 R0883-R0888, the state-assessment reads, stay and each gains a `## Human` noting that it retires when `bin/state` lands. The topic falls from 48 rows to 23: the standing rules the directive names, the six state-assessment rows it keeps, and three it does not name — R0898 and R0899, which belong to the read-pasted-output family, and R0934, a standing prohibition rather than a step in either procedure.
 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 1 define row (R0893), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms.
+
+Store fix pass 3 item 1 moves R1138 into this topic from `spec-reviewer-agent`: recommending a deep read at milestone moments is the Chief of Staff's act, and no deep-read row existed here to merge it into. Its `source` still names `roles/spec-reviewer-agent.md:131 @ fd54448`. The topic holds 24 rows.
