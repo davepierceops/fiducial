@@ -49,3 +49,5 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R1139 | roles/spec-reviewer-agent.md | written | R1139 |
 
 Counts: rows consumed 42; rows written 38; definitions 3; merged away 4 (R1102 into R1101, R1130 into R1127, R1135 into R1104, R1136 into R1105); split 0; retired 0.
+
+Store fix pass 2 item 9 notes, without changing anything: cluster C020 stays three rows in this topic — R1104 (the Depth 1 continuity scan at a spec delta's close), R1105 (widening to the delta's reach) and R1137 (the Depth 3 sweep, its scope conformed to the spec spine and the rules store). The store-all rulebook's C020 ruling asked for two; the store wrote three because Depth 3's scope is a distinct obligation with a distinct trigger. Dave has not ruled it back to two, so it stands as written and is recorded here for his next read.
