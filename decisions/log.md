@@ -635,3 +635,8 @@ Context: Resolves the rule-store PRD's OQ-2; the 153 register rows from the enga
 Date: 2026-09-05
 Decision: A Test Designer edits tests and nothing else; a spec change it needs is a finding to the decision session. A spec writer edits specs and nothing else; a test change it needs is a finding to the decision session.
 Context: Register cluster C097; the positive wording Dave chose over the two prohibitions the source files carried.
+
+## DEC-000450 — Two register rows merge only on the same obligation and the same keys
+Date: 2026-09-05
+Decision: Two register rows become one store row only when they state the same obligation and would carry the same keys. Any difference in keys splits them, however close the wording.
+Context: The rule the store migration and every fix pass merged under; a merged row states the rule at its shortest, not the sum of its sources.
