@@ -121,3 +121,13 @@ The digest card for this file predicted 77 retiring rows. The difference is five
 Store fix pass 2 item 4 replaces `role: [all]` on 18 rows of this topic with an explicit role list, decided per row: 10 rows to `[chief-of-staff, writer, copy-editor, critic, context-quality-reviewer]`; 6 rows to `[architect-agent, chief-of-staff, coder-agent, context-quality-reviewer, copy-editor, critic, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent, test-designer-agent, writer]`; 2 rows to `[architect-agent, coder-agent, context-quality-reviewer, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent, test-designer-agent]`. `all` is not a value; the lists are the role documents' own basename slugs at fd54448.
 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 7 define rows (R0604, R0611, R0613, R0626, R0627, R0632, R0692), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 2 `define` rows carrying a null term (R0633, R0702), each body restated as the instruction it carries.
+
+Store fix pass 4 item 4 dissolves the topic; it ceases to exist. R0604 (`term: [version, versions]` — a
+document's version is the SHA of the last commit that touched it) and R0611 (`term: [agreed]` — agreed means
+Dave agreed it) move to topic `lexicon`, orders 430 and 440; both surface forms are kept on R0604, the
+directive naming the term rather than restricting its forms. R0692, R0695 and R0697 retire, `duplicate` — the
+change-flow and test-designer rows state them (R0471/R0478 and R1153/R1154). Every other row retires,
+disposition `machinery`: R0602, R0613, R0625, R0626, R0627, R0629, R0631, R0632, R0633, R0688, R0699, R0701,
+R0702 — the audience, role-document, order, null, superseded/deprecated and excluded-metadata rows are the row
+model's keys and the tool's now. No surviving row uses a term the retirement removes. Topic count: 18 rows
+before, 0 after.
