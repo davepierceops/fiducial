@@ -42,9 +42,11 @@ execution session.
 3. **Propose a breakdown into tranches, with rationale.** Dave approves,
    renames, or redraws; his approved name slugs each tranche.
 4. **Before proposing a second concurrent tranche, check the claim** on the
-   documents it would touch. At most two tranches run at once, and only over
-   disjoint spec territory. Where the territory overlaps, propose serial
-   execution or a different project.
+   documents it would touch. At most two tranches run at once, never two deltas
+   over one tranche, and only over disjoint spec territory. Two deltas editing
+   one document, with the result merged, is refused rather than tooled for.
+   Where a project has no disjoint territory left to claim, propose serial
+   execution or send the second tranche cross-project.
 5. **For an approved tranche, decompose into change packages** before any
    agentic work on the tranche begins: the smallest independently executable
    units, in dependency order.

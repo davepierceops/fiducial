@@ -64,3 +64,15 @@ Store fix pass 2 item 4 replaces `role: [all]` on 19 rows of this topic with an 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 2 define rows (R0083, R0092), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms.
 
 Store fix pass 3 item 2 merges R0095 into R0094: both fire on one trigger, issuing a directive while a spec delta is open.
+
+Store fix pass 4 item 3 dissolves the topic; it ceases to exist. The red-gate rows: R0084 and R0087 retire,
+`ruled` — the Test Designer states them (R1150; R1152 with R1158). R0083 (the `red-gate` define), R0085 and
+R0086 (the interface contract's source per stage, DEC-000370) move to topic `test-designer`, orders 210–230.
+The open-delta and concurrency rows: R0096, R0097 and R0099 retire, `ruled` — `process/decomposition.md` step 4
+states them, amended in the same commit to carry "never two deltas over one tranche", the refusal of a merged
+two-delta edit, and the no-territory-left branch. R0092 retires as a duplicate of the lexicon's R0006, whose
+body takes its second sentence. R0090, R0091 and R0094 move to topic `change-flow`, orders 260–280, corpus
+narrowed to `[software]`. R0100–R0105 become one checklist row, R0100, in topic `decision-layer`, keyed to the
+four decision roles: the loose-end tracker's five checkpoints. R0106 and R0107 become one row, R0106, in topic
+`coder-agent`, keyed `[coder-agent, test-designer-agent]`. R0081 retires, `describes`. R0082, R0088 and R0089
+were already retired by earlier passes and are unchanged here. Topic count: 21 rows before, 0 after.
