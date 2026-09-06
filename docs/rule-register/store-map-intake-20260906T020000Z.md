@@ -44,3 +44,11 @@ stay, binding the report. Retired `checklist`: R0265, R0268, R0269, R0270, R0271
 R0276, R0278, R0279, R0281, R0282, R0283, R0285. Retired `describes`: R0267 (the `criterion` define) and R0280
 (retirement is Dave's — core's R0166 states it, and R0264's closing line carries it). R0266 still uses the word
 "criterion" with no define row behind it; that is recorded, not resolved. Topic count: 21 rows before, 3 after.
+
+Store fix pass 5 item 6 dissolves topic `context-quality-reviewer` into this one and brings two of its rows
+here: R0944 at order 40 (record each intake as a review artifact — what landed, or what was refused and against
+which row) and R0950 at order 50 (judge coherence and safety as LLM context, not the engineering merit of the
+methodology). Their `source` still names `roles/context-quality-reviewer.md @ fd54448`. R0266's body gains the
+word the retired `criterion` define used to supply: it now reads "Cite the intake criterion it fails in every
+finding you raise", which settles the question store fix pass 4 left open at its summary item 2. The topic holds
+five rows.
