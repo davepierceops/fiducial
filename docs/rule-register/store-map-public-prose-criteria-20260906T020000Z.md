@@ -8,19 +8,19 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0812 | public-prose-criteria.md | retired-ruling (container rule 4: which documents to read and when) | — |
 | R0813 | public-prose-criteria.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0814 | public-prose-criteria.md | retired-ruling (container rule 4: precedence of the Voice document over this one) | — |
-| R0815 | public-prose-criteria.md | written | R0815 |
+| R0815 | public-prose-criteria.md| retired-ruling (fix 3 item 5: describes) | — |
 | R0816 | public-prose-criteria.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0817 | public-prose-criteria.md | written | R0817 |
 | R0818 | public-prose-criteria.md | written | R0818 |
 | R0819 | public-prose-criteria.md | written | R0819 |
 | R0820 | public-prose-criteria.md | written | R0820 |
 | R0821 | public-prose-criteria.md | written | R0821 |
-| R0822 | public-prose-criteria.md | written | R0822 |
-| R0823 | public-prose-criteria.md | written | R0823 |
+| R0822 | public-prose-criteria.md| merged into R0821 (fix 3 item 5) | R0821 |
+| R0823 | public-prose-criteria.md| merged into R0821 (fix 3 item 5) | R0821 |
 | R0824 | public-prose-criteria.md | merged into R0821 | R0821 |
 | R0825 | public-prose-criteria.md | merged into R0821 | R0821 |
-| R0826 | public-prose-criteria.md | written | R0826 |
-| R0827 | public-prose-criteria.md | written | R0827 |
+| R0826 | public-prose-criteria.md| merged into lexicon R0038, the `claim strength` define (fix 3 item 5) | R0038 |
+| R0827 | public-prose-criteria.md| merged into R0821 (fix 3 item 5) | R0821 |
 | R0828 | public-prose-criteria.md | merged into R0821 | R0821 |
 | R0829 | public-prose-criteria.md | written | R0829 |
 | R0830 | public-prose-criteria.md | written | R0830 |
@@ -29,11 +29,11 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0833 | public-prose-criteria.md | written | R0833 |
 | R0834 | public-prose-criteria.md | merged into R0833 | R0833 |
 | R0835 | public-prose-criteria.md | written | R0835 |
-| R0836 | public-prose-criteria.md | written | R0836 |
-| R0837 | public-prose-criteria.md | written | R0837 |
-| R0838 | public-prose-criteria.md | written | R0838 |
-| R0839 | public-prose-criteria.md | written | R0839 |
-| R0840 | public-prose-criteria.md | written | R0840 |
+| R0836 | public-prose-criteria.md| merged into R0835 (fix 3 item 5) | R0835 |
+| R0837 | public-prose-criteria.md| merged into R0835 (fix 3 item 5) | R0835 |
+| R0838 | public-prose-criteria.md| merged into R0835 (fix 3 item 5) | R0835 |
+| R0839 | public-prose-criteria.md| merged into R0835 (fix 3 item 5) | R0835 |
+| R0840 | public-prose-criteria.md| merged into R0835 (fix 3 item 5) | R0835 |
 | R0841 | public-prose-criteria.md | merged into R0840 | R0840 |
 | R0842 | public-prose-criteria.md | merged into R0840 | R0840 |
 | R0843 | public-prose-criteria.md | merged into R0840 | R0840 |
@@ -86,3 +86,7 @@ Notes on the rulings applied:
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 2 define rows (R0836, R0845), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 2 `define` rows carrying a null term (R0826, R0838), each body restated as the instruction it carries.
 
 Store fix pass 3 item 4 retires R0851 under the never-observed test, disposition `never-observed`: a ban with no incident behind it; voice R1600 already states the site-level disclosure positively (named by the directive).
+
+Store fix pass 3 item 5. R0815 retires as description (R0813 and R0816 were already retired by store fix pass 1 item 4). R0821-R0827 become one row at R0821 — "Signal each claim's tier in the sentence: relayed, demonstrated, grounded, or opinion." — with the tier definitions left to the Lexicon, pulled by term; R0826 folds into the Lexicon's `claim strength` define (R0038), which already carries both halves it stated. R0835-R0840 become one row at R0835 — "Say each point once; cut restatements. Length and structure are the author's call per piece." R0851 retired under item 4. Orders are renumbered by ten. The topic holds 17 rows.
+
+The general rule item 5 states — a merged row that restates what its terms mean is restating the Lexicon — is applied across the store to `verification` R0114 and `verification-boundaries` R0788: both enumerated the four release-impact labels; both now name the label and let `term` bring the meanings from the Lexicon's R0029-R0037.
