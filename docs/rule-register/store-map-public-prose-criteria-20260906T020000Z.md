@@ -90,3 +90,6 @@ Store fix pass 3 item 4 retires R0851 under the never-observed test, disposition
 Store fix pass 3 item 5. R0815 retires as description (R0813 and R0816 were already retired by store fix pass 1 item 4). R0821-R0827 become one row at R0821 — "Signal each claim's tier in the sentence: relayed, demonstrated, grounded, or opinion." — with the tier definitions left to the Lexicon, pulled by term; R0826 folds into the Lexicon's `claim strength` define (R0038), which already carries both halves it stated. R0835-R0840 become one row at R0835 — "Say each point once; cut restatements. Length and structure are the author's call per piece." R0851 retired under item 4. Orders are renumbered by ten. The topic holds 17 rows.
 
 The general rule item 5 states — a merged row that restates what its terms mean is restating the Lexicon — is applied across the store to `verification` R0114 and `verification-boundaries` R0788: both enumerated the four release-impact labels; both now name the label and let `term` bring the meanings from the Lexicon's R0029-R0037.
+
+Store fix pass 5 item 9 leaves R0820 exactly as it stands: a `forbid` held under store fix pass 3's never-observed test as
+undecidable, and Dave has not ruled. No key and no word of it changes in this pass.

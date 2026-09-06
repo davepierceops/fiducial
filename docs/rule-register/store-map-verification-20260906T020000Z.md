@@ -92,3 +92,6 @@ Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 7 define rows
 Store fix pass 3 item 2 merges R0072 into R0070 (trigger: the change is meant to be production-grade) and R0153-R0155 into R0152 (trigger: the work is a small project or an early-stage feature).
 
 Store fix pass 3 item 4 retires R0160 under the never-observed test, disposition `never-observed`: a ban with no incident behind it; R0782 already states positively that a mock is a claim about our side with the other side verified elsewhere.
+
+Store fix pass 5 item 9 leaves R0144 and R0159 exactly as they stand: two `forbid` rows held under store fix pass 3's never-observed test as
+undecidable, and Dave has not ruled. No key and no word of either changes in this pass.

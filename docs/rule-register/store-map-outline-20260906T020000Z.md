@@ -66,3 +66,8 @@ document, and only a standing obligation the steps do not carry stays a row — 
 skill-derived topic (`convergence`, `reconciliation`, `command-blocks`, `directive-invariants`,
 `review-artifact-schema`, `verification-boundaries`, `skeptic`, `test-designer`) and caught nothing further:
 each of those topics states standing obligations rather than a sequence.
+
+Store fix pass 5 item 9 names R1380 and R1389 among the seven rows held as undecidable under the never-observed
+test, to be left exactly as they are. They are not rows: store fix pass 4 item 2 retired the whole topic into
+`process/outline.md`, R1380 and R1389 with it, under a different ruling. Nothing changes here — the store is as
+pass 4 left it — and the discrepancy is recorded in this pass's report.

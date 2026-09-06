@@ -107,3 +107,6 @@ new row is written:
   PRD definition at its shortest. This settles the question store fix pass 4 left open at its summary item 4.
 
 The topic holds 48 rows.
+
+Store fix pass 5 item 9 leaves R0013 exactly as it stands: a `forbid` held under store fix pass 3's never-observed test as
+undecidable, and Dave has not ruled. No key and no word of it changes in this pass.
