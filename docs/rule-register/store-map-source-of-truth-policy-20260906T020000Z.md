@@ -60,3 +60,14 @@ Store fix pass 2 item 4 replaces `role: [all]` on 13 rows of this topic with an 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 6 define rows (R0757, R0758, R0759, R0760, R0761, R0762), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms.
 
 Store fix pass 3 item 2 merges R0766 and R0768 into R0765: all three fire on one trigger, creating a vendor-specific artifact.
+
+Store fix pass 4 item 7 dissolves the topic; it ceases to exist. R0757 (`PRD`), R0758 (`TRD`), R0759
+(`acceptance criteria`), R0760 (`architecture summary`) and R0761 (`tracker issue`) move to topic `lexicon`,
+orders 450–490. R0763, R0765 and R0769 become one row, R0763, in topic `core` at order 420, keyed
+`[chief-of-staff, coder-agent]`: a durable rule lives in the store, never only in vendor tooling; the adapter
+is derived from it. R0770 and R0775 retire, `duplicate` — core's R0183 states the obligation to surface a
+disagreement between sources and leave the resolution to Dave. R0776 retires, `duplicate` — the Spec Reviewer's
+R1104 and R1105 state the continuity scan at the close and its widening by the delta's reach. R0762 retires,
+`describes`; no surviving row uses the term `portable operating-model document`. R0757 and `prd-template`'s
+R1512 both define `PRD` across two topics; item 9's sweep disposes of the pair. Topic count: 12 rows before,
+0 after.
