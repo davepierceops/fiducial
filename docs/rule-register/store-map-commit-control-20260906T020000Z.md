@@ -39,3 +39,15 @@ Counts: rows consumed 27; rows written 14; definitions 7; merged away 6; split 0
 Store fix pass 2 item 4 replaces `role: [all]` on 10 rows of this topic with an explicit role list, decided per row: 5 rows to `[architect-agent, chief-of-staff, coder-agent, context-quality-reviewer, copy-editor, critic, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent, test-designer-agent, writer]`; 2 rows to `[chief-of-staff]`; 2 rows to `[chief-of-staff, spec-reviewer-agent]`; 1 row to `[chief-of-staff, release-manager-agent]`. `all` is not a value; the lists are the role documents' own basename slugs at fd54448.
 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 2 define rows (R0533, R0705), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 1 `define` row carrying a null term (R0564), each body restated as the instruction it carries.
+
+Store fix pass 4 item 5 rules the topic down to two rows and one process document. R0564 states the push rule,
+merging R0565: "Push plainly; never force-push", keyed to every role — every role in the store pushes. R0570
+stays as written, re-ordered to 20: a routine change opens a pull request and merges it, and the gate is
+elsewhere. R0574 and R0575 retire, `duplicate` — `change-flow`'s R0474 and R0481 with `reconciliation`'s R1491
+state them; R0576 was already retired by an earlier pass. R0566, R0568, R0703 and R0705 retire, `process`, into
+`process/project-setup.md` — the adoption checklist a human runs once per repo: branch protection in the forge
+(no force-push, no deletion, pull request only, no admin bypass) and the runner's force-push deny in every
+permission mode. The frontmatter-era items of `policies/project-setup-requirements.md` — the pre-commit
+frontmatter check and the empty expedited-review log — are dropped under DEC-000380 and are not carried into
+the document. R0533 retires, `describes`; the phrase "change control" survives only in R0534's `## Human`
+prose, which uses it descriptively and needs no define. Topic count: 10 rows before, 2 after.
