@@ -7,7 +7,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 |---|---|---|---|
 | R1236 | skills/conversation-retro.md | retired-ruling (ruling 9, C004: session-scope statement becomes the `session` key) | — |
 | R1237 | skills/conversation-retro.md | written | R1237 |
-| R1238 | skills/conversation-retro.md | written | R1238 |
+| R1238 | skills/conversation-retro.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R1239 | skills/conversation-retro.md | retired-DEC-000380 | — |
 | R1240 | skills/conversation-retro.md | written | R1240 |
 | R1241 | skills/conversation-retro.md | written | R1241 |

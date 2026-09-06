@@ -5,7 +5,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md. Topic renamed from 
 
 | register id | source file | disposition | store id |
 |---|---|---|---|
-| R0263 | docs/global-context/review-rubric.md | written | R0263 |
+| R0263 | docs/global-context/review-rubric.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0264 | docs/global-context/review-rubric.md | written | R0264 |
 | R0265 | docs/global-context/review-rubric.md | written | R0265 |
 | R0266 | docs/global-context/review-rubric.md | written | R0266 |

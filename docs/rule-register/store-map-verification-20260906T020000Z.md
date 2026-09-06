@@ -60,7 +60,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0160 | context-sets/testing-and-verification.md | written | R0160 |
 | R0161 | context-sets/testing-and-verification.md | written | R0161 |
 | R0070 | context-sets/production-grade-software.md | written | R0070 |
-| R0071 | context-sets/production-grade-software.md | written | R0071 |
+| R0071 | context-sets/production-grade-software.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0072 | context-sets/production-grade-software.md | written | R0072 |
 | R0073 | context-sets/production-grade-software.md | written | R0073 |
 | R0074 | context-sets/production-grade-software.md | written | R0074 |

@@ -5,7 +5,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 
 | register id | source file | disposition | store id |
 |---|---|---|---|
-| R1046 | roles/reviewer-agent.md | written | R1046 |
+| R1046 | roles/reviewer-agent.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R1047 | roles/reviewer-agent.md | written | R1047 |
 | R1048 | roles/reviewer-agent.md | written | R1048 |
 | R1049 | roles/reviewer-agent.md | written | R1049 |

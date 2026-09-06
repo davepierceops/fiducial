@@ -6,7 +6,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 
 | register id | source file | disposition | store id |
 |---|---|---|---|
-| R1140 | roles/test-designer-agent.md | written | R1140 |
+| R1140 | roles/test-designer-agent.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R1141 | roles/test-designer-agent.md | written | R1141 |
 | R1142 | roles/test-designer-agent.md | retired-ruling (ruling 4: disclaimer distinguishing this document's list from the test-plan review skill; the construction/review distinction is now the topic's `role` key) | — |
 | R1143 | roles/test-designer-agent.md | written | R1143 |

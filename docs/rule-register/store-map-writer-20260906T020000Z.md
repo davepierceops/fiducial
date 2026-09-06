@@ -5,7 +5,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 
 | register id | source file | disposition | store id |
 |---|---|---|---|
-| R1160 | roles/writer.md | written | R1160 |
+| R1160 | roles/writer.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R1161 | roles/writer.md | written | R1161 |
 | R1162 | roles/writer.md | written | R1162 |
 | R1163 | roles/writer.md | written | R1163 |

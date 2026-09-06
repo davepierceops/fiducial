@@ -18,16 +18,16 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0571 | policies/commit-and-change-control-policy.md | merged into R0570 | R0570 |
 | R0574 | policies/commit-and-change-control-policy.md | written | R0574 |
 | R0575 | policies/commit-and-change-control-policy.md | written | R0575 |
-| R0576 | policies/commit-and-change-control-policy.md | written | R0576 |
+| R0576 | policies/commit-and-change-control-policy.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0577 | policies/commit-and-change-control-policy.md | merged into R0575 | R0575 |
 | R0578 | policies/commit-and-change-control-policy.md | retired-DEC-000380 (the `agreed` status and its frontmatter-only transition commit) | — |
 | R0703 | policies/project-setup-requirements.md | written | R0703 |
 | R0704 | policies/project-setup-requirements.md | merged into R0703 | R0703 |
 | R0705 | policies/project-setup-requirements.md | written | R0705 |
-| R0706 | policies/project-setup-requirements.md | written | R0706 |
+| R0706 | policies/project-setup-requirements.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0707 | policies/project-setup-requirements.md | merged into R0568 | R0568 |
-| R0708 | policies/project-setup-requirements.md | written | R0708 |
-| R0709 | policies/project-setup-requirements.md | written | R0709 |
+| R0708 | policies/project-setup-requirements.md | retired-ruling (store-fix-1 item 4: describes) | — |
+| R0709 | policies/project-setup-requirements.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0710 | policies/project-setup-requirements.md | retired-DEC-000380 (C144: the pre-commit frontmatter check, `check-frontmatter`) | — |
 | R0711 | policies/project-setup-requirements.md | retired-DEC-000380 (the frontmatter in-scope set) | — |
 | R0712 | policies/project-setup-requirements.md | retired-DEC-000380 (metadata-schema adoption, per-project hook install) | — |

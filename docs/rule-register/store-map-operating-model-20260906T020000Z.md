@@ -10,28 +10,28 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0441 | operating-model.md | retired-ruling (C125: R0464 is the one control-surfaces row) | — |
 | R0442 | operating-model.md | retired-ruling (store-fix-1 item 3: the double-negative form of R0482) | — |
 | R0443 | operating-model.md | written | R0443 |
-| R0444 | operating-model.md | written | R0444 |
-| R0445 | operating-model.md | written | R0445 |
-| R0446 | operating-model.md | written | R0446 |
-| R0447 | operating-model.md | merged into R0446 | R0446 |
-| R0448 | operating-model.md | written | R0448 |
+| R0444 | operating-model.md | retired-ruling (store-fix-1 item 4: describes) | — |
+| R0445 | operating-model.md | retired-ruling (store-fix-1 item 4: describes) | — |
+| R0446 | operating-model.md | retired-ruling (store-fix-1 item 4: describes) | — |
+| R0447 | operating-model.md | retired with R0446 (store-fix-1 item 4) | — |
+| R0448 | operating-model.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0449 | operating-model.md | retired-ruling (2: cross-reference only, to the source-of-truth policy) | — |
-| R0450 | operating-model.md | written | R0450 |
-| R0451 | operating-model.md | written | R0451 |
-| R0452 | operating-model.md | written | R0452 |
-| R0453 | operating-model.md | written | R0453 |
+| R0450 | operating-model.md | retired-ruling (store-fix-1 item 4: describes) | — |
+| R0451 | operating-model.md | retired-ruling (store-fix-1 item 4: describes) | — |
+| R0452 | operating-model.md | retired-ruling (store-fix-1 item 4: describes) | — |
+| R0453 | operating-model.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0454 | operating-model.md | retired with R0440 (store-fix-1 item 3) | — |
 | R0455 | operating-model.md | written | R0455 |
 | R0456 | operating-model.md | written | R0456 |
 | R0457 | operating-model.md | written | R0457 |
 | R0458 | operating-model.md | written | R0458 |
-| R0459 | operating-model.md | written | R0459 |
+| R0459 | operating-model.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0460 | operating-model.md | written | R0460 |
 | R0461 | operating-model.md | written | R0461 |
 | R0462 | operating-model.md | written | R0462 |
 | R0463 | operating-model.md | merged into R0462 | R0462 |
 | R0464 | operating-model.md | written | R0464 |
-| R0465 | operating-model.md | written | R0465 |
+| R0465 | operating-model.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0466 | operating-model.md | written | R0466 |
 | R0467 | operating-model.md | written | R0467 |
 | R0468 | operating-model.md | retired-ruling (5: negation of R0467) | — |
@@ -74,7 +74,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0505 | operating-model.md | written | R0505 |
 | R0506 | operating-model.md | written | R0506 |
 | R0507 | operating-model.md | merged into R0506 | R0506 |
-| R0508 | operating-model.md | merged into R0459 | R0459 |
+| R0508 | operating-model.md | retired with R0459 (store-fix-1 item 4) | — |
 | R0509 | operating-model.md | written | R0509 |
 | R0510 | operating-model.md | merged into R0471 | R0471 |
 | R0511 | operating-model.md | merged into R0443 | R0443 |
@@ -97,6 +97,6 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0528 | operating-model.md | merged into R0458 | R0458 |
 | R0529 | operating-model.md | merged into R0458 | R0458 |
 | R0530 | operating-model.md | written | R0530 |
-| R0531 | operating-model.md | written | R0531 |
+| R0531 | operating-model.md | retired-ruling (store-fix-1 item 4: describes) | — |
 
 Counts: rows consumed 93; rows written 67; definitions 11; merged away 20; split 1 (R0501 → R0501a, R0501b); retired 7 (R0439 C004 scope statement; R0441 C125; R0449, R0496 cross-references; R0468 negation; R0469, R0476 DEC-000380).

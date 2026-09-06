@@ -8,7 +8,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R1511 | specs/prd-template.md | retired-ruling (9, C004 treatment: scope statement becomes the `session` key) | — |
 | R1512 | specs/prd-template.md | written | R1512 |
 | R1513 | specs/prd-template.md | written | R1513 |
-| R1514 | specs/prd-template.md | written | R1514 |
+| R1514 | specs/prd-template.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R1515 | specs/prd-template.md | written | R1515 |
 | R1516 | specs/prd-template.md | written | R1516 |
 | R1517 | specs/prd-template.md | written | R1517 |

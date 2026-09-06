@@ -6,10 +6,10 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | register id | source file | disposition | store id |
 |---|---|---|---|
 | R0812 | public-prose-criteria.md | retired-ruling (container rule 4: which documents to read and when) | — |
-| R0813 | public-prose-criteria.md | written | R0813 |
+| R0813 | public-prose-criteria.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0814 | public-prose-criteria.md | retired-ruling (container rule 4: precedence of the Voice document over this one) | — |
 | R0815 | public-prose-criteria.md | written | R0815 |
-| R0816 | public-prose-criteria.md | written | R0816 |
+| R0816 | public-prose-criteria.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0817 | public-prose-criteria.md | written | R0817 |
 | R0818 | public-prose-criteria.md | written | R0818 |
 | R0819 | public-prose-criteria.md | written | R0819 |
@@ -43,7 +43,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0847 | public-prose-criteria.md | retired-ruling (C153 cut) | — |
 | R0848 | public-prose-criteria.md | merged into R0820 | R0820 |
 | R0849 | public-prose-criteria.md | written | R0849 |
-| R0850 | public-prose-criteria.md | written | R0850 |
+| R0850 | public-prose-criteria.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0851 | public-prose-criteria.md | written | R0851 |
 | R0852 | public-prose-criteria.md | retired-ruling (ruling 5: negation of R0851) | — |
 | R0853 | public-prose-criteria.md | written | R0853 |

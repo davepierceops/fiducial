@@ -5,7 +5,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 
 | register id | source file | disposition | store id |
 |---|---|---|---|
-| R0938 | roles/coder-agent.md | written | R0938 |
+| R0938 | roles/coder-agent.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0939 | roles/coder-agent.md | written | R0939 |
 | R0940 | roles/coder-agent.md | written | R0940 |
 | R0941 | roles/coder-agent.md | written | R0941 |

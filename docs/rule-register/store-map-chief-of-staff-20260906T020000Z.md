@@ -5,8 +5,8 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 
 | register id | source file | disposition | store id |
 |---|---|---|---|
-| R0878 | roles/chief-of-staff.md | written | R0878 |
-| R0879 | roles/chief-of-staff.md | merged into R0878 | R0878 |
+| R0878 | roles/chief-of-staff.md | retired-ruling (store-fix-1 item 4: describes) | — |
+| R0879 | roles/chief-of-staff.md | retired with R0878 (store-fix-1 item 4) | — |
 | R0880 | roles/chief-of-staff.md | written | R0880 |
 | R0881 | roles/chief-of-staff.md | merged into R0880 | R0880 |
 | R0882 | roles/chief-of-staff.md | merged into R0880 | R0880 |
@@ -42,7 +42,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0912 | roles/chief-of-staff.md | written | R0912 |
 | R0913 | roles/chief-of-staff.md | merged into R0907 | R0907 |
 | R0914 | roles/chief-of-staff.md | written | R0914 |
-| R0915 | roles/chief-of-staff.md | written | R0915 |
+| R0915 | roles/chief-of-staff.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0916 | roles/chief-of-staff.md | written | R0916 |
 | R0917 | roles/chief-of-staff.md | written | R0917 |
 | R0918 | roles/chief-of-staff.md | written | R0918 |

@@ -6,7 +6,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | register id | source file | disposition | store id |
 |---|---|---|---|
 | R0951 | roles/copy-editor.md | written | R0951 |
-| R0952 | roles/copy-editor.md | written | R0952 |
+| R0952 | roles/copy-editor.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0953 | roles/copy-editor.md | written | R0953 |
 | R0954 | roles/copy-editor.md | written | R0954 |
 | R0955 | roles/copy-editor.md | written | R0955 |

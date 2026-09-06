@@ -7,7 +7,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 |---|---|---|---|
 | R1193 | skills/command-blocks.md | retired-DEC-000380 (C004: the file's session scope becomes the `session` key) | — |
 | R1194 | skills/command-blocks.md | retired-ruling (ruling 1: core R0208 defines command block and execution block; no distinct obligation here) | — |
-| R1195 | skills/command-blocks.md | written | R1195 |
+| R1195 | skills/command-blocks.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R1196 | skills/command-blocks.md | written | R1196 |
 | R1197 | skills/command-blocks.md | merged into R1196 | R1196 |
 | R1198 | skills/command-blocks.md | written | R1198 |

@@ -5,9 +5,9 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 
 | register id | source file | disposition | store id |
 |---|---|---|---|
-| R1098 | roles/spec-reviewer-agent.md | written | R1098 |
-| R1099 | roles/spec-reviewer-agent.md | written | R1099 |
-| R1100 | roles/spec-reviewer-agent.md | written | R1100 |
+| R1098 | roles/spec-reviewer-agent.md | retired-ruling (store-fix-1 item 4: describes) | — |
+| R1099 | roles/spec-reviewer-agent.md | retired-ruling (store-fix-1 item 4: describes) | — |
+| R1100 | roles/spec-reviewer-agent.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R1101 | roles/spec-reviewer-agent.md | written | R1101 |
 | R1102 | roles/spec-reviewer-agent.md | merged into R1101 | R1101 |
 | R1103 | roles/spec-reviewer-agent.md | written | R1103 |

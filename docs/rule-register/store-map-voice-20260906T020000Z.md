@@ -6,7 +6,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | register id | source file | disposition | store id |
 |---|---|---|---|
 | R1576 | voice.md | retired-ruling (container rule 4: read-with and precedence of documents) | — |
-| R1577 | voice.md | written | R1577 |
+| R1577 | voice.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R1578 | voice.md | written | R1578 |
 | R1579 | voice.md | written | R1579 |
 | R1580 | voice.md | written | R1580 |

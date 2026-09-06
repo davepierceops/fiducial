@@ -10,14 +10,14 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0721 | policies/remote-write-verification-policy.md | merged into R0720 | R0720 |
 | R0722 | policies/remote-write-verification-policy.md | written | R0722 |
 | R0723 | policies/remote-write-verification-policy.md | merged into R0722 | R0722 |
-| R0724 | policies/remote-write-verification-policy.md | written | R0724 |
+| R0724 | policies/remote-write-verification-policy.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0725 | policies/remote-write-verification-policy.md | written | R0725 |
 | R0726 | policies/remote-write-verification-policy.md | merged into R0725 | R0725 |
 | R0727 | policies/remote-write-verification-policy.md | written | R0727 |
 | R0728 | policies/remote-write-verification-policy.md | written | R0728 |
 | R0729 | policies/remote-write-verification-policy.md | written | R0729 |
 | R0730 | policies/remote-write-verification-policy.md | written | R0730 |
-| R0731 | policies/remote-write-verification-policy.md | written | R0731 |
+| R0731 | policies/remote-write-verification-policy.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0732 | policies/remote-write-verification-policy.md | written | R0732 |
 | R0733 | policies/remote-write-verification-policy.md | written | R0733 |
 | R0734 | policies/remote-write-verification-policy.md | written | R0734 |

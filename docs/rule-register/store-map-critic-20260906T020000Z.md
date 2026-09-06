@@ -5,10 +5,10 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 
 | register id | source file | disposition | store id |
 |---|---|---|---|
-| R1000 | roles/critic.md | written | R1000 |
+| R1000 | roles/critic.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R1001 | roles/critic.md | written | R1001 |
 | R1002 | roles/critic.md | written | R1002 |
-| R1003 | roles/critic.md | written | R1003 |
+| R1003 | roles/critic.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R1004 | roles/critic.md | written | R1004 |
 | R1005 | roles/critic.md | written | R1005 |
 | R1006 | roles/critic.md | written | R1006 |

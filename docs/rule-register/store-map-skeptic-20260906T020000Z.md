@@ -7,7 +7,7 @@ The digest's proposed merge of `engagements/sre-critic.md` into this topic is mo
 
 | register id | source file | disposition | store id |
 |---|---|---|---|
-| R1057 | roles/skeptic-risk-agent.md | written | R1057 |
+| R1057 | roles/skeptic-risk-agent.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R1058 | roles/skeptic-risk-agent.md | written | R1058 |
 | R1059 | roles/skeptic-risk-agent.md | merged into R1058 | R1058 |
 | R1060 | roles/skeptic-risk-agent.md | merged into R1058 | R1058 |

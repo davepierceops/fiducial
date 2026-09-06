@@ -7,18 +7,18 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 |---|---|---|---|
 | R0080 | context-sets/spec-and-change-discipline.md | retired-DEC-000380 (C004: the file's session-kind scope becomes the `session` key) | — |
 | R0081 | context-sets/spec-and-change-discipline.md | written | R0081 |
-| R0082 | context-sets/spec-and-change-discipline.md | written | R0082 |
+| R0082 | context-sets/spec-and-change-discipline.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0083 | context-sets/spec-and-change-discipline.md | written | R0083 |
 | R0084 | context-sets/spec-and-change-discipline.md | written | R0084 |
 | R0085 | context-sets/spec-and-change-discipline.md | written | R0085 |
 | R0086 | context-sets/spec-and-change-discipline.md | written | R0086 |
 | R0087 | context-sets/spec-and-change-discipline.md | written | R0087 |
-| R0088 | context-sets/spec-and-change-discipline.md | written | R0088 |
-| R0089 | context-sets/spec-and-change-discipline.md | written | R0089 |
+| R0088 | context-sets/spec-and-change-discipline.md | retired-ruling (store-fix-1 item 4: describes) | — |
+| R0089 | context-sets/spec-and-change-discipline.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0090 | context-sets/spec-and-change-discipline.md | written | R0090 |
 | R0091 | context-sets/spec-and-change-discipline.md | written | R0091 |
 | R0092 | context-sets/spec-and-change-discipline.md | written | R0092 |
-| R0093 | context-sets/spec-and-change-discipline.md | written | R0093 |
+| R0093 | context-sets/spec-and-change-discipline.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0094 | context-sets/spec-and-change-discipline.md | written | R0094 |
 | R0095 | context-sets/spec-and-change-discipline.md | written | R0095 |
 | R0096 | context-sets/spec-and-change-discipline.md | written | R0096 |
