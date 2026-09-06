@@ -15,3 +15,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 Counts: rows consumed 6; rows written 3; definitions 1; merged away 0; split 0; retired 3.
 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 1 define row (R1490), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms.
+
+Store fix pass 5 item 7 moves this topic's three surviving rows to `convergence`, bodies unchanged: R1489 at
+order 130, R1490 at order 140, R1491 at order 150. Their `source` still names `skills/spec-review-cycle.md @
+fd54448`. The topic ceases; `store-map-convergence-20260906T020000Z.md` records where the three landed.

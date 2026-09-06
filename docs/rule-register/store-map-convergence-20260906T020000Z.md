@@ -80,3 +80,31 @@ role; R1486a retires into `change-flow`'s R0481, which takes its "nothing else c
 the "whatever its verdict" clause from the lexicon's R0015, which retires into it. R1481, R1473 and R1479
 survive the sweep as the broader-loaded rows of their pairs, taking R0480/R0018a, R1154 and R1157 respectively.
 Topic count: 11 rows before, 9 after.
+
+Store fix pass 5 item 7 makes this topic the whole of the spec delta. Three rows arrive from the dissolved
+`reconciliation`, bodies unchanged: R1489 (bring the spec into full agreement with what the tranche built
+before closing), R1490 (the `reconciliation` define), R1491 (the branch lands through one pull request carrying
+its whole accumulated diff), at orders 130-150. One new row is written, **R1602** at order 160, keyed
+`role: [chief-of-staff]`, `session: [decision]`: a revision of an agreed spec opens a new spec branch and goes
+through the entry read and the close the same way. Its register id is not the register's — see
+`store-map-lexicon-20260906T020000Z.md` for the three ids this pass mints.
+
+The close checks are then deduped against the Spec Reviewer's R1126 by the sweep's criterion — one obligation,
+loaded together. **R1481 retires into R1126**: both state the close's one read over the branch's whole diff
+from the branch point together with the tests, both are loaded by any `spec-reviewer-agent` query, and R1126 is
+the fuller row. R1126 takes the union of the two role lists (`[spec-reviewer-agent, chief-of-staff]`), the union
+of their sessions (`[decision, execution]`), and R1481's clause naming the reader: its trigger line now reads
+"At the close, in one read by the role that gated the spec:". Store fix pass 4 item 9 had already retired
+`change-flow`'s R0480 and `lexicon`'s R0018a into R1481; those two now resolve through R1126.
+
+Three pairs are kept, both rows standing:
+
+- **R1473 / R1126** — coherence. R1473 binds the Architect and the Test Designer while the branch is open, so
+  that neither treats its artifact as final; R1126's is the Spec Reviewer's check at the close. Different
+  trigger, different actor.
+- **R1474 / R1126** — R1474 is the `spec finding` / `test-side gap` define; R1126's third bullet uses both
+  terms. The store's rule is that a row states the rule and `term` brings the meanings.
+- **R1485 / R1126** — putting the close's diff in front of Dave is the Chief of Staff's act, not the reviewer's
+  read.
+
+Topic count: 9 rows before, 12 after.
