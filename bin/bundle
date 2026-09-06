@@ -49,9 +49,10 @@ def _git(root, *args):
 
 
 def _repo_root():
+    """The repository root, or `None` outside a git repository."""
     proc = _git(pathlib.Path.cwd(), "rev-parse", "--show-toplevel")
     if proc.returncode != 0:
-        return pathlib.Path.cwd()
+        return None
     return pathlib.Path(proc.stdout.strip())
 
 
@@ -162,6 +163,8 @@ def cmd_where(root, tokens, name, out):
 def main(argv=None):
     args = build_parser().parse_args(argv)
     root = _repo_root()
+    if root is None:
+        return refuse("refused: not inside a git repository")
     if args.keys:
         return cmd_keys(root)
     if args.near is not None:
