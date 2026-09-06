@@ -24,7 +24,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R1411 | skills/review-artifact.md | written | R1411 |
 | R1412 | skills/review-artifact.md | written | R1412 |
 | R1413 | skills/review-artifact.md | written | R1413 |
-| R1414 | skills/review-artifact.md | written | R1414 |
+| R1414 | skills/review-artifact.md| restored (fix 3 item 9) | R1414 |
 | R1415 | skills/review-artifact.md | written | R1415 |
 | R1416 | skills/review-artifact.md | written | R1416 |
 | R1417 | skills/review-artifact.md | written | R1417 |
@@ -71,3 +71,8 @@ Notes.
   ruling 12).
 
 Store fix pass 2 item 5 makes this topic's template a process document, `process/review-artifact.md`, written from the source at fd54448 and conformed to the store's vocabulary. Every row stating what the document contains — its sections, fields, footer, form — retires with disposition `template`, and what stays is the obligations an agent performs. Retired here: R1398, R1399, R1400, R1401, R1402, R1403, R1404, R1409, R1411, R1412, R1413, R1414, R1415, R1416, R1417, R1418, R1421, R1422, R1423, R1424, R1425, R1426, R1427, R1428. The topic falls from 30 rows to 6.
+
+Store fix pass 3 item 9 restores R1414. Store fix pass 2 item 5 retired it as `template` when
+`process/review-artifact.md` was written; the verdict rule has teeth — one overall `Verdict:`, one per pass, the
+overall being the most severe — so it stays a row even though the form also states it. It lands at order 40,
+`condition: writing a review artifact`, keyed to every role that writes a review artifact. The topic holds 7 rows.
