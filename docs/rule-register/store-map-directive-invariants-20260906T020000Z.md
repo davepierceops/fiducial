@@ -28,7 +28,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R1294 | skills/directive-authoring.md | merged into R1293 | R1293 |
 | R1295 | skills/directive-authoring.md | written | R1295 |
 | R1296 | skills/directive-authoring.md | written | R1296 |
-| R1297 | skills/directive-authoring.md | written | R1297 |
+| R1297 | skills/directive-authoring.md| merged into R1295 (fix 3 item 2) | R1295 |
 | R1298 | skills/directive-authoring.md | written | R1298 |
 | R1299 | skills/directive-authoring.md | retired-DEC-000380 | — |
 | R1300 | skills/directive-authoring.md | retired-ruling (store-fix-1 item 7: tool-owned) | — |
@@ -105,3 +105,5 @@ non-matching form is a lint miss rather than a violation (R1344), the marker gra
 rule (R1350), and the craft rows R1283, R1286-R1293, R1295-R1298.
 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 7 define rows (R1296, R1305, R1314, R1340, R1341, R1344, R1347), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 2 `define` rows carrying a null term (R1311, R1350), each body restated as the instruction it carries.
+
+Store fix pass 3 item 2 merges R1297 into R1295: both fire on one trigger — the directive assigns a worktree — and are the two ends of the same provision the directive must carry.

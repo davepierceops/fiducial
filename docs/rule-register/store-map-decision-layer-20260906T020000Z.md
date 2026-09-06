@@ -39,7 +39,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0254 | docs/global-context/decision-layer.md | merged into R0252 | R0252 |
 | R0255 | docs/global-context/decision-layer.md | merged into R0252 | R0252 |
 | R0256 | docs/global-context/decision-layer.md | written (restored by store-fix-1 item 1) | R0256 |
-| R0257 | docs/global-context/decision-layer.md | written (restored by store-fix-1 item 1) | R0257 |
+| R0257 | docs/global-context/decision-layer.md| merged into R0256 (fix 3 item 2) | R0256 |
 | R0258 | docs/global-context/decision-layer.md | retired-ruling (directive-invariants owns it) | — |
 | R0259 | docs/global-context/decision-layer.md | written | R0259 |
 | R0260 | docs/global-context/decision-layer.md | merged into R0259 | R0259 |
@@ -51,3 +51,5 @@ Counts: rows consumed 40; rows written 20; definitions 1; merged away 16; split 
 Amended by `docs/cycles/store-fix-1-20260906T040000Z.md` item 1: R0256 and R0257 restored; R0259 and R0262 renumbered to orders 190 and 200 to seat them.
 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 1 define row (R0247), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms.
+
+Store fix pass 3 item 2 merges R0257 into R0256: both fire on one trigger — a directive is written — and constrain the same act.

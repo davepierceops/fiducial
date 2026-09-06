@@ -16,9 +16,9 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0763 | policies/source-of-truth-policy.md | written | R0763 |
 | R0764 | policies/source-of-truth-policy.md | merged into R0763 | R0763 |
 | R0765 | policies/source-of-truth-policy.md | written | R0765 |
-| R0766 | policies/source-of-truth-policy.md | written | R0766 |
+| R0766 | policies/source-of-truth-policy.md| merged into R0765 (fix 3 item 2) | R0765 |
 | R0767 | policies/source-of-truth-policy.md | merged into R0763 | R0763 |
-| R0768 | policies/source-of-truth-policy.md | written | R0768 |
+| R0768 | policies/source-of-truth-policy.md| merged into R0765 (fix 3 item 2) | R0765 |
 | R0769 | policies/source-of-truth-policy.md | written | R0769 |
 | R0770 | policies/source-of-truth-policy.md | written | R0770 |
 | R0771 | policies/source-of-truth-policy.md | merged into R0770 | R0770 |
@@ -58,3 +58,5 @@ Notes.
 Store fix pass 2 item 4 replaces `role: [all]` on 13 rows of this topic with an explicit role list, decided per row: 13 rows to `[architect-agent, chief-of-staff, coder-agent, context-quality-reviewer, copy-editor, critic, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent, test-designer-agent, writer]`. `all` is not a value; the lists are the role documents' own basename slugs at fd54448.
 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 6 define rows (R0757, R0758, R0759, R0760, R0761, R0762), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms.
+
+Store fix pass 3 item 2 merges R0766 and R0768 into R0765: all three fire on one trigger, creating a vendor-specific artifact.

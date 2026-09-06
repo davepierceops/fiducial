@@ -29,11 +29,11 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R1214 | skills/command-blocks.md | merged into R1213 | R1213 |
 | R1215 | skills/command-blocks.md | written | R1215 |
 | R1216 | skills/command-blocks.md | written | R1216 |
-| R1217 | skills/command-blocks.md | written | R1217 |
+| R1217 | skills/command-blocks.md| merged into R1215 (fix 3 item 2) | R1215 |
 | R1218 | skills/command-blocks.md | written | R1218 |
 | R1219 | skills/command-blocks.md | written | R1219 |
 | R1220 | skills/command-blocks.md | written | R1220 |
-| R1221 | skills/command-blocks.md | written | R1221 |
+| R1221 | skills/command-blocks.md| merged into R1220 (fix 3 item 2) | R1220 |
 | R1222 | skills/command-blocks.md | written | R1222 |
 | R1223 | skills/command-blocks.md | merged into R1221 | R1221 |
 | R1224 | skills/command-blocks.md | written | R1224 |
@@ -62,3 +62,5 @@ Amended by `docs/cycles/store-fix-1-20260906T040000Z.md`. Item 4 retired R1195 a
 Store fix pass 2 item 4 replaces `role: [all]` on 24 rows of this topic with an explicit role list, decided per row: 24 rows to `[chief-of-staff]`. `all` is not a value; the lists are the role documents' own basename slugs at fd54448.
 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 2 define rows (R1200, R1204), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 1 `define` row carrying a null term (R1217), each body restated as the instruction it carries.
+
+Store fix pass 3 item 2 merges R1217 into R1215 (trigger: a block carries a construct that can end the shell; R1217 named instances of R1215's rule) and R1221 into R1220 (trigger: stating a block's expected output).

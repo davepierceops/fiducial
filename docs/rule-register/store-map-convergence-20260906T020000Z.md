@@ -60,7 +60,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R1481 | skills/spec-review-cycle.md | written | R1481 |
 | R1482 | skills/spec-review-cycle.md | retired-DEC-000380 (C002: exit-gate range off the `converging` transition) | — |
 | R1483 | skills/spec-review-cycle.md | split into R1483a, R1483b | R1483a, R1483b |
-| R1484 | skills/spec-review-cycle.md | written | R1484 |
+| R1484 | skills/spec-review-cycle.md| merged into R1483a (fix 3 item 2) | R1483a |
 | R1485 | skills/spec-review-cycle.md | written | R1485 |
 | R1486 | skills/spec-review-cycle.md | split into R1486a (written), R1486b (retired-DEC-000380, C002: the frontmatter flip) | R1486a |
 | R1487 | skills/spec-review-cycle.md | retired-DEC-000380 (C002: what the flip commit and `last-reviewed` carry) | — |
@@ -71,3 +71,5 @@ Counts: rows consumed 60; rows written 13 here; definitions 1; merged away 7; sp
 Amended by `docs/cycles/store-fix-1-20260906T040000Z.md` item 2: R1448-R1451 leave this map's retired set and are written under topic `review-artifact-schema` as two rows, R1448 (absorbing R1449) and R1450 (absorbing R1451).
 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 1 define row (R1474), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms.
+
+Store fix pass 3 item 2 merges R1483b and R1484 into R1483a: all three fire on one trigger — reading a spec branch at its close — and are the two checks that read makes, performed together. R1483's split (ruling 10) leaves one written half, R1483a.

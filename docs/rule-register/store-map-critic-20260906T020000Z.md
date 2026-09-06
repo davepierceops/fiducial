@@ -19,7 +19,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R1011 | roles/critic.md | written | R1011 |
 | R1012 | roles/critic.md | written | R1012 |
 | R1013 | roles/critic.md | written | R1013 |
-| R1014 | roles/critic.md | written | R1014 |
+| R1014 | roles/critic.md| merged into R1013 (fix 3 item 2) | R1013 |
 | R1015 | roles/critic.md | written | R1015 |
 | R1016 | roles/critic.md | written | R1016 |
 | R1017 | roles/critic.md | written | R1017 |
@@ -41,3 +41,5 @@ Counts: rows consumed 30; rows written 29; definitions 3; merged away 1 (R1025 i
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 1 define row (R1010), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms.
 
 Store fix pass 2 item 8 re-keys R1029, the run-at-tier row, to `role: [chief-of-staff]`: it binds whoever summons the session, not the role that runs in it. The topic's other two checks — a short-form or runs-as-a-session define — find nothing here that store fix pass 1 item 4 did not already retire.
+
+Store fix pass 3 item 2 merges R1014 into R1013: both are checks of the AI-smell pass, run together on that one trigger.

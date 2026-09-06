@@ -11,10 +11,10 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0881 | roles/chief-of-staff.md | merged into R0880 | R0880 |
 | R0882 | roles/chief-of-staff.md | merged into R0880 | R0880 |
 | R0883 | roles/chief-of-staff.md | written | R0883 |
-| R0884 | roles/chief-of-staff.md | written | R0884 |
-| R0885 | roles/chief-of-staff.md | written | R0885 |
-| R0886 | roles/chief-of-staff.md | written | R0886 |
-| R0887 | roles/chief-of-staff.md | written | R0887 |
+| R0884 | roles/chief-of-staff.md| merged into R0883 (fix 3 item 2) | R0883 |
+| R0885 | roles/chief-of-staff.md| merged into R0883 (fix 3 item 2) | R0883 |
+| R0886 | roles/chief-of-staff.md| merged into R0883 (fix 3 item 2) | R0883 |
+| R0887 | roles/chief-of-staff.md| merged into R0883 (fix 3 item 2) | R0883 |
 | R0888 | roles/chief-of-staff.md | written | R0888 |
 | R0889 | roles/chief-of-staff.md | written | R0889 |
 | R0890 | roles/chief-of-staff.md | written | R0890 |
@@ -97,3 +97,5 @@ R0883-R0888, the state-assessment reads, stay and each gains a `## Human` noting
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 1 define row (R0893), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms.
 
 Store fix pass 3 item 1 moves R1138 into this topic from `spec-reviewer-agent`: recommending a deep read at milestone moments is the Chief of Staff's act, and no deep-read row existed here to merge it into. Its `source` still names `roles/spec-reviewer-agent.md:131 @ fd54448`. The topic holds 24 rows.
+
+Store fix pass 3 item 2 merges R0884-R0887 into R0883: the four manual reads share one trigger — assessing state — and R0883 already named them as one ordered act. The topic holds 20 rows.

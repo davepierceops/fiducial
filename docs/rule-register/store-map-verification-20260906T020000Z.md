@@ -50,9 +50,9 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0150 | context-sets/testing-and-verification.md | written | R0150 |
 | R0151 | context-sets/testing-and-verification.md | written | R0151 |
 | R0152 | context-sets/testing-and-verification.md | written | R0152 |
-| R0153 | context-sets/testing-and-verification.md | written | R0153 |
-| R0154 | context-sets/testing-and-verification.md | written | R0154 |
-| R0155 | context-sets/testing-and-verification.md | written | R0155 |
+| R0153 | context-sets/testing-and-verification.md| merged into R0152 (fix 3 item 2) | R0152 |
+| R0154 | context-sets/testing-and-verification.md| merged into R0152 (fix 3 item 2) | R0152 |
+| R0155 | context-sets/testing-and-verification.md| merged into R0152 (fix 3 item 2) | R0152 |
 | R0156 | context-sets/testing-and-verification.md | written | R0156 |
 | R0157 | context-sets/testing-and-verification.md | written | R0157 |
 | R0158 | context-sets/testing-and-verification.md | written | R0158 |
@@ -61,7 +61,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0161 | context-sets/testing-and-verification.md | written | R0161 |
 | R0070 | context-sets/production-grade-software.md | written | R0070 |
 | R0071 | context-sets/production-grade-software.md | retired-ruling (store-fix-1 item 4: describes) | — |
-| R0072 | context-sets/production-grade-software.md | written | R0072 |
+| R0072 | context-sets/production-grade-software.md| merged into R0070 (fix 3 item 2) | R0070 |
 | R0073 | context-sets/production-grade-software.md | written | R0073 |
 | R0074 | context-sets/production-grade-software.md | written | R0074 |
 | R0075 | context-sets/production-grade-software.md | merged into R0074 | R0074 |
@@ -88,3 +88,5 @@ R0531, from `operating-model.md` and consumed by `store-map-operating-model-2026
 Store fix pass 2 item 3 re-keys every row in this topic off `role: [all]`. The 24 rows keyed `session: [execution]` carry `role: [test-designer-agent, coder-agent, reviewer-agent, skeptic-risk-agent]`; the 18 rows that bind the reader of evidence carry those four plus `release-manager-agent` and `chief-of-staff`. R0074, R0145 and R0147, named by the directive as decision-session rows, and R0161, which binds the judge of a verification claim rather than its producer, are re-keyed `session: [decision, execution]` to match. R0531, a define row, carries no role key at all.
 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 7 define rows (R0108, R0131, R0133, R0135, R0137, R0139, R0150), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 2 `define` rows carrying a null term (R0112, R0140), each body restated as the instruction it carries.
+
+Store fix pass 3 item 2 merges R0072 into R0070 (trigger: the change is meant to be production-grade) and R0153-R0155 into R0152 (trigger: the work is a small project or an early-stage feature).

@@ -20,7 +20,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0092 | context-sets/spec-and-change-discipline.md | written | R0092 |
 | R0093 | context-sets/spec-and-change-discipline.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0094 | context-sets/spec-and-change-discipline.md | written | R0094 |
-| R0095 | context-sets/spec-and-change-discipline.md | written | R0095 |
+| R0095 | context-sets/spec-and-change-discipline.md| merged into R0094 (fix 3 item 2) | R0094 |
 | R0096 | context-sets/spec-and-change-discipline.md | written | R0096 |
 | R0097 | context-sets/spec-and-change-discipline.md | written | R0097 |
 | R0098 | context-sets/spec-and-change-discipline.md | merged into R0096 | R0096 |
@@ -62,3 +62,5 @@ Notes on the rulings applied:
 Store fix pass 2 item 4 replaces `role: [all]` on 19 rows of this topic with an explicit role list, decided per row: 8 rows to `[architect-agent, chief-of-staff, coder-agent, context-quality-reviewer, copy-editor, critic, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent, test-designer-agent, writer]`; 6 rows to `[chief-of-staff]`; 3 rows to `[test-designer-agent]`; 1 row to `[coder-agent]`; 1 row to `[coder-agent, release-manager-agent, reviewer-agent]`. `all` is not a value; the lists are the role documents' own basename slugs at fd54448.
 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 2 define rows (R0083, R0092), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms.
+
+Store fix pass 3 item 2 merges R0095 into R0094: both fire on one trigger, issuing a directive while a spec delta is open.

@@ -70,7 +70,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0501 | operating-model.md | split into R0501a, R0501b, both moved to topic `trd` (store-fix-1 item 6c) | R0501a, R0501b |
 | R0502 | operating-model.md | moved to topic `release-manager-agent` (store-fix-1 item 6d) | R0502 |
 | R0503 | operating-model.md | moved to topic `release-manager-agent` (store-fix-1 item 6d) | R0503 |
-| R0504 | operating-model.md | moved to topic `release-manager-agent` (store-fix-1 item 6d) | R0504 |
+| R0504 | operating-model.md| merged into R0503 (fix 3 item 2) | R0503 |
 | R0505 | operating-model.md | moved to topic `release-manager-agent` (store-fix-1 item 6d) | R0505 |
 | R0506 | operating-model.md | moved to topic `release-manager-agent` (store-fix-1 item 6d) | R0506 |
 | R0507 | operating-model.md | merged into R0506, topic `release-manager-agent` (store-fix-1 item 6d) | R0506 |
@@ -119,3 +119,5 @@ Two rows are merged in the move: R0530 into core's R0458 (the escalation rule an
 Topic `change-flow` is new with this pass; its rows are `corpus: [software]` and each is keyed to the role that performs the stage.
 
 Store fix pass 2 item 1 restores two of the ids this map had retired, as define rows carrying `term` and nothing else: R0465 to `change-flow` and R0531 to `verification`. Both terms are used by rows that survive, and the store-fix-1 summary recorded the loss.
+
+Store fix pass 3 item 2 merges two ids this map records into rows of their new topics: R0504 into `release-manager-agent` R0503 (trigger: a change package is assembled) and R0501a into `trd` R0500 (trigger: a feature flag is introduced).

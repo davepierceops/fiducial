@@ -31,7 +31,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0556 | policies/commit-and-change-control-policy.md | merged into R0552 | R0552 |
 | R0557 | policies/commit-and-change-control-policy.md | merged into R0553 | R0553 |
 | R0558 | policies/commit-and-change-control-policy.md | written | R0558 |
-| R0559 | policies/commit-and-change-control-policy.md | written | R0559 |
+| R0559 | policies/commit-and-change-control-policy.md| merged into R0558 (fix 3 item 2) | R0558 |
 | R0560 | policies/commit-and-change-control-policy.md | written | R0560 |
 | R0561 | policies/commit-and-change-control-policy.md | written | R0561 |
 | R0562 | policies/commit-and-change-control-policy.md | written | R0562 |
@@ -48,3 +48,5 @@ Counts: rows consumed 36; rows written 15; definitions 6; merged away 18; split 
 Store fix pass 2 item 4 replaces `role: [all]` on 15 rows of this topic with an explicit role list, decided per row: 9 rows to `[chief-of-staff]`; 6 rows to `[architect-agent, chief-of-staff, coder-agent, context-quality-reviewer, copy-editor, critic, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent, test-designer-agent, writer]`. `all` is not a value; the lists are the role documents' own basename slugs at fd54448.
 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 2 define rows (R0535, R0716), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 4 `define` rows carrying a null term (R0555, R0560, R0572, R0573), each body restated as the instruction it carries.
+
+Store fix pass 3 item 2 merges R0559 into R0558: both fire on the one trigger — the `human-gate` issue could not be opened — and are performed together as one act.

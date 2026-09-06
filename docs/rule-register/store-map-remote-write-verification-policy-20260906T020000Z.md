@@ -20,7 +20,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0731 | policies/remote-write-verification-policy.md | retired-ruling (store-fix-1 item 4: describes) | — |
 | R0732 | policies/remote-write-verification-policy.md | written | R0732 |
 | R0733 | policies/remote-write-verification-policy.md | written | R0733 |
-| R0734 | policies/remote-write-verification-policy.md | written | R0734 |
+| R0734 | policies/remote-write-verification-policy.md| merged into R0733 (fix 3 item 2) | R0733 |
 | R0735 | policies/remote-write-verification-policy.md | written | R0735 |
 | R0736 | policies/remote-write-verification-policy.md | written | R0736 |
 | R0737 | policies/remote-write-verification-policy.md | written | R0737 |
@@ -47,3 +47,5 @@ Counts: rows consumed 36; rows written 27; definitions 8; merged away 5 (R0721, 
 Store fix pass 2 item 4 replaces `role: [all]` on 25 rows of this topic with an explicit role list, decided per row: 23 rows to `[architect-agent, chief-of-staff, coder-agent, context-quality-reviewer, copy-editor, critic, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent, test-designer-agent, writer]`; 2 rows to `[chief-of-staff, writer, copy-editor, critic]`. `all` is not a value; the lists are the role documents' own basename slugs at fd54448.
 
 Store fix pass 2 item 7 strips `role`, `session` and `corpus` from 2 define rows (R0727, R0736), which now carry `term` and nothing else — the bundle tool pulls them by scanning selected bodies for their terms; and re-verbs 4 `define` rows carrying a null term (R0728, R0729, R0753, R0754), each body restated as the instruction it carries.
+
+Store fix pass 3 item 2 merges R0734 into R0733: both are checks of one act, verifying what a tool-mediated write landed.
