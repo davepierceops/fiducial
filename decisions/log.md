@@ -651,3 +651,8 @@ Supersedes: DEC-000360
 Date: 2026-09-05
 Decision: No row carries `role: [all]`. Every row's role list is decided for that row; the roles in use are the twelve role-document slugs at fd54448.
 Context: A blanket role list defeats selection by query, which is the store's whole mechanism.
+
+## DEC-000480 — Corpus values are software and writing
+Date: 2026-09-05
+Decision: The `corpus` key takes the values `software` and `writing`. `methodology` is not a value until a row needs it.
+Context: The register's methodology rows all keyed to a role and a session already; a third corpus value had nothing to select.
