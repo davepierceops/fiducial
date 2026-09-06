@@ -33,3 +33,5 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R1536 | specs/prd-template.md | retired-DEC-000380 | — |
 
 Counts: rows consumed 26; rows written 24; definitions 4; merged away 0; split 0; retired 2 (R1536 under DEC-000380 — `status: draft` and `last-reviewed: null` in the project-PRD skeleton; R1511 under ruling 9's C004 treatment — the template's own scope statement is the topic's `session` key).
+
+Store fix pass 2 item 5 makes this topic's template a process document, `process/prd-template.md`, written from the source at fd54448 and conformed to the store's vocabulary. Every row stating what the document contains — its sections, fields, footer, form — retires with disposition `template`, and what stays is the obligations an agent performs. Retired here: R1515, R1516, R1517, R1518, R1519, R1520, R1521, R1522, R1523, R1524, R1525, R1526, R1527, R1528, R1529, R1530, R1531, R1532, R1534, R1535. The topic falls from 23 rows to 3.

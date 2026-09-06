@@ -34,3 +34,5 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 Counts: rows consumed 25; rows written 22; definitions 5; merged away 1 (R1578 into R1577); split 0; retired 2 (R1576, R1595 container rules).
 
 Store fix pass 1 item 4 retired R1577 as description and store fix pass 2 item 1 restores it, merged with R1578 into one `require` row: the readership and goal the register is set for, and the trigger that sends the register question back to Dave. The definition count drops to 5 because the restored row is a `require`, not a `define`.
+
+Store fix pass 2 item 5 makes this topic's template a process document, `process/voice.md`, written from the source at fd54448 and conformed to the store's vocabulary. Every row stating what the document contains — its sections, fields, footer, form — retires with disposition `template`, and what stays is the obligations an agent performs. Retired here: R1580, R1581, R1582, R1583, R1584, R1586, R1589, R1590, R1592, R1593, R1596, R1597, R1599. The topic falls from 22 rows to 9.

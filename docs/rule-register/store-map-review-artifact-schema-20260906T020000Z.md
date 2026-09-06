@@ -69,3 +69,5 @@ Notes.
 - C115 (R1396 with sre-critic.md's R0311) is cross-file with an engagement
   file; R1396's body is written from this file's text alone (ruling 1,
   ruling 12).
+
+Store fix pass 2 item 5 makes this topic's template a process document, `process/review-artifact.md`, written from the source at fd54448 and conformed to the store's vocabulary. Every row stating what the document contains — its sections, fields, footer, form — retires with disposition `template`, and what stays is the obligations an agent performs. Retired here: R1398, R1399, R1400, R1401, R1402, R1403, R1404, R1409, R1411, R1412, R1413, R1414, R1415, R1416, R1417, R1418, R1421, R1422, R1423, R1424, R1425, R1426, R1427, R1428. The topic falls from 30 rows to 6.
