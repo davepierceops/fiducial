@@ -23,3 +23,5 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R1045 | roles/release-manager-agent.md | written | R1045 |
 
 Counts: rows consumed 16; rows written 15; definitions 0; merged away 1 (R1040 into R1031, cluster C068); split 0; retired 0.
+
+Amended by `docs/cycles/store-fix-1-20260906T040000Z.md` item 6d, which moved seven rows in from the dissolved `operating-model` topic, at orders 160-220, corpus `software`: R0502-R0505 (the change package), R0506 (the shape of the reply, keyed also to `reviewer-agent` and `skeptic-risk-agent`), R0509 (the definition of done, merging R0512-R0520 with R0459 and R0508) and R0527 (escalate for human code inspection, keyed also to `chief-of-staff`).
