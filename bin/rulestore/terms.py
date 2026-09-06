@@ -17,7 +17,8 @@ def is_definition(row):
 
 
 def _term_pattern(term):
-    return re.compile(r"(?<!\w)%s(?!\w)" % re.escape(term), re.IGNORECASE)
+    words = r"\s+".join(re.escape(word) for word in term.split())
+    return re.compile(r"(?<!\w)%s(?!\w)" % words, re.IGNORECASE)
 
 
 def pull_definitions(selected, all_rows):
