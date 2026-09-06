@@ -656,3 +656,8 @@ Context: A blanket role list defeats selection by query, which is the store's wh
 Date: 2026-09-05
 Decision: The `corpus` key takes the values `software` and `writing`. `methodology` is not a value until a row needs it.
 Context: The register's methodology rows all keyed to a role and a session already; a third corpus value had nothing to select.
+
+## DEC-000490 — Templates and schemas are process documents
+Date: 2026-09-05
+Decision: A template or a schema is a `process/` document selected by key, not a set of rows. Rows are written only where an agent performs an act: the TRD, PRD, voice, outline, review-artifact, retro, decision-log entry form, and project setup are process documents.
+Context: A document's form is prose; rows that restated a template's sections were the restatement problem in another shape.
