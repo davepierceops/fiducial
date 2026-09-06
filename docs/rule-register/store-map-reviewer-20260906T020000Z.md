@@ -27,3 +27,6 @@ commit that lands it retires these rows. No `retired:` key is written here —
 the directive fixes the frontmatter to ten keys.
 
 Store fix pass 3 item 2 merges R1049-R1053 into R1048: the six checks share one trigger — the review pass over a change — and R1047 already requires them in one pass over the whole of it.
+
+Store fix pass 4 item 8 brings R1496 and R1497 in from topic `test-designer`, orders 120 and 130 — the test-plan
+review checklist and the triggers that fire it, both already keyed `reviewer-agent`.

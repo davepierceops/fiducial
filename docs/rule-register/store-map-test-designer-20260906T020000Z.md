@@ -50,3 +50,9 @@ Cross-file clusters left unmerged, as ruled: C012 (R1150 run the red-gate / R150
 Store fix pass 3 item 2 merges R1144-R1148 into R1143 (trigger: designing the test plan) and R1502-R1510 into R1496 (trigger: reviewing a test plan). R1146 and R1506 stated the same obligation on the two sides; each survives inside its own checklist.
 
 Store fix pass 3 item 4 retires R1159 under the never-observed test, disposition `never-observed`: a ban with no incident behind it; R0121 already states positively that the smallest test producing the evidence is the one to choose.
+
+Store fix pass 4 item 8 moves the test-plan-review rows out of the topic, so `test-designer` carries only the
+Test Designer's own rows. R1496 — the merged test-plan-review checklist, keyed `reviewer-agent` — moves to topic
+`reviewer` at order 120. R1497, its trigger row and also keyed `reviewer-agent`, moves with it at order 130: the
+item names R1496, and leaving R1497 behind would leave a reviewer-agent row in the Test Designer's topic, which
+is what the item removes. Item 3 moves R0083, R0085 and R0086 into this topic in the same pass.
