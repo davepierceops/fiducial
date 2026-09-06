@@ -14,8 +14,8 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0784 | policies/verification-boundary-policy.md | written | R0784 |
 | R0785 | policies/verification-boundary-policy.md | written | R0785 |
 | R0786 | policies/verification-boundary-policy.md | merged into R0785 | R0785 |
-| R0787 | policies/verification-boundary-policy.md | written | R0787 |
-| R0788 | policies/verification-boundary-policy.md | written | R0788 |
+| R0787 | policies/verification-boundary-policy.md | retired (store-fix-4 item 9: duplicate — core's R0456) | — |
+| R0788 | policies/verification-boundary-policy.md | retired (store-fix-4 item 9: duplicate — the Lexicon's R0030) | — |
 | R0789 | policies/verification-boundary-policy.md | written | R0789 |
 | R0790 | policies/verification-boundary-policy.md | merged into R0789 | R0789 |
 | R0791 | policies/verification-boundary-policy.md | merged into R0789 | R0789 |
@@ -35,7 +35,7 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0805 | policies/verification-boundary-policy.md | retired-ruling (container rule 4: "apply the obligation for the role you are filling" is the `role` key) | — |
 | R0806 | policies/verification-boundary-policy.md | merged into R0799 | R0799 |
 | R0807 | policies/verification-boundary-policy.md | written | R0807 |
-| R0808 | policies/verification-boundary-policy.md | written | R0808 |
+| R0808 | policies/verification-boundary-policy.md | retired (store-fix-4 item 9: duplicate — the Skeptic's R1058) | — |
 | R0809 | policies/verification-boundary-policy.md | written | R0809 |
 | R0810 | policies/verification-boundary-policy.md| merged into R0809 (fix 3 item 2) | R0809 |
 | R0811 | policies/verification-boundary-policy.md | retired-ruling (ruling 5: negation of R0810) | — |
@@ -71,3 +71,10 @@ loaded by every role, this topic by eight); R0788 of the lexicon's R0030, which 
 labels and is loaded by every role; R0808 of the Skeptic's stance row R1058, the pair the directive names. R0799
 survives its pair with `trd`'s R1556, which retires into it. R0110/R0787 is moot with R0787 gone. Topic count:
 21 rows before, 18 after.
+
+Store fix pass 5 item 10 confirms both retirements landed: neither `rules/R0787.md` nor `rules/R0808.md` exists
+on this branch, and `docs/rule-register/store-fix-4-20260906T070000Z.md` carries a line for each — R0787 as a
+duplicate of core's R0456, R0808 as a duplicate of the Skeptic's R1058. Neither survives, so nothing is retired
+now. What this item did find is that store fix pass 4 recorded the three sweep retirements in the prose note
+above but left their per-id disposition cells reading `written`; the cells for R0787, R0788 and R0808 are
+corrected here. No row changes.
