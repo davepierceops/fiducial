@@ -12,3 +12,5 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0069 | boundaries/human-review-boundary.md | retired-ruling (store-fix-1 item 4: describes) | — |
 
 Counts: rows consumed 5; rows written 5; definitions 4 (R0066–R0069); merged away 0; split 0; retired 0.
+
+Store fix pass 2 item 4 replaces `role: [all]` on 3 rows of this topic with an explicit role list, decided per row: 2 rows to `[chief-of-staff, writer, copy-editor, critic]`; 1 row to `[chief-of-staff]`. `all` is not a value; the lists are the role documents' own basename slugs at fd54448.

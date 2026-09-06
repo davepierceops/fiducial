@@ -57,3 +57,5 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R1192 | skills/boundary-audit.md | merged into R0788 | R0788 |
 
 Counts: rows consumed 50; rows written 29; definitions 4; merged away 17; split 0; retired 4 (R0778, R1177 session-kind scope statements; R0805 container rule; R0811 negation).
+
+Store fix pass 2 item 4 replaces `role: [all]` on 17 rows of this topic with an explicit role list, decided per row: 16 rows to `[architect-agent, chief-of-staff, coder-agent, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent, test-designer-agent]`; 1 row to `[coder-agent, test-designer-agent]`. `all` is not a value; the lists are the role documents' own basename slugs at fd54448.

@@ -54,3 +54,5 @@ Notes.
 - C014 and C071 are cross-file clusters with operating-model.md,
   prd-template.md and trd-template.md; R0757, R0758, R0759 and R0762 are
   written from this file's own text (ruling 1).
+
+Store fix pass 2 item 4 replaces `role: [all]` on 13 rows of this topic with an explicit role list, decided per row: 13 rows to `[architect-agent, chief-of-staff, coder-agent, context-quality-reviewer, copy-editor, critic, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent, test-designer-agent, writer]`. `all` is not a value; the lists are the role documents' own basename slugs at fd54448.

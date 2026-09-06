@@ -43,3 +43,5 @@ Directive: docs/cycles/store-all-topics-20260906T020000Z.md.
 | R0754 | policies/remote-write-verification-policy.md | written | R0754 |
 
 Counts: rows consumed 36; rows written 27; definitions 8; merged away 5 (R0721, R0723, R0726, R0738, R0749); split 0; retired 4 (R0719 ruling 9/C004; R0740, R0741, R0742 DEC-000380).
+
+Store fix pass 2 item 4 replaces `role: [all]` on 25 rows of this topic with an explicit role list, decided per row: 23 rows to `[architect-agent, chief-of-staff, coder-agent, context-quality-reviewer, copy-editor, critic, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent, test-designer-agent, writer]`; 2 rows to `[chief-of-staff, writer, copy-editor, critic]`. `all` is not a value; the lists are the role documents' own basename slugs at fd54448.
