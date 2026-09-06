@@ -1,0 +1,1408 @@
+# Red-gate run — the rule-store bundle tool's suite against the stub
+#
+# Directive: docs/cycles/bundle-tool-tests-20260906T110000Z.md
+# Base:      a5d60506d1d1266d8685f498662f514d49e12136 (origin/main)
+# Under test: bin/rulestore/ (stub package) and bin/tests/stubs/bundle
+#            (the stub command; helpers.rs_bin_dir() prefers it while it exists)
+#
+# Every failure below is an assertion failure. No import or attribute error
+# appears anywhere in this log: the stub carries the contract's whole public
+# surface, so the suite reds on wrong behaviour and on nothing else.
+
+==============================================================
+$ bin/tests/run -p 'test_rulestore*.py'
+==============================================================
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+======================================================================
+FAIL: test_ac_rs_3_a_row_carrying_no_keys_contributes_nothing (tests.test_rulestore.TestKeysInUse.test_ac_rs_3_a_row_carrying_no_keys_contributes_nothing)
+AC-RS-3: computed from the rows given, and from nothing else.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 275, in test_ac_rs_3_a_row_carrying_no_keys_contributes_nothing
+    self.assertEqual(keys_mod.keys_in_use([row("R0001")]), {})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'id': {'R0001': 1}} != {}
+- {'id': {'R0001': 1}}
++ {}
+
+======================================================================
+FAIL: test_ac_rs_3_every_key_and_value_is_counted (tests.test_rulestore.TestKeysInUse.test_ac_rs_3_every_key_and_value_is_counted)
+AC-RS-3: every key in use, with every value and the count of rows.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 259, in test_ac_rs_3_every_key_and_value_is_counted
+    self.assertEqual(
+    ~~~~~~~~~~~~~~~~^
+        keys_mod.keys_in_use(rows),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        },
+        ^^
+    )
+    ^
+AssertionError: {'topic': {'core': 1, 'intake': 1}, 'role': {'writer': 1, 'c[88 chars]: 1}} != {'topic': {'core': 2, 'intake': 1}, 'role': {'writer': 2, 'critic': 2}}
++ {'role': {'critic': 2, 'writer': 2}, 'topic': {'core': 2, 'intake': 1}}
+- {'id': {'R0001': 1, 'R0002': 1, 'R0003': 1},
+-  'order': {'10': 1, '20': 1, '30': 1},
+-  'role': {'critic': 1, 'writer': 1},
+-  'topic': {'core': 1, 'intake': 1}}
+
+======================================================================
+FAIL: test_ac_rs_3_id_and_order_are_excluded (tests.test_rulestore.TestKeysInUse.test_ac_rs_3_id_and_order_are_excluded)
+AC-RS-3: the two typed keys are not part of the census.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 270, in test_ac_rs_3_id_and_order_are_excluded
+    self.assertNotIn("id", census)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+AssertionError: 'id' unexpectedly found in {'topic': {'core': 1}, 'id': {'R0001': 1}, 'order': {'10': 1}}
+
+======================================================================
+FAIL: test_ac_rs_5_a_row_below_the_threshold_is_dropped (tests.test_rulestore.TestNear.test_ac_rs_5_a_row_below_the_threshold_is_dropped)
+AC-RS-5: only the rows at or above the threshold come back.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 390, in test_ac_rs_5_a_row_below_the_threshold_is_dropped
+    self.assertEqual(ids([r for r, _ in hits]), ["R0001"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [] != ['R0001']
+
+Second list contains 1 additional elements.
+First extra element 0:
+'R0001'
+
+- []
++ ['R0001']
+
+======================================================================
+FAIL: test_ac_rs_5_a_row_scoring_exactly_at_the_threshold_is_returned (tests.test_rulestore.TestNear.test_ac_rs_5_a_row_scoring_exactly_at_the_threshold_is_returned)
+AC-RS-5: "at or above threshold" — the boundary is inclusive.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 382, in test_ac_rs_5_a_row_scoring_exactly_at_the_threshold_is_returned
+    self.assertEqual(ids([r for r, _ in hits]), ["R0001"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [] != ['R0001']
+
+Second list contains 1 additional elements.
+First extra element 0:
+'R0001'
+
+- []
++ ['R0001']
+
+======================================================================
+FAIL: test_ac_rs_5_normalization_drops_short_words_and_punctuation (tests.test_rulestore.TestNear.test_ac_rs_5_normalization_drops_short_words_and_punctuation)
+AC-RS-5: lower-cased, punctuation stripped, words of <= 2 letters dropped.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 403, in test_ac_rs_5_normalization_drops_short_words_and_punctuation
+    self.assertEqual(ids([r for r, _ in hits]), ["R0001"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [] != ['R0001']
+
+Second list contains 1 additional elements.
+First extra element 0:
+'R0001'
+
+- []
++ ['R0001']
+
+======================================================================
+FAIL: test_ac_rs_5_results_come_back_highest_first (tests.test_rulestore.TestNear.test_ac_rs_5_results_come_back_highest_first)
+AC-RS-5: the rows are ordered by score, highest first.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 397, in test_ac_rs_5_results_come_back_highest_first
+    self.assertEqual(ids([r for r, _ in hits]), ["R0001", "R0002"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['R0001'] != ['R0001', 'R0002']
+
+Second list contains 1 additional elements.
+First extra element 1:
+'R0002'
+
+- ['R0001']
++ ['R0001', 'R0002']
+
+======================================================================
+FAIL: test_ac_rs_5_the_threshold_is_a_parameter_and_is_inclusive (tests.test_rulestore.TestNear.test_ac_rs_5_the_threshold_is_a_parameter_and_is_inclusive)
+AC-RS-5: `threshold` defaults to 0.3 and admits a score equal to it.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 411, in test_ac_rs_5_the_threshold_is_a_parameter_and_is_inclusive
+    self.assertEqual(ids([r for r, _ in hits]), ["R0001"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [] != ['R0001']
+
+Second list contains 1 additional elements.
+First extra element 0:
+'R0001'
+
+- []
++ ['R0001']
+
+======================================================================
+FAIL: test_ac_rs_13_a_definition_already_selected_is_not_added_again (tests.test_rulestore.TestPullDefinitions.test_ac_rs_13_a_definition_already_selected_is_not_added_again)
+AC-RS-13: definitions already in the selection are not added twice.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 338, in test_ac_rs_13_a_definition_already_selected_is_not_added_again
+    self.assertEqual(ids(pulled), ["R0020"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['R0020', 'R0500', 'R0500'] != ['R0020']
+
+First list contains 2 additional elements.
+First extra element 1:
+'R0500'
+
+- ['R0020', 'R0500', 'R0500']
++ ['R0020']
+
+======================================================================
+FAIL: test_ac_rs_13_a_definition_is_never_added_twice (tests.test_rulestore.TestPullDefinitions.test_ac_rs_13_a_definition_is_never_added_twice)
+AC-RS-13: two selected rows using one term add that definition once.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 327, in test_ac_rs_13_a_definition_is_never_added_twice
+    self.assertEqual(ids(terms.pull_definitions(selected, selected + [tranche])),
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     ["R0003"])
+                     ^^^^^^^^^^
+AssertionError: Lists differ: ['R0003', 'R0003'] != ['R0003']
+
+First list contains 1 additional elements.
+First extra element 1:
+'R0003'
+
+- ['R0003', 'R0003']
++ ['R0003']
+
+======================================================================
+FAIL: test_ac_rs_13_a_pulled_definition_pulls_further_definitions (tests.test_rulestore.TestPullDefinitions.test_ac_rs_13_a_pulled_definition_pulls_further_definitions)
+AC-RS-13: the scan repeats over pulled bodies until nothing new is added.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 300, in test_ac_rs_13_a_pulled_definition_pulls_further_definitions
+    self.assertEqual(ids(pulled), ["R0020", "R0012"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['R0020'] != ['R0020', 'R0012']
+
+Second list contains 1 additional elements.
+First extra element 1:
+'R0012'
+
+- ['R0020']
++ ['R0020', 'R0012']
+
+======================================================================
+FAIL: test_ac_rs_13_a_role_less_definition_is_not_selected_by_role (tests.test_rulestore.TestPullDefinitions.test_ac_rs_13_a_role_less_definition_is_not_selected_by_role)
+AC-RS-13: a definition's role-less shape excludes it from role selection.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 344, in test_ac_rs_13_a_role_less_definition_is_not_selected_by_role
+    self.assertEqual(ids(query.select([tranche, ordinary], {"role": "writer"})),
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     ["R0100"])
+                     ^^^^^^^^^^
+AssertionError: Lists differ: ['R0100', 'R0003'] != ['R0100']
+
+First list contains 1 additional elements.
+First extra element 1:
+'R0003'
+
+- ['R0100', 'R0003']
++ ['R0100']
+
+======================================================================
+FAIL: test_ac_rs_13_a_row_carrying_term_and_a_role_is_not_a_definition (tests.test_rulestore.TestPullDefinitions.test_ac_rs_13_a_row_carrying_term_and_a_role_is_not_a_definition)
+AC-RS-13: "a `term` key and no `role` key" — a role disqualifies the row.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 354, in test_ac_rs_13_a_row_carrying_term_and_a_role_is_not_a_definition
+    self.assertEqual(terms.pull_definitions(selected, selected + [hybrid, read]), [])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [Row(id='R0502', body='A read is not a sto[159 chars]='')] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+Row(id='R0502', body='A read is not a store term.', human=None, keys={'topic': ['lexicon'], 'term': ['read']}, order=30, kind='rule', path=None, blob='0000000000000000000000000000000000000000', legacy='')
+
++ []
+- [Row(id='R0502',
+-      body='A read is not a store term.',
+-      human=None,
+-      keys={'term': ['read'], 'topic': ['lexicon']},
+-      order=30,
+-      kind='rule',
+-      path=None,
+-      blob='0000000000000000000000000000000000000000',
+-      legacy='')]
+
+======================================================================
+FAIL: test_ac_rs_13_a_term_is_a_phrase_and_matches_case_insensitively (tests.test_rulestore.TestPullDefinitions.test_ac_rs_13_a_term_is_a_phrase_and_matches_case_insensitively)
+AC-RS-13: each term is a phrase; the match ignores case.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 318, in test_ac_rs_13_a_term_is_a_phrase_and_matches_case_insensitively
+    self.assertEqual(ids(pulled), ["R0040"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['R0040', 'R0501'] != ['R0040']
+
+First list contains 1 additional elements.
+First extra element 1:
+'R0501'
+
+- ['R0040', 'R0501']
++ ['R0040']
+
+======================================================================
+FAIL: test_ac_rs_13_a_term_matches_whole_words_only (tests.test_rulestore.TestPullDefinitions.test_ac_rs_13_a_term_matches_whole_words_only)
+AC-RS-13: whole-word matching — `row` inside `rowdy` pulls nothing.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 307, in test_ac_rs_13_a_term_matches_whole_words_only
+    self.assertEqual(terms.pull_definitions(selected, selected + [rowdef]), [])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [Row(id='R0030', body='A row is one obliga[155 chars]='')] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+Row(id='R0030', body='A row is one obligation.', human=None, keys={'topic': ['lexicon'], 'term': ['row']}, order=20, kind='rule', path=None, blob='0000000000000000000000000000000000000000', legacy='')
+
++ []
+- [Row(id='R0030',
+-      body='A row is one obligation.',
+-      human=None,
+-      keys={'term': ['row'], 'topic': ['lexicon']},
+-      order=20,
+-      kind='rule',
+-      path=None,
+-      blob='0000000000000000000000000000000000000000',
+-      legacy='')]
+
+======================================================================
+FAIL: test_ac_rs_13_a_used_term_pulls_its_definition (tests.test_rulestore.TestPullDefinitions.test_ac_rs_13_a_used_term_pulls_its_definition)
+AC-RS-13: a selected row whose body uses a term pulls that definition.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 291, in test_ac_rs_13_a_used_term_pulls_its_definition
+    self.assertEqual(ids(pulled), ["R0003"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['R0003', 'R0500'] != ['R0003']
+
+First list contains 1 additional elements.
+First extra element 1:
+'R0500'
+
+- ['R0003', 'R0500']
++ ['R0003']
+
+======================================================================
+FAIL: test_ac_rs_13_pulled_definitions_use_the_select_ordering_rule (tests.test_rulestore.TestPullDefinitions.test_ac_rs_13_pulled_definitions_use_the_select_ordering_rule)
+AC-RS-13: "returned in the same order rule as select".
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 362, in test_ac_rs_13_pulled_definitions_use_the_select_ordering_rule
+    self.assertEqual(ids(pulled), ["R0060", "R0050"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['R0050', 'R0060'] != ['R0060', 'R0050']
+
+First differing element 0:
+'R0050'
+'R0060'
+
+- ['R0050', 'R0060']
++ ['R0060', 'R0050']
+
+======================================================================
+FAIL: test_ac_rs_14_the_human_form_is_carried_on_the_row_and_never_rendered (tests.test_rulestore.TestRender.test_ac_rs_14_the_human_form_is_carried_on_the_row_and_never_rendered)
+AC-RS-14 (G4): two forms, one row — `## Human` reaches no output.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 482, in test_ac_rs_14_the_human_form_is_carried_on_the_row_and_never_rendered
+    self.assertNotIn("## Human", text)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: '## Human' unexpectedly found in '# fiducial-bundle\n\n- Repo: davepierceops/fiducial\n- HEAD: a5d6050\n- Generated: 20260906T110000Z\n\n## R0007\n\nDave edits freely.\n\n## Human\n\nDEC-000170: the branch is the state.\n\n'
+
+======================================================================
+FAIL: test_ac_rs_15_a_process_document_renders_under_its_path (tests.test_rulestore.TestRender.test_ac_rs_15_a_process_document_renders_under_its_path)
+AC-RS-15 (DEC-000490): a process row's heading is its path, not an id.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 491, in test_ac_rs_15_a_process_document_renders_under_its_path
+    self.assertIn("## process/change-flow.md", text)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '## process/change-flow.md' not found in '# fiducial-bundle\n\n- Repo: davepierceops/fiducial\n- HEAD: a5d6050\n- Generated: 20260906T110000Z\n\n## change-flow\n\nThe flow.\n\n'
+
+======================================================================
+FAIL: test_ac_rs_15_process_rows_interleave_with_rules_by_order (tests.test_rulestore.TestRender.test_ac_rs_15_process_rows_interleave_with_rules_by_order)
+AC-RS-15: a process document is selected and ordered like any other row.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 506, in test_ac_rs_15_process_rows_interleave_with_rules_by_order
+    self.assertEqual(
+    ~~~~~~~~~~~~~~~~^
+        [line for line in text.splitlines() if line.startswith("## ")],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        ["## R0001", "## process/change-flow.md", "## R0002"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+AssertionError: Lists differ: ['## R0001', '## change-flow', '## R0002'] != ['## R0001', '## process/change-flow.md', '## R0002']
+
+First differing element 1:
+'## change-flow'
+'## process/change-flow.md'
+
+- ['## R0001', '## change-flow', '## R0002']
++ ['## R0001', '## process/change-flow.md', '## R0002']
+?                  ++++++++           +++
+
+
+======================================================================
+FAIL: test_ac_rs_6_a_definition_renders_under_its_first_term (tests.test_rulestore.TestRender.test_ac_rs_6_a_definition_renders_under_its_first_term)
+AC-RS-6: each definition as `**<first term>** — <body>`.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 518, in test_ac_rs_6_a_definition_renders_under_its_first_term
+    self.assertIn("**tranche** — A tranche is one workstream.", text)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '**tranche** — A tranche is one workstream.' not found in '# fiducial-bundle\n\n- Repo: davepierceops/fiducial\n- HEAD: a5d6050\n- Generated: 20260906T110000Z\n\n## R0003\n\nA tranche is one workstream.\n\n## R0001\n\nOpen one tranche.\n\n'
+
+======================================================================
+FAIL: test_ac_rs_6_a_rule_is_manifested_by_id_and_blob (tests.test_rulestore.TestRender.test_ac_rs_6_a_rule_is_manifested_by_id_and_blob)
+AC-RS-6: `  - <id> (<blob>)` for a rule, in bundle order.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 448, in test_ac_rs_6_a_rule_is_manifested_by_id_and_blob
+    self.assertEqual(
+    ~~~~~~~~~~~~~~~~^
+        [line for line in lines if line.startswith("  - ")],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        ["  - R0001 (%s)" % ("b" * 40), "  - R0002 (%s)" % ("c" * 40)],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+AssertionError: Lists differ: [] != ['  - R0001 (bbbbbbbbbbbbbbbbbbbbbbbbbbbbb[65 chars]cc)']
+
+Second list contains 2 additional elements.
+First extra element 0:
+'  - R0001 (bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb)'
+
+- []
++ ['  - R0001 (bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb)',
++  '  - R0002 (cccccccccccccccccccccccccccccccccccccccc)']
+
+======================================================================
+FAIL: test_ac_rs_6_definitions_are_manifested_after_the_selected_rows (tests.test_rulestore.TestRender.test_ac_rs_6_definitions_are_manifested_after_the_selected_rows)
+AC-RS-6: the definitions are listed after the rows, under their own key.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 458, in test_ac_rs_6_definitions_are_manifested_after_the_selected_rows
+    self.assertIn("- Definitions:", lines)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '- Definitions:' not found in ['# fiducial-bundle', '', '- Repo: davepierceops/fiducial', '- HEAD: a5d6050', '- Generated: 20260906T110000Z', '', '## R0003', '', 'A tranche is one workstream.', '', '## R0001', '', 'Open one tranche.', '']
+
+======================================================================
+FAIL: test_ac_rs_6_rows_render_in_bundle_order_before_the_definitions (tests.test_rulestore.TestRender.test_ac_rs_6_rows_render_in_bundle_order_before_the_definitions)
+AC-RS-6: `## <id>` per row, in order; `## Definitions` last.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 468, in test_ac_rs_6_rows_render_in_bundle_order_before_the_definitions
+    self.assertEqual(
+    ~~~~~~~~~~~~~~~~^
+        [line for line in text.splitlines() if line.startswith("#")],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        ["# fiducial-bundle", "## R0001", "## R0002", "## Definitions"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+AssertionError: Lists differ: ['# fiducial-bundle', '## R0003', '## R0001', '## R0002'] != ['# fiducial-bundle', '## R0001', '## R0002', '## Definitions']
+
+First differing element 1:
+'## R0003'
+'## R0001'
+
+- ['# fiducial-bundle', '## R0003', '## R0001', '## R0002']
+?                          ------------
+
++ ['# fiducial-bundle', '## R0001', '## R0002', '## Definitions']
+?                                             ++++++++++++++++++
+
+
+======================================================================
+FAIL: test_ac_rs_6_the_header_comes_first_and_carries_every_field (tests.test_rulestore.TestRender.test_ac_rs_6_the_header_comes_first_and_carries_every_field)
+AC-RS-6: title, Repo, the full HEAD SHA, Generated, then the manifest.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 438, in test_ac_rs_6_the_header_comes_first_and_carries_every_field
+    self.assertIn("- HEAD: %s" % self.HEAD, lines)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '- HEAD: a5d60506d1d1266d8685f498662f514d49e12136' not found in ['# fiducial-bundle', '', '- Repo: davepierceops/fiducial', '- HEAD: a5d6050', '- Generated: 20260906T110000Z', '', '## R0001', '', 'Prose.', '']
+
+======================================================================
+FAIL: test_ac_rs_6_the_render_carries_nothing_else (tests.test_rulestore.TestRender.test_ac_rs_6_the_render_carries_nothing_else)
+AC-RS-6: "Nothing else" — no separator furniture, no extra list lines.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 529, in test_ac_rs_6_the_render_carries_nothing_else
+    self.assertEqual(
+    ~~~~~~~~~~~~~~~~^
+        [line for line in lines if line.startswith("- ") or line.startswith("  - ")],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        ],
+        ^^
+    )
+    ^
+AssertionError: Lists differ: ['- R[41 chars]d6050', '- Generated: 20260906T110000Z'] != ['- R[41 chars]d60506d1d1266d8685f498662f514d49e12136', '- Ge[89 chars]bb)']
+
+First differing element 1:
+'- HEAD: a5d6050'
+'- HEAD: a5d60506d1d1266d8685f498662f514d49e12136'
+
+Second list contains 2 additional elements.
+First extra element 3:
+'- Rows:'
+
+  ['- Repo: davepierceops/fiducial',
+-  '- HEAD: a5d6050',
++  '- HEAD: a5d60506d1d1266d8685f498662f514d49e12136',
+-  '- Generated: 20260906T110000Z']
+?                                 ^
+
++  '- Generated: 20260906T110000Z',
+?                                 ^
+
++  '- Rows:',
++  '  - R0001 (bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb)']
+
+======================================================================
+FAIL: test_ac_rs_1_a_bare_number_on_another_key_is_a_defect (tests.test_rulestore.TestRowShape.test_ac_rs_1_a_bare_number_on_another_key_is_a_defect)
+AC-RS-1: `order` is the only typed key; a bare number elsewhere is a defect.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 135, in test_ac_rs_1_a_bare_number_on_another_key_is_a_defect
+    with self.assertRaises(RowShapeError) as caught:
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: RowShapeError not raised
+
+======================================================================
+FAIL: test_ac_rs_1_a_bare_word_normalizes_to_a_list_of_one (tests.test_rulestore.TestRowShape.test_ac_rs_1_a_bare_word_normalizes_to_a_list_of_one)
+AC-RS-1: every value is a list of words; a bare word is a list of one.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 96, in test_ac_rs_1_a_bare_word_normalizes_to_a_list_of_one
+    self.assertEqual(keys, {"verb": ["require"]})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'verb': 'require'} != {'verb': ['require']}
+- {'verb': 'require'}
++ {'verb': ['require']}
+?          +         +
+
+
+======================================================================
+FAIL: test_ac_rs_1_a_bracket_list_splits_on_commas_and_lower_cases (tests.test_rulestore.TestRowShape.test_ac_rs_1_a_bracket_list_splits_on_commas_and_lower_cases)
+AC-RS-1: `[a, b]` splits on commas; every element is stripped and lowered.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 103, in test_ac_rs_1_a_bracket_list_splits_on_commas_and_lower_cases
+    self.assertEqual(keys, {"role": ["writer", "copy-editor"], "corpus": ["software"]})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'role': '[ Writer,  COPY-editor ]', 'corpus': '[software]'} != {'role': ['writer', 'copy-editor'], 'corpus': ['software']}
+- {'corpus': '[software]', 'role': '[ Writer,  COPY-editor ]'}
+?             -         -           ^^^       ^^^^^       ^ -
+
++ {'corpus': ['software'], 'role': ['writer', 'copy-editor']}
+?            +         +           + ^     +  ^^^^^       ^
+
+
+======================================================================
+FAIL: test_ac_rs_1_a_non_integer_order_is_a_defect_naming_id_and_key (tests.test_rulestore.TestRowShape.test_ac_rs_1_a_non_integer_order_is_a_defect_naming_id_and_key)
+AC-RS-1: a value the dialect cannot type is a defect, not a silent None.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 127, in test_ac_rs_1_a_non_integer_order_is_a_defect_naming_id_and_key
+    with self.assertRaises(RowShapeError) as caught:
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: RowShapeError not raised
+
+======================================================================
+FAIL: test_ac_rs_1_a_quoted_number_on_another_key_is_text (tests.test_rulestore.TestRowShape.test_ac_rs_1_a_quoted_number_on_another_key_is_text)
+AC-RS-1: "a quoted number on another key is text", so it normalizes.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 143, in test_ac_rs_1_a_quoted_number_on_another_key_is_text
+    self.assertEqual(keys, {"source": ["12"]})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'source': '"12"'} != {'source': ['12']}
+- {'source': '"12"'}
+?             -  -
+
++ {'source': ['12']}
+?            +    +
+
+
+======================================================================
+FAIL: test_ac_rs_1_id_is_never_a_key_and_an_absent_order_is_none (tests.test_rulestore.TestRowShape.test_ac_rs_1_id_is_never_a_key_and_an_absent_order_is_none)
+AC-RS-1: `id` is excluded from `keys`; a row with no `order` carries None.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 123, in test_ac_rs_1_id_is_never_a_key_and_an_absent_order_is_none
+    self.assertEqual(keys, {"topic": ["core"]})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'id': 'R0005', 'topic': 'core'} != {'topic': ['core']}
+- {'id': 'R0005', 'topic': 'core'}
++ {'topic': ['core']}
+
+======================================================================
+FAIL: test_ac_rs_1_memory_row_source_returns_exactly_what_it_was_given (tests.test_rulestore.TestRowShape.test_ac_rs_1_memory_row_source_returns_exactly_what_it_was_given)
+AC-RS-1/AC-RS-4: `MemoryRowSource` is the identity over its rows.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 148, in test_ac_rs_1_memory_row_source_returns_exactly_what_it_was_given
+    self.assertEqual(MemoryRowSource(given).rows(), given)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [Row([323 chars]y=''), Row(id='RSTUB', body='stub row', human=[68 chars]='')] != [Row([323 chars]y='')]
+
+First list contains 1 additional elements.
+First extra element 2:
+Row(id='RSTUB', body='stub row', human=None, keys={}, order=None, kind='rule', path=None, blob=None, legacy='')
+
+  [Row(id='R0001',
+       body='Prose.',
+       human=None,
+       keys={'topic': ['core']},
+       order=None,
+       kind='rule',
+       path=None,
+       blob='0000000000000000000000000000000000000000',
+       legacy=''),
+   Row(id='R0002',
+       body='Prose.',
+       human=None,
+       keys={'topic': ['intake']},
+       order=None,
+       kind='rule',
+       path=None,
+       blob='0000000000000000000000000000000000000000',
+-      legacy=''),
+-  Row(id='RSTUB',
+-      body='stub row',
+-      human=None,
+-      keys={},
+-      order=None,
+-      kind='rule',
+-      path=None,
+-      blob=None,
+       legacy='')]
+
+======================================================================
+FAIL: test_ac_rs_1_null_and_the_empty_list_are_an_absent_key (tests.test_rulestore.TestRowShape.test_ac_rs_1_null_and_the_empty_list_are_an_absent_key)
+AC-RS-1: `null` and an empty list carry no key at all.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 110, in test_ac_rs_1_null_and_the_empty_list_are_an_absent_key
+    self.assertEqual(keys, {"topic": ["core"]})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'term': 'null', 'session': '[]', 'topic': 'core'} != {'topic': ['core']}
+- {'session': '[]', 'term': 'null', 'topic': 'core'}
++ {'topic': ['core']}
+
+======================================================================
+FAIL: test_ac_rs_1_order_parses_to_an_int_and_is_not_a_key (tests.test_rulestore.TestRowShape.test_ac_rs_1_order_parses_to_an_int_and_is_not_a_key)
+AC-RS-1: `order` is the one numeric key, and it is not part of `keys`.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 115, in test_ac_rs_1_order_parses_to_an_int_and_is_not_a_key
+    self.assertEqual(order, 360)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: '360' != 360
+
+======================================================================
+FAIL: test_ac_rs_1_row_carries_exactly_the_contracted_fields (tests.test_rulestore.TestRowShape.test_ac_rs_1_row_carries_exactly_the_contracted_fields)
+AC-RS-1: `Row` is a dataclass of id/body/human/keys/order/kind/path/blob.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 88, in test_ac_rs_1_row_carries_exactly_the_contracted_fields
+    self.assertEqual(
+    ~~~~~~~~~~~~~~~~^
+        [f.name for f in dataclasses.fields(Row)],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        ["id", "body", "human", "keys", "order", "kind", "path", "blob"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+AssertionError: Lists differ: ['id', 'body', 'human', 'keys', 'order', 'kind', 'path', 'blob', 'legacy'] != ['id', 'body', 'human', 'keys', 'order', 'kind', 'path', 'blob']
+
+First list contains 1 additional elements.
+First extra element 8:
+'legacy'
+
+- ['id', 'body', 'human', 'keys', 'order', 'kind', 'path', 'blob', 'legacy']
+?                                                                ----------
+
++ ['id', 'body', 'human', 'keys', 'order', 'kind', 'path', 'blob']
+
+======================================================================
+FAIL: test_ac_rs_2_a_bare_equals_raises_query_error (tests.test_rulestore.TestSelect.test_ac_rs_2_a_bare_equals_raises_query_error)
+AC-RS-2: `=` alone has an empty key and an empty value; a `QueryError`.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 186, in test_ac_rs_2_a_bare_equals_raises_query_error
+    with self.assertRaises(query.QueryError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: QueryError not raised
+
+======================================================================
+FAIL: test_ac_rs_2_a_missing_key_is_a_non_match (tests.test_rulestore.TestSelect.test_ac_rs_2_a_missing_key_is_a_non_match)
+AC-RS-2: a row that does not carry the key never matches on it.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 214, in test_ac_rs_2_a_missing_key_is_a_non_match
+    self.assertEqual(ids(query.select(rows, {"role": "writer"})), ["R0001"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['R0002', 'R0001'] != ['R0001']
+
+First differing element 0:
+'R0002'
+'R0001'
+
+First list contains 1 additional elements.
+First extra element 1:
+'R0001'
+
+- ['R0002', 'R0001']
++ ['R0001']
+
+======================================================================
+FAIL: test_ac_rs_2_a_query_nothing_holds_selects_nothing (tests.test_rulestore.TestSelect.test_ac_rs_2_a_query_nothing_holds_selects_nothing)
+AC-RS-2: "exactly the rows" — including when that is none of them.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 243, in test_ac_rs_2_a_query_nothing_holds_selects_nothing
+    self.assertEqual(query.select(rows, {"role": "nobody"}), [])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [Row(id='R0002', body='Prose.', human=None[120 chars]='')] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+Row(id='R0002', body='Prose.', human=None, keys={'topic': ['lexicon']}, order=20, kind='rule', path=None, blob='0000000000000000000000000000000000000000', legacy='')
+
++ []
+- [Row(id='R0002',
+-      body='Prose.',
+-      human=None,
+-      keys={'topic': ['lexicon']},
+-      order=20,
+-      kind='rule',
+-      path=None,
+-      blob='0000000000000000000000000000000000000000',
+-      legacy='')]
+
+======================================================================
+FAIL: test_ac_rs_2_a_row_without_order_sorts_after_every_integer (tests.test_rulestore.TestSelect.test_ac_rs_2_a_row_without_order_sorts_after_every_integer)
+AC-RS-2: `None` order sorts after every integer, however large.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 235, in test_ac_rs_2_a_row_without_order_sorts_after_every_integer
+    self.assertEqual(ids(selected), ["R0002", "R0001", "R0003"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['R0003', 'R0002', 'R0001'] != ['R0002', 'R0001', 'R0003']
+
+First differing element 0:
+'R0003'
+'R0002'
+
+- ['R0003', 'R0002', 'R0001']
++ ['R0002', 'R0001', 'R0003']
+
+======================================================================
+FAIL: test_ac_rs_2_a_single_key_selects_the_rows_holding_the_value (tests.test_rulestore.TestSelect.test_ac_rs_2_a_single_key_selects_the_rows_holding_the_value)
+AC-RS-2: a row matches when the named key's list contains the value.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 196, in test_ac_rs_2_a_single_key_selects_the_rows_holding_the_value
+    self.assertEqual(ids(query.select(rows, {"role": "writer"})), ["R0001"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['R0003', 'R0001'] != ['R0001']
+
+First differing element 0:
+'R0003'
+'R0001'
+
+First list contains 1 additional elements.
+First extra element 1:
+'R0001'
+
+- ['R0003', 'R0001']
++ ['R0001']
+
+======================================================================
+FAIL: test_ac_rs_2_a_token_with_no_equals_raises_query_error (tests.test_rulestore.TestSelect.test_ac_rs_2_a_token_with_no_equals_raises_query_error)
+AC-RS-2: a token with no `=` is a `QueryError`.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 166, in test_ac_rs_2_a_token_with_no_equals_raises_query_error
+    with self.assertRaises(query.QueryError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: QueryError not raised
+
+======================================================================
+FAIL: test_ac_rs_2_an_empty_key_raises_query_error (tests.test_rulestore.TestSelect.test_ac_rs_2_an_empty_key_raises_query_error)
+AC-RS-2: a token with an empty key is a `QueryError`.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 171, in test_ac_rs_2_an_empty_key_raises_query_error
+    with self.assertRaises(query.QueryError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: QueryError not raised
+
+======================================================================
+FAIL: test_ac_rs_2_an_empty_token_raises_query_error (tests.test_rulestore.TestSelect.test_ac_rs_2_an_empty_token_raises_query_error)
+AC-RS-2: an empty token has neither key nor value; a `QueryError`.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 181, in test_ac_rs_2_an_empty_token_raises_query_error
+    with self.assertRaises(query.QueryError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: QueryError not raised
+
+======================================================================
+FAIL: test_ac_rs_2_an_empty_value_raises_query_error (tests.test_rulestore.TestSelect.test_ac_rs_2_an_empty_value_raises_query_error)
+AC-RS-2: a token with an empty value is a `QueryError`.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 176, in test_ac_rs_2_an_empty_value_raises_query_error
+    with self.assertRaises(query.QueryError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: QueryError not raised
+
+======================================================================
+FAIL: test_ac_rs_2_multiple_keys_are_conjunctive (tests.test_rulestore.TestSelect.test_ac_rs_2_multiple_keys_are_conjunctive)
+AC-RS-2: every named key must contain its value.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 206, in test_ac_rs_2_multiple_keys_are_conjunctive
+    self.assertEqual(ids(selected), ["R0001"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['R0003', 'R0001'] != ['R0001']
+
+First differing element 0:
+'R0003'
+'R0001'
+
+First list contains 1 additional elements.
+First extra element 1:
+'R0001'
+
+- ['R0003', 'R0001']
++ ['R0001']
+
+======================================================================
+FAIL: test_ac_rs_2_parse_where_reads_k_equals_v_tokens (tests.test_rulestore.TestSelect.test_ac_rs_2_parse_where_reads_k_equals_v_tokens)
+AC-RS-2: `parse_where` turns `k=v` tokens into a key-value mapping.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 159, in test_ac_rs_2_parse_where_reads_k_equals_v_tokens
+    self.assertEqual(
+    ~~~~~~~~~~~~~~~~^
+        query.parse_where(["role=writer", "corpus=writing"]),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        {"role": "writer", "corpus": "writing"},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+AssertionError: {'role': 'role=writer', 'corpus': 'corpus=writing'} != {'role': 'writer', 'corpus': 'writing'}
+- {'corpus': 'corpus=writing', 'role': 'role=writer'}
+?             -------                   -----
+
++ {'corpus': 'writing', 'role': 'writer'}
+
+======================================================================
+FAIL: test_ac_rs_2_result_is_ordered_by_order_then_topic_then_id (tests.test_rulestore.TestSelect.test_ac_rs_2_result_is_ordered_by_order_then_topic_then_id)
+AC-RS-2: ascending `order`, then first `topic` value, then `id`.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore.py", line 225, in test_ac_rs_2_result_is_ordered_by_order_then_topic_then_id
+    self.assertEqual(ids(selected), ["R0002", "R0001", "R0003", "R0009"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['R0001', 'R0002', 'R0003', 'R0009'] != ['R0002', 'R0001', 'R0003', 'R0009']
+
+First differing element 0:
+'R0001'
+'R0002'
+
+- ['R0001', 'R0002', 'R0003', 'R0009']
+?           ---------
+
++ ['R0002', 'R0001', 'R0003', 'R0009']
+?  +++++++++
+
+
+======================================================================
+FAIL: test_ac_rs_4_every_module_parses_and_is_stdlib_only (tests.test_rulestore_boundary.TestStorageBoundary.test_ac_rs_4_every_module_parses_and_is_stdlib_only)
+AC-RS-4: the scan means nothing unless every module actually parses.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore_boundary.py", line 156, in test_ac_rs_4_every_module_parses_and_is_stdlib_only
+    self.assertEqual(offenders, [], "\n".join(offenders))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['store.py imports yaml'] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+'store.py imports yaml'
+
+- ['store.py imports yaml']
++ [] : store.py imports yaml
+
+======================================================================
+FAIL: test_ac_rs_4_no_processing_module_imports_a_filesystem_module (tests.test_rulestore_boundary.TestStorageBoundary.test_ac_rs_4_no_processing_module_imports_a_filesystem_module)
+AC-RS-4: os, pathlib, glob, io and subprocess belong to the storage layer.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore_boundary.py", line 93, in test_ac_rs_4_no_processing_module_imports_a_filesystem_module
+    self.assertEqual(offenders, [], "\n".join(offenders))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['query.py imports os', 'query.py imports [95 chars] os'] != []
+
+First list contains 6 additional elements.
+First extra element 0:
+'query.py imports os'
+
++ []
+- ['query.py imports os',
+-  'query.py imports pathlib',
+-  'terms.py imports os',
+-  'keys.py imports os',
+-  'near.py imports io',
+-  'render.py imports os'] : query.py imports os
+query.py imports pathlib
+terms.py imports os
+keys.py imports os
+near.py imports io
+render.py imports os
+
+======================================================================
+FAIL: test_ac_rs_4_no_processing_module_names_a_storage_path (tests.test_rulestore_boundary.TestStorageBoundary.test_ac_rs_4_no_processing_module_names_a_storage_path)
+AC-RS-4: only `store.py` names `rules/` or `process/`.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore_boundary.py", line 103, in test_ac_rs_4_no_processing_module_names_a_storage_path
+    self.assertEqual(offenders, [], "\n".join(offenders))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ["query.py contains 'rules/'", "terms.py c[106 chars]s/'"] != []
+
+First list contains 5 additional elements.
+First extra element 0:
+"query.py contains 'rules/'"
+
++ []
+- ["query.py contains 'rules/'",
+-  "terms.py contains 'process/'",
+-  "keys.py contains 'rules/'",
+-  "near.py contains 'process/'",
+-  "render.py contains 'rules/'"] : query.py contains 'rules/'
+terms.py contains 'process/'
+keys.py contains 'rules/'
+near.py contains 'process/'
+render.py contains 'rules/'
+
+======================================================================
+FAIL: test_ac_rs_4_no_processing_module_opens_a_file (tests.test_rulestore_boundary.TestStorageBoundary.test_ac_rs_4_no_processing_module_opens_a_file)
+AC-RS-4: file I/O stays inside the storage layer, however it is spelled.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore_boundary.py", line 144, in test_ac_rs_4_no_processing_module_opens_a_file
+    self.assertEqual(offenders, [], "\n".join(offenders))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['render.py calls open()'] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+'render.py calls open()'
+
+- ['render.py calls open()']
++ [] : render.py calls open()
+
+======================================================================
+FAIL: test_ac_rs_4_processing_modules_take_only_row_and_rowsource_from_store (tests.test_rulestore_boundary.TestStorageBoundary.test_ac_rs_4_processing_modules_take_only_row_and_rowsource_from_store)
+AC-RS-4: "import nothing from store.py but the Row type and RowSource".
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore_boundary.py", line 130, in test_ac_rs_4_processing_modules_take_only_row_and_rowsource_from_store
+    self.assertEqual(offenders, [], "\n".join(offenders))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['query.py imports FileRowSource from store'] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+'query.py imports FileRowSource from store'
+
+- ['query.py imports FileRowSource from store']
++ [] : query.py imports FileRowSource from store
+
+======================================================================
+FAIL: test_ac_rs_4_store_is_the_only_module_that_names_a_storage_path (tests.test_rulestore_boundary.TestStorageBoundary.test_ac_rs_4_store_is_the_only_module_that_names_a_storage_path)
+AC-RS-4: the boundary has a storage side, and it is `store.py` alone.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore_boundary.py", line 112, in test_ac_rs_4_store_is_the_only_module_that_names_a_storage_path
+    self.assertEqual(naming, [STORAGE_MODULE])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['keys.py', 'near.py', 'query.py', 'render.py', 'store.py', 'terms.py'] != ['store.py']
+
+First differing element 0:
+'keys.py'
+'store.py'
+
+First list contains 5 additional elements.
+First extra element 1:
+'near.py'
+
+- ['keys.py', 'near.py', 'query.py', 'render.py', 'store.py', 'terms.py']
++ ['store.py']
+
+======================================================================
+FAIL: test_ac_rs_4_store_is_the_only_module_that_reaches_the_filesystem (tests.test_rulestore_boundary.TestStorageBoundary.test_ac_rs_4_store_is_the_only_module_that_reaches_the_filesystem)
+AC-RS-4: `store.py` is where directory reads and file opens live.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore_boundary.py", line 121, in test_ac_rs_4_store_is_the_only_module_that_reaches_the_filesystem
+    self.assertEqual(reaching, [STORAGE_MODULE])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['keys.py', 'near.py', 'query.py', 'render.py', 'store.py', 'terms.py'] != ['store.py']
+
+First differing element 0:
+'keys.py'
+'store.py'
+
+First list contains 5 additional elements.
+First extra element 1:
+'near.py'
+
+- ['keys.py', 'near.py', 'query.py', 'render.py', 'store.py', 'terms.py']
++ ['store.py']
+
+======================================================================
+FAIL: test_ac_rs_4_the_package_holds_exactly_the_contracted_modules (tests.test_rulestore_boundary.TestStorageBoundary.test_ac_rs_4_the_package_holds_exactly_the_contracted_modules)
+AC-RS-4: the check is meaningful only over the whole package.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore_boundary.py", line 85, in test_ac_rs_4_the_package_holds_exactly_the_contracted_modules
+    self.assertEqual(present, sorted((STORAGE_MODULE,) + PROCESSING_MODULES))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['__i[18 chars]y', 'legacy.py', 'near.py', 'query.py', 'rende[25 chars].py'] != ['__i[18 chars]y', 'near.py', 'query.py', 'render.py', 'store.py', 'terms.py']
+
+First differing element 2:
+'legacy.py'
+'near.py'
+
+First list contains 1 additional elements.
+First extra element 7:
+'terms.py'
+
+  ['__init__.py',
+   'keys.py',
+-  'legacy.py',
+   'near.py',
+   'query.py',
+   'render.py',
+   'store.py',
+   'terms.py']
+
+======================================================================
+FAIL: test_ac_rs_13_a_definition_carries_a_term_and_no_role (tests.test_rulestore_store.TestFileRowSource.test_ac_rs_13_a_definition_carries_a_term_and_no_role)
+AC-RS-13 (DEC-000420): the definition row's shape, as it is on disk.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore_store.py", line 82, in test_ac_rs_13_a_definition_carries_a_term_and_no_role
+    self.assertEqual(row.keys["term"], ["tranche", "tranches"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '[tranche, tranches]' != ['tranche', 'tranches']
+
+======================================================================
+FAIL: test_ac_rs_14_a_row_with_no_human_section_carries_none (tests.test_rulestore_store.TestFileRowSource.test_ac_rs_14_a_row_with_no_human_section_carries_none)
+AC-RS-14: `human` is None, not the empty string, when there is none.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore_store.py", line 99, in test_ac_rs_14_a_row_with_no_human_section_carries_none
+    self.assertIsNone(by_id(self.rows)["R0002"].human)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '' is not None
+
+======================================================================
+FAIL: test_ac_rs_14_the_body_stops_at_the_human_section (tests.test_rulestore_store.TestFileRowSource.test_ac_rs_14_the_body_stops_at_the_human_section)
+AC-RS-14 (G4): `body` is everything above `## Human`, stripped.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore_store.py", line 88, in test_ac_rs_14_the_body_stops_at_the_human_section
+    self.assertEqual(row.body,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^
+                     "Open one tranche per delta, and close it at the end.")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'Open[38 chars]t the end.\n\n## Human\n\nDEC-000170: the branch is the state.' != 'Open[38 chars]t the end.'
+  Open one tranche per delta, and close it at the end.
+- 
+- ## Human
+- 
+- DEC-000170: the branch is the state.
+
+
+======================================================================
+FAIL: test_ac_rs_14_the_human_section_is_carried_on_the_row (tests.test_rulestore_store.TestFileRowSource.test_ac_rs_14_the_human_section_is_carried_on_the_row)
+AC-RS-14: two forms, one row — the human form is parsed, not dropped.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore_store.py", line 94, in test_ac_rs_14_the_human_section_is_carried_on_the_row
+    self.assertEqual(by_id(self.rows)["R0001"].human,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     "DEC-000170: the branch is the state.")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '' != 'DEC-000170: the branch is the state.'
++ DEC-000170: the branch is the state.
+
+
+======================================================================
+FAIL: test_ac_rs_15_a_process_document_carries_its_path_and_stem_id (tests.test_rulestore_store.TestFileRowSource.test_ac_rs_15_a_process_document_carries_its_path_and_stem_id)
+AC-RS-15: a `process/` document has no `id:`; its path is its identity.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore_store.py", line 105, in test_ac_rs_15_a_process_document_carries_its_path_and_stem_id
+    self.assertEqual(row.kind, "process")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'rule' != 'process'
+- rule
++ process
+
+
+======================================================================
+FAIL: test_ac_rs_15_kinds_name_the_two_roots (tests.test_rulestore_store.TestFileRowSource.test_ac_rs_15_kinds_name_the_two_roots)
+AC-RS-15 (DEC-000490): `rules/` rows are "rule", `process/` "process".
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore_store.py", line 54, in test_ac_rs_15_kinds_name_the_two_roots
+    self.assertEqual(kinds["process/change-flow.md"], "process")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'rule' != 'process'
+- rule
++ process
+
+
+======================================================================
+FAIL: test_ac_rs_1_a_null_value_carries_no_key (tests.test_rulestore_store.TestFileRowSource.test_ac_rs_1_a_null_value_carries_no_key)
+AC-RS-1: `term: null` is an absent key, not a key holding "null".
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore_store.py", line 77, in test_ac_rs_1_a_null_value_carries_no_key
+    self.assertNotIn("term", by_id(self.rows)["R0001"].keys)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'term' unexpectedly found in {'id': 'R0001', 'topic': '[core]', 'role': '[writer, critic]', 'session': '[decision]', 'corpus': '[writing]', 'verb': 'require', 'term': 'null'}
+
+======================================================================
+FAIL: test_ac_rs_1_a_rows_blob_is_its_git_blob_at_head (tests.test_rulestore_store.TestFileRowSource.test_ac_rs_1_a_rows_blob_is_its_git_blob_at_head)
+AC-RS-1/AC-RS-6: the header's blob is the file's git object at HEAD.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore_store.py", line 64, in test_ac_rs_1_a_rows_blob_is_its_git_blob_at_head
+    self.assertEqual(observed, expected)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'rules/R0001.md': None, 'process/change-flow.md': None} != {'rules/R0001.md': '788c1f0068752c53ccff9985f3c4f7f52615af06[67 chars]f8e'}
+- {'process/change-flow.md': None, 'rules/R0001.md': None}
++ {'process/change-flow.md': '559ddd0df81286be2df0e2111d7e6336e95b7f8e',
++  'rules/R0001.md': '788c1f0068752c53ccff9985f3c4f7f52615af06'}
+
+======================================================================
+FAIL: test_ac_rs_1_every_rule_and_process_document_is_returned (tests.test_rulestore_store.TestFileRowSource.test_ac_rs_1_every_rule_and_process_document_is_returned)
+AC-RS-1: every `rules/*.md` and every `process/*.md` becomes a row.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore_store.py", line 39, in test_ac_rs_1_every_rule_and_process_document_is_returned
+    self.assertEqual(
+    ~~~~~~~~~~~~~~~~^
+        sorted(r.path for r in self.rows),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        ["process/change-flow.md", "rules/R0001.md", "rules/R0002.md",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+         "rules/R0003.md", "rules/R0100.md"],
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+AssertionError: Lists differ: ['pro[56 chars], 'rules/R0003.md', 'rules/R0100.md', 'rules/retired/R0900.md'] != ['pro[56 chars], 'rules/R0003.md', 'rules/R0100.md']
+
+First list contains 1 additional elements.
+First extra element 5:
+'rules/retired/R0900.md'
+
+  ['process/change-flow.md',
+   'rules/R0001.md',
+   'rules/R0002.md',
+   'rules/R0003.md',
+-  'rules/R0100.md',
+?                  ^
+
++  'rules/R0100.md']
+?                  ^
+
+-  'rules/retired/R0900.md']
+
+======================================================================
+FAIL: test_ac_rs_1_frontmatter_normalizes_to_lists_and_an_integer_order (tests.test_rulestore_store.TestFileRowSource.test_ac_rs_1_frontmatter_normalizes_to_lists_and_an_integer_order)
+AC-RS-1: values are lists of words; `order` is an int; `id` is not a key.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore_store.py", line 69, in test_ac_rs_1_frontmatter_normalizes_to_lists_and_an_integer_order
+    self.assertEqual(row.order, 10)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: '10' != 10
+
+======================================================================
+FAIL: test_ac_rs_1_nothing_under_rules_retired_is_returned (tests.test_rulestore_store.TestFileRowSource.test_ac_rs_1_nothing_under_rules_retired_is_returned)
+AC-RS-1: "nothing under `rules/retired/` is returned".
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore_store.py", line 47, in test_ac_rs_1_nothing_under_rules_retired_is_returned
+    self.assertNotIn("R0900", by_id(self.rows))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'R0900' unexpectedly found in {'R0001': Row(id='R0001', body='Open one tranche per delta, and close it at the end.\n\n## Human\n\nDEC-000170: the branch is the state.', human='', keys={'id': 'R0001', 'topic': '[core]', 'role': '[writer, critic]', 'session': '[decision]', 'corpus': '[writing]', 'verb': 'require', 'term': 'null'}, order='10', kind='rule', path='rules/R0001.md', blob=None, legacy=''), 'R0002': Row(id='R0002', body='State the obligation at its shortest.', human='', keys={'id': 'R0002', 'topic': '[core]', 'role': '[writer]', 'session': '[decision]', 'corpus': '[software]', 'verb': 'require', 'term': 'null'}, order='30', kind='rule', path='rules/R0002.md', blob=None, legacy=''), 'R0003': Row(id='R0003', body='Run the red gate before any implementation.', human='', keys={'id': 'R0003', 'topic': '[intake]', 'role': '[coder-agent]', 'session': '[execution]', 'corpus': '[software]', 'verb': 'require', 'term': 'null'}, order='40', kind='rule', path='rules/R0003.md', blob=None, legacy=''), 'R0100': Row(id='R0100', body='A tranche is one concurrent workstream of build work.', human='', keys={'id': 'R0100', 'topic': '[lexicon]', 'verb': 'define', 'term': '[tranche, tranches]'}, order='20', kind='rule', path='rules/R0100.md', blob=None, legacy=''), 'R0900': Row(id='R0900', body='A retired row is never bundled.', human='', keys={'id': 'R0900', 'topic': '[core]', 'role': '[writer]', 'session': '[decision]', 'corpus': '[writing]', 'verb': 'require', 'term': 'null'}, order='5', kind='rule', path='rules/retired/R0900.md', blob=None, legacy=''), 'change-flow': Row(id='change-flow', body='# Change flow\n\nEvery pull request gets an agentic code review.', human='', keys={'role': '[writer, critic]', 'session': '[decision]', 'corpus': '[writing]'}, order='20', kind='rule', path='process/change-flow.md', blob=None, legacy='')}
+
+======================================================================
+FAIL: test_ac_rs_1_a_non_integer_order_raises_row_shape_error (tests.test_rulestore_store.TestFileRowSourceDefects.test_ac_rs_1_a_non_integer_order_raises_row_shape_error)
+AC-RS-1: `order: twenty` names the id and the key it came from.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_rulestore_store.py", line 120, in test_ac_rs_1_a_non_integer_order_raises_row_shape_error
+    with self.assertRaises(RowShapeError) as caught:
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: RowShapeError not raised
+
+----------------------------------------------------------------------
+Ran 68 tests in 1.920s
+
+FAILED (failures=68)
+
+==============================================================
+$ bin/tests/run -p 'test_bundle_cli.py'
+==============================================================
+FFFFFFFFFFFFFFFFFF
+======================================================================
+FAIL: test_ac_rs_3_keys_excludes_the_two_typed_keys (tests.test_bundle_cli.TestBundleKeysAndNear.test_ac_rs_3_keys_excludes_the_two_typed_keys)
+AC-RS-3: `id` and `order` are not keys in use.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 257, in test_ac_rs_3_keys_excludes_the_two_typed_keys
+    self.assertNotIn("id", prefixes)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+AssertionError: 'id' unexpectedly found in {'stub', 'order', 'id'}
+
+======================================================================
+FAIL: test_ac_rs_3_keys_lists_every_key_value_with_its_count (tests.test_bundle_cli.TestBundleKeysAndNear.test_ac_rs_3_keys_lists_every_key_value_with_its_count)
+AC-RS-3: `<key>=<value> <count>`, computed from the store, sorted.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 249, in test_ac_rs_3_keys_lists_every_key_value_with_its_count
+    self.assertIn("role=writer 2", lines)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'role=writer 2' not found in ['id=RSTUB 1', 'order=10 1', 'stub=stub 1']
+
+======================================================================
+FAIL: test_ac_rs_5_near_prints_each_row_with_its_score (tests.test_bundle_cli.TestBundleKeysAndNear.test_ac_rs_5_near_prints_each_row_with_its_score)
+AC-RS-5: `<id> <score to two places>`, highest first, no sync needed.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 270, in test_ac_rs_5_near_prints_each_row_with_its_score
+    self.assertEqual(lines[0].split(" ", 1)[0], "R0100")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'RSTUB' != 'R0100'
+- RSTUB
++ R0100
+
+
+======================================================================
+FAIL: test_ac_rs_6_a_head_behind_origin_main_is_refused (tests.test_bundle_cli.TestBundleRefusals.test_ac_rs_6_a_head_behind_origin_main_is_refused)
+AC-RS-6: "HEAD is not equal to origin/main after a fetch".
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 225, in test_ac_rs_6_a_head_behind_origin_main_is_refused
+    self.assert_refused(code, out, err)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 200, in assert_refused
+    self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2 : stdout='' stderr=''
+
+======================================================================
+FAIL: test_ac_rs_6_a_malformed_query_is_refused (tests.test_bundle_cli.TestBundleRefusals.test_ac_rs_6_a_malformed_query_is_refused)
+AC-RS-6: a `--where` token that is not `k=v` refuses, writing nothing.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 208, in test_ac_rs_6_a_malformed_query_is_refused
+    self.assert_refused(code, out, err)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 200, in assert_refused
+    self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2 : stdout='' stderr=''
+
+======================================================================
+FAIL: test_ac_rs_6_an_empty_query_value_is_refused (tests.test_bundle_cli.TestBundleRefusals.test_ac_rs_6_an_empty_query_value_is_refused)
+AC-RS-6: an empty value is malformed, not a query for the empty string.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 213, in test_ac_rs_6_an_empty_query_value_is_refused
+    self.assert_refused(code, out, err)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 200, in assert_refused
+    self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2 : stdout='' stderr=''
+
+======================================================================
+FAIL: test_ac_rs_6_an_empty_selection_is_refused (tests.test_bundle_cli.TestBundleRefusals.test_ac_rs_6_an_empty_selection_is_refused)
+AC-RS-6: "An empty selection is refused, not written".
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 230, in test_ac_rs_6_an_empty_selection_is_refused
+    self.assert_refused(code, out, err)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 200, in assert_refused
+    self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2 : stdout='' stderr=''
+
+======================================================================
+FAIL: test_ac_rs_6_an_uncommitted_change_under_rules_is_refused (tests.test_bundle_cli.TestBundleRefusals.test_ac_rs_6_an_uncommitted_change_under_rules_is_refused)
+AC-RS-6: an unsynced tree refuses — a bundle must be reproducible.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 219, in test_ac_rs_6_an_uncommitted_change_under_rules_is_refused
+    self.assert_refused(code, out, err)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 200, in assert_refused
+    self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2 : stdout='' stderr=''
+
+======================================================================
+FAIL: test_ac_rs_13_a_used_term_pulls_its_definition_into_the_bundle (tests.test_bundle_cli.TestBundleWhere.test_ac_rs_13_a_used_term_pulls_its_definition_into_the_bundle)
+AC-RS-13: R0001's body uses "tranche", so R0100 joins the bundle.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 175, in test_ac_rs_13_a_used_term_pulls_its_definition_into_the_bundle
+    text = self.bundle_path(out).read_text()
+           ~~~~~~~~~~~~~~~~^^^^^
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 69, in bundle_path
+    self.assertTrue(printed, "the command printed no path on stdout")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '' is not true : the command printed no path on stdout
+
+======================================================================
+FAIL: test_ac_rs_14_no_human_content_reaches_the_bundle (tests.test_bundle_cli.TestBundleWhere.test_ac_rs_14_no_human_content_reaches_the_bundle)
+AC-RS-14 (G4): the `## Human` section is nowhere in the output.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 184, in test_ac_rs_14_no_human_content_reaches_the_bundle
+    text = self.bundle_path(out).read_text()
+           ~~~~~~~~~~~~~~~~^^^^^
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 69, in bundle_path
+    self.assertTrue(printed, "the command printed no path on stdout")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '' is not true : the command printed no path on stdout
+
+======================================================================
+FAIL: test_ac_rs_15_the_bundle_holds_the_selected_rows_in_order (tests.test_bundle_cli.TestBundleWhere.test_ac_rs_15_the_bundle_holds_the_selected_rows_in_order)
+AC-RS-15: a `process/` document interleaves with rules by `order`.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 164, in test_ac_rs_15_the_bundle_holds_the_selected_rows_in_order
+    text = self.bundle_path(out).read_text()
+           ~~~~~~~~~~~~~~~~^^^^^
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 69, in bundle_path
+    self.assertTrue(printed, "the command printed no path on stdout")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '' is not true : the command printed no path on stdout
+
+======================================================================
+FAIL: test_ac_rs_6_a_query_writes_exactly_one_file_under_the_ruled_name (tests.test_bundle_cli.TestBundleWhere.test_ac_rs_6_a_query_writes_exactly_one_file_under_the_ruled_name)
+AC-RS-6: one file in `--out`, named `fiducial-bundle-<name>-<ts>Z.md`.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 101, in test_ac_rs_6_a_query_writes_exactly_one_file_under_the_ruled_name
+    self.assertIsNotNone(match, self.written()[0])
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: unexpectedly None : bundle-stub.md
+
+======================================================================
+FAIL: test_ac_rs_6_a_retired_row_is_never_bundled (tests.test_bundle_cli.TestBundleWhere.test_ac_rs_6_a_retired_row_is_never_bundled)
+AC-RS-1/AC-RS-6: `rules/retired/` is outside the store.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 192, in test_ac_rs_6_a_retired_row_is_never_bundled
+    text = self.bundle_path(out).read_text()
+           ~~~~~~~~~~~~~~~~^^^^^
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 69, in bundle_path
+    self.assertTrue(printed, "the command printed no path on stdout")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '' is not true : the command printed no path on stdout
+
+======================================================================
+FAIL: test_ac_rs_6_an_explicit_name_replaces_the_default (tests.test_bundle_cli.TestBundleWhere.test_ac_rs_6_an_explicit_name_replaces_the_default)
+AC-RS-6: `--name <name>` names the file instead of the query.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 128, in test_ac_rs_6_an_explicit_name_replaces_the_default
+    self.assertIsNotNone(match, self.written()[0])
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: unexpectedly None : bundle-stub.md
+
+======================================================================
+FAIL: test_ac_rs_6_the_default_directory_is_the_downloads_folder (tests.test_bundle_cli.TestBundleWhere.test_ac_rs_6_the_default_directory_is_the_downloads_folder)
+AC-RS-6: `--out` defaults to `~/Downloads`.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 140, in test_ac_rs_6_the_default_directory_is_the_downloads_folder
+    self.assertIsNotNone(BUNDLE_NAME_RE.match(written[0]), written[0])
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: unexpectedly None : bundle-stub.md
+
+======================================================================
+FAIL: test_ac_rs_6_the_default_name_joins_every_key_value_pair (tests.test_bundle_cli.TestBundleWhere.test_ac_rs_6_the_default_name_joins_every_key_value_pair)
+AC-RS-6: `<name>` defaults to the query's pairs joined `k-v` with `-`.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 118, in test_ac_rs_6_the_default_name_joins_every_key_value_pair
+    self.assertIsNotNone(match, self.written()[0])
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: unexpectedly None : bundle-stub.md
+
+======================================================================
+FAIL: test_ac_rs_6_the_header_stamps_repo_head_generated_and_the_rows (tests.test_bundle_cli.TestBundleWhere.test_ac_rs_6_the_header_stamps_repo_head_generated_and_the_rows)
+AC-RS-6: the header's fields, with the full HEAD SHA and each blob.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 146, in test_ac_rs_6_the_header_stamps_repo_head_generated_and_the_rows
+    lines = self.bundle_path(out).read_text().splitlines()
+            ~~~~~~~~~~~~~~~~^^^^^
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 69, in bundle_path
+    self.assertTrue(printed, "the command printed no path on stdout")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '' is not true : the command printed no path on stdout
+
+======================================================================
+FAIL: test_ac_rs_6_the_written_path_is_printed_on_stdout (tests.test_bundle_cli.TestBundleWhere.test_ac_rs_6_the_written_path_is_printed_on_stdout)
+AC-RS-6: the command prints the path it wrote, and exits 0.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 108, in test_ac_rs_6_the_written_path_is_printed_on_stdout
+    printed = self.bundle_path(out)
+  File "/private/tmp/claude-501/fiducial-bundle-tool-tests/bin/tests/test_bundle_cli.py", line 69, in bundle_path
+    self.assertTrue(printed, "the command printed no path on stdout")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '' is not true : the command printed no path on stdout
+
+----------------------------------------------------------------------
+Ran 18 tests in 3.079s
+
+FAILED (failures=18)
