@@ -58,3 +58,7 @@ Store fix pass 4 item 3 brings in R0100 at order 210, keyed to the four decision
 five checkpoints as one checklist row, merging R0101–R0105 from the dissolved `spec-and-change-discipline`.
 Item 9's sweep emitted no pair between this topic and `core`: the operating-model rows store fix pass 1 merged
 into core have no surviving decision-layer twin. Topic count: 19 rows before, 20 after.
+
+Store fix pass 5 item 3 gives R0252's body the named told states from `chief-of-staff`'s R0933, which retires
+into it: any execution session left running, any worktree held, and whether the connector is released. The text
+is the directive's, verbatim.
