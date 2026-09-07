@@ -443,11 +443,16 @@ class TestNear(unittest.TestCase):
 
 
 class TestRender(unittest.TestCase):
-    """AC-RS-6 the header, AC-RS-14 the two forms, AC-RS-15 process documents."""
+    """DEC-000630 the header, DEC-000640 the three bands, AC-RS-14 the two forms.
+
+    Contract: `docs/cycles/bundle-tool-followup-20260907T170000Z.md`, item 5 —
+    overrides the tests directive's header/manifest/heading form.
+    """
 
     HEAD = "a5d60506d1d1266d8685f498662f514d49e12136"
     GENERATED = "20260906T110000Z"
     REPO = "davepierceops/fiducial"
+    HEADER = "<!-- fiducial %s @ %s %s -->" % (REPO, HEAD, GENERATED)
 
     def rendered(self, rows, definitions=()):
         return render.render(
@@ -458,47 +463,30 @@ class TestRender(unittest.TestCase):
             generated=self.GENERATED,
         )
 
-    def test_ac_rs_6_the_header_comes_first_and_carries_every_field(self):
-        """AC-RS-6: title, Repo, the full HEAD SHA, Generated, then the manifest."""
+    def test_dec_000630_the_header_is_one_comment_line_then_a_blank_line(self):
+        """DEC-000630: `<!-- fiducial <repo> @ <head> <generated> -->`, then blank."""
         lines = self.rendered([row("R0001", "Prose.", order=10, blob="b" * 40)]).splitlines()
-        self.assertEqual(lines[0], "# fiducial-bundle")
-        self.assertIn("- Repo: %s" % self.REPO, lines)
-        self.assertIn("- HEAD: %s" % self.HEAD, lines)
-        self.assertIn("- Generated: %s" % self.GENERATED, lines)
-        self.assertIn("- Rows:", lines)
+        self.assertEqual(lines[0], self.HEADER)
+        self.assertEqual(lines[1], "")
 
-    def test_ac_rs_6_a_rule_is_manifested_by_id_and_blob(self):
-        """AC-RS-6: `  - <id> (<blob>)` for a rule, in bundle order."""
-        lines = self.rendered([
-            row("R0001", "First.", order=10, blob="b" * 40),
-            row("R0002", "Second.", order=20, blob="c" * 40),
-        ]).splitlines()
-        self.assertEqual(
-            [line for line in lines if line.startswith("  - ")],
-            ["  - R0001 (%s)" % ("b" * 40), "  - R0002 (%s)" % ("c" * 40)],
-        )
+    def test_dec_000630_no_title_or_manifest_lines_appear(self):
+        """DEC-000630: no member list, no blob list, no title line."""
+        text = self.rendered([row("R0001", "Prose.", order=10, blob="b" * 40)])
+        self.assertNotIn("# fiducial-bundle", text)
+        self.assertNotIn("- Repo:", text)
+        self.assertNotIn("- Rows:", text)
+        self.assertNotIn("- Definitions:", text)
+        self.assertNotIn("b" * 40, text)
 
-    def test_ac_rs_6_definitions_are_manifested_after_the_selected_rows(self):
-        """AC-RS-6: the definitions are listed after the rows, under their own key."""
-        selected = [row("R0001", "Open one tranche.", order=10, blob="b" * 40)]
-        defs = [definition("R0003", "tranche", "A tranche is one workstream.", order=20)]
-        lines = self.rendered(selected, defs).splitlines()
-        self.assertIn("- Definitions:", lines)
-        self.assertLess(lines.index("- Rows:"), lines.index("- Definitions:"))
-        self.assertIn("  - R0003 (%s)" % ("0" * 40), lines)
-
-    def test_ac_rs_6_rows_render_in_bundle_order_before_the_definitions(self):
-        """AC-RS-6: `## <id>` per row, in order; `## Definitions` last."""
+    def test_dec_000640_each_row_renders_as_body_text_with_no_heading(self):
+        """DEC-000640: rows render one after another, blank line between, no heading."""
         text = self.rendered(
-            [row("R0001", "First prose.", order=10), row("R0002", "Second prose.", order=20)],
-            [definition("R0003", "tranche", "A tranche is one workstream.", order=30)],
+            [row("R0001", "First prose.", order=10), row("R0002", "Second prose.", order=20)]
         )
-        self.assertEqual(
-            [line for line in text.splitlines() if line.startswith("#")],
-            ["# fiducial-bundle", "## R0001", "## R0002", "## Definitions"],
-        )
-        self.assertIn("First prose.", text)
-        self.assertIn("Second prose.", text)
+        self.assertNotIn("## R0001", text)
+        self.assertNotIn("## R0002", text)
+        body = text.split("\n\n", 1)[1]
+        self.assertEqual(body, "First prose.\n\nSecond prose.\n")
 
     def test_ac_rs_14_the_human_form_is_carried_on_the_row_and_never_rendered(self):
         """AC-RS-14 (G4): two forms, one row — `## Human` reaches no output."""
@@ -510,14 +498,14 @@ class TestRender(unittest.TestCase):
         self.assertNotIn("## Human", text)
         self.assertNotIn("DEC-000170", text)
 
-    def test_ac_rs_15_a_process_document_renders_under_its_path(self):
-        """AC-RS-15 (DEC-000490): a process row's heading is its path, not an id."""
+    def test_ac_rs_15_a_process_document_renders_as_body_text_under_no_heading(self):
+        """AC-RS-15/DEC-000640: a process row is body-only, not headed by its path."""
         text = self.rendered([
             row("change-flow", "The flow.", order=10, kind="process",
                 path="process/change-flow.md", blob="c" * 40)
         ])
-        self.assertIn("## process/change-flow.md", text)
-        self.assertIn("  - process/change-flow.md (%s)" % ("c" * 40), text.splitlines())
+        self.assertNotIn("## process/change-flow.md", text)
+        self.assertIn("The flow.", text)
 
     def test_ac_rs_15_process_rows_sort_after_every_rule_whatever_their_order(self):
         """AC-RS-15/DEC-000640: a process document is its own band, after every
@@ -533,12 +521,21 @@ class TestRender(unittest.TestCase):
         )
         text = self.rendered(rows)
         self.assertEqual(
-            [line for line in text.splitlines() if line.startswith("## ")],
-            ["## R0001", "## R0002", "## process/change-flow.md"],
+            [line for line in text.splitlines() if line.strip()],
+            [self.HEADER, "Early rule.", "Late rule.", "The flow."],
         )
 
+    def test_dec_000640_definitions_render_last_under_one_heading(self):
+        """DEC-000640: definitions render last, under one `## Definitions` heading."""
+        selected = [row("R0001", "Open one tranche.", order=10)]
+        defs = [definition("R0003", "tranche", "A tranche is one workstream.", order=20)]
+        text = self.rendered(selected, defs)
+        headings = [line for line in text.splitlines() if line.startswith("## ")]
+        self.assertEqual(headings, ["## Definitions"])
+        self.assertLess(text.index("Open one tranche."), text.index("## Definitions"))
+
     def test_ac_rs_6_a_definition_renders_under_its_first_term(self):
-        """AC-RS-6: each definition as `**<first term>** — <body>`."""
+        """Each definition as `**<first term>** — <body>`."""
         text = self.rendered(
             [row("R0001", "Open one tranche.", order=10)],
             [definition("R0003", ["tranche", "tranches"],
@@ -546,25 +543,13 @@ class TestRender(unittest.TestCase):
         )
         self.assertIn("**tranche** — A tranche is one workstream.", text)
 
-    def test_ac_rs_6_the_render_carries_nothing_else(self):
-        """AC-RS-6: "Nothing else" — no separator furniture, no extra list lines."""
+    def test_dec_000630_the_render_carries_nothing_else(self):
+        """"Nothing else": no separator furniture, no extra list lines."""
         text = self.rendered([row("R0001", "Prose.", order=10, blob="b" * 40)])
+        self.assertEqual(text.count("<!--"), 1)
         lines = text.splitlines()
-        self.assertNotIn("<!--", text)
-        self.assertEqual(
-            [line for line in lines if line.startswith("#")],
-            ["# fiducial-bundle", "## R0001"],
-        )
-        self.assertEqual(
-            [line for line in lines if line.startswith("- ") or line.startswith("  - ")],
-            [
-                "- Repo: %s" % self.REPO,
-                "- HEAD: %s" % self.HEAD,
-                "- Generated: %s" % self.GENERATED,
-                "- Rows:",
-                "  - R0001 (%s)" % ("b" * 40),
-            ],
-        )
+        self.assertEqual([line for line in lines if line.startswith("#")], [])
+        self.assertEqual(lines, [self.HEADER, "", "Prose."])
 
 
 if __name__ == "__main__":

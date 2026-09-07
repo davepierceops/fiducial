@@ -139,42 +139,38 @@ class TestBundleWhere(BundleCliTestCase):
         self.assertEqual(len(written), 1, written)
         self.assertIsNotNone(BUNDLE_NAME_RE.match(written[0]), written[0])
 
-    def test_ac_rs_6_the_header_stamps_repo_head_generated_and_the_rows(self):
-        """AC-RS-6: the header's fields, with the full HEAD SHA and each blob."""
+    def test_ac_rs_14_the_header_is_one_comment_line_naming_head_and_a_timestamp(self):
+        """AC-RS-14/DEC-000630: the header is one HTML comment; nothing else in it."""
         code, out, err = self.bundle("--where", "role=writer", "--out", str(self.out))
         self.assertEqual(code, EXIT_OK, err)
         lines = self.bundle_path(out).read_text().splitlines()
         head = git(self.clone, "rev-parse", "HEAD", env=self.env, check=True)[1].strip()
-        blob = git(self.clone, "rev-parse", "HEAD:rules/R0001.md",
-                   env=self.env, check=True)[1].strip()
-        self.assertEqual(lines[0], "# fiducial-bundle")
-        self.assertIn("- HEAD: %s" % head, lines)
-        self.assertIn("- Rows:", lines)
-        self.assertIn("  - R0001 (%s)" % blob, lines)
-        self.assertTrue(any(line.startswith("- Repo: ") for line in lines), lines[:8])
-        self.assertTrue(
-            any(re.match(r"^- Generated: \d{8}T\d{6}Z$", line) for line in lines),
-            lines[:8],
+        self.assertRegex(
+            lines[0], r"^<!-- fiducial \S+ @ %s \d{8}T\d{6}Z -->$" % re.escape(head)
         )
+        self.assertEqual(lines[1], "")
 
     def test_ac_rs_15_the_bundle_holds_the_selected_rows_in_order(self):
         """AC-RS-15/DEC-000640: process documents are their own band, after
-        every rule, whatever `order` says."""
+        every rule; no row-id headings; `## Definitions` is the last heading."""
         code, out, err = self.bundle("--where", "role=writer", "--out", str(self.out))
         self.assertEqual(code, EXIT_OK, err)
         text = self.bundle_path(out).read_text()
-        headings = [line for line in text.splitlines() if line.startswith("## ")]
-        self.assertEqual(
-            headings, ["## R0001", "## R0002", "## process/change-flow.md",
-                       "## Definitions"]
-        )
+        lines = text.splitlines()
+        self.assertFalse([line for line in lines if re.match(r"^## R", line)])
+        process_at = text.index("# Change flow")
+        self.assertLess(text.index("Open one tranche per delta"), process_at)
+        self.assertLess(text.index("State the obligation at its shortest"), process_at)
+        headings = [line for line in lines if line.startswith("## ")]
+        self.assertEqual(headings, ["## Definitions"])
+        self.assertGreater(text.index("## Definitions"), process_at)
 
     def test_ac_rs_13_a_used_term_pulls_its_definition_into_the_bundle(self):
         """AC-RS-13: R0001's body uses "tranche", so R0100 joins the bundle."""
         code, out, err = self.bundle("--where", "role=writer", "--out", str(self.out))
         self.assertEqual(code, EXIT_OK, err)
         text = self.bundle_path(out).read_text()
-        self.assertIn("- Definitions:", text)
+        self.assertIn("## Definitions", text)
         self.assertIn("**tranche** — A tranche is one concurrent workstream of build "
                       "work.", text)
 
