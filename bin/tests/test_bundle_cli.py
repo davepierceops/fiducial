@@ -31,6 +31,7 @@ from tests.helpers import (
     base_env,
     commit,
     git,
+    make_repo,
     make_store_repo,
     no_traceback,
     rs_row,
@@ -306,6 +307,38 @@ class TestBundleKeysAndNear(BundleCliTestCase):
         scores = [float(line.rsplit(" ", 1)[1]) for line in lines]
         self.assertEqual(scores, sorted(scores, reverse=True))
         self.assertEqual(lines[0].split(" ", 1)[0], "R0100")
+
+
+class TestBundleNotTheRuleStore(unittest.TestCase):
+    """S12: inside a git repository that is not the rule store, refuse
+    rather than reporting an empty store as though it were the real one."""
+
+    def setUp(self):
+        self.env = base_env()
+        self.repo = make_repo(self)
+        write(self.repo, "README.md", "Not the rule store.\n")
+        commit(self.repo, "seed", env=self.env)
+
+    def assert_refused_naming_the_directory(self, code, out, err):
+        self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
+        lines = err.strip().splitlines()
+        self.assertEqual(len(lines), 1, err)
+        self.assertIn(str(self.repo), lines[0])
+        self.assertTrue(no_traceback(out, err), err)
+
+    def test_s12_keys_refuses_outside_the_rule_store(self):
+        code, out, err = run_bundle("--keys", cwd=self.repo, env=self.env)
+        self.assert_refused_naming_the_directory(code, out, err)
+
+    def test_s12_near_refuses_outside_the_rule_store(self):
+        code, out, err = run_bundle("--near", "anything", cwd=self.repo, env=self.env)
+        self.assert_refused_naming_the_directory(code, out, err)
+
+    def test_s12_where_refuses_outside_the_rule_store(self):
+        code, out, err = run_bundle(
+            "--where", "role=writer", cwd=self.repo, env=self.env
+        )
+        self.assert_refused_naming_the_directory(code, out, err)
 
 
 class TestBundleMalformedRow(unittest.TestCase):

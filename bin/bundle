@@ -176,6 +176,8 @@ def main(argv=None):
     root = _repo_root()
     if root is None:
         return refuse("refused: not inside a git repository")
+    if not (root / "rules").is_dir() and not (root / "process").is_dir():
+        return refuse("refused: no rules/ or process/ under %s" % root)
     if args.keys:
         return cmd_keys(root)
     if args.near is not None:
