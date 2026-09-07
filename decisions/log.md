@@ -671,3 +671,8 @@ Context: Dave's ruling of 2026-09-06 when the rebuild's entries were listed for 
 Date: 2026-09-05
 Decision: R0264, the intake checklist, is the rule every row is judged by on entry and the rule the store was built under. Its criteria are rows in topic intake, not decisions; a change to a criterion goes through intake like any row.
 Context: The criteria were ruled one at a time across the fix-pass reads of 2026-09-05 and 2026-09-06 and are recorded here once, as one rule.
+
+## DEC-000520 — process/change-flow.md agreed after the sweep
+Date: 2026-09-07
+Decision: process/change-flow.md is agreed at b814e4561c25db77d248c76c2b0f992e01965f2c, under the process gate; one frontier read (reviews/change-flow-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
+Context: the process sweep of 2026-09-07 reduced it from 252 to 81 lines.
