@@ -116,7 +116,7 @@ def cmd_near(root, text):
     except store_mod.RowShapeError as exc:
         return refuse("refused: %s" % exc)
     for row, score in near_mod.near(text, rows):
-        print("%s %.2f" % (row.id, score))
+        print("%s %.2f" % (render._heading(row), score))
     return EXIT_OK
 
 
