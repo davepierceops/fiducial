@@ -1,6 +1,6 @@
 ---
 order: 60
-role: [writer]
+role: [writer, copy-editor, critic]
 session: [decision]
 corpus: [writing]
 ---
