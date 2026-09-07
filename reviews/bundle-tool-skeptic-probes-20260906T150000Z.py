@@ -368,29 +368,32 @@ def probe_d():
         print("      %-22s -> %s" % (label, got or "[] NOT PULLED"))
 
     print()
-    print("  The same question asked of the real store:")
+    print("  The same question asked of the real store (S10: calls")
+    print("  terms.pull_definitions itself, so this tracks the code as it")
+    print("  stands rather than re-implementing the pre-fix pattern):")
     rows = FileRowSource(REPO).rows()
     definitions = [r for r in rows if terms.is_definition(r)]
+    multiword = sum(1 for d in definitions for t in d.keys["term"] if " " in t)
     missed = []
     for r in rows:
-        body = r.body or ""
-        flat = re.sub(r"\s+", " ", body)
+        if terms.is_definition(r):
+            continue
+        pulled_ids = {d.id for d in terms.pull_definitions([r], rows)}
+        flat = re.sub(r"\s+", " ", r.body or "")
         for d in definitions:
             if d.id == r.id:
                 continue
             for term in d.keys.get("term") or []:
                 if " " not in term:
                     continue
-                as_written = re.compile(r"(?<!\w)%s(?!\w)" % re.escape(term), re.I)
                 unwrapped = re.compile(
                     r"(?<!\w)%s(?!\w)" % re.escape(re.sub(r"\s+", " ", term)), re.I
                 )
-                if unwrapped.search(flat) and not as_written.search(body):
+                if unwrapped.search(flat) and d.id not in pulled_ids:
                     missed.append((r.id, d.id, term))
     print("      rows: %d   definitions: %d   multi-word terms: %d"
-          % (len(rows), len(definitions),
-             sum(1 for d in definitions for t in d.keys["term"] if " " in t)))
-    print("      real rows whose phrase-term use is missed because the body wraps: %d"
+          % (len(rows), len(definitions), multiword))
+    print("      real rows whose phrase-term use is missed by pull_definitions: %d"
           % len(missed))
     for r_id, d_id, term in missed:
         print("          row %-16s misses definition %-8s on term %r" % (r_id, d_id, term))
@@ -455,12 +458,19 @@ def probe_f():
         files = dict(STORE)
         files["rules/R0777.md"] = "Just prose, and no frontmatter at all.\n"
         _origin, clone = make_store_repo(parent, files=files)
-        rows = FileRowSource(clone).rows()
-        orphan = next(r for r in rows if r.path == "rules/R0777.md")
-        print("      returned: id=%r keys=%r order=%r" % (orphan.id, orphan.keys, orphan.order))
-        print("      -> accepted silently; the id falls back to the path stem, and the")
-        print("         row is unselectable by any key while still counting as a row.")
-        f1_defect = orphan.keys == {} and orphan.id == "R0777"
+        try:
+            rows = FileRowSource(clone).rows()
+            orphan = next(r for r in rows if r.path == "rules/R0777.md")
+            print("      returned: id=%r keys=%r order=%r"
+                  % (orphan.id, orphan.keys, orphan.order))
+            print("      -> accepted silently; the id falls back to the path stem, and")
+            print("         the row is unselectable while still counting as a row.")
+            f1_defect = orphan.keys == {} and orphan.id == "R0777"
+        except RowShapeError as exc:
+            print("      raises: %s" % exc)
+            print("      -> S4 (this package): a rules/ file with no frontmatter is now")
+            print("         a named defect, not a silently-accepted row.")
+            f1_defect = False
     finally:
         shutil.rmtree(parent, ignore_errors=True)
 
@@ -471,8 +481,12 @@ def probe_f():
     scalar, _order = normalize_fields("R0003", {"note": '"one, two"'})
     print("      note: \"one, two\"     ->  %r" % scalar)
     f2_defect = got.get("topic") != ["a, b", "c"]
-    print("      -> the bracket branch splits on every comma before quotes come off,")
-    print("         so the quoted value is torn in two and both halves keep a quote.")
+    if f2_defect:
+        print("      -> the bracket branch splits on every comma before quotes come off,")
+        print("         so the quoted value is torn in two and both halves keep a quote.")
+    else:
+        print("      -> S4 (this package): the bracket branch now splits on commas")
+        print("         outside quotes, so the quoted value survives whole.")
 
     print()
     print("  f3 — a `## Human` heading at a different level")
@@ -492,8 +506,12 @@ def probe_f():
         text = render.render([mis], [], repo="probe", head="0" * 40, generated="20260906T150000Z")
         leaked = "DEC-000999" in text
         print("      the rationale reaches the rendered bundle: %s" % leaked)
-        print("      -> AC-RS-14 holds only for the exact string '## Human'; one wrong")
-        print("         heading level publishes the human form to an agent.")
+        if leaked:
+            print("      -> AC-RS-14 holds only for the exact string '## Human'; one wrong")
+            print("         heading level publishes the human form to an agent.")
+        else:
+            print("      -> S2 (this package): any ATX heading spelled Human is now")
+            print("         recognized, so the mis-levelled heading no longer leaks.")
         f3_defect = leaked
     finally:
         shutil.rmtree(parent, ignore_errors=True)
@@ -508,22 +526,29 @@ def probe_f():
             "---\n\n# A process document whose stem collides with a rule id.\n"
         )
         _origin, clone = make_store_repo(parent, files=files)
-        rows = FileRowSource(clone).rows()
-        colliding = [r for r in rows if r.id == "R0001"]
-        print("      rows sharing id 'R0001': %s"
-              % [(r.kind, r.path) for r in colliding])
-        selected = query.select(rows, {"role": "writer"})
-        print("      both selected: %s" % [(r.kind, r.id) for r in selected])
-        # the dedupe that keys on id
-        definition = row("R0100", "A tranche is one workstream.", term=["tranche"])
-        pulled = terms.pull_definitions(selected, rows)
-        print("      pull_definitions dedupes on row.id; selected ids seen as: %s"
-              % sorted({r.id for r in selected}))
-        collide_defect = len(colliding) > 1 and len({r.id for r in selected}) < len(selected)
-        print("      -> `pull_definitions` builds `already = {row.id for row in selected}`,")
-        print("         so a definition whose id equals a colliding process stem is")
-        print("         suppressed, and `--near` prints an ambiguous first column.")
-        f4_defect = collide_defect
+        try:
+            rows = FileRowSource(clone).rows()
+            colliding = [r for r in rows if r.id == "R0001"]
+            print("      rows sharing id 'R0001': %s"
+                  % [(r.kind, r.path) for r in colliding])
+            selected = query.select(rows, {"role": "writer"})
+            print("      both selected: %s" % [(r.kind, r.id) for r in selected])
+            pulled = terms.pull_definitions(selected, rows)
+            print("      pull_definitions dedupes on row.id; selected ids seen as: %s"
+                  % sorted({r.id for r in selected}))
+            collide_defect = (
+                len(colliding) > 1 and len({r.id for r in selected}) < len(selected)
+            )
+            print("      -> `pull_definitions` builds `already = {row.id for row in "
+                  "selected}`,")
+            print("         so a definition whose id equals a colliding process stem is")
+            print("         suppressed, and `--near` prints an ambiguous first column.")
+            f4_defect = collide_defect
+        except RowShapeError as exc:
+            print("      raises: %s" % exc)
+            print("      -> S4 (this package): an id shared across the two roots is now")
+            print("         a named defect, not two rows sharing one identity.")
+            f4_defect = False
     finally:
         shutil.rmtree(parent, ignore_errors=True)
 
@@ -556,14 +581,18 @@ def probe_g():
 
         print()
         print("  g2 — what those ACs would have caught with a live argv")
+        exits = {}
         for args in (("--keys",), ("--near", "anything")):
             code, out, err = bundle(outside, *args)
+            exits[args] = code
             print("      `bundle %-16s` outside a repo -> exit %s, stdout %r, stderr %r"
                   % (" ".join(args), code, out.strip(), err.strip()))
-        print("      -> AC-X-4 requires exit 2 or 3 outside a repository. Both modes")
-        print("         exit 0 in silence: `_repo_root()` falls back to the cwd and")
-        print("         `FileRowSource` finds no rules/ directory there.")
-        acx4_violated = bundle(outside, "--keys")[0] == 0
+        acx4_violated = any(code == 0 for code in exits.values())
+        print("      -> AC-X-4 requires exit 2 or 3 outside a repository.")
+        if acx4_violated:
+            print("         At least one mode above exits 0 in silence.")
+        else:
+            print("         Both modes above now refuse.")
     finally:
         shutil.rmtree(outside, ignore_errors=True)
 
@@ -580,8 +609,10 @@ def probe_g():
     print("         no longer includes the code that does the work.")
 
     note("(g)", "FAIL" if acx4_violated else "PASS",
-         "AC-X-4 is violated by --keys/--near (exit 0 outside a repo) and hidden "
-         "by a stale argv; bin/rulestore/ is outside every AC-X scan")
+         ("AC-X-4 is violated by --keys/--near (exit 0 outside a repo) and hidden "
+          "by a stale argv" if acx4_violated
+          else "AC-X-4 now refuses outside a repo for --keys and --near")
+         + "; bin/rulestore/ is outside every AC-X scan")
 
 
 def main():
