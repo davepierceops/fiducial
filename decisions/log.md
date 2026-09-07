@@ -716,3 +716,8 @@ Context: the process sweep of 2026-09-07 reduced it from 77 to 29 lines.
 Date: 2026-09-07
 Decision: process/project-setup.md is agreed at 85f6e437b5ce8796523d4266eeacb5fb1bada2e9, under the process gate; one frontier read (reviews/project-setup-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
 Context: the process sweep of 2026-09-07 reduced it from 56 to 21 lines; no bundle selects it; the human works it once per repository.
+
+## DEC-000610 — process/spec-test-suite.md agreed after the sweep
+Date: 2026-09-07
+Decision: process/spec-test-suite.md is agreed at 74f7eef61128f5443642cc8bfb0cd7fe270f96ce, under the process gate; one frontier read (reviews/spec-test-suite-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
+Context: the process sweep of 2026-09-07 reduced it from 50 to 25 lines.
