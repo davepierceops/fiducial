@@ -102,6 +102,13 @@ class TestRowShape(unittest.TestCase):
         )
         self.assertEqual(keys, {"role": ["writer", "copy-editor"], "corpus": ["software"]})
 
+    def test_ac_rs_1_a_typed_value_inside_a_bracket_list_is_also_a_defect(self):
+        """AC-RS-1/Q7: bracketing a typed value must not hide the defect."""
+        with self.assertRaises(RowShapeError) as caught:
+            store.normalize_fields("R0009", {"weight": "[12, true]"})
+        self.assertIn("R0009", str(caught.exception))
+        self.assertIn("weight", str(caught.exception))
+
     def test_ac_rs_1_null_and_the_empty_list_are_an_absent_key(self):
         """AC-RS-1: `null` and an empty list carry no key at all."""
         keys, _ = store.normalize_fields(

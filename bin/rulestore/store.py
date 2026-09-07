@@ -92,10 +92,16 @@ def normalize_fields(row_id, fields):
             inner = text[1:-1].strip()
             if not inner:
                 continue
-            keys[key] = [
-                _strip_quotes(part.strip()).strip().lower()
-                for part in inner.split(",")
-            ]
+            values = []
+            for part in inner.split(","):
+                part = part.strip()
+                unquoted_part = _strip_quotes(part)
+                if unquoted_part == part and TYPED_SCALAR_RE.match(part):
+                    raise RowShapeError(
+                        row_id, key, "typed value on a text key: %r" % (raw,)
+                    )
+                values.append(unquoted_part.strip().lower())
+            keys[key] = values
             continue
         unquoted = _strip_quotes(text)
         if unquoted == text and TYPED_SCALAR_RE.match(text):
