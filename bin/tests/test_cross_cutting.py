@@ -45,13 +45,14 @@ CLI_MINIMAL_ARGS["bundle"] = ["--keys"]
 
 
 def production_files():
-    """Every shipped file under `bin/` — CLIs and the `aimeta` package."""
+    """Every shipped file under `bin/` — CLIs, `aimeta`, and `rulestore`."""
     files = [
         p
         for p in sorted(BIN_DIR.iterdir())
         if p.is_file() and not p.name.startswith(".")
     ]
     files += sorted((BIN_DIR / "aimeta").glob("*.py"))
+    files += sorted((BIN_DIR / "rulestore").glob("*.py"))
     return files
 
 
