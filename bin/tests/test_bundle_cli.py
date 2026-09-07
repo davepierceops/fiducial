@@ -158,13 +158,14 @@ class TestBundleWhere(BundleCliTestCase):
         )
 
     def test_ac_rs_15_the_bundle_holds_the_selected_rows_in_order(self):
-        """AC-RS-15: a `process/` document interleaves with rules by `order`."""
+        """AC-RS-15/DEC-000640: process documents are their own band, after
+        every rule, whatever `order` says."""
         code, out, err = self.bundle("--where", "role=writer", "--out", str(self.out))
         self.assertEqual(code, EXIT_OK, err)
         text = self.bundle_path(out).read_text()
         headings = [line for line in text.splitlines() if line.startswith("## ")]
         self.assertEqual(
-            headings, ["## R0001", "## process/change-flow.md", "## R0002",
+            headings, ["## R0001", "## R0002", "## process/change-flow.md",
                        "## Definitions"]
         )
 

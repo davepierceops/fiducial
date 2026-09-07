@@ -213,8 +213,9 @@ class TestSelect(unittest.TestCase):
         ]
         self.assertEqual(ids(query.select(rows, {"role": "writer"})), ["R0001"])
 
-    def test_ac_rs_2_result_is_ordered_by_order_then_topic_then_id(self):
-        """AC-RS-2: ascending `order`, then first `topic` value, then `id`."""
+    def test_ac_rs_2_with_no_sequence_every_topic_ties_and_sorts_by_name_then_order_then_id(self):
+        """AC-RS-2/DEC-000640: no sequence given, every topic is "unnamed" and
+        ties at position 0 — the result falls back to name, then order, then id."""
         rows = [
             row("R0009", order=20, topic="zeta", role=["writer"]),
             row("R0003", order=10, topic="beta", role=["writer"]),
@@ -225,14 +226,41 @@ class TestSelect(unittest.TestCase):
         self.assertEqual(ids(selected), ["R0002", "R0001", "R0003", "R0009"])
 
     def test_ac_rs_2_a_row_without_order_sorts_after_every_integer(self):
-        """AC-RS-2: `None` order sorts after every integer, however large."""
+        """AC-RS-2: `None` order sorts after every integer, however large.
+
+        Every row shares one topic, so the topic-position/name key ties and
+        the order/id tiebreak is isolated.
+        """
         rows = [
             row("R0001", order=None, topic="alpha", role=["writer"]),
-            row("R0002", order=999, topic="zeta", role=["writer"]),
+            row("R0002", order=999, topic="alpha", role=["writer"]),
             row("R0003", order=None, topic="alpha", role=["writer"]),
         ]
         selected = query.select(rows, {"role": "writer"})
         self.assertEqual(ids(selected), ["R0002", "R0001", "R0003"])
+
+    def test_ac_rs_2_a_two_line_sequence_orders_topic_position_ahead_of_order(self):
+        """AC-RS-2/DEC-000640: a later-named topic sorts after an earlier one,
+        whatever its `order` — the two-line sequence's position dominates."""
+        rows = [
+            row("R0001", order=1, topic="beta", role=["writer"]),
+            row("R0002", order=999, topic="alpha", role=["writer"]),
+        ]
+        sequences = ([["alpha"], ["beta"]], [])
+        selected = query.select(rows, {"role": "writer"}, sequences)
+        self.assertEqual(ids(selected), ["R0002", "R0001"])
+
+    def test_ac_rs_2_a_topic_the_sequence_does_not_name_sorts_after_every_named_one(self):
+        """AC-RS-2/DEC-000640: an unnamed topic sorts last, ties breaking
+        alphabetically by name among the unnamed rows."""
+        rows = [
+            row("R0001", order=1, topic="zeta", role=["writer"]),
+            row("R0002", order=2, topic="yankee", role=["writer"]),
+            row("R0003", order=100, topic="alpha", role=["writer"]),
+        ]
+        sequences = ([["alpha"]], [])
+        selected = query.select(rows, {"role": "writer"}, sequences)
+        self.assertEqual(ids(selected), ["R0003", "R0002", "R0001"])
 
     def test_ac_rs_2_a_query_nothing_holds_selects_nothing(self):
         """AC-RS-2: "exactly the rows" — including when that is none of them."""
@@ -491,12 +519,13 @@ class TestRender(unittest.TestCase):
         self.assertIn("## process/change-flow.md", text)
         self.assertIn("  - process/change-flow.md (%s)" % ("c" * 40), text.splitlines())
 
-    def test_ac_rs_15_process_rows_interleave_with_rules_by_order(self):
-        """AC-RS-15: a process document is selected and ordered like any other row."""
+    def test_ac_rs_15_process_rows_sort_after_every_rule_whatever_their_order(self):
+        """AC-RS-15/DEC-000640: a process document is its own band, after every
+        rule regardless of `order` — no interleaving."""
         rows = query.select(
             [
                 row("R0002", "Late rule.", order=30, topic="core", role=["writer"]),
-                row("change-flow", "The flow.", order=20, kind="process",
+                row("change-flow", "The flow.", order=1, kind="process",
                     path="process/change-flow.md", role=["writer"]),
                 row("R0001", "Early rule.", order=10, topic="core", role=["writer"]),
             ],
@@ -505,7 +534,7 @@ class TestRender(unittest.TestCase):
         text = self.rendered(rows)
         self.assertEqual(
             [line for line in text.splitlines() if line.startswith("## ")],
-            ["## R0001", "## process/change-flow.md", "## R0002"],
+            ["## R0001", "## R0002", "## process/change-flow.md"],
         )
 
     def test_ac_rs_6_a_definition_renders_under_its_first_term(self):
