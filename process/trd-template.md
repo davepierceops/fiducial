@@ -9,7 +9,8 @@ corpus: [software]
 
 The standing technical specification's form, drafted and maintained by the
 Architect [R0871, R1541, R1542, R1543]; per-feature technical design lives in the
-per-change architecture summary [R0862b]. Keep each section short.
+per-change architecture summary [R0862b]. Keep each section short. The Architect
+drafts it; the Spec Reviewer gates it before the human agrees it.
 
 1. **System overview** — the major components, how they fit together, and what
    kind of system it is: service, app, PWA, CLI.
@@ -35,7 +36,7 @@ per-change architecture summary [R0862b]. Keep each section short.
 8. **Constraints, NFRs, and non-goals** — for each NFR dimension the PRD defines
    — performance, reliability, scalability, security, maintainability, usability,
    observability, portability and compatibility, compliance — the concrete
-   technical target or constraint, or `N/A`; then the technical non-goals [R1573].
+   technical target or constraint, or `N/A`; then the technical non-goals.
 9. **Open technical questions** — each naming what would resolve it.
 
 ## Skeleton
