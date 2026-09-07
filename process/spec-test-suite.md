@@ -7,10 +7,9 @@ corpus: [software]
 
 # Process: Spec Test Suite
 
-The one act that runs against a spec before it closes: the tests are written
-against the spec as it stands, and the suite is the evidence the close reads
-[R1468, R1158]. Everything else in the decomposition procedure waits on the spec
-closing agreed.
+Before a spec closes, the only work run against it is writing its tests. Write
+them against the spec as it stands; the suite is the evidence the close reads
+[R1468, R1158]. Decomposition waits for the close.
 
 1. Once the entry read has run over the open spec, whatever its verdict, and the
    human has said to proceed, direct a test-suite directive to a Test Designer
