@@ -8,7 +8,9 @@ corpus: [software]
 # Process: PRD Template
 
 The standing product specification's form — what is being built and why, parent
-of the TRD and the source acceptance criteria derive from [R1513, R1533].
+of the TRD and the source acceptance criteria derive from [R1513, R1533]. The
+Chief of Staff drafts it with the human; the Spec Reviewer gates it before the
+human agrees it.
 
 1. **Problem and intent** — the problem, who has it, and why it is worth building
    now.
