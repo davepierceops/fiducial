@@ -12,8 +12,12 @@ from rulestore.query import sort_key
 
 
 def is_definition(row):
-    """A definition is a row with a `term` key and no `role` key."""
-    return bool(row.keys.get("term")) and not row.keys.get("role")
+    """A definition is a row with a `term` key and none of `role`, `session`,
+    or `corpus` (DEC-000420's wording — bundle-tool-quality-20260906T150000Z.md
+    Q4)."""
+    return bool(row.keys.get("term")) and not any(
+        row.keys.get(key) for key in ("role", "session", "corpus")
+    )
 
 
 def _term_pattern(term):

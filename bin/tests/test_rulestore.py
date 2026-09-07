@@ -381,6 +381,14 @@ class TestPullDefinitions(unittest.TestCase):
         selected = [row("R0100", "The critic reads last.", order=10, role=["writer"])]
         self.assertEqual(terms.pull_definitions(selected, selected + [hybrid, read]), [])
 
+    def test_ac_rs_13_a_row_carrying_term_and_session_is_not_a_definition(self):
+        """AC-RS-13/DEC-000420 (Q4): a `session` key disqualifies a row from
+        being a definition, just as `role` and `corpus` do."""
+        hybrid = row("R0503", "A note about method.", order=20,
+                     term=["method"], session=["execution"])
+        selected = [row("R0100", "The method matters.", order=10, role=["writer"])]
+        self.assertEqual(terms.pull_definitions(selected, selected + [hybrid]), [])
+
     def test_ac_rs_13_pulled_definitions_use_the_select_ordering_rule(self):
         """AC-RS-13: "returned in the same order rule as select"."""
         late = definition("R0050", "beta", "A beta is a beta.", order=30)
