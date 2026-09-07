@@ -1339,9 +1339,32 @@ def rs_store_files():
         "process/change-flow.md": rs_process(
             "# Change flow\n\nEvery pull request gets an agentic code review.",
             order=20,
+            topic=["change-flow"],
             role=["writer", "critic"],
             session=["decision"],
             corpus=["writing"],
+        ),
+        "process/named-queries.md": rs_process(
+            "# Named Queries (fixture)\n\n"
+            "## The list\n\n"
+            "```text\n"
+            "writer       role=writer\n"
+            "critic       role=critic\n"
+            "coder-agent  role=coder-agent\n"
+            "```\n\n"
+            "## Sequence\n\n"
+            "```text\n"
+            "intake\n"
+            "core\n"
+            "```\n\n"
+            "```text\n"
+            "change-flow\n"
+            "```\n",
+            order=15,
+            topic=["named-queries"],
+            role=["chief-of-staff"],
+            session=["decision"],
+            corpus=["software"],
         ),
     }
 

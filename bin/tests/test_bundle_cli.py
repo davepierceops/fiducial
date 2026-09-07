@@ -181,6 +181,17 @@ class TestBundleWhere(BundleCliTestCase):
         self.assertEqual(headings, ["## Definitions"])
         self.assertGreater(text.index("## Definitions"), process_at)
 
+    def test_ac_rs_15_the_topic_sequence_orders_intake_before_core(self):
+        """AC-RS-15/DEC-000640: process/named-queries.md's fixture sequence
+        puts intake ahead of core, so R0003 precedes R0001 and R0002 — the
+        opposite of alphabetical, which is what tells the two apart."""
+        code, out, err = self.bundle("--where", "verb=require", "--out", str(self.out))
+        self.assertEqual(code, EXIT_OK, err)
+        text = self.bundle_path(out).read_text()
+        intake_at = text.index("Run the red gate before any implementation.")
+        self.assertLess(intake_at, text.index("Open one tranche per delta"))
+        self.assertLess(intake_at, text.index("State the obligation at its shortest"))
+
     def test_ac_rs_13_a_used_term_pulls_its_definition_into_the_bundle(self):
         """AC-RS-13: R0001's body uses "tranche", so R0100 joins the bundle."""
         code, out, err = self.bundle("--where", "role=writer", "--out", str(self.out))

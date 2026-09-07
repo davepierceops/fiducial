@@ -1,7 +1,9 @@
 """Selection and ordering over rows (AC-RS-2).
 
 Contract: `docs/cycles/bundle-tool-tests-20260906T110000Z.md` § "INTERFACE
-CONTRACT", landed at `d5b643b48cf0285194d29b09f6755db1b8a16b34`.
+CONTRACT", landed at `d5b643b48cf0285194d29b09f6755db1b8a16b34`; the ordering
+rule is overridden by `docs/cycles/bundle-tool-followup-20260907T170000Z.md`
+item 4 (DEC-000640: band, then sequence position, then order, then id).
 """
 
 from __future__ import annotations

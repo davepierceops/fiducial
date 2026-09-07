@@ -45,8 +45,8 @@ class TestFileRowSource(FileRowSourceTestCase):
         """AC-RS-1: every `rules/*.md` and every `process/*.md` becomes a row."""
         self.assertEqual(
             sorted(r.path for r in self.rows),
-            ["process/change-flow.md", "rules/R0001.md", "rules/R0002.md",
-             "rules/R0003.md", "rules/R0100.md"],
+            ["process/change-flow.md", "process/named-queries.md",
+             "rules/R0001.md", "rules/R0002.md", "rules/R0003.md", "rules/R0100.md"],
         )
 
     def test_ac_rs_1_nothing_under_rules_retired_is_returned(self):

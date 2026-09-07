@@ -5,7 +5,11 @@ This module is the one place in the package allowed to name `rules/` or
 Everything else works over `Row` objects handed to it in memory.
 
 Contract: `docs/cycles/bundle-tool-tests-20260906T110000Z.md` § "INTERFACE
-CONTRACT", landed at `d5b643b48cf0285194d29b09f6755db1b8a16b34`.
+CONTRACT", landed at `d5b643b48cf0285194d29b09f6755db1b8a16b34`; amended by
+`docs/cycles/bundle-tool-followup-20260907T170000Z.md` items 3 (the
+named-queries reader), 7 S2/S4 (a Human heading at any level, a
+no-frontmatter file, a quoted-comma list, a duplicate id) and S5 (the
+blob/body docstring).
 """
 
 from __future__ import annotations

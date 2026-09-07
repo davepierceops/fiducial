@@ -1,7 +1,9 @@
 """Definition pulling by term (AC-RS-13, DEC-000420).
 
 Contract: `docs/cycles/bundle-tool-tests-20260906T110000Z.md` § "INTERFACE
-CONTRACT", landed at `d5b643b48cf0285194d29b09f6755db1b8a16b34`.
+CONTRACT", landed at `d5b643b48cf0285194d29b09f6755db1b8a16b34`; `is_definition`
+amended by `docs/cycles/bundle-tool-followup-20260907T170000Z.md` item 7 (Q4)
+to match DEC-000420's wording exactly.
 """
 
 from __future__ import annotations

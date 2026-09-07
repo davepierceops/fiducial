@@ -2,7 +2,10 @@
 """`bin/bundle` — the rule-store bundle command.
 
 Contract: `docs/cycles/bundle-tool-tests-20260906T110000Z.md` § "INTERFACE
-CONTRACT", landed at `d5b643b48cf0285194d29b09f6755db1b8a16b34`. Three modes:
+CONTRACT", landed at `d5b643b48cf0285194d29b09f6755db1b8a16b34`; amended by
+`docs/cycles/bundle-tool-followup-20260907T170000Z.md` items 4 (sequence-
+ordered selection), 5 (the one-line header) and 7 (Q5 plain imports, Q6/Q8/
+Q9/Q11/S8/S12 refusals). Three modes:
 
     bin/bundle --where k=v [k=v ...] [--name NAME] [--out DIR]
     bin/bundle --keys
