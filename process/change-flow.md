@@ -7,7 +7,7 @@ corpus: [software]
 
 # Process: Change Flow
 
-**Record:** agreed by Dave 2026-09-05 after five frontier reads
+**Record:** agreed by the human 2026-09-05 after five frontier reads
 (reviews/change-flow-read-20260905T195000Z.md through
 reviews/change-flow-read-5-20260905T233000Z.md); the decision-log entry that
 records the agreement names this document's SHA. Register ids (`R0000`) in
@@ -43,9 +43,9 @@ these; it states the ones that exist.
 | What changes | The delta | Closed by | Who reads |
 |---|---|---|---|
 | **Rules** — rows in `rules/` | the proposed rows | **intake**: one commit | Context Quality Reviewer |
-| **Process** — prose in `process/` | the edited document | **one frontier read** against the rows it cites, then Dave's sign-off, recorded in the decision log naming the SHA (DEC-000380) | a frontier session that did not draft it, then Dave |
-| **Specs** — a project's PRD, TRD, acceptance criteria | a spec branch with commits on it | **reconciliation**: one read, one ruling recorded in the decision log naming the SHA, one pull request | Spec Reviewer, then Dave |
-| **Code** — a project's implementation | a unit of work's branch, landing as one pull request | **change package**: one read over the package; every pull request gets a code review by an agent, without exception | Reviewer and Skeptic/Risk, then Dave at the release gate |
+| **Process** — prose in `process/` | the edited document | **one frontier read** against the rows it cites, then the human's sign-off, recorded in the decision log naming the SHA (DEC-000380) | a frontier session that did not draft it, then the human |
+| **Specs** — a project's PRD, TRD, acceptance criteria | a spec branch with commits on it | **reconciliation**: one read, one ruling recorded in the decision log naming the SHA, one pull request | Spec Reviewer, then the human |
+| **Code** — a project's implementation | a unit of work's branch, landing as one pull request | **change package**: one read over the package; every pull request gets a code review by an agent, without exception | Reviewer and Skeptic/Risk, then the human at the release gate |
 
 A delta is bounded by its tranche and never spans two (R0008). It may be
 closed early, at will; frequent small closes are the norm and the tranche
@@ -127,13 +127,13 @@ the intake session names the dimensions in force.
 Two separations hold whatever the delta's size (R0462, R0463): whoever produced
 the delta does not read it; whoever drafted a document does not gate it.
 
-**A deep read, on demand, at any time.** Dave — or the Chief of Staff on his
+**A deep read, on demand, at any time.** the human — or the Chief of Staff on his
 behalf — may call for a full read of anything, at any point, whether or not a
 delta is closing: every dimension, two sessions, continuity at its widest
 reach (Depth 3's equivalent, R1137), over the whole thing rather than a
 diff. It is a directive like any other, with the object named (a spec, a
-project's code, the rules store); its verdict is input to Dave. The Chief of
-Staff proposes one at milestone moments without being asked. How Dave sees
+project's code, the rules store); its verdict is input to the human. The Chief of
+Staff proposes one at milestone moments without being asked. How the human sees
 the list of things he can call for is the Store package's to design.
 
 The read's output is a review artifact in the review-artifact schema, amended
@@ -154,8 +154,8 @@ the default branch does not) or **closed** (agreed; the default branch is the
 version of record).
 
 1. **Open.** A spec branch is open from the commit that cuts it,
-   `spec/<tranche-slug>` (R0004). While it is open, Dave edits the spec freely
-   with no per-edit gate (R0007). The Test Designer begins once the **entry read** has run and Dave has said
+   `spec/<tranche-slug>` (R0004). While it is open, the human edits the spec freely
+   with no per-edit gate (R0007). The Test Designer begins once the **entry read** has run and the human has said
    to proceed (DEC-000360's entry condition, kept: R0015 restated without the
    status flip). The entry read is the Spec Reviewer's, over the spec as it
    stands at that commit, emitting a review artifact whatever its verdict; it
@@ -173,7 +173,7 @@ version of record).
    (R0012, R0013); nothing decomposes from an open spec (DEC-000170).
 2. **Close.** When spec and tests cohere, the Spec Reviewer reads the
    branch's whole diff plus the tests (R0480, restated: the diff runs from the
-   branch point, not from a status transition); then Dave reads that diff and
+   branch point, not from a status transition); then the human reads that diff and
    makes one ruling that agrees the spec and accepts the tests as its red-gate
    evidence (R0481, restated: the ruling is recorded in the decision log
    naming the reviewed SHA, not as a frontmatter flip; the tests' acceptance
@@ -202,7 +202,7 @@ acceptance criteria; an architecture summary derived from the TRD; the unit's
 tests confirmed red; implement to green with mechanical checks; then **the one
 read** — continuity, quality, and skepticism as three passes, one session or
 two by class;
-then the release package and Dave's release gate. Mechanical checks are
+then the release package and the human's release gate. Mechanical checks are
 evidence folded into green, not a review step (R0493).
 
 A change is done when the definition of done holds (R0508–R0519); the read is
@@ -221,7 +221,7 @@ here.
 - **Restated, obligation unchanged:** everything DEC-000360 requires of a spec
   while it is being tested — the entry read before the Test Designer starts,
   tests only and no implementation, the red-gate run while open and handed
-  to the close as evidence, the close's read and Dave's one ruling — now said
+  to the close as evidence, the close's read and the human's one ruling — now said
   in open/closed vocabulary, with the ruling recorded in the decision log.
 - **Retired:** the `converging` status itself, its entry, exit, and re-entry
   frontmatter transitions, and the definition of converging as an interval
@@ -240,7 +240,7 @@ the open spec's test suite.
 
 ## What this document does not decide
 
-Dave's, one at a time when reached:
+The human's, one at a time when reached:
 
 - Which published code-review standard is adopted; the search is queued for the
   Store package's Reviewer rows.

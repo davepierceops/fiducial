@@ -23,7 +23,7 @@ per-change architecture summary the Architect Agent produces for each unit of
 work. The TRD is the durable technical anchor; tracker issues are derived from
 it, by way of that summary.
 
-The Architect Agent drafts it. Dave agrees it, and it is not in force until he
+The Architect Agent drafts it. The human agrees it, and it is not in force until he
 has. Whoever holds the Architect role for a change that alters standing
 architecture updates this document as part of that change.
 

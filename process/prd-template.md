@@ -16,8 +16,8 @@ drafts, gates, or maintains a PRD are rows in the store under topic
 
 The PRD is the standing product specification: the authoritative description of
 *what* is being built and *why*. It is canonical and sits at the top of the spec
-spine, above the TRD. It owns product intent, it is Dave's document, and it is
-not in force until Dave agrees it.
+spine, above the TRD. It owns product intent, it is the human's document, and it is
+not in force until the human agrees it.
 
 The PRD is the parent of the TRD and the source acceptance criteria are derived
 from.

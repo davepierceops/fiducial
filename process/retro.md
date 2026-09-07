@@ -7,9 +7,9 @@ corpus: [software, writing]
 
 # Process: Retro
 
-**Status of this draft:** proposal for Dave's correction, 2026-09-06. Written
+**Status of this draft:** proposal for the human's correction, 2026-09-06. Written
 under the gate DEC-000380 sets for a process document: one frontier read against
-the rows it cites, then Dave's sign-off, recorded as a decision-log entry naming
+the rows it cites, then the human's sign-off, recorded as a decision-log entry naming
 the SHA. It is drawn from `skills/conversation-retro.md` @ fd54448 and from the
 store rows that carried the retro's form, which retire into it.
 
@@ -58,10 +58,10 @@ In this order, every time:
    attempted.
 2. **Evidence** — numbered, concrete observations of what happened, quoting or
    closely paraphrasing pivotal moments. No interpretation here. A correction
-   Dave made once, inside the session, is evidence and stays here.
+   the human made once, inside the session, is evidence and stays here.
 3. **Interpretation** — what the evidence suggests, each item naming the evidence
    numbers it rests on.
-4. **Standing preferences** — preferences Dave stated this session that he has
+4. **Standing preferences** — preferences the human stated this session that he has
    stated in earlier sessions too, each as a candidate standing rule naming where
    it was stated before. Say so where there are none.
 5. **Durable insights** — techniques, workflow changes, and belief changes that
@@ -93,7 +93,7 @@ paraphrases of pivotal moments; no interpretation here>
 it rests on>
 
 ## Standing preferences
-<preferences Dave stated this session that he has stated in earlier
+<preferences the human stated this session that he has stated in earlier
 sessions too, each as a candidate standing rule and each naming where it
 was stated before; empty-with-a-statement if none>
 
@@ -143,7 +143,7 @@ written: it is data, not a governed document.
 
 ## What this document does not decide
 
-Dave's, when reached:
+The human's, when reached:
 
 - What invites a retro. The old end-of-session obligation is gone and nothing
   replaced it; until he rules, a retro runs when he asks for one in the moment.

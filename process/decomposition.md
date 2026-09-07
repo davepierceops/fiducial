@@ -7,16 +7,16 @@ corpus: [software]
 
 # Process: Decomposition
 
-**Status of this draft:** proposal for Dave's correction, 2026-09-06. Written
+**Status of this draft:** proposal for the human's correction, 2026-09-06. Written
 under the gate DEC-000380 sets for a process document: one frontier read against
-the rows it cites, then Dave's sign-off, recorded as a decision-log entry naming
+the rows it cites, then the human's sign-off, recorded as a decision-log entry naming
 the SHA. It is drawn from `roles/chief-of-staff.md` @ fd54448 and from the store
 rows R0901–R0916 and R0925–R0930, which retire into it.
 
 ## The principle
 
 **A decomposition is derived from a closed spec, and it derives nothing but an
-ordered list Dave approves once.**
+ordered list the human approves once.**
 
 The decomposition doc is a tranche's durable artifact. It carries no directives:
 a directive is written at handover and lands in git as its own file. Because the
@@ -39,7 +39,7 @@ execution session.
    derived from ungated text propagates an ungated decision into every package
    beneath it; this is why the SHAs a decomposition doc pins are always
    default-branch SHAs.
-3. **Propose a breakdown into tranches, with rationale.** Dave approves,
+3. **Propose a breakdown into tranches, with rationale.** the human approves,
    renames, or redraws; his approved name slugs each tranche.
 4. **Before proposing a second concurrent tranche, check the claim** on the
    documents it would touch. At most two tranches run at once, never two deltas
@@ -51,11 +51,11 @@ execution session.
    agentic work on the tranche begins: the smallest independently executable
    units, in dependency order.
 6. **Flag any spec ambiguity that would force an agent to decide rather than
-   escalate**, and resolve it with Dave first.
+   escalate**, and resolve it with the human first.
 7. **Write `docs/packages/<tranche>-decomposition.md`**: the PRD and TRD SHAs it
    derived from, the ordered package list, the sequencing rationale, the
    dependency map, and the flagged ambiguities with their resolutions.
-8. **Stop.** Dave approves the ordered list in one approval — his to reorder,
+8. **Stop.** the human approves the ordered list in one approval — his to reorder,
    merge, split, or drop — and that approval ends this procedure.
 
 ## Handover
@@ -74,11 +74,11 @@ not part of what a decomposition doc pins.
 
 ## What this does not decide
 
-- **Whether the breakdown is right.** The Chief of Staff proposes; Dave
+- **Whether the breakdown is right.** The Chief of Staff proposes; the human
   approves, reorders, merges, splits, or drops. The proposal is not the
   decision.
 - **Anything a spec ambiguity turns on.** An ambiguity that would force an agent
-  to decide goes to Dave before the decomposition is written, not into a package
+  to decide goes to the human before the decomposition is written, not into a package
   as an instruction.
 - **How strict the staleness re-check is.** Left open on purpose.
 - **What a package's implementation looks like.** That is the execution
