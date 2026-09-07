@@ -7,8 +7,9 @@ corpus: [writing]
 
 # Process: Outline
 
-Read the Public Prose Criteria and the Voice document in this bundle first
-[R1164]. Produce parts 1 through 3 as one document in the document pane, in
+When the author asks for an outline, produce it in the shape this document
+sets [R1164]. Read the Public Prose Criteria and the Voice document in this
+bundle first. Produce parts 1 through 3 as one document in the document pane, in
 order, and part 4 only when the author asks for it. Present the outline and stop:
 the author decides thesis, tiers, order, and budgets, the approved outline is
 what the Writer drafts against, and a tier he changes is his assignment.
