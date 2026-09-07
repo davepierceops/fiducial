@@ -1,5 +1,6 @@
 ---
 order: 90
+topic: [retro]
 role: [chief-of-staff, writer]
 session: [decision]
 corpus: [software, writing]

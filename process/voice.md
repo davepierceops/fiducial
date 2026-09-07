@@ -1,5 +1,6 @@
 ---
 order: 50
+topic: [voice]
 role: [writer, copy-editor, critic]
 session: [decision]
 corpus: [writing]

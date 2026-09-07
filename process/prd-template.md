@@ -1,5 +1,6 @@
 ---
 order: 20
+topic: [prd-template]
 role: [chief-of-staff, spec-reviewer-agent]
 session: [decision, execution]
 corpus: [software]

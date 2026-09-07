@@ -1,5 +1,6 @@
 ---
 order: 30
+topic: [trd-template]
 role: [architect-agent, spec-reviewer-agent]
 session: [decision, execution]
 corpus: [software]

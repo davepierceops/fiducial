@@ -1,5 +1,6 @@
 ---
 order: 60
+topic: [outline]
 role: [writer, copy-editor, critic]
 session: [decision]
 corpus: [writing]
