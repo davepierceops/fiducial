@@ -78,7 +78,11 @@ class TestNoAbsolutePaths(unittest.TestCase):
 
 
 class TestStdlibOnly(unittest.TestCase):
-    LOCAL_MODULES = {"aimeta"}
+    #: `bin/release` (bundle-tool-followup-20260907T170000Z.md item 6) imports
+    #: `rulestore` plainly, so it needs the name here to pass this scan; the
+    #: rest of Q5's fix — `bin/rulestore/*.py` in `production_files()` and
+    #: `bin/bundle`'s own plain imports — lands with that finding, item 7.
+    LOCAL_MODULES = {"aimeta", "rulestore"}
 
     def imported_top_level_modules(self, path):
         tree = ast.parse(path.read_text(), filename=str(path))

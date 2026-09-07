@@ -41,6 +41,7 @@ CLI_NAMES = [
     "install-hooks",
     "directive",
     "check-directive",
+    "release",
 ]
 
 #: Minimal argv that gets each CLI past argparse, for tests that only care
@@ -54,6 +55,7 @@ CLI_MINIMAL_ARGS = {
     "install-hooks": [],
     "directive": ["--descriptor", "x", "--title", "T"],
     "check-directive": ["docs/cycles/x-20260828T170000.md"],
+    "release": [],
 }
 
 REAL_POLICY_TEXT = (REPO_ROOT / POLICY_RELPATH).read_text()
