@@ -18,7 +18,14 @@ from __future__ import annotations
 import unittest
 
 from rulestore.store import FileRowSource, RowShapeError
-from tests.helpers import base_env, git, make_store_repo, rs_row, rs_store_files
+from tests.helpers import (
+    base_env,
+    git,
+    make_store_repo,
+    rs_process,
+    rs_row,
+    rs_store_files,
+)
 
 
 def by_id(rows):
@@ -135,6 +142,28 @@ class TestFileRowSourceDefects(unittest.TestCase):
         message = str(caught.exception)
         self.assertIn("R0002", message)
         self.assertIn("order", message)
+
+    def test_s4_a_rules_file_with_no_frontmatter_raises_row_shape_error(self):
+        """S4: a rules/ file with no frontmatter block is a defect, not a
+        silently-accepted row keyed by its filename stem."""
+        files = dict(rs_store_files())
+        files["rules/R0777.md"] = "A rules/ row holding only prose.\n"
+        _origin, clone = make_store_repo(self, files=files)
+        with self.assertRaises(RowShapeError) as caught:
+            FileRowSource(clone).rows()
+        self.assertIn("rules/R0777.md", str(caught.exception))
+
+    def test_s4_a_duplicate_id_across_rules_and_process_raises_row_shape_error(self):
+        """S4: an id shared across the two roots is a defect, not two rows."""
+        files = dict(rs_store_files())
+        files["process/R0001.md"] = rs_process(
+            "# Duplicate.\n\nA process document sharing rules/R0001's id.",
+            order=15,
+        )
+        _origin, clone = make_store_repo(self, files=files)
+        with self.assertRaises(RowShapeError) as caught:
+            FileRowSource(clone).rows()
+        self.assertIn("R0001", str(caught.exception))
 
 
 if __name__ == "__main__":

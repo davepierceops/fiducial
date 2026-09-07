@@ -109,6 +109,13 @@ class TestRowShape(unittest.TestCase):
         self.assertIn("R0009", str(caught.exception))
         self.assertIn("weight", str(caught.exception))
 
+    def test_ac_rs_1_a_quoted_comma_inside_a_list_element_is_not_split(self):
+        """AC-RS-1/S4: `["a, b", c]` keeps the quoted comma inside its item,
+        instead of the scalar branch's correct handling and the list
+        branch's naive `str.split(",")` disagreeing."""
+        keys, _ = store.normalize_fields("R0010", {"topic": '["a, b", c]'})
+        self.assertEqual(keys, {"topic": ["a, b", "c"]})
+
     def test_ac_rs_1_null_and_the_empty_list_are_an_absent_key(self):
         """AC-RS-1: `null` and an empty list carry no key at all."""
         keys, _ = store.normalize_fields(

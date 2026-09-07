@@ -71,6 +71,30 @@ def _strip_quotes(raw):
     return raw
 
 
+def _split_list_items(inner):
+    """Split a bracket list's inner text on commas outside quotes (S4):
+    `["a, b", c]`'s comma stays inside its item instead of tearing it in two.
+    """
+    items = []
+    current = []
+    quote = None
+    for char in inner:
+        if quote:
+            current.append(char)
+            if char == quote:
+                quote = None
+        elif char in ("'", '"'):
+            quote = char
+            current.append(char)
+        elif char == ",":
+            items.append("".join(current))
+            current = []
+        else:
+            current.append(char)
+    items.append("".join(current))
+    return items
+
+
 def normalize_fields(row_id, fields):
     """`(keys, order)` from raw frontmatter values.
 
@@ -96,7 +120,7 @@ def normalize_fields(row_id, fields):
             if not inner:
                 continue
             values = []
-            for part in inner.split(","):
+            for part in _split_list_items(inner):
                 part = part.strip()
                 unquoted_part = _strip_quotes(part)
                 if unquoted_part == part and TYPED_SCALAR_RE.match(part):
@@ -186,6 +210,8 @@ class FileRowSource:
         relpath = path.relative_to(self.root).as_posix()
         text = path.read_text(encoding="utf-8", errors="replace")
         fields, body = _parse_frontmatter(text)
+        if kind == "rule" and not fields:
+            raise RowShapeError(relpath, "frontmatter", "no frontmatter block")
         row_id = fields.get("id") or path.stem
         keys, order = normalize_fields(row_id, fields)
         agent, human = _split_human(body)
@@ -204,9 +230,12 @@ class FileRowSource:
         """Every `rules/*.md` (kind "rule") and `process/*.md` (kind "process").
 
         `rules/retired/` is a subdirectory; a non-recursive glob over
-        `rules/*.md` never descends into it.
+        `rules/*.md` never descends into it. Raises `RowShapeError` on an id
+        shared across the two roots (S4): a duplicate is a defect, not a
+        second row.
         """
         found = []
+        seen = {}
         rules_dir = self.root / "rules"
         if rules_dir.is_dir():
             for path in sorted(rules_dir.glob("*.md")):
@@ -215,4 +244,10 @@ class FileRowSource:
         if process_dir.is_dir():
             for path in sorted(process_dir.glob("*.md")):
                 found.append(self._row(path, "process"))
+        for row in found:
+            if row.id in seen:
+                raise RowShapeError(
+                    row.id, "id", "duplicate of %s at %s" % (row.id, seen[row.id])
+                )
+            seen[row.id] = row.path
         return found
