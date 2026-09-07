@@ -671,3 +671,59 @@ Context: Dave's ruling of 2026-09-06 when the rebuild's entries were listed for 
 Date: 2026-09-05
 Decision: R0264, the intake checklist, is the rule every row is judged by on entry and the rule the store was built under. Its criteria are rows in topic intake, not decisions; a change to a criterion goes through intake like any row.
 Context: The criteria were ruled one at a time across the fix-pass reads of 2026-09-05 and 2026-09-06 and are recorded here once, as one rule.
+
+## DEC-000520 — process/change-flow.md agreed after the sweep
+Date: 2026-09-07
+Decision: process/change-flow.md is agreed at b814e4561c25db77d248c76c2b0f992e01965f2c, under the process gate; one frontier read (reviews/change-flow-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
+Context: the process sweep of 2026-09-07 reduced it from 252 to 81 lines.
+
+## DEC-000530 — process/review-artifact.md agreed after the sweep
+Date: 2026-09-07
+Decision: process/review-artifact.md is agreed at 1be6fb02371d947aa21eca772d67212e0783e11a, under the process gate; one frontier read (reviews/review-artifact-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
+Context: the process sweep of 2026-09-07 reduced it from 139 to 82 lines.
+
+## DEC-000540 — process/retro.md agreed after the sweep
+Date: 2026-09-07
+Decision: process/retro.md is agreed at 757a6c4cc4e256ca85f178e9d9cc1e448bb3eae0, under the process gate; one frontier read (reviews/retro-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
+Context: the process sweep of 2026-09-07 reduced it from 151 to 67 lines; keyed to chief-of-staff and writer; the human has never asked a copy editor or critic for one.
+
+## DEC-000550 — process/trd-template.md agreed after the sweep
+Date: 2026-09-07
+Decision: process/trd-template.md is agreed at 40784df9d818f82c5a571607a10818a5b375e01f, under the process gate; one frontier read (reviews/trd-template-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
+Context: the process sweep of 2026-09-07 reduced it from 155 to 60 lines; agreed for this version; the human intends to revisit it.
+
+## DEC-000560 — process/prd-template.md agreed after the sweep
+Date: 2026-09-07
+Decision: process/prd-template.md is agreed at a78145bd16d9a761dd6b51b070bbc85890b5836b, under the process gate; one frontier read (reviews/prd-template-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
+Context: the process sweep of 2026-09-07 reduced it from 119 to 58 lines.
+
+## DEC-000570 — process/decomposition.md agreed after the sweep
+Date: 2026-09-07
+Decision: process/decomposition.md is agreed at fa0022f05a165f32efe16bb62f1565840e50a01a, under the process gate; one frontier read (reviews/decomposition-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
+Context: the process sweep of 2026-09-07 reduced it from 85 to 39 lines.
+
+## DEC-000580 — process/outline.md agreed after the sweep
+Date: 2026-09-07
+Decision: process/outline.md is agreed at 4283d79bad9fe213cdabd65a19172b3d4ec0502e, under the process gate; one frontier read (reviews/outline-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
+Context: the process sweep of 2026-09-07 reduced it from 78 to 41 lines.
+
+## DEC-000590 — process/decision-log.md agreed after the sweep
+Date: 2026-09-07
+Decision: process/decision-log.md is agreed at 1f6d7e3ba361c360bc5879e586fe569d47b202ae, under the process gate; one frontier read (reviews/decision-log-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
+Context: the process sweep of 2026-09-07 reduced it from 77 to 29 lines.
+
+## DEC-000600 — process/project-setup.md agreed after the sweep
+Date: 2026-09-07
+Decision: process/project-setup.md is agreed at 85f6e437b5ce8796523d4266eeacb5fb1bada2e9, under the process gate; one frontier read (reviews/project-setup-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
+Context: the process sweep of 2026-09-07 reduced it from 56 to 21 lines; no bundle selects it; the human works it once per repository.
+
+## DEC-000610 — process/spec-test-suite.md agreed after the sweep
+Date: 2026-09-07
+Decision: process/spec-test-suite.md is agreed at 74f7eef61128f5443642cc8bfb0cd7fe270f96ce, under the process gate; one frontier read (reviews/spec-test-suite-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
+Context: the process sweep of 2026-09-07 reduced it from 50 to 25 lines.
+
+## DEC-000620 — The two-tranche cap is dropped
+Date: 2026-09-07
+Decision: No limit is placed on how many tranches run at once; the rule that concurrent deltas cover disjoint spec territory stands unchanged.
+Context: the human's ruling of 2026-09-07 on the read of process/change-flow.md and process/decomposition.md: R0013 already prevents the collision the cap guarded, and no third tranche has ever been opened.
+Supersedes: DEC-000170
