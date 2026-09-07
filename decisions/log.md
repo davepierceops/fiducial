@@ -721,3 +721,9 @@ Context: the process sweep of 2026-09-07 reduced it from 56 to 21 lines; no bund
 Date: 2026-09-07
 Decision: process/spec-test-suite.md is agreed at 74f7eef61128f5443642cc8bfb0cd7fe270f96ce, under the process gate; one frontier read (reviews/spec-test-suite-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
 Context: the process sweep of 2026-09-07 reduced it from 50 to 25 lines.
+
+## DEC-000620 — The two-tranche cap is dropped
+Date: 2026-09-07
+Decision: No limit is placed on how many tranches run at once; the rule that concurrent deltas cover disjoint spec territory stands unchanged.
+Context: the human's ruling of 2026-09-07 on the read of process/change-flow.md and process/decomposition.md: R0013 already prevents the collision the cap guarded, and no third tranche has ever been opened.
+Supersedes: DEC-000170
