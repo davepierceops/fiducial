@@ -150,6 +150,19 @@ class TestBundleWhere(BundleCliTestCase):
         )
         self.assertEqual(lines[1], "")
 
+    def test_q9_the_repo_label_reflects_a_remote_of_a_known_form(self):
+        """Q9: `_repo_label` reads `owner/repo` off a remote shaped like one."""
+        named = self.origin.parent / "davepierceops" / "fiducial.git"
+        named.parent.mkdir(parents=True, exist_ok=True)
+        git(self.origin.parent, "clone", "-q", "--bare", str(self.origin), str(named),
+            env=self.env, check=True)
+        git(self.clone, "remote", "set-url", "origin", str(named),
+            env=self.env, check=True)
+        code, out, err = self.bundle("--where", "role=writer", "--out", str(self.out))
+        self.assertEqual(code, EXIT_OK, err)
+        lines = self.bundle_path(out).read_text().splitlines()
+        self.assertIn(" davepierceops/fiducial @ ", lines[0])
+
     def test_ac_rs_15_the_bundle_holds_the_selected_rows_in_order(self):
         """AC-RS-15/DEC-000640: process documents are their own band, after
         every rule; no row-id headings; `## Definitions` is the last heading."""
@@ -233,6 +246,14 @@ class TestBundleRefusals(BundleCliTestCase):
         """AC-RS-6: "An empty selection is refused, not written"."""
         code, out, err = self.bundle("--where", "role=nobody", "--out", str(self.out))
         self.assert_refused(code, out, err)
+
+    def test_q9_the_malformed_query_message_wins_over_a_dirty_tree(self):
+        """Q9: both conditions at once still reports the query defect — the
+        malformed-query refusal is checked before the dirty-tree one."""
+        self.dirty_the_store()
+        code, out, err = self.bundle("--where", "role", "--out", str(self.out))
+        self.assert_refused(code, out, err)
+        self.assertIn("not a k=v token", err)
 
 
 class TestBundleKeysAndNear(BundleCliTestCase):
