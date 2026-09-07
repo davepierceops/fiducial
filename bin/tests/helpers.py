@@ -50,7 +50,13 @@ CLI_MINIMAL_ARGS = {
     "check-frontmatter": ["--all"],
     "flip-agreed": ["policies/x.md", "--review", "reviews/r.md @ abc1234"],
     "cycle-open": ["--cycle", "1"],
-    "bundle": ["base"],
+    #: `["base"]` no longer gets `bundle` past argparse (S1, bundle-tool-
+    #: skeptic review 20260906T150000Z): the mode flags are
+    #: `--where`/`--keys`/`--near`, not a positional. A live argv is needed
+    #: so AC-X-4, AC-X-6 and AC-X-7 actually reach the tool's repository,
+    #: file and encoding handling (Q10/S11, bundle-tool-quality-reread and
+    #: bundle-tool-skeptic-reread, both 20260906T170000Z).
+    "bundle": ["--keys"],
     "migrate-frontmatter": ["--plan"],
     "install-hooks": [],
     "directive": ["--descriptor", "x", "--title", "T"],
