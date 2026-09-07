@@ -10,8 +10,9 @@ corpus: [software]
 A delta is the accumulated difference between a thing as it stands and the thing
 as it will stand when the work is done. Review is charged once per delta, at its
 close — never per document, never per edit — and the delta's size and reach set
-the depth of the read. Close a delta early at will; the tranche boundary is a
-deadline, not a target [R0008].
+the depth of the read. A delta is bounded by its tranche and never spans two
+[R0008]. Close a delta early at will; the tranche boundary is a deadline, not
+a target.
 
 ## Four kinds of thing change
 
