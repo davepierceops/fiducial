@@ -27,8 +27,10 @@ from tests.helpers import BIN_DIR
 PACKAGE_DIR = BIN_DIR / "rulestore"
 
 #: The modules AC-RS-4 names as processing modules, plus the package marker.
+#: `named_queries.py` (bundle-tool-followup-20260907T170000Z.md item 3) is
+#: pure over text and holds to the same rules.
 PROCESSING_MODULES = ("query.py", "terms.py", "keys.py", "near.py", "render.py",
-                      "__init__.py")
+                      "named_queries.py", "__init__.py")
 STORAGE_MODULE = "store.py"
 
 #: Imports that can only serve filesystem traversal or subprocess work.

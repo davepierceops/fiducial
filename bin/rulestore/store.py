@@ -145,12 +145,22 @@ class MemoryRowSource:
     def rows(self):
         return list(self._rows)
 
+    def named_queries_text(self):
+        return ""
+
 
 class FileRowSource:
     """A `RowSource` reading one row per file from `rules/` and `process/`."""
 
     def __init__(self, root):
         self.root = pathlib.Path(root)
+
+    def named_queries_text(self):
+        """`process/named-queries.md`'s text under the root, or `""` if absent."""
+        path = self.root / "process" / "named-queries.md"
+        if not path.is_file():
+            return ""
+        return path.read_text(encoding="utf-8", errors="replace")
 
     def _blob(self, relpath):
         proc = subprocess.run(
