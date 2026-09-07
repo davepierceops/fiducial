@@ -8,7 +8,23 @@ corpus: [software, writing]
 # Process: Review Artifact
 
 The form a review emits: one read over one delta, one artifact [R1395a, R1396,
-R1408]. A per-entry log of agreements is not an artifact in this sense; its shape
+R1408].
+
+Where a role or a policy names a required output, this is where it goes:
+
+| Required by the role or policy | Field here |
+|---|---|
+| Sign-off; recommendation (the overall ship call) | `Verdict` |
+| Required changes | entries marked `blocking` |
+| Advisory items | entries marked `non-blocking` |
+| Required follow-ups | the finding's `Fix` |
+| Risks, verification gaps | `Consequence`, and `Not inspected` |
+| Evidence inspected; scope reviewed | `Scope`, `Cross-checked` |
+| What the human should inspect | `the human should inspect` |
+
+The entry field is `Fix`, not `Recommendation`.
+
+A per-entry log of agreements is not an artifact in this sense; its shape
 is set by the policy that mandates it.
 
 A review artifact goes in `reviews/`, its filename beginning with the reviewed
