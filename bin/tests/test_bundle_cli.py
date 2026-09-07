@@ -33,6 +33,8 @@ from tests.helpers import (
     git,
     make_store_repo,
     no_traceback,
+    rs_row,
+    rs_store_files,
     run_bundle,
     temp_dir,
     write,
@@ -294,6 +296,45 @@ class TestBundleKeysAndNear(BundleCliTestCase):
         scores = [float(line.rsplit(" ", 1)[1]) for line in lines]
         self.assertEqual(scores, sorted(scores, reverse=True))
         self.assertEqual(lines[0].split(" ", 1)[0], "R0100")
+
+
+class TestBundleMalformedRow(unittest.TestCase):
+    """Q11/Q3: `RowShapeError` refuses with one line, in every mode — closes
+    the coverage gap the fix directive's waiver left open."""
+
+    def setUp(self):
+        files = dict(rs_store_files())
+        files["rules/R0002.md"] = rs_row(
+            "R0002", "State the obligation at its shortest.",
+            order="twenty", topic=["core"], role=["writer"], verb="require", term=None,
+        )
+        self.origin, self.clone = make_store_repo(self, files=files)
+        self.env = base_env()
+        self.out = temp_dir(self, "rulestore-out-")
+
+    def bundle(self, *args):
+        return run_bundle(*args, cwd=self.clone, env=self.env)
+
+    def assert_refused_naming_the_defect(self, code, out, err):
+        self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
+        lines = err.strip().splitlines()
+        self.assertEqual(len(lines), 1, err)
+        self.assertIn("R0002", lines[0])
+        self.assertIn("order", lines[0])
+        self.assertTrue(no_traceback(out, err), err)
+
+    def test_q11_keys_refuses_on_a_malformed_row(self):
+        code, out, err = self.bundle("--keys")
+        self.assert_refused_naming_the_defect(code, out, err)
+
+    def test_q11_near_refuses_on_a_malformed_row(self):
+        code, out, err = self.bundle("--near", "obligation")
+        self.assert_refused_naming_the_defect(code, out, err)
+
+    def test_q11_where_refuses_on_a_malformed_row(self):
+        code, out, err = self.bundle("--where", "topic=core", "--out", str(self.out))
+        self.assert_refused_naming_the_defect(code, out, err)
+        self.assertEqual(sorted(p.name for p in self.out.iterdir()), [])
 
 
 if __name__ == "__main__":
