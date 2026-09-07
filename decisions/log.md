@@ -701,3 +701,8 @@ Context: the process sweep of 2026-09-07 reduced it from 119 to 58 lines.
 Date: 2026-09-07
 Decision: process/decomposition.md is agreed at fa0022f05a165f32efe16bb62f1565840e50a01a, under the process gate; one frontier read (reviews/decomposition-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
 Context: the process sweep of 2026-09-07 reduced it from 85 to 39 lines.
+
+## DEC-000580 — process/outline.md agreed after the sweep
+Date: 2026-09-07
+Decision: process/outline.md is agreed at 4283d79bad9fe213cdabd65a19172b3d4ec0502e, under the process gate; one frontier read (reviews/outline-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
+Context: the process sweep of 2026-09-07 reduced it from 78 to 41 lines.
