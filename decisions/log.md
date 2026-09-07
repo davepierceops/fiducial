@@ -691,3 +691,8 @@ Context: the process sweep of 2026-09-07 reduced it from 151 to 67 lines; keyed 
 Date: 2026-09-07
 Decision: process/trd-template.md is agreed at 40784df9d818f82c5a571607a10818a5b375e01f, under the process gate; one frontier read (reviews/trd-template-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
 Context: the process sweep of 2026-09-07 reduced it from 155 to 60 lines; agreed for this version; the human intends to revisit it.
+
+## DEC-000560 — process/prd-template.md agreed after the sweep
+Date: 2026-09-07
+Decision: process/prd-template.md is agreed at a78145bd16d9a761dd6b51b070bbc85890b5836b, under the process gate; one frontier read (reviews/prd-template-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
+Context: the process sweep of 2026-09-07 reduced it from 119 to 58 lines.
