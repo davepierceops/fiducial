@@ -681,3 +681,8 @@ Context: the process sweep of 2026-09-07 reduced it from 252 to 81 lines.
 Date: 2026-09-07
 Decision: process/review-artifact.md is agreed at 1be6fb02371d947aa21eca772d67212e0783e11a, under the process gate; one frontier read (reviews/review-artifact-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
 Context: the process sweep of 2026-09-07 reduced it from 139 to 82 lines.
+
+## DEC-000540 — process/retro.md agreed after the sweep
+Date: 2026-09-07
+Decision: process/retro.md is agreed at 757a6c4cc4e256ca85f178e9d9cc1e448bb3eae0, under the process gate; one frontier read (reviews/retro-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
+Context: the process sweep of 2026-09-07 reduced it from 151 to 67 lines; keyed to chief-of-staff and writer; the human has never asked a copy editor or critic for one.
