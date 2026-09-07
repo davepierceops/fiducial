@@ -47,7 +47,14 @@ class RowShapeError(Exception):
 
 @dataclasses.dataclass
 class Row:
-    """One store row: the agent form, the human form, and its keys."""
+    """One store row: the agent form, the human form, and its keys.
+
+    `blob` is the git blob at `HEAD`; `body` (and `human`) come from the
+    working tree's file (S5, bundle-tool-skeptic-20260906T150000Z.md). The
+    two can name different content for any caller that skips the sync check
+    `bin/bundle --where` runs before it reads; a bundle's render no longer
+    emits `blob` at all (item 5), so nothing downstream sees them disagree.
+    """
 
     id: str
     body: str
