@@ -105,6 +105,19 @@ class TestFileRowSource(FileRowSourceTestCase):
         self.assertEqual(row.kind, "process")
         self.assertEqual(row.id, "change-flow")
 
+    def test_s2_a_human_heading_at_any_atx_level_still_splits_the_row(self):
+        """S2: `### Human` (not just `## Human`) still separates the two
+        forms — a mis-levelled heading must not publish the human form."""
+        files = dict(rs_store_files())
+        files["rules/R0001.md"] = files["rules/R0001.md"].replace(
+            "## Human", "### Human"
+        )
+        _origin, clone = make_store_repo(self, files=files)
+        row = by_id(FileRowSource(clone).rows())["R0001"]
+        self.assertEqual(row.human, "DEC-000170: the branch is the state.")
+        self.assertNotIn("### Human", row.body)
+        self.assertNotIn("DEC-000170", row.body)
+
 
 class TestFileRowSourceDefects(unittest.TestCase):
     """AC-RS-1: a value the dialect cannot type is a defect, named and raised."""

@@ -23,7 +23,10 @@ ORDER_RE = re.compile(r"^[+-]?[0-9]+$")
 #: any key other than `order` this is a defect; quoted, it is text.
 TYPED_SCALAR_RE = re.compile(r"^([+-]?[0-9]+(\.[0-9]+)?|true|false|yes|no)$", re.IGNORECASE)
 
-HUMAN_MARKER = "## Human"
+#: Any ATX heading whose text is "Human", whatever its level (S2,
+#: bundle-tool-skeptic-20260906T150000Z.md) — a mis-levelled `### Human` must
+#: not publish the rationale it introduces.
+HUMAN_MARKER_RE = re.compile(r"^#{1,6}\s+Human\s*$")
 
 
 class RowShapeError(Exception):
@@ -132,10 +135,10 @@ def _parse_frontmatter(text):
 
 
 def _split_human(body):
-    """`(agent_form, human_form)` — everything above/below the `## Human` line."""
+    """`(agent_form, human_form)` — everything above/below the Human heading."""
     lines = body.split("\n")
     for index, line in enumerate(lines):
-        if line.strip() == HUMAN_MARKER:
+        if HUMAN_MARKER_RE.match(line.strip()):
             agent = "\n".join(lines[:index]).strip()
             human = "\n".join(lines[index + 1 :]).strip()
             return agent, (human or None)
