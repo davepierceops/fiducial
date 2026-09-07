@@ -19,7 +19,7 @@ handover as its own file.
 3. Propose a breakdown into tranches, with rationale; the human approves, renames,
    or redraws, and his approved name slugs each tranche.
 4. Before proposing a second concurrent tranche, check the claim on the documents it
-   would touch [R0012, R0013]; at most two run at once, never two deltas over one
+   would touch [R0012, R0013]; never two deltas over one
    tranche. Where no disjoint territory is left, propose serial execution or send
    the second tranche cross-project.
 5. For an approved tranche, decompose into change packages before any agentic work
