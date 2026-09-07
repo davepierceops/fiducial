@@ -676,3 +676,8 @@ Context: The criteria were ruled one at a time across the fix-pass reads of 2026
 Date: 2026-09-07
 Decision: process/change-flow.md is agreed at b814e4561c25db77d248c76c2b0f992e01965f2c, under the process gate; one frontier read (reviews/change-flow-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
 Context: the process sweep of 2026-09-07 reduced it from 252 to 81 lines.
+
+## DEC-000530 — process/review-artifact.md agreed after the sweep
+Date: 2026-09-07
+Decision: process/review-artifact.md is agreed at 1be6fb02371d947aa21eca772d67212e0783e11a, under the process gate; one frontier read (reviews/review-artifact-read-20260907T060000Z.md), blocking findings applied, then the human's sign-off.
+Context: the process sweep of 2026-09-07 reduced it from 139 to 82 lines.
