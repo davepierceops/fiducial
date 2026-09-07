@@ -40,7 +40,7 @@ tests, evidence, a change package — organised by dimension, not by document.
 
 Continuity carries its own verdict line, as quality and skepticism do; the
 delta's class decides whether those two run in one session or two [R0492, R0534,
-R0535, R0536]. The **size call** is the second trigger for two: the reader finds
+R0535, R0536]. The **size call** is the other trigger for two: the reader finds
 the delta exceeds what one session can read whole and says so in the verdict; it
 sets the session count only.
 
