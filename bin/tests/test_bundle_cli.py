@@ -209,6 +209,14 @@ class TestBundleRefusals(BundleCliTestCase):
         code, out, err = self.bundle("--where", "role=", "--out", str(self.out))
         self.assert_refused(code, out, err)
 
+    def test_q8_a_name_containing_a_path_separator_or_dotdot_is_refused(self):
+        """Q8: `--name` cannot escape `--out` — refused on the malformed-query
+        path, writing nothing."""
+        code, out, err = self.bundle(
+            "--where", "role=writer", "--name", "../escaped", "--out", str(self.out)
+        )
+        self.assert_refused(code, out, err)
+
     def test_ac_rs_6_an_uncommitted_change_under_rules_is_refused(self):
         """AC-RS-6: an unsynced tree refuses — a bundle must be reproducible."""
         self.dirty_the_store()

@@ -126,6 +126,9 @@ def cmd_where(root, tokens, name, out):
     except query.QueryError as exc:
         return refuse("refused: %s" % exc)
 
+    if name and ("/" in name or "\\" in name or ".." in name):
+        return refuse("refused: --name must not contain a path separator or ..: %r" % name)
+
     if _dirty_under(root, "rules", "process"):
         return refuse("refused: uncommitted changes under rules/ or process/")
 
