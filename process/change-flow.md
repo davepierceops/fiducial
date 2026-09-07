@@ -61,7 +61,8 @@ A spec branch is **open** — it has commits the default branch does not — or
    ungated and are gated together at the close [R0474]. The Test Designer starts
    once the entry read has run and the human has said to proceed [R1101, R1468],
    then writes the spec's suite and runs the red gate while the branch is open
-   [R0478, R1158]. At most two tranches run at once [R0012, R0013].
+   [R0478, R1158]. Over disjoint spec territory; a document appearing in one
+   open delta's diff may not appear in a second [R0012, R0013].
 2. **Close** when spec and tests cohere: the Spec Reviewer reads the branch's
    whole diff, from the branch point, with the tests [R1106, R1126]; the human
    then reads that diff and makes one ruling [R0481, R1485]. The reconciliation
