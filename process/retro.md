@@ -1,6 +1,6 @@
 ---
 order: 90
-role: [chief-of-staff, writer, copy-editor, critic]
+role: [chief-of-staff, writer]
 session: [decision]
 corpus: [software, writing]
 ---
@@ -8,12 +8,6 @@ corpus: [software, writing]
 # Process: Retro
 
 Run a retro when the human asks for one.
-
-`date:` is the session's last interaction, taken from the last dated artifact the
-session touched as recorded in the local tree — a merge commit, a commit, a
-review artifact. Where the session touched none, take it from the `source:`
-pointer; where `source:` is null too, `generated:` stands in and the retro states
-the substitution. Where the two disagree, both are correct and both are stated.
 
 A retro is `retro-<timestamp>.md`, a synthesis `retro-synthesis-<timestamp>.md`,
 the timestamp taken at generation time as `<YYYYMMDD>T<HHMMSS>Z`. Match a filename
@@ -65,3 +59,9 @@ session; empty-with-a-statement if none>
 <specific proposed edits to methodology documents, if any, phrased as
 findings for the delta that would carry them — not as decisions>
 ~~~
+
+`date:` is the session's last interaction, taken from the last dated artifact the
+session touched as recorded in the local tree — a merge commit, a commit, a
+review artifact. Where the session touched none, take it from the `source:`
+pointer; where `source:` is null too, `generated:` stands in and the retro states
+the substitution. Where the two disagree, both are correct and both are stated.
