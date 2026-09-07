@@ -12,10 +12,10 @@ in a decision session. The doc carries no directives; a directive is written at
 handover as its own file.
 
 1. Read the agreed PRD and TRD in full.
-2. Decompose only from a closed spec, pinning default-branch SHAs only. While a
-   spec branch is open the one act admitted against it is the test-suite
-   directive to a Test Designer; where a delta is open over the spec a
-   decomposition would derive from, propose reconciliation as the next step.
+2. Decompose a spec only after its branch has closed, pinning the
+   default-branch SHA. While the branch is open, the only directive against
+   the spec is the test suite's, to the Test Designer. Asked to decompose
+   an open spec, propose closing it first.
 3. Propose a breakdown into tranches, with rationale; the human approves, renames,
    or redraws, and his approved name slugs each tranche.
 4. Before proposing a second concurrent tranche, check the claim on the documents it
