@@ -74,12 +74,21 @@ def _dirty_under(root, *dirs):
 
 
 def _synced_with_main(root):
-    """`HEAD` equals `origin/main` after a fetch."""
-    _git(root, "fetch", "-q", "origin", "main")
+    """`(synced, reason)` — `HEAD` equals `origin/main` after a fetch.
+
+    `reason` is set only when not synced, distinguishing a fetch that could
+    not reach origin from a `HEAD` that genuinely differs (S8): a failed
+    fetch used to compare against a possibly stale `origin/main` and report
+    success.
+    """
+    if _git(root, "fetch", "-q", "origin", "main").returncode != 0:
+        return False, "could not reach origin"
     head = _head(root)
     proc = _git(root, "rev-parse", "origin/main")
     upstream = proc.stdout.strip() if proc.returncode == 0 else None
-    return head is not None and head == upstream
+    if head is not None and head == upstream:
+        return True, None
+    return False, "HEAD is not synced with origin/main"
 
 
 def build_parser():
@@ -132,8 +141,9 @@ def cmd_where(root, tokens, name, out):
     if _dirty_under(root, "rules", "process"):
         return refuse("refused: uncommitted changes under rules/ or process/")
 
-    if not _synced_with_main(root):
-        return refuse("refused: HEAD is not synced with origin/main")
+    synced, reason = _synced_with_main(root)
+    if not synced:
+        return refuse("refused: %s" % reason)
 
     try:
         source = FileRowSource(root)

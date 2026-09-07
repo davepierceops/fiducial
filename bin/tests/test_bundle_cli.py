@@ -244,6 +244,16 @@ class TestBundleRefusals(BundleCliTestCase):
         code, out, err = self.bundle("--where", "role=writer", "--out", str(self.out))
         self.assert_refused(code, out, err)
 
+    def test_s8_a_failed_fetch_is_distinguished_from_an_unsynced_head(self):
+        """S8: a fetch that cannot reach origin refuses with its own message
+        — it must not fall back to comparing against a stale local
+        origin/main and report success."""
+        git(self.clone, "remote", "set-url", "origin", "/nonexistent/origin.git",
+            env=self.env, check=True)
+        code, out, err = self.bundle("--where", "role=writer", "--out", str(self.out))
+        self.assert_refused(code, out, err)
+        self.assertIn("could not reach origin", err)
+
     def test_ac_rs_6_an_empty_selection_is_refused(self):
         """AC-RS-6: "An empty selection is refused, not written"."""
         code, out, err = self.bundle("--where", "role=nobody", "--out", str(self.out))
