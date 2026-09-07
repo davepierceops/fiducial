@@ -37,6 +37,12 @@ from tests.helpers import (
     write,
 )
 
+#: `["base"]` no longer gets `bundle` past argparse (S1, bundle-tool-skeptic
+#: review 20260906T150000Z): the mode flags are `--where`/`--keys`/`--near`,
+#: not a positional. A live argv is needed so AC-X-4, AC-X-6 and AC-X-7
+#: actually reach the tool's repository, file and encoding handling.
+CLI_MINIMAL_ARGS["bundle"] = ["--keys"]
+
 
 def production_files():
     """Every shipped file under `bin/` — CLIs and the `aimeta` package."""
