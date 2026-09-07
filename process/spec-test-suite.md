@@ -7,9 +7,9 @@ corpus: [software]
 
 # Process: Spec Test Suite
 
-**Status of this draft:** proposal for Dave's correction, 2026-09-06. Written
+**Status of this draft:** proposal for the human's correction, 2026-09-06. Written
 under the gate DEC-000380 sets for a process document: one frontier read against
-the rows it cites, then Dave's sign-off, recorded as a decision-log entry naming
+the rows it cites, then the human's sign-off, recorded as a decision-log entry naming
 the SHA. It is drawn from `roles/chief-of-staff.md` @ fd54448 and from the store
 rows R0917–R0923, which retire into it.
 
@@ -25,7 +25,7 @@ red-gate the Spec Reviewer takes with the diff.
 ## The sequence
 
 1. **Wait for the entry read.** Once the entry read has run over the open spec —
-   whatever its verdict — and Dave has said to proceed, direct a test-suite
+   whatever its verdict — and the human has said to proceed, direct a test-suite
    directive to a Test Designer execution session.
 2. **Derive the directive from the spec itself**, never from a decomposition
    doc. There is no decomposition yet; there cannot be one, because the spec is
@@ -43,8 +43,8 @@ red-gate the Spec Reviewer takes with the diff.
 ## What this does not decide
 
 - **Whether the spec is right.** A finding against the spec is triaged in the
-  decision session and settled by Dave; the Test Designer does not edit the
+  decision session and settled by the human; the Test Designer does not edit the
   spec, and this directive does not authorize an edit to it.
 - **When the spec closes.** The close is a read over the whole diff and one
-  ruling from Dave, not a consequence of the suite existing.
+  ruling from the human, not a consequence of the suite existing.
 - **Anything about implementation.** No package, no code, no schedule.

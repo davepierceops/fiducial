@@ -7,9 +7,9 @@ corpus: [software]
 
 # Process: Decision Log
 
-**Status of this draft:** proposal for Dave's correction, 2026-09-06. Written
+**Status of this draft:** proposal for the human's correction, 2026-09-06. Written
 under the gate DEC-000380 sets for a process document: one frontier read against
-the rows it cites, then Dave's sign-off, recorded as a decision-log entry naming
+the rows it cites, then the human's sign-off, recorded as a decision-log entry naming
 the SHA. It is drawn from `policies/decision-log-policy.md` @ fd54448 and from
 the store rows R0585, R0586, R0589 and R0591, which retire into it. The rules
 with teeth stay rows and are not restated here: **R0583** (append to
@@ -46,7 +46,7 @@ Supersedes: DEC-000030   (omit if none)
   can consult the entry without reopening the session it came from.
 - **Supersedes** names the old ID, and is omitted where the entry supersedes
   nothing.
-- There is **no author field**. Every entry records a decision of Dave's, so a
+- There is **no author field**. Every entry records a decision of the human's, so a
   "who" would say the same thing on every line.
 
 ## Assigning an ID
@@ -70,7 +70,7 @@ changes a number, never a decision.
 
 ## What this does not decide
 
-- **What is worth an entry.** A decision of Dave's that governs later work goes
+- **What is worth an entry.** A decision of the human's that governs later work goes
   in the log; the judgment of which decisions those are is his and the Chief of
   Staff's, not this document's.
 - **Whether a decision is still live.** That is answered by searching its ID in

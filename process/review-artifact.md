@@ -29,7 +29,7 @@ Where a role or a policy names a required output, this is where it goes:
 | Required follow-ups | the finding's `Fix` |
 | Risks, verification gaps | `Consequence`, and `Not inspected` |
 | Evidence inspected; scope reviewed | `Scope`, `Cross-checked` |
-| What Dave should inspect | `Dave should inspect` |
+| What the human should inspect | `the human should inspect` |
 
 The entry field is `Fix`, not `Recommendation`.
 
@@ -70,17 +70,17 @@ Scope: <what was inspected>
 Cross-checked: <other documents consulted for consistency, or omitted>
 Not inspected: <stated explicitly — "nothing" is a claim, not a default>
 Findings: <none | count by severity>
-Dave should inspect: <the few items that need his judgment, or omitted>
+The human should inspect: <the few items that need his judgment, or omitted>
 ~~~
 
 The header carries one overall `Verdict:` line, and each pass section opens with
 its own `Verdict (<pass>):` line — continuity, quality, skepticism, and any
 further dimension in force. Every verdict is `ready`, `ready-with-findings`, or
 `changes-required`, and the overall verdict is the most severe of the pass
-verdicts on that order. `ready` means ready for Dave's agreement; the value is
-never the word `agreed`, because agreement is Dave's act, not the reviewer's.
+verdicts on that order. `ready` means ready for the human's agreement; the value is
+never the word `agreed`, because agreement is the human's act, not the reviewer's.
 
-`Cross-checked` and `Dave should inspect` are omit-if-none — a clean pass should
+`Cross-checked` and `the human should inspect` are omit-if-none — a clean pass should
 not have to write lines of `none`. `Baseline` is required where the artifact
 reviews a range — a read over a delta's whole diff, or a reconciliation — and
 names the revision the diff starts from; a review of one revision omits it. The

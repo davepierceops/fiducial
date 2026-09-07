@@ -7,9 +7,9 @@ corpus: [software]
 
 # Process: Project Setup
 
-**Status of this draft:** proposal for Dave's correction, 2026-09-06. Written
+**Status of this draft:** proposal for the human's correction, 2026-09-06. Written
 under the gate DEC-000380 sets for a process document: one frontier read against
-the rows it cites, then Dave's sign-off, recorded as a decision-log entry naming
+the rows it cites, then the human's sign-off, recorded as a decision-log entry naming
 the SHA. It is drawn from `policies/project-setup-requirements.md` and
 `policies/commit-and-change-control-policy.md` @ fd54448 and from the store rows
 R0566, R0568, R0703 and R0705, which retire into it.
