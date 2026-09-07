@@ -29,7 +29,8 @@ what the Writer drafts against, and a tier he changes is his assignment.
    grounded, opinion. Give a claim the tier the author's evidence earns; where you
    cannot tell what the evidence is, mark the tier *unknown* and ask. The Copy
    Editor's claims-tier audit and the Critic's Skeptic pass read the finished
-   prose against this list.
+   prose against this list. A claim the prose makes that is absent here is a
+   finding; a claim here the prose drops is a finding.
 4. **Section plan**, on request only. One entry per section, in reading order,
    following the approved topic grouping: title; what the section argues, in one
    or two sentences; which claims by number it carries; a word budget. Take the
