@@ -1,8 +1,8 @@
 """Named queries and their render sequence (DEC-000640, DEC-000650).
 
-Pure over text: nothing here reads a file or names a storage path.
-`store.FileRowSource.named_queries_text()` is the one caller that reads the
-document this module parses; this module works over whatever text it is
+Pure over text: nothing here reads a file or names a storage path. A method
+of the storage layer's file-backed row source is the one caller that reads
+the document this module parses; this module works over whatever text it is
 given, and a missing heading or block is an empty result, not an error.
 
 Contract: `docs/cycles/bundle-tool-followup-20260907T170000Z.md`, item 3.
