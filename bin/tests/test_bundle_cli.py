@@ -142,7 +142,7 @@ class TestBundleWhere(BundleCliTestCase):
         self.assertEqual(len(written), 1, written)
         self.assertIsNotNone(BUNDLE_NAME_RE.match(written[0]), written[0])
 
-    def test_ac_rs_14_the_header_is_one_comment_line_naming_head_and_a_timestamp(self):
+    def test_dec_000630_the_header_is_one_comment_line_naming_head_and_a_timestamp(self):
         """AC-RS-14/DEC-000630: the header is one HTML comment; nothing else in it."""
         code, out, err = self.bundle("--where", "role=writer", "--out", str(self.out))
         self.assertEqual(code, EXIT_OK, err)
