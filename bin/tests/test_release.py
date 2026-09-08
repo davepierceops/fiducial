@@ -111,6 +111,22 @@ class TestReleaseRefusals(ReleaseCliTestCase):
         self.assertTrue(no_traceback(out, err), err)
         self.assertFalse(self.out.exists())
 
+    def test_refuses_when_named_queries_is_absent(self):
+        """The tenth refusal: an absent process/named-queries.md gets its own
+        message, distinct from an empty bundle list."""
+        files = dict(rs_store_files())
+        del files["process/named-queries.md"]
+        origin, clone = make_store_repo(self, files=files)
+        self.add_readme_and_push(clone)
+        code, out, err = run_cli(
+            "release", "--tag", TAG, "--out", str(self.out), cwd=clone, env=self.env,
+        )
+        self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
+        self.assertEqual(len(err.strip().splitlines()), 1, err)
+        self.assertIn("no process/named-queries.md under", err)
+        self.assertTrue(no_traceback(out, err), err)
+        self.assertFalse(self.out.exists())
+
     def test_refuses_outside_a_git_repository(self):
         """F4: outside a git repository entirely."""
         outside = temp_dir(self, "release-outside-")
