@@ -736,7 +736,7 @@ Supersedes: DEC-000320 (header clause only; the filename clause stands)
 
 ## DEC-000640 — A bundle is three bands of body text
 Date: 2026-09-07
-Decision: A bundle renders its rows as body text, one row after another with a blank line between, under no per-row heading; then every selected process document, body only; then the definitions the rows use, under one `## Definitions` heading. Rows sort by their topic's position in the topic sequence, then `order`, then id; process documents sort by their stem's position in the process sequence; a topic or stem the sequence does not name sorts after the last named one, alphabetically.
+Decision: A bundle renders its rows as body text, one row after another with a blank line between, under no per-row heading; then every selected process document, body only; then the definitions the rows use, under one `## Definitions` heading. Rows sort by their topic's position in the topic sequence, then by topic name, then `order`, then id — so topics sharing a position render as contiguous alphabetical runs; process documents sort by their `topic` value's position in the process sequence, the path stem standing in where the key is absent. A topic or stem the sequence does not name sorts after the last named one, alphabetically. Definitions sort by `order`, then id.
 Context: the human's rulings of 2026-09-06 (no `## R` headings) and 2026-09-07 (rows first, then the process documents as their own band, then the definitions). `order` keeps its meaning as position within a topic.
 
 ## DEC-000650 — process/named-queries.md is where a bundle and the sequence are defined
