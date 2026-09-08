@@ -52,6 +52,16 @@ class TestReleaseRefusals(ReleaseCliTestCase):
         self.assertTrue(no_traceback(out, err), err)
         self.assertFalse(self.out.exists())
 
+    def test_refuses_when_readme_is_uncommitted(self):
+        """S13: an uncommitted README.md refuses too, not only rules/ or process/."""
+        self.add_readme_and_push()
+        write(self.clone, "README.md", "An uncommitted edit.\n")
+        code, out, err = self.release("--tag", TAG, "--out", str(self.out))
+        self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
+        self.assertEqual(len(err.strip().splitlines()), 1, err)
+        self.assertTrue(no_traceback(out, err), err)
+        self.assertFalse(self.out.exists())
+
     def test_refuses_when_out_already_exists(self):
         """Refuses when --out already exists, before any bundle generation."""
         self.add_readme_and_push()

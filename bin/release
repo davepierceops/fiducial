@@ -5,12 +5,14 @@
     bin/release [--tag TAG] [--out DIR]
 
 Refuses (exit 2, one line on stderr, nothing written) outside a git
-repository, in a repository with neither `rules/` nor `process/`, on
-uncommitted changes under `rules/` or `process/`, when the fetch of
-`origin main` fails, when HEAD is not `origin/main`, when `README.md` is
-absent at the root, when `--tag` already exists on origin, when `--out`
-exists, or when the bundle list is empty. On any per-entry `bin/bundle`
-failure it refuses whole and removes everything it wrote.
+repository, in a repository with neither `rules/` nor `process/`, on any
+uncommitted change anywhere under the root — README.md included, since it
+is the one asset generated from the working tree rather than from a
+selection — when the fetch of `origin main` fails, when HEAD is not
+`origin/main`, when `README.md` is absent at the root, when `--tag`
+already exists on origin, when `--out` exists, or when the bundle list is
+empty. On any per-entry `bin/bundle` failure it refuses whole and removes
+everything it wrote.
 
 Contract: `docs/cycles/bundle-tool-followup-20260907T170000Z.md`, item 6.
 """
@@ -56,8 +58,8 @@ def _head(root):
     return proc.stdout.strip() if proc.returncode == 0 else None
 
 
-def _dirty_under(root, *dirs):
-    proc = _git(root, "status", "--porcelain", "--", *dirs)
+def _dirty_under(root):
+    proc = _git(root, "status", "--porcelain")
     return bool(proc.stdout.strip())
 
 
@@ -89,8 +91,8 @@ def main(argv=None):
     if not (root / "rules").is_dir() and not (root / "process").is_dir():
         return refuse("refused: no rules/ or process/ under %s" % root)
 
-    if _dirty_under(root, "rules", "process"):
-        return refuse("refused: uncommitted changes under rules/ or process/")
+    if _dirty_under(root):
+        return refuse("refused: uncommitted changes under %s" % root)
 
     if _git(root, "fetch", "-q", "origin", "main").returncode != 0:
         return refuse("refused: could not fetch origin/main")
