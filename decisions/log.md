@@ -727,3 +727,24 @@ Date: 2026-09-07
 Decision: No limit is placed on how many tranches run at once; the rule that concurrent deltas cover disjoint spec territory stands unchanged.
 Context: the human's ruling of 2026-09-07 on the read of process/change-flow.md and process/decomposition.md: R0013 already prevents the collision the cap guarded, and no third tranche has ever been opened.
 Supersedes: DEC-000170
+
+## DEC-000630 — A bundle's header is one comment line
+Date: 2026-09-06
+Decision: A generated bundle opens with exactly one line, an HTML comment: `<!-- fiducial <owner/repo> @ <full HEAD SHA> <generation timestamp> -->`, the timestamp in the `<YYYYMMDD>T<HHMMSS>Z` form. No member list, no blob list, no title line.
+Context: the human's ruling of 2026-09-06 on the first generated bundles: the 240-line member list served no session that loaded a bundle, and the SHA is the one fact a session judges the bundle's age by.
+Supersedes: DEC-000320 (header clause only; the filename clause stands)
+
+## DEC-000640 — A bundle is three bands of body text
+Date: 2026-09-07
+Decision: A bundle renders its rows as body text, one row after another with a blank line between, under no per-row heading; then every selected process document, body only; then the definitions the rows use, under one `## Definitions` heading. Rows sort by their topic's position in the topic sequence, then by topic name, then `order`, then id — so topics sharing a position render as contiguous alphabetical runs; process documents sort by their `topic` value's position in the process sequence, the path stem standing in where the key is absent. A topic or stem the sequence does not name sorts after the last named one, alphabetically. Definitions sort by `order`, then id.
+Context: the human's rulings of 2026-09-06 (no `## R` headings) and 2026-09-07 (rows first, then the process documents as their own band, then the definitions). `order` keeps its meaning as position within a topic.
+
+## DEC-000650 — process/named-queries.md is where a bundle and the sequence are defined
+Date: 2026-09-07
+Decision: The list of distributed bundles — one per role, the query `role=<slug>` — and the two sequences DEC-000640 orders by live in `process/named-queries.md`, in fenced blocks the tool reads. A process document carries `topic: [<its stem>]`. Nothing else names a bundle or an ordering.
+Context: resolves the rule-store PRD's OQ-1. A durable rule lives in the store and the tool derives from it (R0763); a new role or a reordered topic is an edit to the document, never to the tool.
+
+## DEC-000660 — Release assets carry no timestamp; a release is tagged by date
+Date: 2026-09-06
+Decision: A release attaches README.md and one `fiducial-bundle-<slug>.md` per entry in the list, each generated at the release's SHA, and is tagged `v<YYYY>.<MM>.<DD>`. The file bin/bundle writes for a session keeps its timestamped name. bin/release generates the assets from a synced clone, refuses whole on any failure, and prints the `gh release create` command; the human runs it.
+Context: the human's ruling of 2026-09-06 on distribution: a stable asset name gives `releases/latest/download/` a stable URL; the date is the version, since a methodology's semantic version cannot be computed.

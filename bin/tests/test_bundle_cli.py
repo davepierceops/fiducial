@@ -31,8 +31,11 @@ from tests.helpers import (
     base_env,
     commit,
     git,
+    make_repo,
     make_store_repo,
     no_traceback,
+    rs_row,
+    rs_store_files,
     run_bundle,
     temp_dir,
     write,
@@ -139,41 +142,62 @@ class TestBundleWhere(BundleCliTestCase):
         self.assertEqual(len(written), 1, written)
         self.assertIsNotNone(BUNDLE_NAME_RE.match(written[0]), written[0])
 
-    def test_ac_rs_6_the_header_stamps_repo_head_generated_and_the_rows(self):
-        """AC-RS-6: the header's fields, with the full HEAD SHA and each blob."""
+    def test_dec_000630_the_header_is_one_comment_line_naming_head_and_a_timestamp(self):
+        """AC-RS-14/DEC-000630: the header is one HTML comment; nothing else in it."""
         code, out, err = self.bundle("--where", "role=writer", "--out", str(self.out))
         self.assertEqual(code, EXIT_OK, err)
         lines = self.bundle_path(out).read_text().splitlines()
         head = git(self.clone, "rev-parse", "HEAD", env=self.env, check=True)[1].strip()
-        blob = git(self.clone, "rev-parse", "HEAD:rules/R0001.md",
-                   env=self.env, check=True)[1].strip()
-        self.assertEqual(lines[0], "# fiducial-bundle")
-        self.assertIn("- HEAD: %s" % head, lines)
-        self.assertIn("- Rows:", lines)
-        self.assertIn("  - R0001 (%s)" % blob, lines)
-        self.assertTrue(any(line.startswith("- Repo: ") for line in lines), lines[:8])
-        self.assertTrue(
-            any(re.match(r"^- Generated: \d{8}T\d{6}Z$", line) for line in lines),
-            lines[:8],
+        self.assertRegex(
+            lines[0], r"^<!-- fiducial \S+ @ %s \d{8}T\d{6}Z -->$" % re.escape(head)
         )
+        self.assertEqual(lines[1], "")
+
+    def test_q9_the_repo_label_reflects_a_remote_of_a_known_form(self):
+        """Q9: `_repo_label` reads `owner/repo` off a remote shaped like one."""
+        named = self.origin.parent / "davepierceops" / "fiducial.git"
+        named.parent.mkdir(parents=True, exist_ok=True)
+        git(self.origin.parent, "clone", "-q", "--bare", str(self.origin), str(named),
+            env=self.env, check=True)
+        git(self.clone, "remote", "set-url", "origin", str(named),
+            env=self.env, check=True)
+        code, out, err = self.bundle("--where", "role=writer", "--out", str(self.out))
+        self.assertEqual(code, EXIT_OK, err)
+        lines = self.bundle_path(out).read_text().splitlines()
+        self.assertIn(" davepierceops/fiducial @ ", lines[0])
 
     def test_ac_rs_15_the_bundle_holds_the_selected_rows_in_order(self):
-        """AC-RS-15: a `process/` document interleaves with rules by `order`."""
+        """AC-RS-15/DEC-000640: process documents are their own band, after
+        every rule; no row-id headings; `## Definitions` is the last heading."""
         code, out, err = self.bundle("--where", "role=writer", "--out", str(self.out))
         self.assertEqual(code, EXIT_OK, err)
         text = self.bundle_path(out).read_text()
-        headings = [line for line in text.splitlines() if line.startswith("## ")]
-        self.assertEqual(
-            headings, ["## R0001", "## process/change-flow.md", "## R0002",
-                       "## Definitions"]
-        )
+        lines = text.splitlines()
+        self.assertFalse([line for line in lines if re.match(r"^## R", line)])
+        process_at = text.index("# Change flow")
+        self.assertLess(text.index("Open one tranche per delta"), process_at)
+        self.assertLess(text.index("State the obligation at its shortest"), process_at)
+        headings = [line for line in lines if line.startswith("## ")]
+        self.assertEqual(headings, ["## Definitions"])
+        self.assertGreater(text.index("## Definitions"), process_at)
+
+    def test_ac_rs_15_the_topic_sequence_orders_intake_before_core(self):
+        """AC-RS-15/DEC-000640: process/named-queries.md's fixture sequence
+        puts intake ahead of core, so R0003 precedes R0001 and R0002 — the
+        opposite of alphabetical, which is what tells the two apart."""
+        code, out, err = self.bundle("--where", "verb=require", "--out", str(self.out))
+        self.assertEqual(code, EXIT_OK, err)
+        text = self.bundle_path(out).read_text()
+        intake_at = text.index("Run the red gate before any implementation.")
+        self.assertLess(intake_at, text.index("Open one tranche per delta"))
+        self.assertLess(intake_at, text.index("State the obligation at its shortest"))
 
     def test_ac_rs_13_a_used_term_pulls_its_definition_into_the_bundle(self):
         """AC-RS-13: R0001's body uses "tranche", so R0100 joins the bundle."""
         code, out, err = self.bundle("--where", "role=writer", "--out", str(self.out))
         self.assertEqual(code, EXIT_OK, err)
         text = self.bundle_path(out).read_text()
-        self.assertIn("- Definitions:", text)
+        self.assertIn("## Definitions", text)
         self.assertIn("**tranche** — A tranche is one concurrent workstream of build "
                       "work.", text)
 
@@ -212,6 +236,14 @@ class TestBundleRefusals(BundleCliTestCase):
         code, out, err = self.bundle("--where", "role=", "--out", str(self.out))
         self.assert_refused(code, out, err)
 
+    def test_q8_a_name_containing_a_path_separator_or_dotdot_is_refused(self):
+        """Q8: `--name` cannot escape `--out` — refused on the malformed-query
+        path, writing nothing."""
+        code, out, err = self.bundle(
+            "--where", "role=writer", "--name", "../escaped", "--out", str(self.out)
+        )
+        self.assert_refused(code, out, err)
+
     def test_ac_rs_6_an_uncommitted_change_under_rules_is_refused(self):
         """AC-RS-6: an unsynced tree refuses — a bundle must be reproducible."""
         self.dirty_the_store()
@@ -224,10 +256,28 @@ class TestBundleRefusals(BundleCliTestCase):
         code, out, err = self.bundle("--where", "role=writer", "--out", str(self.out))
         self.assert_refused(code, out, err)
 
+    def test_s8_a_failed_fetch_is_distinguished_from_an_unsynced_head(self):
+        """S8: a fetch that cannot reach origin refuses with its own message
+        — it must not fall back to comparing against a stale local
+        origin/main and report success."""
+        git(self.clone, "remote", "set-url", "origin", "/nonexistent/origin.git",
+            env=self.env, check=True)
+        code, out, err = self.bundle("--where", "role=writer", "--out", str(self.out))
+        self.assert_refused(code, out, err)
+        self.assertIn("could not reach origin", err)
+
     def test_ac_rs_6_an_empty_selection_is_refused(self):
         """AC-RS-6: "An empty selection is refused, not written"."""
         code, out, err = self.bundle("--where", "role=nobody", "--out", str(self.out))
         self.assert_refused(code, out, err)
+
+    def test_q9_the_malformed_query_message_wins_over_a_dirty_tree(self):
+        """Q9: both conditions at once still reports the query defect — the
+        malformed-query refusal is checked before the dirty-tree one."""
+        self.dirty_the_store()
+        code, out, err = self.bundle("--where", "role", "--out", str(self.out))
+        self.assert_refused(code, out, err)
+        self.assertIn("not a k=v token", err)
 
 
 class TestBundleKeysAndNear(BundleCliTestCase):
@@ -268,6 +318,77 @@ class TestBundleKeysAndNear(BundleCliTestCase):
         scores = [float(line.rsplit(" ", 1)[1]) for line in lines]
         self.assertEqual(scores, sorted(scores, reverse=True))
         self.assertEqual(lines[0].split(" ", 1)[0], "R0100")
+
+
+class TestBundleNotTheRuleStore(unittest.TestCase):
+    """S12: inside a git repository that is not the rule store, refuse
+    rather than reporting an empty store as though it were the real one."""
+
+    def setUp(self):
+        self.env = base_env()
+        self.repo = make_repo(self)
+        write(self.repo, "README.md", "Not the rule store.\n")
+        commit(self.repo, "seed", env=self.env)
+
+    def assert_refused_naming_the_directory(self, code, out, err):
+        self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
+        lines = err.strip().splitlines()
+        self.assertEqual(len(lines), 1, err)
+        self.assertIn(str(self.repo), lines[0])
+        self.assertTrue(no_traceback(out, err), err)
+
+    def test_s12_keys_refuses_outside_the_rule_store(self):
+        code, out, err = run_bundle("--keys", cwd=self.repo, env=self.env)
+        self.assert_refused_naming_the_directory(code, out, err)
+
+    def test_s12_near_refuses_outside_the_rule_store(self):
+        code, out, err = run_bundle("--near", "anything", cwd=self.repo, env=self.env)
+        self.assert_refused_naming_the_directory(code, out, err)
+
+    def test_s12_where_refuses_outside_the_rule_store(self):
+        code, out, err = run_bundle(
+            "--where", "role=writer", cwd=self.repo, env=self.env
+        )
+        self.assert_refused_naming_the_directory(code, out, err)
+
+
+class TestBundleMalformedRow(unittest.TestCase):
+    """Q11/Q3: `RowShapeError` refuses with one line, in every mode — closes
+    the coverage gap the fix directive's waiver left open."""
+
+    def setUp(self):
+        files = dict(rs_store_files())
+        files["rules/R0002.md"] = rs_row(
+            "R0002", "State the obligation at its shortest.",
+            order="twenty", topic=["core"], role=["writer"], verb="require", term=None,
+        )
+        self.origin, self.clone = make_store_repo(self, files=files)
+        self.env = base_env()
+        self.out = temp_dir(self, "rulestore-out-")
+
+    def bundle(self, *args):
+        return run_bundle(*args, cwd=self.clone, env=self.env)
+
+    def assert_refused_naming_the_defect(self, code, out, err):
+        self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
+        lines = err.strip().splitlines()
+        self.assertEqual(len(lines), 1, err)
+        self.assertIn("R0002", lines[0])
+        self.assertIn("order", lines[0])
+        self.assertTrue(no_traceback(out, err), err)
+
+    def test_q11_keys_refuses_on_a_malformed_row(self):
+        code, out, err = self.bundle("--keys")
+        self.assert_refused_naming_the_defect(code, out, err)
+
+    def test_q11_near_refuses_on_a_malformed_row(self):
+        code, out, err = self.bundle("--near", "obligation")
+        self.assert_refused_naming_the_defect(code, out, err)
+
+    def test_q11_where_refuses_on_a_malformed_row(self):
+        code, out, err = self.bundle("--where", "topic=core", "--out", str(self.out))
+        self.assert_refused_naming_the_defect(code, out, err)
+        self.assertEqual(sorted(p.name for p in self.out.iterdir()), [])
 
 
 if __name__ == "__main__":

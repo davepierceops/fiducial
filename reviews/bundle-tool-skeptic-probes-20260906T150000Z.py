@@ -55,6 +55,8 @@ from rulestore.store import (  # noqa: E402
     RowShapeError,
     normalize_fields,
 )
+from tests import test_rulestore_boundary as boundary  # noqa: E402
+from tests.test_cross_cutting import production_files  # noqa: E402
 
 SUMMARY = []
 
@@ -225,13 +227,15 @@ def leak(root):
 
 
 def _boundary_checks(source, name="query.py"):
-    """The eight checks `test_rulestore_boundary.py` makes, over one source."""
+    """The checks `test_rulestore_boundary.py` makes, over one source. The
+    two load-bearing checks (S3, S16) delegate to that module's own
+    `names_imported_from_store` and `source_of`, applied to a scratch copy of
+    `source`, so this probe fails and passes exactly when they do rather than
+    re-implementing frozen copies of them."""
     forbidden = {"os", "pathlib", "glob", "io", "subprocess"}
     storage_paths = ("rules/", "process/")
-    allowed_store_names = {"Row", "RowSource"}
     tree = ast.parse(source, filename=name)
     imports = set()
-    from_store = set()
     calls = []
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):
@@ -240,21 +244,33 @@ def _boundary_checks(source, name="query.py"):
         elif isinstance(node, ast.ImportFrom):
             if node.level == 0 and node.module:
                 imports.add(node.module.split(".")[0])
-            module = node.module or ""
-            if (node.level == 0 and module in ("rulestore.store", "store")) or (
-                node.level > 0 and module == "store"
-            ):
-                from_store.update(alias.name for alias in node.names)
         elif isinstance(node, ast.Call):
             func = node.func
             called = getattr(func, "id", None) or getattr(func, "attr", None)
             if called in ("open", "read_text", "read_bytes", "rglob", "glob",
                           "iterdir", "walk", "listdir"):
                 calls.append(called)
+    scratch = pathlib.Path(tempfile.mkdtemp(prefix="probe-boundary-"))
+    try:
+        (scratch / name).write_text(source, encoding="utf-8")
+        original_package_dir = boundary.PACKAGE_DIR
+        boundary.PACKAGE_DIR = scratch
+        try:
+            takes_more_than_row_types = sorted(
+                boundary.names_imported_from_store(name) - boundary.ALLOWED_STORE_NAMES
+            )
+            references_filerowsource = "FileRowSource" in boundary.source_of(name)
+        finally:
+            boundary.PACKAGE_DIR = original_package_dir
+    finally:
+        shutil.rmtree(scratch, ignore_errors=True)
     return {
         "imports a filesystem module": sorted(imports & forbidden),
         "names a storage path": [p for p in storage_paths if p in source],
-        "takes more than Row/RowSource from store": sorted(from_store - allowed_store_names),
+        "takes more than Row/RowSource from store": takes_more_than_row_types,
+        "references FileRowSource by name": (
+            ["FileRowSource"] if references_filerowsource else []
+        ),
         "calls a file-opening name": calls,
         "imports outside stdlib+rulestore": sorted(
             n for n in imports if n not in set(sys.stdlib_module_names) | {"rulestore"}
@@ -274,14 +290,22 @@ def probe_b():
     caught = any(results.values())
     print()
     print("  every boundary check passes on this module: %s" % (not caught))
-    print("  and yet it reads the store: leak(root) -> FileRowSource(root).rows()")
+    if caught:
+        print("  it does not: names_imported_from_store and the FileRowSource-by-name")
+        print("  check (bin/tests/test_rulestore_boundary.py) both catch it (S16).")
+    else:
+        print("  and yet it reads the store: leak(root) -> FileRowSource(root).rows()")
     print()
-    print("  A rename also defeats the literal scan. `STORAGE_PATHS` is the pair")
-    print("  ('rules/', 'process/'); rename either root and the scan asserts nothing,")
+    print("  A rename still defeats the literal scan alone. `STORAGE_PATHS` is the pair")
+    print("  ('rules/', 'process/'); rename either root and that one scan asserts nothing,")
     print("  and `test_ac_rs_4_store_is_the_only_module_that_names_a_storage_path`")
-    print("  fails on store.py rather than catching a processing module.")
+    print("  fails on store.py rather than catching a processing module — the two")
+    print("  load-bearing checks above do not depend on the storage root's name.")
     note("(b)", "FAIL" if not caught else "PASS",
-         "AC-RS-4 is defeated by `import rulestore.store` + a split string literal")
+         ("AC-RS-4 is defeated by `import rulestore.store` + a split string literal"
+          if not caught else
+          "the two load-bearing checks catch `import rulestore.store` + a split "
+          "string literal; the STORAGE_PATHS substring scan alone would still miss it"))
 
 
 # ------------------------------------------------------------------ probe c
@@ -368,35 +392,40 @@ def probe_d():
         print("      %-22s -> %s" % (label, got or "[] NOT PULLED"))
 
     print()
-    print("  The same question asked of the real store:")
+    print("  The same question asked of the real store (S10: calls")
+    print("  terms.pull_definitions itself, so this tracks the code as it")
+    print("  stands rather than re-implementing the pre-fix pattern):")
     rows = FileRowSource(REPO).rows()
     definitions = [r for r in rows if terms.is_definition(r)]
+    multiword = sum(1 for d in definitions for t in d.keys["term"] if " " in t)
     missed = []
     for r in rows:
-        body = r.body or ""
-        flat = re.sub(r"\s+", " ", body)
+        if terms.is_definition(r):
+            continue
+        pulled_ids = {d.id for d in terms.pull_definitions([r], rows)}
+        flat = re.sub(r"\s+", " ", r.body or "")
         for d in definitions:
             if d.id == r.id:
                 continue
             for term in d.keys.get("term") or []:
                 if " " not in term:
                     continue
-                as_written = re.compile(r"(?<!\w)%s(?!\w)" % re.escape(term), re.I)
                 unwrapped = re.compile(
                     r"(?<!\w)%s(?!\w)" % re.escape(re.sub(r"\s+", " ", term)), re.I
                 )
-                if unwrapped.search(flat) and not as_written.search(body):
+                if unwrapped.search(flat) and d.id not in pulled_ids:
                     missed.append((r.id, d.id, term))
     print("      rows: %d   definitions: %d   multi-word terms: %d"
-          % (len(rows), len(definitions),
-             sum(1 for d in definitions for t in d.keys["term"] if " " in t)))
-    print("      real rows whose phrase-term use is missed because the body wraps: %d"
+          % (len(rows), len(definitions), multiword))
+    print("      real rows whose phrase-term use is missed by pull_definitions: %d"
           % len(missed))
     for r_id, d_id, term in missed:
         print("          row %-16s misses definition %-8s on term %r" % (r_id, d_id, term))
+    clause = ("a phrase across a line break is missed" if missed
+              else "a phrase across a line break is not missed")
     note("(d)", "FAIL" if missed else "PASS",
-         "whole-word matching is right; a phrase across a line break is missed "
-         "(%d real rows lose a definition)" % len(missed))
+         "whole-word matching is right; %s (%d real rows lose a definition)"
+         % (clause, len(missed)))
 
 
 # ------------------------------------------------------------------ probe e
@@ -455,12 +484,19 @@ def probe_f():
         files = dict(STORE)
         files["rules/R0777.md"] = "Just prose, and no frontmatter at all.\n"
         _origin, clone = make_store_repo(parent, files=files)
-        rows = FileRowSource(clone).rows()
-        orphan = next(r for r in rows if r.path == "rules/R0777.md")
-        print("      returned: id=%r keys=%r order=%r" % (orphan.id, orphan.keys, orphan.order))
-        print("      -> accepted silently; the id falls back to the path stem, and the")
-        print("         row is unselectable by any key while still counting as a row.")
-        f1_defect = orphan.keys == {} and orphan.id == "R0777"
+        try:
+            rows = FileRowSource(clone).rows()
+            orphan = next(r for r in rows if r.path == "rules/R0777.md")
+            print("      returned: id=%r keys=%r order=%r"
+                  % (orphan.id, orphan.keys, orphan.order))
+            print("      -> accepted silently; the id falls back to the path stem, and")
+            print("         the row is unselectable while still counting as a row.")
+            f1_defect = orphan.keys == {} and orphan.id == "R0777"
+        except RowShapeError as exc:
+            print("      raises: %s" % exc)
+            print("      -> S4 (this package): a rules/ file with no frontmatter is now")
+            print("         a named defect, not a silently-accepted row.")
+            f1_defect = False
     finally:
         shutil.rmtree(parent, ignore_errors=True)
 
@@ -471,8 +507,12 @@ def probe_f():
     scalar, _order = normalize_fields("R0003", {"note": '"one, two"'})
     print("      note: \"one, two\"     ->  %r" % scalar)
     f2_defect = got.get("topic") != ["a, b", "c"]
-    print("      -> the bracket branch splits on every comma before quotes come off,")
-    print("         so the quoted value is torn in two and both halves keep a quote.")
+    if f2_defect:
+        print("      -> the bracket branch splits on every comma before quotes come off,")
+        print("         so the quoted value is torn in two and both halves keep a quote.")
+    else:
+        print("      -> S4 (this package): the bracket branch now splits on commas")
+        print("         outside quotes, so the quoted value survives whole.")
 
     print()
     print("  f3 — a `## Human` heading at a different level")
@@ -492,8 +532,12 @@ def probe_f():
         text = render.render([mis], [], repo="probe", head="0" * 40, generated="20260906T150000Z")
         leaked = "DEC-000999" in text
         print("      the rationale reaches the rendered bundle: %s" % leaked)
-        print("      -> AC-RS-14 holds only for the exact string '## Human'; one wrong")
-        print("         heading level publishes the human form to an agent.")
+        if leaked:
+            print("      -> AC-RS-14 holds only for the exact string '## Human'; one wrong")
+            print("         heading level publishes the human form to an agent.")
+        else:
+            print("      -> S2 (this package): any ATX heading spelled Human is now")
+            print("         recognized, so the mis-levelled heading no longer leaks.")
         f3_defect = leaked
     finally:
         shutil.rmtree(parent, ignore_errors=True)
@@ -508,22 +552,29 @@ def probe_f():
             "---\n\n# A process document whose stem collides with a rule id.\n"
         )
         _origin, clone = make_store_repo(parent, files=files)
-        rows = FileRowSource(clone).rows()
-        colliding = [r for r in rows if r.id == "R0001"]
-        print("      rows sharing id 'R0001': %s"
-              % [(r.kind, r.path) for r in colliding])
-        selected = query.select(rows, {"role": "writer"})
-        print("      both selected: %s" % [(r.kind, r.id) for r in selected])
-        # the dedupe that keys on id
-        definition = row("R0100", "A tranche is one workstream.", term=["tranche"])
-        pulled = terms.pull_definitions(selected, rows)
-        print("      pull_definitions dedupes on row.id; selected ids seen as: %s"
-              % sorted({r.id for r in selected}))
-        collide_defect = len(colliding) > 1 and len({r.id for r in selected}) < len(selected)
-        print("      -> `pull_definitions` builds `already = {row.id for row in selected}`,")
-        print("         so a definition whose id equals a colliding process stem is")
-        print("         suppressed, and `--near` prints an ambiguous first column.")
-        f4_defect = collide_defect
+        try:
+            rows = FileRowSource(clone).rows()
+            colliding = [r for r in rows if r.id == "R0001"]
+            print("      rows sharing id 'R0001': %s"
+                  % [(r.kind, r.path) for r in colliding])
+            selected = query.select(rows, {"role": "writer"})
+            print("      both selected: %s" % [(r.kind, r.id) for r in selected])
+            pulled = terms.pull_definitions(selected, rows)
+            print("      pull_definitions dedupes on row.id; selected ids seen as: %s"
+                  % sorted({r.id for r in selected}))
+            collide_defect = (
+                len(colliding) > 1 and len({r.id for r in selected}) < len(selected)
+            )
+            print("      -> `pull_definitions` builds `already = {row.id for row in "
+                  "selected}`,")
+            print("         so a definition whose id equals a colliding process stem is")
+            print("         suppressed, and `--near` prints an ambiguous first column.")
+            f4_defect = collide_defect
+        except RowShapeError as exc:
+            print("      raises: %s" % exc)
+            print("      -> S4 (this package): an id shared across the two roots is now")
+            print("         a named defect, not two rows sharing one identity.")
+            f4_defect = False
     finally:
         shutil.rmtree(parent, ignore_errors=True)
 
@@ -543,45 +594,63 @@ def probe_g():
 
     print("  g1 — the argv AC-X-4/6/7 run `bundle` with")
     helpers = (BIN / "tests" / "helpers.py").read_text(encoding="utf-8")
-    argv = re.search(r'"bundle": (\[[^\]]*\])', helpers)
-    print("      helpers.CLI_MINIMAL_ARGS['bundle'] = %s" % (argv.group(1) if argv else "?"))
+    argv_match = re.search(r'"bundle": (\[[^\]]*\])', helpers)
+    minimal_argv = ast.literal_eval(argv_match.group(1)) if argv_match else []
+    print("      helpers.CLI_MINIMAL_ARGS['bundle'] = %r" % (minimal_argv,))
     print("      (its comment: \"Minimal argv that gets each CLI past argparse\")")
     outside = pathlib.Path(tempfile.mkdtemp(prefix="probe-outside-"))
     try:
-        code, out, err = bundle(outside, "base")
-        print("      `bundle base` outside a repo -> exit %s, %r"
-              % (code, (err.strip().splitlines() or [""])[-1]))
-        print("      -> it dies AT argparse, never reaching the repo, file or encoding")
-        print("         work AC-X-4, AC-X-6 and AC-X-7 exist to exercise.")
+        code, out, err = bundle(outside, *minimal_argv)
+        last_err = (err.strip().splitlines() or [""])[-1]
+        print("      `bundle %s` outside a repo -> exit %s, %r"
+              % (" ".join(minimal_argv), code, last_err))
+        died_at_argparse = "usage:" in err.lower()
+        if died_at_argparse:
+            print("      -> it dies AT argparse, never reaching the repo, file or encoding")
+            print("         work AC-X-4, AC-X-6 and AC-X-7 exist to exercise.")
+        else:
+            print("      -> it passes argparse and reaches the repo-existence check that")
+            print("         refuses it; the repo, file and encoding work AC-X-4, AC-X-6")
+            print("         and AC-X-7 exist to exercise is reached, not skipped.")
 
         print()
         print("  g2 — what those ACs would have caught with a live argv")
+        exits = {}
         for args in (("--keys",), ("--near", "anything")):
             code, out, err = bundle(outside, *args)
+            exits[args] = code
             print("      `bundle %-16s` outside a repo -> exit %s, stdout %r, stderr %r"
                   % (" ".join(args), code, out.strip(), err.strip()))
-        print("      -> AC-X-4 requires exit 2 or 3 outside a repository. Both modes")
-        print("         exit 0 in silence: `_repo_root()` falls back to the cwd and")
-        print("         `FileRowSource` finds no rules/ directory there.")
-        acx4_violated = bundle(outside, "--keys")[0] == 0
+        acx4_violated = any(code == 0 for code in exits.values())
+        print("      -> AC-X-4 requires exit 2 or 3 outside a repository.")
+        if acx4_violated:
+            print("         At least one mode above exits 0 in silence.")
+        else:
+            print("         Both modes above now refuse.")
     finally:
         shutil.rmtree(outside, ignore_errors=True)
 
     print()
     print("  g3 — which files the AC-X-1/2/7 static scans read")
-    scanned = sorted(p.name for p in BIN.iterdir() if p.is_file() and not p.name.startswith("."))
-    scanned += sorted("aimeta/%s" % p.name for p in (BIN / "aimeta").glob("*.py"))
-    package = sorted("rulestore/%s" % p.name for p in PACKAGE.glob("*.py"))
-    print("      production_files() covers %d files under bin/ and bin/aimeta/" % len(scanned))
-    print("      bin/rulestore/ files it covers: %s"
-          % ([n for n in package if n in scanned] or "none"))
-    print("      -> the new package is outside every AC-X static scan, and bin/bundle")
-    print("         reaches it through importlib, so the module graph AC-X-2 reads")
-    print("         no longer includes the code that does the work.")
+    files = production_files()
+    covered_rulestore = sorted(p.name for p in files if p.parent.name == "rulestore")
+    bundle_source = (BIN / "bundle").read_text(encoding="utf-8")
+    bundle_imports_importlib = "importlib" in bundle_source
+    print("      production_files() covers %d files, bin/rulestore/ included" % len(files))
+    print("      bin/rulestore/ files it covers: %s" % (covered_rulestore or "none"))
+    if covered_rulestore:
+        print("      -> Q5 added bin/rulestore/*.py to production_files(); the new")
+        print("         package is inside the AC-X static scans.")
+    else:
+        print("      -> the new package is outside every AC-X static scan.")
+    print("      bin/bundle imports importlib: %s" % bundle_imports_importlib)
 
     note("(g)", "FAIL" if acx4_violated else "PASS",
-         "AC-X-4 is violated by --keys/--near (exit 0 outside a repo) and hidden "
-         "by a stale argv; bin/rulestore/ is outside every AC-X scan")
+         ("AC-X-4 is violated by --keys/--near (exit 0 outside a repo) and hidden "
+          "by a stale argv" if acx4_violated
+          else "AC-X-4 now refuses outside a repo for --keys and --near")
+         + ("; bin/rulestore/ is outside every AC-X scan" if not covered_rulestore
+            else "; bin/rulestore/ is inside the AC-X static scans (Q5)"))
 
 
 def main():

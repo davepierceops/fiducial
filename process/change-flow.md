@@ -1,5 +1,6 @@
 ---
 order: 10
+topic: [change-flow]
 role: [architect-agent, chief-of-staff, coder-agent, context-quality-reviewer, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent, test-designer-agent]
 session: [decision, execution]
 corpus: [software]

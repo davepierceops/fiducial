@@ -1,5 +1,6 @@
 ---
 order: 110
+topic: [decision-log]
 role: [chief-of-staff]
 session: [decision]
 corpus: [software]

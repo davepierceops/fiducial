@@ -1,5 +1,6 @@
 ---
 order: 80
+topic: [spec-test-suite]
 role: [chief-of-staff]
 session: [decision]
 corpus: [software]

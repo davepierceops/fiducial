@@ -14,6 +14,11 @@ there builds its rows in memory and touches no file.
 `store.py` is the storage layer. `query.py`, `terms.py`, `keys.py`, `near.py`
 and `render.py` are the processing modules; `__init__.py` is the package
 docstring and nothing else, and is held to the processing modules' rules.
+
+The `STORAGE_PATHS` substring scan (S3, bundle-tool-skeptic-20260906T150000Z.md)
+is a smoke check, not the guarantee: string concatenation or a renamed storage
+root defeats it. `names_imported_from_store` and the `FileRowSource`-name check
+below are the load-bearing half.
 """
 
 from __future__ import annotations
@@ -27,8 +32,10 @@ from tests.helpers import BIN_DIR
 PACKAGE_DIR = BIN_DIR / "rulestore"
 
 #: The modules AC-RS-4 names as processing modules, plus the package marker.
+#: `named_queries.py` (bundle-tool-followup-20260907T170000Z.md item 3) is
+#: pure over text and holds to the same rules.
 PROCESSING_MODULES = ("query.py", "terms.py", "keys.py", "near.py", "render.py",
-                      "__init__.py")
+                      "named_queries.py", "__init__.py")
 STORAGE_MODULE = "store.py"
 
 #: Imports that can only serve filesystem traversal or subprocess work.
@@ -60,19 +67,24 @@ def top_level_imports(name):
 
 
 def names_imported_from_store(name):
-    """Every name `name` imports out of the storage module, either spelling."""
+    """Every name `name` imports out of the storage module, either spelling —
+    `from ... import X` and a plain `import rulestore.store` / `import store`
+    alike (S3): the latter is invisible to an `ImportFrom`-only scan."""
     tree = ast.parse(source_of(name), filename=name)
     found = set()
     for node in ast.walk(tree):
-        if not isinstance(node, ast.ImportFrom):
-            continue
-        module = node.module or ""
-        is_store = (
-            (node.level == 0 and module in ("rulestore.store", "store"))
-            or (node.level > 0 and module == "store")
-        )
-        if is_store:
-            found.update(alias.name for alias in node.names)
+        if isinstance(node, ast.ImportFrom):
+            module = node.module or ""
+            is_store = (
+                (node.level == 0 and module in ("rulestore.store", "store"))
+                or (node.level > 0 and module == "store")
+            )
+            if is_store:
+                found.update(alias.name for alias in node.names)
+        elif isinstance(node, ast.Import):
+            for alias in node.names:
+                if alias.name in ("rulestore.store", "store"):
+                    found.add(alias.name)
     return found
 
 
@@ -128,6 +140,14 @@ class TestStorageBoundary(unittest.TestCase):
             for taken in sorted(extra):
                 offenders.append("%s imports %s from store" % (name, taken))
         self.assertEqual(offenders, [], "\n".join(offenders))
+
+    def test_ac_rs_4_no_processing_module_references_filerowsource(self):
+        """AC-RS-4/S3: `FileRowSource` is `store.py`'s alone; no processing
+        module names it at all, whatever import spelling got it there."""
+        offenders = [
+            name for name in PROCESSING_MODULES if "FileRowSource" in source_of(name)
+        ]
+        self.assertEqual(offenders, [], offenders)
 
     def test_ac_rs_4_no_processing_module_opens_a_file(self):
         """AC-RS-4: file I/O stays inside the storage layer, however it is spelled."""

@@ -2,7 +2,10 @@
 """`bin/bundle` — the rule-store bundle command.
 
 Contract: `docs/cycles/bundle-tool-tests-20260906T110000Z.md` § "INTERFACE
-CONTRACT", landed at `d5b643b48cf0285194d29b09f6755db1b8a16b34`. Three modes:
+CONTRACT", landed at `d5b643b48cf0285194d29b09f6755db1b8a16b34`; amended by
+`docs/cycles/bundle-tool-followup-20260907T170000Z.md` items 4 (sequence-
+ordered selection), 5 (the one-line header) and 7 (Q5 plain imports, Q6/Q8/
+Q9/Q11/S8/S12 refusals). Three modes:
 
     bin/bundle --where k=v [k=v ...] [--name NAME] [--out DIR]
     bin/bundle --keys
@@ -18,7 +21,6 @@ from __future__ import annotations
 
 import argparse
 import datetime
-import importlib
 import os
 import pathlib
 import subprocess
@@ -26,17 +28,14 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-#: Loaded by name, not `import`, so this file's own import surface stays
-#: stdlib-only (AC-X-2, `bin/tests/test_cross_cutting.py`): that scan's
-#: `LOCAL_MODULES` allowlist predates this package and names only `aimeta`,
-#: and editing the test is not this package's to do (DEC-000440).
-query = importlib.import_module("rulestore.query")
-terms = importlib.import_module("rulestore.terms")
-keys_mod = importlib.import_module("rulestore.keys")
-near_mod = importlib.import_module("rulestore.near")
-render = importlib.import_module("rulestore.render")
-store_mod = importlib.import_module("rulestore.store")
-FileRowSource = store_mod.FileRowSource
+from rulestore import keys as keys_mod
+from rulestore import named_queries
+from rulestore import near as near_mod
+from rulestore import query
+from rulestore import render
+from rulestore import store as store_mod
+from rulestore import terms
+from rulestore.store import FileRowSource
 
 EXIT_OK = 0
 EXIT_REFUSED = 2
@@ -78,12 +77,21 @@ def _dirty_under(root, *dirs):
 
 
 def _synced_with_main(root):
-    """`HEAD` equals `origin/main` after a fetch."""
-    _git(root, "fetch", "-q", "origin", "main")
+    """`(synced, reason)` — `HEAD` equals `origin/main` after a fetch.
+
+    `reason` is set only when not synced, distinguishing a fetch that could
+    not reach origin from a `HEAD` that genuinely differs (S8): a failed
+    fetch used to compare against a possibly stale `origin/main` and report
+    success.
+    """
+    if _git(root, "fetch", "-q", "origin", "main").returncode != 0:
+        return False, "could not reach origin"
     head = _head(root)
     proc = _git(root, "rev-parse", "origin/main")
     upstream = proc.stdout.strip() if proc.returncode == 0 else None
-    return head is not None and head == upstream
+    if head is not None and head == upstream:
+        return True, None
+    return False, "HEAD is not synced with origin/main"
 
 
 def build_parser():
@@ -120,7 +128,7 @@ def cmd_near(root, text):
     except store_mod.RowShapeError as exc:
         return refuse("refused: %s" % exc)
     for row, score in near_mod.near(text, rows):
-        print("%s %.2f" % (row.id, score))
+        print("%s %.2f" % (render._heading(row), score))
     return EXIT_OK
 
 
@@ -130,17 +138,23 @@ def cmd_where(root, tokens, name, out):
     except query.QueryError as exc:
         return refuse("refused: %s" % exc)
 
+    if name and ("/" in name or "\\" in name or ".." in name):
+        return refuse("refused: --name must not contain a path separator or ..: %r" % name)
+
     if _dirty_under(root, "rules", "process"):
         return refuse("refused: uncommitted changes under rules/ or process/")
 
-    if not _synced_with_main(root):
-        return refuse("refused: HEAD is not synced with origin/main")
+    synced, reason = _synced_with_main(root)
+    if not synced:
+        return refuse("refused: %s" % reason)
 
     try:
-        rows = FileRowSource(root).rows()
+        source = FileRowSource(root)
+        rows = source.rows()
     except store_mod.RowShapeError as exc:
         return refuse("refused: %s" % exc)
-    selected = query.select(rows, where)
+    sequences = named_queries.sequences(source.named_queries_text())
+    selected = query.select(rows, where, sequences)
     if not selected:
         return refuse("refused: the query selected no rows")
 
@@ -165,6 +179,8 @@ def main(argv=None):
     root = _repo_root()
     if root is None:
         return refuse("refused: not inside a git repository")
+    if not (root / "rules").is_dir() and not (root / "process").is_dir():
+        return refuse("refused: no rules/ or process/ under %s" % root)
     if args.keys:
         return cmd_keys(root)
     if args.near is not None:

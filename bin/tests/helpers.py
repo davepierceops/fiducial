@@ -41,6 +41,7 @@ CLI_NAMES = [
     "install-hooks",
     "directive",
     "check-directive",
+    "release",
 ]
 
 #: Minimal argv that gets each CLI past argparse, for tests that only care
@@ -49,11 +50,18 @@ CLI_MINIMAL_ARGS = {
     "check-frontmatter": ["--all"],
     "flip-agreed": ["policies/x.md", "--review", "reviews/r.md @ abc1234"],
     "cycle-open": ["--cycle", "1"],
-    "bundle": ["base"],
+    #: `["base"]` no longer gets `bundle` past argparse (S1, bundle-tool-
+    #: skeptic review 20260906T150000Z): the mode flags are
+    #: `--where`/`--keys`/`--near`, not a positional. A live argv is needed
+    #: so AC-X-4, AC-X-6 and AC-X-7 actually reach the tool's repository,
+    #: file and encoding handling (Q10/S11, bundle-tool-quality-reread and
+    #: bundle-tool-skeptic-reread, both 20260906T170000Z).
+    "bundle": ["--keys"],
     "migrate-frontmatter": ["--plan"],
     "install-hooks": [],
     "directive": ["--descriptor", "x", "--title", "T"],
     "check-directive": ["docs/cycles/x-20260828T170000.md"],
+    "release": [],
 }
 
 REAL_POLICY_TEXT = (REPO_ROOT / POLICY_RELPATH).read_text()
@@ -1331,9 +1339,32 @@ def rs_store_files():
         "process/change-flow.md": rs_process(
             "# Change flow\n\nEvery pull request gets an agentic code review.",
             order=20,
+            topic=["change-flow"],
             role=["writer", "critic"],
             session=["decision"],
             corpus=["writing"],
+        ),
+        "process/named-queries.md": rs_process(
+            "# Named Queries (fixture)\n\n"
+            "## The list\n\n"
+            "```text\n"
+            "writer       role=writer\n"
+            "critic       role=critic\n"
+            "coder-agent  role=coder-agent\n"
+            "```\n\n"
+            "## Sequence\n\n"
+            "```text\n"
+            "intake\n"
+            "core\n"
+            "```\n\n"
+            "```text\n"
+            "change-flow\n"
+            "```\n",
+            order=15,
+            topic=["named-queries"],
+            role=["chief-of-staff"],
+            session=["decision"],
+            corpus=["software"],
         ),
     }
 

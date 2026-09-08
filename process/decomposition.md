@@ -1,5 +1,6 @@
 ---
 order: 70
+topic: [decomposition]
 role: [chief-of-staff]
 session: [decision]
 corpus: [software]

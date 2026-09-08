@@ -39,9 +39,11 @@ import dataclasses
 import unittest
 
 from rulestore import keys as keys_mod
+from rulestore import named_queries
 from rulestore import near as near_mod
 from rulestore import query, render, store, terms
-from rulestore.store import MemoryRowSource, Row, RowShapeError
+from rulestore.store import FileRowSource, MemoryRowSource, Row, RowShapeError
+from tests.helpers import REPO_ROOT
 
 
 # --------------------------------------------------------------- fixture rows
@@ -101,6 +103,20 @@ class TestRowShape(unittest.TestCase):
             "R0002", {"role": "[ Writer,  COPY-editor ]", "corpus": "[software]"}
         )
         self.assertEqual(keys, {"role": ["writer", "copy-editor"], "corpus": ["software"]})
+
+    def test_ac_rs_1_a_typed_value_inside_a_bracket_list_is_also_a_defect(self):
+        """AC-RS-1/Q7: bracketing a typed value must not hide the defect."""
+        with self.assertRaises(RowShapeError) as caught:
+            store.normalize_fields("R0009", {"weight": "[12, true]"})
+        self.assertIn("R0009", str(caught.exception))
+        self.assertIn("weight", str(caught.exception))
+
+    def test_ac_rs_1_a_quoted_comma_inside_a_list_element_is_not_split(self):
+        """AC-RS-1/S4: `["a, b", c]` keeps the quoted comma inside its item,
+        instead of the scalar branch's correct handling and the list
+        branch's naive `str.split(",")` disagreeing."""
+        keys, _ = store.normalize_fields("R0010", {"topic": '["a, b", c]'})
+        self.assertEqual(keys, {"topic": ["a, b", "c"]})
 
     def test_ac_rs_1_null_and_the_empty_list_are_an_absent_key(self):
         """AC-RS-1: `null` and an empty list carry no key at all."""
@@ -213,8 +229,9 @@ class TestSelect(unittest.TestCase):
         ]
         self.assertEqual(ids(query.select(rows, {"role": "writer"})), ["R0001"])
 
-    def test_ac_rs_2_result_is_ordered_by_order_then_topic_then_id(self):
-        """AC-RS-2: ascending `order`, then first `topic` value, then `id`."""
+    def test_ac_rs_2_with_no_sequence_every_topic_ties_and_sorts_by_name_then_order_then_id(self):
+        """AC-RS-2/DEC-000640: no sequence given, every topic is "unnamed" and
+        ties at position 0 — the result falls back to name, then order, then id."""
         rows = [
             row("R0009", order=20, topic="zeta", role=["writer"]),
             row("R0003", order=10, topic="beta", role=["writer"]),
@@ -225,14 +242,41 @@ class TestSelect(unittest.TestCase):
         self.assertEqual(ids(selected), ["R0002", "R0001", "R0003", "R0009"])
 
     def test_ac_rs_2_a_row_without_order_sorts_after_every_integer(self):
-        """AC-RS-2: `None` order sorts after every integer, however large."""
+        """AC-RS-2: `None` order sorts after every integer, however large.
+
+        Every row shares one topic, so the topic-position/name key ties and
+        the order/id tiebreak is isolated.
+        """
         rows = [
             row("R0001", order=None, topic="alpha", role=["writer"]),
-            row("R0002", order=999, topic="zeta", role=["writer"]),
+            row("R0002", order=999, topic="alpha", role=["writer"]),
             row("R0003", order=None, topic="alpha", role=["writer"]),
         ]
         selected = query.select(rows, {"role": "writer"})
         self.assertEqual(ids(selected), ["R0002", "R0001", "R0003"])
+
+    def test_ac_rs_2_a_two_line_sequence_orders_topic_position_ahead_of_order(self):
+        """AC-RS-2/DEC-000640: a later-named topic sorts after an earlier one,
+        whatever its `order` — the two-line sequence's position dominates."""
+        rows = [
+            row("R0001", order=1, topic="beta", role=["writer"]),
+            row("R0002", order=999, topic="alpha", role=["writer"]),
+        ]
+        sequences = ([["alpha"], ["beta"]], [])
+        selected = query.select(rows, {"role": "writer"}, sequences)
+        self.assertEqual(ids(selected), ["R0002", "R0001"])
+
+    def test_ac_rs_2_a_topic_the_sequence_does_not_name_sorts_after_every_named_one(self):
+        """AC-RS-2/DEC-000640: an unnamed topic sorts last, ties breaking
+        alphabetically by name among the unnamed rows."""
+        rows = [
+            row("R0001", order=1, topic="zeta", role=["writer"]),
+            row("R0002", order=2, topic="yankee", role=["writer"]),
+            row("R0003", order=100, topic="alpha", role=["writer"]),
+        ]
+        sequences = ([["alpha"]], [])
+        selected = query.select(rows, {"role": "writer"}, sequences)
+        self.assertEqual(ids(selected), ["R0003", "R0002", "R0001"])
 
     def test_ac_rs_2_a_query_nothing_holds_selects_nothing(self):
         """AC-RS-2: "exactly the rows" — including when that is none of them."""
@@ -353,13 +397,24 @@ class TestPullDefinitions(unittest.TestCase):
         selected = [row("R0100", "The critic reads last.", order=10, role=["writer"])]
         self.assertEqual(terms.pull_definitions(selected, selected + [hybrid, read]), [])
 
-    def test_ac_rs_13_pulled_definitions_use_the_select_ordering_rule(self):
-        """AC-RS-13: "returned in the same order rule as select"."""
+    def test_ac_rs_13_a_row_carrying_term_and_session_is_not_a_definition(self):
+        """AC-RS-13/DEC-000420 (Q4): a `session` key disqualifies a row from
+        being a definition, just as `role` and `corpus` do."""
+        hybrid = row("R0503", "A note about method.", order=20,
+                     term=["method"], session=["execution"])
+        selected = [row("R0100", "The method matters.", order=10, role=["writer"])]
+        self.assertEqual(terms.pull_definitions(selected, selected + [hybrid]), [])
+
+    def test_ac_rs_13_pulled_definitions_sort_by_order_then_id_none_last(self):
+        """AC-RS-13/F3: the definitions band is pinned to `(order, id)`, `None`
+        order last — its own key, independent of `select`'s sequence-based one."""
         late = definition("R0050", "beta", "A beta is a beta.", order=30)
         early = definition("R0060", "alpha", "An alpha is an alpha.", order=10)
-        selected = [row("R0100", "An alpha precedes a beta.", order=5, role=["writer"])]
-        pulled = terms.pull_definitions(selected, selected + [late, early])
-        self.assertEqual(ids(pulled), ["R0060", "R0050"])
+        unordered = definition("R0070", "gamma", "A gamma is a gamma.", order=None)
+        selected = [row("R0100", "An alpha precedes a beta precedes a gamma.",
+                        order=5, role=["writer"])]
+        pulled = terms.pull_definitions(selected, selected + [late, early, unordered])
+        self.assertEqual(ids(pulled), ["R0060", "R0050", "R0070"])
 
 
 # ------------------------------------------------------------------- AC-RS-5
@@ -415,11 +470,16 @@ class TestNear(unittest.TestCase):
 
 
 class TestRender(unittest.TestCase):
-    """AC-RS-6 the header, AC-RS-14 the two forms, AC-RS-15 process documents."""
+    """DEC-000630 the header, DEC-000640 the three bands, AC-RS-14 the two forms.
+
+    Contract: `docs/cycles/bundle-tool-followup-20260907T170000Z.md`, item 5 —
+    overrides the tests directive's header/manifest/heading form.
+    """
 
     HEAD = "a5d60506d1d1266d8685f498662f514d49e12136"
     GENERATED = "20260906T110000Z"
     REPO = "davepierceops/fiducial"
+    HEADER = "<!-- fiducial %s @ %s %s -->" % (REPO, HEAD, GENERATED)
 
     def rendered(self, rows, definitions=()):
         return render.render(
@@ -430,47 +490,30 @@ class TestRender(unittest.TestCase):
             generated=self.GENERATED,
         )
 
-    def test_ac_rs_6_the_header_comes_first_and_carries_every_field(self):
-        """AC-RS-6: title, Repo, the full HEAD SHA, Generated, then the manifest."""
+    def test_dec_000630_the_header_is_one_comment_line_then_a_blank_line(self):
+        """DEC-000630: `<!-- fiducial <repo> @ <head> <generated> -->`, then blank."""
         lines = self.rendered([row("R0001", "Prose.", order=10, blob="b" * 40)]).splitlines()
-        self.assertEqual(lines[0], "# fiducial-bundle")
-        self.assertIn("- Repo: %s" % self.REPO, lines)
-        self.assertIn("- HEAD: %s" % self.HEAD, lines)
-        self.assertIn("- Generated: %s" % self.GENERATED, lines)
-        self.assertIn("- Rows:", lines)
+        self.assertEqual(lines[0], self.HEADER)
+        self.assertEqual(lines[1], "")
 
-    def test_ac_rs_6_a_rule_is_manifested_by_id_and_blob(self):
-        """AC-RS-6: `  - <id> (<blob>)` for a rule, in bundle order."""
-        lines = self.rendered([
-            row("R0001", "First.", order=10, blob="b" * 40),
-            row("R0002", "Second.", order=20, blob="c" * 40),
-        ]).splitlines()
-        self.assertEqual(
-            [line for line in lines if line.startswith("  - ")],
-            ["  - R0001 (%s)" % ("b" * 40), "  - R0002 (%s)" % ("c" * 40)],
-        )
+    def test_dec_000630_no_title_or_manifest_lines_appear(self):
+        """DEC-000630: no member list, no blob list, no title line."""
+        text = self.rendered([row("R0001", "Prose.", order=10, blob="b" * 40)])
+        self.assertNotIn("# fiducial-bundle", text)
+        self.assertNotIn("- Repo:", text)
+        self.assertNotIn("- Rows:", text)
+        self.assertNotIn("- Definitions:", text)
+        self.assertNotIn("b" * 40, text)
 
-    def test_ac_rs_6_definitions_are_manifested_after_the_selected_rows(self):
-        """AC-RS-6: the definitions are listed after the rows, under their own key."""
-        selected = [row("R0001", "Open one tranche.", order=10, blob="b" * 40)]
-        defs = [definition("R0003", "tranche", "A tranche is one workstream.", order=20)]
-        lines = self.rendered(selected, defs).splitlines()
-        self.assertIn("- Definitions:", lines)
-        self.assertLess(lines.index("- Rows:"), lines.index("- Definitions:"))
-        self.assertIn("  - R0003 (%s)" % ("0" * 40), lines)
-
-    def test_ac_rs_6_rows_render_in_bundle_order_before_the_definitions(self):
-        """AC-RS-6: `## <id>` per row, in order; `## Definitions` last."""
+    def test_dec_000640_each_row_renders_as_body_text_with_no_heading(self):
+        """DEC-000640: rows render one after another, blank line between, no heading."""
         text = self.rendered(
-            [row("R0001", "First prose.", order=10), row("R0002", "Second prose.", order=20)],
-            [definition("R0003", "tranche", "A tranche is one workstream.", order=30)],
+            [row("R0001", "First prose.", order=10), row("R0002", "Second prose.", order=20)]
         )
-        self.assertEqual(
-            [line for line in text.splitlines() if line.startswith("#")],
-            ["# fiducial-bundle", "## R0001", "## R0002", "## Definitions"],
-        )
-        self.assertIn("First prose.", text)
-        self.assertIn("Second prose.", text)
+        self.assertNotIn("## R0001", text)
+        self.assertNotIn("## R0002", text)
+        body = text.split("\n\n", 1)[1]
+        self.assertEqual(body, "First prose.\n\nSecond prose.\n")
 
     def test_ac_rs_14_the_human_form_is_carried_on_the_row_and_never_rendered(self):
         """AC-RS-14 (G4): two forms, one row — `## Human` reaches no output."""
@@ -482,21 +525,22 @@ class TestRender(unittest.TestCase):
         self.assertNotIn("## Human", text)
         self.assertNotIn("DEC-000170", text)
 
-    def test_ac_rs_15_a_process_document_renders_under_its_path(self):
-        """AC-RS-15 (DEC-000490): a process row's heading is its path, not an id."""
+    def test_ac_rs_15_a_process_document_renders_as_body_text_under_no_heading(self):
+        """AC-RS-15/DEC-000640: a process row is body-only, not headed by its path."""
         text = self.rendered([
             row("change-flow", "The flow.", order=10, kind="process",
                 path="process/change-flow.md", blob="c" * 40)
         ])
-        self.assertIn("## process/change-flow.md", text)
-        self.assertIn("  - process/change-flow.md (%s)" % ("c" * 40), text.splitlines())
+        self.assertNotIn("## process/change-flow.md", text)
+        self.assertIn("The flow.", text)
 
-    def test_ac_rs_15_process_rows_interleave_with_rules_by_order(self):
-        """AC-RS-15: a process document is selected and ordered like any other row."""
+    def test_ac_rs_15_process_rows_sort_after_every_rule_whatever_their_order(self):
+        """AC-RS-15/DEC-000640: a process document is its own band, after every
+        rule regardless of `order` — no interleaving."""
         rows = query.select(
             [
                 row("R0002", "Late rule.", order=30, topic="core", role=["writer"]),
-                row("change-flow", "The flow.", order=20, kind="process",
+                row("change-flow", "The flow.", order=1, kind="process",
                     path="process/change-flow.md", role=["writer"]),
                 row("R0001", "Early rule.", order=10, topic="core", role=["writer"]),
             ],
@@ -504,12 +548,21 @@ class TestRender(unittest.TestCase):
         )
         text = self.rendered(rows)
         self.assertEqual(
-            [line for line in text.splitlines() if line.startswith("## ")],
-            ["## R0001", "## process/change-flow.md", "## R0002"],
+            [line for line in text.splitlines() if line.strip()],
+            [self.HEADER, "Early rule.", "Late rule.", "The flow."],
         )
 
+    def test_dec_000640_definitions_render_last_under_one_heading(self):
+        """DEC-000640: definitions render last, under one `## Definitions` heading."""
+        selected = [row("R0001", "Open one tranche.", order=10)]
+        defs = [definition("R0003", "tranche", "A tranche is one workstream.", order=20)]
+        text = self.rendered(selected, defs)
+        headings = [line for line in text.splitlines() if line.startswith("## ")]
+        self.assertEqual(headings, ["## Definitions"])
+        self.assertLess(text.index("Open one tranche."), text.index("## Definitions"))
+
     def test_ac_rs_6_a_definition_renders_under_its_first_term(self):
-        """AC-RS-6: each definition as `**<first term>** — <body>`."""
+        """Each definition as `**<first term>** — <body>`."""
         text = self.rendered(
             [row("R0001", "Open one tranche.", order=10)],
             [definition("R0003", ["tranche", "tranches"],
@@ -517,25 +570,98 @@ class TestRender(unittest.TestCase):
         )
         self.assertIn("**tranche** — A tranche is one workstream.", text)
 
-    def test_ac_rs_6_the_render_carries_nothing_else(self):
-        """AC-RS-6: "Nothing else" — no separator furniture, no extra list lines."""
+    def test_dec_000630_the_render_carries_nothing_else(self):
+        """"Nothing else": no separator furniture, no extra list lines."""
         text = self.rendered([row("R0001", "Prose.", order=10, blob="b" * 40)])
+        self.assertEqual(text.count("<!--"), 1)
         lines = text.splitlines()
-        self.assertNotIn("<!--", text)
-        self.assertEqual(
-            [line for line in lines if line.startswith("#")],
-            ["# fiducial-bundle", "## R0001"],
+        self.assertEqual([line for line in lines if line.startswith("#")], [])
+        self.assertEqual(lines, [self.HEADER, "", "Prose."])
+
+
+class TestNamedQueries(unittest.TestCase):
+    """F5: `bin/rulestore/named_queries.py`, pure over text — every branch
+    item 3/item 4 of the base directive states, previously exercised only
+    end-to-end through one well-formed fixture document."""
+
+    def test_a_missing_file_is_empty_sequences_and_no_bundles(self):
+        self.assertEqual(named_queries.sequences(""), ([], []))
+        self.assertEqual(named_queries.bundles(""), [])
+
+    def test_a_missing_heading_is_an_empty_result(self):
+        text = "# Just prose\n\nNothing here names a sequence or a list.\n"
+        self.assertEqual(named_queries.sequences(text), ([], []))
+        self.assertEqual(named_queries.bundles(text), [])
+
+    def test_blank_lines_inside_a_block_are_filtered(self):
+        text = (
+            "## The list\n\n"
+            "~~~text\n"
+            "writer  role=writer\n"
+            "\n"
+            "critic  role=critic\n"
+            "~~~\n\n"
+            "## Sequence\n\n"
+            "~~~text\n"
+            "core\n"
+            "\n"
+            "intake\n"
+            "~~~\n\n"
+            "~~~text\n"
+            "change-flow\n"
+            "~~~\n"
         )
         self.assertEqual(
-            [line for line in lines if line.startswith("- ") or line.startswith("  - ")],
-            [
-                "- Repo: %s" % self.REPO,
-                "- HEAD: %s" % self.HEAD,
-                "- Generated: %s" % self.GENERATED,
-                "- Rows:",
-                "  - R0001 (%s)" % ("b" * 40),
-            ],
+            named_queries.bundles(text),
+            [("writer", ["role=writer"]), ("critic", ["role=critic"])],
         )
+        self.assertEqual(
+            named_queries.sequences(text), ([["core"], ["intake"]], ["change-flow"])
+        )
+
+    def test_a_name_split_across_two_lines_is_two_entries_not_one(self):
+        text = "## The list\n\n~~~text\nwriter\nrole=writer\n~~~\n"
+        self.assertEqual(
+            named_queries.bundles(text), [("writer", []), ("role=writer", [])]
+        )
+
+    def test_a_tilde_fenced_document_parses(self):
+        text = (
+            "## The list\n\n~~~text\nwriter  role=writer\n~~~\n\n"
+            "## Sequence\n\n~~~text\ncore\n~~~\n\n~~~text\nchange-flow\n~~~\n"
+        )
+        self.assertEqual(named_queries.bundles(text), [("writer", ["role=writer"])])
+        self.assertEqual(named_queries.sequences(text), ([["core"]], ["change-flow"]))
+
+    def test_a_backtick_fenced_document_parses(self):
+        text = (
+            "## The list\n\n```text\nwriter  role=writer\n```\n\n"
+            "## Sequence\n\n```text\ncore\n```\n\n```text\nchange-flow\n```\n"
+        )
+        self.assertEqual(named_queries.bundles(text), [("writer", ["role=writer"])])
+        self.assertEqual(named_queries.sequences(text), ([["core"]], ["change-flow"]))
+
+    def test_a_process_row_with_no_topic_falls_back_to_its_stem(self):
+        """The sort key's own gap: every other process-row test in this suite
+        runs with `sequences=([], [])`, which never exercises `_position`'s
+        found branch for a process row — only its always-taken fallback."""
+        without_topic = row("R0001", "Body.", order=10, kind="process",
+                             path="process/change-flow.md")
+        sequences = ([], ["intake", "change-flow"])
+        self.assertEqual(query.sort_key(without_topic, sequences)[1], 1)
+
+
+class TestNamedQueriesRealDocument(unittest.TestCase):
+    """F1: the real process/named-queries.md parses to its full counts — the
+    guard against a fence spelling `_FENCE_RE` does not recognize emptying
+    both sequences and the bundle list in silence."""
+
+    def test_the_real_document_parses_to_its_full_counts(self):
+        text = FileRowSource(REPO_ROOT).named_queries_text()
+        topic_positions, process_positions = named_queries.sequences(text)
+        self.assertEqual(len(topic_positions), 9)
+        self.assertEqual(len(process_positions), 11)
+        self.assertEqual(len(named_queries.bundles(text)), 12)
 
 
 if __name__ == "__main__":

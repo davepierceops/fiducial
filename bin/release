@@ -1,0 +1,166 @@
+#!/usr/bin/env python3
+"""`bin/release` — cut a release: README.md plus one bundle per entry of
+`process/named-queries.md`'s list, all generated at HEAD (DEC-000660).
+
+    bin/release [--tag TAG] [--out DIR]
+
+Refuses (exit 2, one line on stderr, nothing written) outside a git
+repository, in a repository with neither `rules/` nor `process/`, on any
+uncommitted change anywhere under the root — README.md included, since it
+is the one asset generated from the working tree rather than from a
+selection — when the fetch of `origin main` fails, when HEAD is not
+`origin/main`, when `README.md` is absent at the root, when `--tag`
+already exists on origin, when `--out` exists, or when the bundle list is
+empty. On any per-entry `bin/bundle` failure it refuses whole and removes
+everything it wrote.
+
+Contract: `docs/cycles/bundle-tool-followup-20260907T170000Z.md`, item 6.
+"""
+
+from __future__ import annotations
+
+import argparse
+import datetime
+import os
+import pathlib
+import shlex
+import shutil
+import subprocess
+import sys
+import tempfile
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from rulestore import named_queries
+from rulestore.store import FileRowSource
+
+EXIT_OK = 0
+EXIT_REFUSED = 2
+
+BUNDLE_BIN = pathlib.Path(__file__).resolve().parent / "bundle"
+
+
+def _git(root, *args):
+    return subprocess.run(
+        ["git", *args], cwd=str(root), capture_output=True, text=True,
+    )
+
+
+def _repo_root():
+    proc = _git(pathlib.Path.cwd(), "rev-parse", "--show-toplevel")
+    if proc.returncode != 0:
+        return None
+    return pathlib.Path(proc.stdout.strip())
+
+
+def _head(root):
+    proc = _git(root, "rev-parse", "HEAD")
+    return proc.stdout.strip() if proc.returncode == 0 else None
+
+
+def _dirty_under(root):
+    proc = _git(root, "status", "--porcelain")
+    return bool(proc.stdout.strip())
+
+
+def refuse(message):
+    print(message, file=sys.stderr)
+    return EXIT_REFUSED
+
+
+def default_tag():
+    today = datetime.datetime.now(datetime.timezone.utc)
+    return "v%04d.%02d.%02d" % (today.year, today.month, today.day)
+
+
+def build_parser():
+    parser = argparse.ArgumentParser(prog="release")
+    parser.add_argument("--tag")
+    parser.add_argument("--out")
+    return parser
+
+
+def main(argv=None):
+    args = build_parser().parse_args(argv)
+    tag = args.tag or default_tag()
+
+    root = _repo_root()
+    if root is None:
+        return refuse("refused: not inside a git repository")
+
+    if not (root / "rules").is_dir() and not (root / "process").is_dir():
+        return refuse("refused: no rules/ or process/ under %s" % root)
+
+    if _dirty_under(root):
+        return refuse("refused: uncommitted changes under %s" % root)
+
+    if _git(root, "fetch", "-q", "origin", "main").returncode != 0:
+        return refuse("refused: could not fetch origin/main")
+
+    head = _head(root)
+    upstream_proc = _git(root, "rev-parse", "origin/main")
+    upstream = upstream_proc.stdout.strip() if upstream_proc.returncode == 0 else None
+    if head is None or head != upstream:
+        return refuse("refused: HEAD is not origin/main")
+
+    readme = root / "README.md"
+    if not readme.is_file():
+        return refuse("refused: README.md is missing at %s" % root)
+
+    if _git(root, "ls-remote", "--tags", "origin", tag).stdout.strip():
+        return refuse("refused: tag %s already exists on origin" % tag)
+
+    out_dir = (
+        pathlib.Path(args.out).expanduser() if args.out
+        else pathlib.Path.home() / "Downloads" / ("fiducial-release-%s" % tag)
+    )
+    if out_dir.exists():
+        return refuse("refused: --out already exists: %s" % out_dir)
+
+    if not (root / "process" / "named-queries.md").is_file():
+        return refuse("refused: no process/named-queries.md under %s" % root)
+
+    entries = named_queries.bundles(FileRowSource(root).named_queries_text())
+    if not entries:
+        return refuse("refused: the bundle list is empty")
+
+    names = [name for name, _ in entries]
+    duplicate = next((name for name in names if names.count(name) > 1), None)
+    if duplicate is not None:
+        return refuse("refused: the bundle list repeats the name %r" % duplicate)
+
+    scratch = pathlib.Path(tempfile.mkdtemp(prefix="fiducial-release-"))
+    try:
+        written = []
+        for name, tokens in entries:
+            proc = subprocess.run(
+                [sys.executable, str(BUNDLE_BIN), "--where", *tokens,
+                 "--name", name, "--out", str(scratch)],
+                cwd=str(root), capture_output=True, text=True,
+            )
+            if proc.returncode != 0:
+                print("refused: %s: bin/bundle exited %d" % (name, proc.returncode),
+                      file=sys.stderr)
+                return EXIT_REFUSED
+            written.append((name, pathlib.Path(proc.stdout.strip())))
+
+        out_dir.mkdir(parents=True)
+        assets = [readme]
+        for name, path in written:
+            dest = out_dir / ("fiducial-bundle-%s.md" % name)
+            shutil.copyfile(path, dest)
+            assets.append(dest)
+    finally:
+        shutil.rmtree(scratch, ignore_errors=True)
+
+    print(str(out_dir))
+    notes = "fiducial %s at %s" % (tag, head)
+    print("gh release create %s --target %s --title %s --notes %s %s" % (
+        shlex.quote(tag), shlex.quote(head), shlex.quote(tag), shlex.quote(notes),
+        " ".join(shlex.quote(str(asset)) for asset in assets),
+    ))
+    return EXIT_OK
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

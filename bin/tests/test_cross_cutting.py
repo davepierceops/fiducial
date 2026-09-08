@@ -37,21 +37,15 @@ from tests.helpers import (
     write,
 )
 
-#: `["base"]` no longer gets `bundle` past argparse (S1, bundle-tool-skeptic
-#: review 20260906T150000Z): the mode flags are `--where`/`--keys`/`--near`,
-#: not a positional. A live argv is needed so AC-X-4, AC-X-6 and AC-X-7
-#: actually reach the tool's repository, file and encoding handling.
-CLI_MINIMAL_ARGS["bundle"] = ["--keys"]
-
-
 def production_files():
-    """Every shipped file under `bin/` — CLIs and the `aimeta` package."""
+    """Every shipped file under `bin/` — CLIs, `aimeta`, and `rulestore`."""
     files = [
         p
         for p in sorted(BIN_DIR.iterdir())
         if p.is_file() and not p.name.startswith(".")
     ]
     files += sorted((BIN_DIR / "aimeta").glob("*.py"))
+    files += sorted((BIN_DIR / "rulestore").glob("*.py"))
     return files
 
 
@@ -78,7 +72,11 @@ class TestNoAbsolutePaths(unittest.TestCase):
 
 
 class TestStdlibOnly(unittest.TestCase):
-    LOCAL_MODULES = {"aimeta"}
+    #: `bin/release` (bundle-tool-followup-20260907T170000Z.md item 6) imports
+    #: `rulestore` plainly, so it needs the name here to pass this scan; the
+    #: rest of Q5's fix — `bin/rulestore/*.py` in `production_files()` and
+    #: `bin/bundle`'s own plain imports — lands with that finding, item 7.
+    LOCAL_MODULES = {"aimeta", "rulestore"}
 
     def imported_top_level_modules(self, path):
         tree = ast.parse(path.read_text(), filename=str(path))

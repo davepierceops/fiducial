@@ -1,5 +1,6 @@
 ---
 order: 40
+topic: [review-artifact]
 role: [spec-reviewer-agent, context-quality-reviewer, reviewer-agent, skeptic-risk-agent, release-manager-agent, copy-editor, critic]
 session: [decision, execution]
 corpus: [software, writing]

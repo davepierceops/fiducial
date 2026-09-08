@@ -1,5 +1,6 @@
 ---
 order: 100
+topic: [project-setup]
 session: [decision]
 corpus: [software]
 ---

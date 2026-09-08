@@ -5,7 +5,11 @@ This module is the one place in the package allowed to name `rules/` or
 Everything else works over `Row` objects handed to it in memory.
 
 Contract: `docs/cycles/bundle-tool-tests-20260906T110000Z.md` § "INTERFACE
-CONTRACT", landed at `d5b643b48cf0285194d29b09f6755db1b8a16b34`.
+CONTRACT", landed at `d5b643b48cf0285194d29b09f6755db1b8a16b34`; amended by
+`docs/cycles/bundle-tool-followup-20260907T170000Z.md` items 3 (the
+named-queries reader), 7 S2/S4 (a Human heading at any level, a
+no-frontmatter file, a quoted-comma list, a duplicate id) and S5 (the
+blob/body docstring).
 """
 
 from __future__ import annotations
@@ -23,7 +27,10 @@ ORDER_RE = re.compile(r"^[+-]?[0-9]+$")
 #: any key other than `order` this is a defect; quoted, it is text.
 TYPED_SCALAR_RE = re.compile(r"^([+-]?[0-9]+(\.[0-9]+)?|true|false|yes|no)$", re.IGNORECASE)
 
-HUMAN_MARKER = "## Human"
+#: Any ATX heading whose text is "Human", whatever its level (S2,
+#: bundle-tool-skeptic-20260906T150000Z.md) — a mis-levelled `### Human` must
+#: not publish the rationale it introduces.
+HUMAN_MARKER_RE = re.compile(r"^#{1,6}\s+Human\s*$")
 
 
 class RowShapeError(Exception):
@@ -44,7 +51,14 @@ class RowShapeError(Exception):
 
 @dataclasses.dataclass
 class Row:
-    """One store row: the agent form, the human form, and its keys."""
+    """One store row: the agent form, the human form, and its keys.
+
+    `blob` is the git blob at `HEAD`; `body` (and `human`) come from the
+    working tree's file (S5, bundle-tool-skeptic-20260906T150000Z.md). The
+    two can name different content for any caller that skips the sync check
+    `bin/bundle --where` runs before it reads; a bundle's render no longer
+    emits `blob` at all (item 5), so nothing downstream sees them disagree.
+    """
 
     id: str
     body: str
@@ -66,6 +80,30 @@ def _strip_quotes(raw):
     if len(raw) >= 2 and raw[0] == raw[-1] and raw[0] in ("'", '"'):
         return raw[1:-1]
     return raw
+
+
+def _split_list_items(inner):
+    """Split a bracket list's inner text on commas outside quotes (S4):
+    `["a, b", c]`'s comma stays inside its item instead of tearing it in two.
+    """
+    items = []
+    current = []
+    quote = None
+    for char in inner:
+        if quote:
+            current.append(char)
+            if char == quote:
+                quote = None
+        elif char in ("'", '"'):
+            quote = char
+            current.append(char)
+        elif char == ",":
+            items.append("".join(current))
+            current = []
+        else:
+            current.append(char)
+    items.append("".join(current))
+    return items
 
 
 def normalize_fields(row_id, fields):
@@ -92,10 +130,16 @@ def normalize_fields(row_id, fields):
             inner = text[1:-1].strip()
             if not inner:
                 continue
-            keys[key] = [
-                _strip_quotes(part.strip()).strip().lower()
-                for part in inner.split(",")
-            ]
+            values = []
+            for part in _split_list_items(inner):
+                part = part.strip()
+                unquoted_part = _strip_quotes(part)
+                if unquoted_part == part and TYPED_SCALAR_RE.match(part):
+                    raise RowShapeError(
+                        row_id, key, "typed value on a text key: %r" % (raw,)
+                    )
+                values.append(unquoted_part.strip().lower())
+            keys[key] = values
             continue
         unquoted = _strip_quotes(text)
         if unquoted == text and TYPED_SCALAR_RE.match(text):
@@ -126,10 +170,10 @@ def _parse_frontmatter(text):
 
 
 def _split_human(body):
-    """`(agent_form, human_form)` — everything above/below the `## Human` line."""
+    """`(agent_form, human_form)` — everything above/below the Human heading."""
     lines = body.split("\n")
     for index, line in enumerate(lines):
-        if line.strip() == HUMAN_MARKER:
+        if HUMAN_MARKER_RE.match(line.strip()):
             agent = "\n".join(lines[:index]).strip()
             human = "\n".join(lines[index + 1 :]).strip()
             return agent, (human or None)
@@ -145,12 +189,22 @@ class MemoryRowSource:
     def rows(self):
         return list(self._rows)
 
+    def named_queries_text(self):
+        return ""
+
 
 class FileRowSource:
     """A `RowSource` reading one row per file from `rules/` and `process/`."""
 
     def __init__(self, root):
         self.root = pathlib.Path(root)
+
+    def named_queries_text(self):
+        """`process/named-queries.md`'s text under the root, or `""` if absent."""
+        path = self.root / "process" / "named-queries.md"
+        if not path.is_file():
+            return ""
+        return path.read_text(encoding="utf-8", errors="replace")
 
     def _blob(self, relpath):
         proc = subprocess.run(
@@ -167,6 +221,8 @@ class FileRowSource:
         relpath = path.relative_to(self.root).as_posix()
         text = path.read_text(encoding="utf-8", errors="replace")
         fields, body = _parse_frontmatter(text)
+        if kind == "rule" and not fields:
+            raise RowShapeError(relpath, "frontmatter", "no frontmatter block")
         row_id = fields.get("id") or path.stem
         keys, order = normalize_fields(row_id, fields)
         agent, human = _split_human(body)
@@ -185,9 +241,12 @@ class FileRowSource:
         """Every `rules/*.md` (kind "rule") and `process/*.md` (kind "process").
 
         `rules/retired/` is a subdirectory; a non-recursive glob over
-        `rules/*.md` never descends into it.
+        `rules/*.md` never descends into it. Raises `RowShapeError` on an id
+        shared across the two roots (S4): a duplicate is a defect, not a
+        second row.
         """
         found = []
+        seen = {}
         rules_dir = self.root / "rules"
         if rules_dir.is_dir():
             for path in sorted(rules_dir.glob("*.md")):
@@ -196,4 +255,10 @@ class FileRowSource:
         if process_dir.is_dir():
             for path in sorted(process_dir.glob("*.md")):
                 found.append(self._row(path, "process"))
+        for row in found:
+            if row.id in seen:
+                raise RowShapeError(
+                    row.id, "id", "duplicate of %s at %s" % (row.id, seen[row.id])
+                )
+            seen[row.id] = row.path
         return found
