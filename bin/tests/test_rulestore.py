@@ -39,9 +39,11 @@ import dataclasses
 import unittest
 
 from rulestore import keys as keys_mod
+from rulestore import named_queries
 from rulestore import near as near_mod
 from rulestore import query, render, store, terms
-from rulestore.store import MemoryRowSource, Row, RowShapeError
+from rulestore.store import FileRowSource, MemoryRowSource, Row, RowShapeError
+from tests.helpers import REPO_ROOT
 
 
 # --------------------------------------------------------------- fixture rows
@@ -572,6 +574,19 @@ class TestRender(unittest.TestCase):
         lines = text.splitlines()
         self.assertEqual([line for line in lines if line.startswith("#")], [])
         self.assertEqual(lines, [self.HEADER, "", "Prose."])
+
+
+class TestNamedQueriesRealDocument(unittest.TestCase):
+    """F1: the real process/named-queries.md parses to its full counts — the
+    guard against a fence spelling `_FENCE_RE` does not recognize emptying
+    both sequences and the bundle list in silence."""
+
+    def test_the_real_document_parses_to_its_full_counts(self):
+        text = FileRowSource(REPO_ROOT).named_queries_text()
+        topic_positions, process_positions = named_queries.sequences(text)
+        self.assertEqual(len(topic_positions), 9)
+        self.assertEqual(len(process_positions), 11)
+        self.assertEqual(len(named_queries.bundles(text)), 12)
 
 
 if __name__ == "__main__":

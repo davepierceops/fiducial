@@ -21,7 +21,7 @@ and nothing more: a role's rows are whatever carries its value, and the
 definitions those rows use follow by term. One line per bundle: the name,
 then the query.
 
-```text
+~~~text
 chief-of-staff            role=chief-of-staff
 architect-agent           role=architect-agent
 spec-reviewer-agent       role=spec-reviewer-agent
@@ -34,7 +34,7 @@ context-quality-reviewer  role=context-quality-reviewer
 writer                    role=writer
 copy-editor               role=copy-editor
 critic                    role=critic
-```
+~~~
 
 A new role is a new line here and a new value on `role`; the tool does not
 change.
@@ -49,7 +49,7 @@ second block is the position of process documents, by stem. A topic or a
 stem neither block names sorts after the last named one, alphabetically.
 Definitions render last, always.
 
-```text
+~~~text
 core
 chief-of-staff architect-agent spec-reviewer-agent test-designer coder-agent reviewer skeptic release-manager-agent context-quality-reviewer writer copy-editor critic
 decision-layer
@@ -59,12 +59,12 @@ directive-invariants command-blocks remote-write-verification-policy
 verification verification-boundaries human-review-boundary
 review-artifact-schema retro decision-log-policy
 public-prose-criteria voice trd prd-template
-```
+~~~
 
 The second line holds the twelve role topics at one position: one per
 bundle, and they never co-occur.
 
-```text
+~~~text
 change-flow
 prd-template
 trd-template
@@ -76,7 +76,7 @@ spec-test-suite
 retro
 project-setup
 decision-log
-```
+~~~
 
 ## Generating
 

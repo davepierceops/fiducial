@@ -13,7 +13,7 @@ from __future__ import annotations
 import re
 
 _HEADING_RE = re.compile(r"^##\s+(.+?)\s*$")
-_FENCE_RE = re.compile(r"^```")
+_FENCE_RE = re.compile(r"^(`{3,}|~{3,})")
 
 
 def _section(text, heading):
