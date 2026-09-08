@@ -405,13 +405,16 @@ class TestPullDefinitions(unittest.TestCase):
         selected = [row("R0100", "The method matters.", order=10, role=["writer"])]
         self.assertEqual(terms.pull_definitions(selected, selected + [hybrid]), [])
 
-    def test_ac_rs_13_pulled_definitions_use_the_select_ordering_rule(self):
-        """AC-RS-13: "returned in the same order rule as select"."""
+    def test_ac_rs_13_pulled_definitions_sort_by_order_then_id_none_last(self):
+        """AC-RS-13/F3: the definitions band is pinned to `(order, id)`, `None`
+        order last — its own key, independent of `select`'s sequence-based one."""
         late = definition("R0050", "beta", "A beta is a beta.", order=30)
         early = definition("R0060", "alpha", "An alpha is an alpha.", order=10)
-        selected = [row("R0100", "An alpha precedes a beta.", order=5, role=["writer"])]
-        pulled = terms.pull_definitions(selected, selected + [late, early])
-        self.assertEqual(ids(pulled), ["R0060", "R0050"])
+        unordered = definition("R0070", "gamma", "A gamma is a gamma.", order=None)
+        selected = [row("R0100", "An alpha precedes a beta precedes a gamma.",
+                        order=5, role=["writer"])]
+        pulled = terms.pull_definitions(selected, selected + [late, early, unordered])
+        self.assertEqual(ids(pulled), ["R0060", "R0050", "R0070"])
 
 
 # ------------------------------------------------------------------- AC-RS-5

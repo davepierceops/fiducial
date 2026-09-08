@@ -10,7 +10,9 @@ from __future__ import annotations
 
 import re
 
-from rulestore.query import sort_key
+#: `None` order sorts after every integer, however large (F3: the definitions
+#: band's order is pinned here, independent of `query.sort_key`).
+_NO_ORDER = float("inf")
 
 
 def is_definition(row):
@@ -28,7 +30,9 @@ def _term_pattern(term):
 
 
 def pull_definitions(selected, all_rows):
-    """Definitions pulled into `selected`, transitively, in `select`'s order."""
+    """Definitions pulled into `selected`, transitively, sorted by `(order,
+    id)`, `None` order last — the definitions band's own key, independent of
+    the rows/process bands' sequence-based `sort_key` (F3, DEC-000640)."""
     definitions = [row for row in all_rows if is_definition(row)]
     already = {row.id for row in selected}
     pulled = {}
@@ -46,4 +50,7 @@ def pull_definitions(selected, all_rows):
                         next_frontier.append(definition)
                         break
         frontier = next_frontier
-    return sorted(pulled.values(), key=sort_key)
+    return sorted(
+        pulled.values(),
+        key=lambda r: (r.order if r.order is not None else _NO_ORDER, r.id),
+    )
