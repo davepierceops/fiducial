@@ -748,3 +748,8 @@ Context: resolves the rule-store PRD's OQ-1. A durable rule lives in the store a
 Date: 2026-09-06
 Decision: A release attaches README.md and one `fiducial-bundle-<slug>.md` per entry in the list, each generated at the release's SHA, and is tagged `v<YYYY>.<MM>.<DD>`. The file bin/bundle writes for a session keeps its timestamped name. bin/release generates the assets from a synced clone, refuses whole on any failure, and prints the `gh release create` command; the human runs it.
 Context: the human's ruling of 2026-09-06 on distribution: a stable asset name gives `releases/latest/download/` a stable URL; the date is the version, since a methodology's semantic version cannot be computed.
+
+## DEC-000670 — The rule-store PRD is agreed
+Date: 2026-09-07
+Decision: specs/rule-store.md is agreed at db94962d2c9c596f2ee1dc07fbf58d8bd48ea92b as the standing product specification for the rule store, the bundle tool and the release, superseding specs/bundle-system.md; process/named-queries.md is agreed at 0eb0085f9f564e5bac1e32d3b31090073b0ecb74 as the one place a bundle and the render order are defined.
+Context: the human read the PRD redrafted against main at 8d21cd3 to state what was built, and called it version one.
