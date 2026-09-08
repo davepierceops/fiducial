@@ -92,6 +92,25 @@ class TestReleaseRefusals(ReleaseCliTestCase):
         self.assertTrue(no_traceback(out, err), err)
         self.assertFalse(self.out.exists())
 
+    def test_refuses_whole_when_two_list_entries_share_a_name(self):
+        """S15: two entries named alike would collapse to one asset and name
+        it twice in the `gh` line — refuse before anything is written."""
+        files = dict(rs_store_files())
+        files["process/named-queries.md"] = files["process/named-queries.md"].replace(
+            "writer       role=writer\n",
+            "writer       role=writer\nwriter       topic=core\n",
+        )
+        origin, clone = make_store_repo(self, files=files)
+        self.add_readme_and_push(clone)
+        code, out, err = run_cli(
+            "release", "--tag", TAG, "--out", str(self.out), cwd=clone, env=self.env,
+        )
+        self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
+        self.assertEqual(len(err.strip().splitlines()), 1, err)
+        self.assertIn("writer", err)
+        self.assertTrue(no_traceback(out, err), err)
+        self.assertFalse(self.out.exists())
+
     def test_refuses_outside_a_git_repository(self):
         """F4: outside a git repository entirely."""
         outside = temp_dir(self, "release-outside-")

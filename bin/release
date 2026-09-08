@@ -121,6 +121,11 @@ def main(argv=None):
     if not entries:
         return refuse("refused: the bundle list is empty")
 
+    names = [name for name, _ in entries]
+    duplicate = next((name for name in names if names.count(name) > 1), None)
+    if duplicate is not None:
+        return refuse("refused: the bundle list repeats the name %r" % duplicate)
+
     scratch = pathlib.Path(tempfile.mkdtemp(prefix="fiducial-release-"))
     try:
         written = []
