@@ -8,16 +8,20 @@ lists three bundles — writer, critic, coder-agent — each `role=<slug>`.
 
 from __future__ import annotations
 
+import pathlib
+import tempfile
 import unittest
 
 from tests.helpers import (
     base_env,
     commit,
     git,
+    make_repo,
     make_store_repo,
     no_traceback,
     rs_store_files,
     run_cli,
+    temp_dir,
     write,
 )
 
@@ -87,6 +91,96 @@ class TestReleaseRefusals(ReleaseCliTestCase):
         self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
         self.assertTrue(no_traceback(out, err), err)
         self.assertFalse(self.out.exists())
+
+    def test_refuses_outside_a_git_repository(self):
+        """F4: outside a git repository entirely."""
+        outside = temp_dir(self, "release-outside-")
+        code, out, err = run_cli(
+            "release", "--tag", TAG, "--out", str(self.out), cwd=outside, env=self.env,
+        )
+        self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
+        self.assertEqual(err.strip(), "refused: not inside a git repository")
+        self.assertTrue(no_traceback(out, err), err)
+        self.assertFalse(self.out.exists())
+
+    def test_refuses_when_neither_rules_nor_process_exist(self):
+        """F4: a git repository that is not the rule store."""
+        repo = make_repo(self)
+        write(repo, "README.md", "Not the rule store.\n")
+        commit(repo, "seed", env=self.env)
+        code, out, err = run_cli(
+            "release", "--tag", TAG, "--out", str(self.out), cwd=repo, env=self.env,
+        )
+        self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
+        self.assertIn(str(repo), err.strip())
+        self.assertTrue(no_traceback(out, err), err)
+        self.assertFalse(self.out.exists())
+
+    def test_refuses_when_rules_is_uncommitted(self):
+        """F4: an uncommitted change under rules/ refuses (S13's widened check)."""
+        self.add_readme_and_push()
+        write(self.clone, "rules/R0001.md",
+              rs_store_files()["rules/R0001.md"] + "\nAn uncommitted line.\n")
+        code, out, err = self.release("--tag", TAG, "--out", str(self.out))
+        self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
+        self.assertEqual(len(err.strip().splitlines()), 1, err)
+        self.assertTrue(no_traceback(out, err), err)
+        self.assertFalse(self.out.exists())
+
+    def test_refuses_when_fetch_cannot_reach_origin(self):
+        """F4/S8's shape: a fetch that cannot reach origin refuses distinctly."""
+        self.add_readme_and_push()
+        git(self.clone, "remote", "set-url", "origin", "/nonexistent/origin.git",
+            env=self.env, check=True)
+        code, out, err = self.release("--tag", TAG, "--out", str(self.out))
+        self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
+        self.assertEqual(err.strip(), "refused: could not fetch origin/main")
+        self.assertTrue(no_traceback(out, err), err)
+        self.assertFalse(self.out.exists())
+
+    def test_refuses_when_head_is_not_origin_main(self):
+        """F4: HEAD one commit behind origin/main after the fetch."""
+        self.add_readme_and_push()
+        write(self.clone, "rules/R0004.md",
+              "---\nid: R0004\norder: 50\ntopic: [core]\nrole: [writer]\n"
+              "verb: require\nterm: null\n---\n\nA later rule.\n")
+        commit(self.clone, "store: a later rule", env=self.env)
+        git(self.clone, "push", "-q", "origin", "main", env=self.env, check=True)
+        git(self.clone, "reset", "--hard", "-q", "HEAD~1", env=self.env, check=True)
+        code, out, err = self.release("--tag", TAG, "--out", str(self.out))
+        self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
+        self.assertEqual(err.strip(), "refused: HEAD is not origin/main")
+        self.assertTrue(no_traceback(out, err), err)
+        self.assertFalse(self.out.exists())
+
+    def test_refuses_when_tag_already_exists_on_origin(self):
+        """F4: the one guard against re-cutting a released tag."""
+        self.add_readme_and_push()
+        git(self.clone, "tag", TAG, env=self.env, check=True)
+        git(self.clone, "push", "-q", "origin", TAG, env=self.env, check=True)
+        code, out, err = self.release("--tag", TAG, "--out", str(self.out))
+        self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
+        self.assertEqual(err.strip(), "refused: tag %s already exists on origin" % TAG)
+        self.assertTrue(no_traceback(out, err), err)
+        self.assertFalse(self.out.exists())
+
+    def test_cleanup_leaves_no_scratch_directory_after_a_failing_release(self):
+        """F4: the `finally` actually removes the scratch tree it wrote at
+        least one asset into — not merely that --out was never created."""
+        files = dict(rs_store_files())
+        files["process/named-queries.md"] = files["process/named-queries.md"].replace(
+            "coder-agent  role=coder-agent\n",
+            "coder-agent  role=coder-agent\nnobody       role=nobody\n",
+        )
+        origin, clone = make_store_repo(self, files=files)
+        self.add_readme_and_push(clone)
+        before = set(pathlib.Path(tempfile.gettempdir()).glob("fiducial-release-*"))
+        code, out, err = run_cli(
+            "release", "--tag", TAG, "--out", str(self.out), cwd=clone, env=self.env,
+        )
+        self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
+        after = set(pathlib.Path(tempfile.gettempdir()).glob("fiducial-release-*"))
+        self.assertEqual(before, after)
 
 
 class TestReleaseSuccess(ReleaseCliTestCase):
