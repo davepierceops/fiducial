@@ -751,5 +751,5 @@ Context: the human's ruling of 2026-09-06 on distribution: a stable asset name g
 
 ## DEC-000670 — The rule-store PRD is agreed
 Date: 2026-09-07
-Decision: specs/rule-store.md is agreed at  as the standing product specification for the rule store, the bundle tool and the release, superseding specs/bundle-system.md; process/named-queries.md is agreed at 0eb0085f9f564e5bac1e32d3b31090073b0ecb74 as the one place a bundle and the render order are defined.
+Decision: specs/rule-store.md is agreed at db94962d2c9c596f2ee1dc07fbf58d8bd48ea92b as the standing product specification for the rule store, the bundle tool and the release, superseding specs/bundle-system.md; process/named-queries.md is agreed at 0eb0085f9f564e5bac1e32d3b31090073b0ecb74 as the one place a bundle and the render order are defined.
 Context: the human read the PRD redrafted against main at 8d21cd3 to state what was built, and called it version one.
