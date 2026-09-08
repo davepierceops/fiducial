@@ -199,6 +199,22 @@ class TestReleaseSuccess(ReleaseCliTestCase):
              "fiducial-bundle-writer.md"],
         )
 
+    def test_a_name_carrying_a_glob_metacharacter_still_produces_one_asset(self):
+        """S14: bin/release reads the exact path bin/bundle prints on stdout,
+        so a name like `a[b]` no longer defeats a `glob()` lookup."""
+        files = dict(rs_store_files())
+        files["process/named-queries.md"] = files["process/named-queries.md"].replace(
+            "writer       role=writer\n",
+            "a[b]         role=writer\n",
+        )
+        origin, clone = make_store_repo(self, files=files)
+        self.add_readme_and_push(clone)
+        code, out, err = run_cli(
+            "release", "--tag", TAG, "--out", str(self.out), cwd=clone, env=self.env,
+        )
+        self.assertEqual(code, EXIT_OK, "stdout=%r stderr=%r" % (out, err))
+        self.assertTrue((self.out / "fiducial-bundle-a[b].md").is_file())
+
     def test_prints_the_out_dir_then_the_gh_release_create_command(self):
         """Prints the out dir, then a last line starting `gh release create`,
         naming the tag, HEAD, README.md and every asset."""

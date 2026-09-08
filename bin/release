@@ -134,8 +134,7 @@ def main(argv=None):
                 print("refused: %s: bin/bundle exited %d" % (name, proc.returncode),
                       file=sys.stderr)
                 return EXIT_REFUSED
-            matches = sorted(scratch.glob("fiducial-bundle-%s-*.md" % name))
-            written.append((name, matches[-1]))
+            written.append((name, pathlib.Path(proc.stdout.strip())))
 
         out_dir.mkdir(parents=True)
         assets = [readme]
