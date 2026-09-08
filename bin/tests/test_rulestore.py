@@ -579,6 +579,78 @@ class TestRender(unittest.TestCase):
         self.assertEqual(lines, [self.HEADER, "", "Prose."])
 
 
+class TestNamedQueries(unittest.TestCase):
+    """F5: `bin/rulestore/named_queries.py`, pure over text — every branch
+    item 3/item 4 of the base directive states, previously exercised only
+    end-to-end through one well-formed fixture document."""
+
+    def test_a_missing_file_is_empty_sequences_and_no_bundles(self):
+        self.assertEqual(named_queries.sequences(""), ([], []))
+        self.assertEqual(named_queries.bundles(""), [])
+
+    def test_a_missing_heading_is_an_empty_result(self):
+        text = "# Just prose\n\nNothing here names a sequence or a list.\n"
+        self.assertEqual(named_queries.sequences(text), ([], []))
+        self.assertEqual(named_queries.bundles(text), [])
+
+    def test_blank_lines_inside_a_block_are_filtered(self):
+        text = (
+            "## The list\n\n"
+            "~~~text\n"
+            "writer  role=writer\n"
+            "\n"
+            "critic  role=critic\n"
+            "~~~\n\n"
+            "## Sequence\n\n"
+            "~~~text\n"
+            "core\n"
+            "\n"
+            "intake\n"
+            "~~~\n\n"
+            "~~~text\n"
+            "change-flow\n"
+            "~~~\n"
+        )
+        self.assertEqual(
+            named_queries.bundles(text),
+            [("writer", ["role=writer"]), ("critic", ["role=critic"])],
+        )
+        self.assertEqual(
+            named_queries.sequences(text), ([["core"], ["intake"]], ["change-flow"])
+        )
+
+    def test_a_name_split_across_two_lines_is_two_entries_not_one(self):
+        text = "## The list\n\n~~~text\nwriter\nrole=writer\n~~~\n"
+        self.assertEqual(
+            named_queries.bundles(text), [("writer", []), ("role=writer", [])]
+        )
+
+    def test_a_tilde_fenced_document_parses(self):
+        text = (
+            "## The list\n\n~~~text\nwriter  role=writer\n~~~\n\n"
+            "## Sequence\n\n~~~text\ncore\n~~~\n\n~~~text\nchange-flow\n~~~\n"
+        )
+        self.assertEqual(named_queries.bundles(text), [("writer", ["role=writer"])])
+        self.assertEqual(named_queries.sequences(text), ([["core"]], ["change-flow"]))
+
+    def test_a_backtick_fenced_document_parses(self):
+        text = (
+            "## The list\n\n```text\nwriter  role=writer\n```\n\n"
+            "## Sequence\n\n```text\ncore\n```\n\n```text\nchange-flow\n```\n"
+        )
+        self.assertEqual(named_queries.bundles(text), [("writer", ["role=writer"])])
+        self.assertEqual(named_queries.sequences(text), ([["core"]], ["change-flow"]))
+
+    def test_a_process_row_with_no_topic_falls_back_to_its_stem(self):
+        """The sort key's own gap: every other process-row test in this suite
+        runs with `sequences=([], [])`, which never exercises `_position`'s
+        found branch for a process row — only its always-taken fallback."""
+        without_topic = row("R0001", "Body.", order=10, kind="process",
+                             path="process/change-flow.md")
+        sequences = ([], ["intake", "change-flow"])
+        self.assertEqual(query.sort_key(without_topic, sequences)[1], 1)
+
+
 class TestNamedQueriesRealDocument(unittest.TestCase):
     """F1: the real process/named-queries.md parses to its full counts — the
     guard against a fence spelling `_FENCE_RE` does not recognize emptying
