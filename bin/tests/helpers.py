@@ -56,7 +56,12 @@ CLI_MINIMAL_ARGS = {
     "release": [],
 }
 
-REAL_POLICY_TEXT = (REPO_ROOT / POLICY_RELPATH).read_text()
+#: AC-RS-9 moved the live document to history; the fixture text still sources
+#: its content, at the path it now lives at, rather than duplicating it.
+POLICY_HISTORY_RELPATH = (
+    "docs/history/corpus-152797090c3ae7242dcfd69ac49ab6d3cb9c4863/" + POLICY_RELPATH
+)
+REAL_POLICY_TEXT = (REPO_ROOT / POLICY_HISTORY_RELPATH).read_text()
 
 DEFAULT_ROLE_SLUGS = (
     "coder-agent",
