@@ -33,12 +33,8 @@ POLICY_RELPATH = "policies/document-metadata-policy.md"
 DISPOSITION_RELPATH = "reviews/frontmatter-disposition.md"
 
 CLI_NAMES = [
-    "check-frontmatter",
-    "flip-agreed",
     "cycle-open",
     "bundle",
-    "migrate-frontmatter",
-    "install-hooks",
     "directive",
     "check-directive",
     "release",
@@ -47,8 +43,6 @@ CLI_NAMES = [
 #: Minimal argv that gets each CLI past argparse, for tests that only care
 #: about environmental preconditions (e.g. AC-X-4, "run outside a repo").
 CLI_MINIMAL_ARGS = {
-    "check-frontmatter": ["--all"],
-    "flip-agreed": ["policies/x.md", "--review", "reviews/r.md @ abc1234"],
     "cycle-open": ["--cycle", "1"],
     #: `["base"]` no longer gets `bundle` past argparse (S1, bundle-tool-
     #: skeptic review 20260906T150000Z): the mode flags are
@@ -57,14 +51,17 @@ CLI_MINIMAL_ARGS = {
     #: file and encoding handling (Q10/S11, bundle-tool-quality-reread and
     #: bundle-tool-skeptic-reread, both 20260906T170000Z).
     "bundle": ["--keys"],
-    "migrate-frontmatter": ["--plan"],
-    "install-hooks": [],
     "directive": ["--descriptor", "x", "--title", "T"],
     "check-directive": ["docs/cycles/x-20260828T170000.md"],
     "release": [],
 }
 
-REAL_POLICY_TEXT = (REPO_ROOT / POLICY_RELPATH).read_text()
+#: AC-RS-9 moved the live document to history; the fixture text still sources
+#: its content, at the path it now lives at, rather than duplicating it.
+POLICY_HISTORY_RELPATH = (
+    "docs/history/corpus-152797090c3ae7242dcfd69ac49ab6d3cb9c4863/" + POLICY_RELPATH
+)
+REAL_POLICY_TEXT = (REPO_ROOT / POLICY_HISTORY_RELPATH).read_text()
 
 DEFAULT_ROLE_SLUGS = (
     "coder-agent",
@@ -269,7 +266,7 @@ def make_home(case, policy_text=None, roles=DEFAULT_ROLE_SLUGS, parent=None, nam
     copy this test can vary (AC-CF-13).
 
     TRD §4.1 and §3.9's migration make the home a git repository with
-    `skills/directive-invariants.md` committed in it: §3.2 resolves that
+    `process/directive-invariants.md` committed in it: §3.2 resolves that
     document's revision in the home, so the substrate must give it one.
     `git_init=False` withholds both, for FM-G1's no-committed-body refusal.
     """
@@ -516,14 +513,6 @@ def disposition_doc(paths):
     return "\n".join(lines) + "\n"
 
 
-def plan_block(path, action="migrate", **fields):
-    """One `migrate-frontmatter --plan` block (spec §3.8 format)."""
-    lines = ["## `%s`" % path, "- action: %s" % action]
-    for key, value in fields.items():
-        lines.append("- %s: %s" % (key.replace("_", "-"), value))
-    return "\n".join(lines) + "\n"
-
-
 # ================================================================ directive tooling
 #
 # Fixture substrate for `bin/directive` and `bin/check-directive`, per
@@ -548,7 +537,7 @@ def plan_block(path, action="migrate", **fields):
 #: `bin/tests/stubs/`. Test-only; no production code reads it.
 DT_BIN_ENV_VAR = "DIRECTIVE_TOOLING_BIN"
 
-INVARIANTS_RELPATH = "skills/directive-invariants.md"
+INVARIANTS_RELPATH = "process/directive-invariants.md"
 AUTHORING_RELPATH = "skills/directive-authoring.md"
 
 #: TRD §3.4's Q9 decision. The fixture substrate sources it from one place so
@@ -815,7 +804,7 @@ def invariants_text(overrides=None, drop=()):
 
 def invariants_doc(home, overrides=None, drop=(), env=None, commit_it=True,
                    message="invariants"):
-    """Install `skills/directive-invariants.md` into `home` and commit it there.
+    """Install `process/directive-invariants.md` into `home` and commit it there.
 
     §3.2 resolves the document's revision in the **methodology home**, so the
     fixture must give the home a history (F-2's resolution). Returns the

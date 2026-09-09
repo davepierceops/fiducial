@@ -262,7 +262,7 @@ class TestInvariantsDocumentIsGovernedText(TrdTestCase):
     def test_b1_the_real_invariants_document_shows_the_label_only_inside_fences(self):
         """Live-verified against the committed document (§4.2, B1).
 
-        Red until migration step 1 lands `skills/directive-invariants.md`; the
+        Red until migration step 1 lands `process/directive-invariants.md`; the
         TRD names that landing as the migration's first, with no code changes.
         """
         path = REPO_ROOT / INVARIANTS_RELPATH

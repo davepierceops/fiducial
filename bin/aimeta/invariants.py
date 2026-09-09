@@ -21,7 +21,7 @@ import re
 from . import cli, repo
 
 #: The governed document this module is the only reader of.
-RELPATH = "skills/directive-invariants.md"
+RELPATH = "process/directive-invariants.md"
 
 #: Names §3.3's tables address sections by, held here so a caller never spells
 #: a heading twice. Each is a key of the parsed mapping, never a marker.

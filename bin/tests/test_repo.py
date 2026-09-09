@@ -70,18 +70,18 @@ class TestMethodologyHome(RepoTestCase):
         """AC-RP-2: `$AI_METHODOLOGY_HOME` is consulted first."""
         parent = temp_dir(self, "aimeta-layout-")
         root = make_repo(self, parent=parent)
-        write(root, "bin/check-frontmatter", "#!/bin/sh\n")
-        os.chmod(root / "bin" / "check-frontmatter", 0o755)
+        write(root, "bin/bundle", "#!/bin/sh\n")
+        os.chmod(root / "bin" / "bundle", 0o755)
         home = make_home(self)
         with mock.patch.dict(os.environ, {"AI_METHODOLOGY_HOME": str(home)}):
             self.assertEqual(R.methodology_home(root).resolve(), home.resolve())
 
     def test_rp2_self_hosted_repo_is_the_second_candidate(self):
-        """AC-RP-2: a repo carrying `bin/check-frontmatter` is its own home."""
+        """AC-RP-2: a repo carrying `bin/bundle` is its own home."""
         parent = temp_dir(self, "aimeta-layout-")
         root = make_repo(self, parent=parent)
-        write(root, "bin/check-frontmatter", "#!/bin/sh\n")
-        os.chmod(root / "bin" / "check-frontmatter", 0o755)
+        write(root, "bin/bundle", "#!/bin/sh\n")
+        os.chmod(root / "bin" / "bundle", 0o755)
         self.assertEqual(R.methodology_home(root).resolve(), root.resolve())
 
     def test_rp2_sibling_ai_directory_is_the_third_candidate(self):
