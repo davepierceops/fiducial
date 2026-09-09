@@ -211,28 +211,11 @@ class TestNoTracebacks(unittest.TestCase):
         )
         return rc, out, err
 
-    def test_x6_check_frontmatter_all_over_a_non_utf8_document(self):
-        """AC-X-6: `check-frontmatter --all` must not raise UnicodeDecodeError."""
-        self.assert_clean_failure("check-frontmatter", "--all")
-
-    def test_x6_check_frontmatter_path_over_a_non_utf8_document(self):
-        """AC-X-6: `check-frontmatter PATH` must not raise UnicodeDecodeError."""
-        self.assert_clean_failure("check-frontmatter", "policies/latin1.md")
-
-    def test_x6_migrate_frontmatter_plan_over_a_non_utf8_document(self):
-        """AC-X-6: `migrate-frontmatter --plan` must not raise UnicodeDecodeError."""
-        self.assert_clean_failure("migrate-frontmatter", "--plan")
-
     def test_x6_every_cli_survives_a_non_utf8_document_in_the_repo(self):
         """AC-X-6: no CLI tracebacks with an undecodable document present."""
         for name in CLI_NAMES:
             with self.subTest(cli=name):
                 self.assert_clean_failure(name, *CLI_MINIMAL_ARGS[name])
-
-    def test_x6_undecodable_document_is_named(self):
-        """AC-X-6: the diagnostic identifies which document could not be read."""
-        rc, out, err = self.assert_clean_failure("check-frontmatter", "--all")
-        self.assertIn("policies/latin1.md", out + err)
 
 
 class TestExplicitEncoding(unittest.TestCase):
@@ -282,20 +265,6 @@ class TestExplicitEncoding(unittest.TestCase):
                 offenders.append("%s:%d %s() without encoding=" % (path.name, lineno, name))
         self.assertEqual(offenders, [], "\n".join(offenders))
 
-    def test_x7_check_frontmatter_works_under_an_ascii_default_encoding(self):
-        """AC-X-7: an em-dash document validates cleanly under `LC_ALL=C`."""
-        env = ascii_env(methodology_home=self.home)
-        rc, out, err = run_cli("check-frontmatter", "--all", cwd=self.repo, env=env)
-        self.assertTrue(no_traceback(out, err), "traceback under LC_ALL=C:\n%s" % err)
-        self.assertEqual(rc, 0, "stdout=%r stderr=%r" % (out, err))
-
-    def test_x7_migrate_frontmatter_works_under_an_ascii_default_encoding(self):
-        """AC-X-7: `--plan` reads em-dash documents under `LC_ALL=C`."""
-        env = ascii_env(methodology_home=self.home)
-        rc, out, err = run_cli("migrate-frontmatter", "--plan", cwd=self.repo, env=env)
-        self.assertTrue(no_traceback(out, err), "traceback under LC_ALL=C:\n%s" % err)
-        self.assertEqual(rc, 0, "stdout=%r stderr=%r" % (out, err))
-
     def test_x7_every_cli_survives_an_ascii_default_encoding(self):
         """AC-X-7: no CLI depends on the platform default text encoding."""
         env = ascii_env(methodology_home=self.home)
@@ -328,20 +297,8 @@ class TestWriteContainment(unittest.TestCase):
         before = snapshot_tree(self.sandbox, skip=skip)
 
         invocations = [
-            ("check-frontmatter", ["--all"]),
             ("bundle", ["entry"]),
-            ("migrate-frontmatter", ["--plan"]),
             ("cycle-open", ["--cycle", "1", "--title", "T", "policies/sample.md"]),
-            (
-                "flip-agreed",
-                [
-                    "policies/sample.md",
-                    "--review",
-                    "reviews/r.md @ %s" % self.sha[:7],
-                    "--no-commit",
-                ],
-            ),
-            ("install-hooks", []),
         ]
         for name, args in invocations:
             run_cli(name, *args, cwd=self.repo, env=self.env)

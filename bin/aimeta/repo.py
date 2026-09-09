@@ -14,7 +14,7 @@ from . import frontmatter
 
 DISPOSITION_PATH = "reviews/frontmatter-disposition.md"
 HOME_ENV_VAR = "AI_METHODOLOGY_HOME"
-HOME_SENTINEL = "bin/check-frontmatter"
+HOME_SENTINEL = "bin/bundle"
 
 _BACKTICKED = re.compile(r"`([^`]+)`")
 

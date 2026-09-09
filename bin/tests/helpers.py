@@ -33,12 +33,8 @@ POLICY_RELPATH = "policies/document-metadata-policy.md"
 DISPOSITION_RELPATH = "reviews/frontmatter-disposition.md"
 
 CLI_NAMES = [
-    "check-frontmatter",
-    "flip-agreed",
     "cycle-open",
     "bundle",
-    "migrate-frontmatter",
-    "install-hooks",
     "directive",
     "check-directive",
     "release",
@@ -47,8 +43,6 @@ CLI_NAMES = [
 #: Minimal argv that gets each CLI past argparse, for tests that only care
 #: about environmental preconditions (e.g. AC-X-4, "run outside a repo").
 CLI_MINIMAL_ARGS = {
-    "check-frontmatter": ["--all"],
-    "flip-agreed": ["policies/x.md", "--review", "reviews/r.md @ abc1234"],
     "cycle-open": ["--cycle", "1"],
     #: `["base"]` no longer gets `bundle` past argparse (S1, bundle-tool-
     #: skeptic review 20260906T150000Z): the mode flags are
@@ -57,8 +51,6 @@ CLI_MINIMAL_ARGS = {
     #: file and encoding handling (Q10/S11, bundle-tool-quality-reread and
     #: bundle-tool-skeptic-reread, both 20260906T170000Z).
     "bundle": ["--keys"],
-    "migrate-frontmatter": ["--plan"],
-    "install-hooks": [],
     "directive": ["--descriptor", "x", "--title", "T"],
     "check-directive": ["docs/cycles/x-20260828T170000.md"],
     "release": [],
