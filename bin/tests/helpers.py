@@ -513,14 +513,6 @@ def disposition_doc(paths):
     return "\n".join(lines) + "\n"
 
 
-def plan_block(path, action="migrate", **fields):
-    """One `migrate-frontmatter --plan` block (spec §3.8 format)."""
-    lines = ["## `%s`" % path, "- action: %s" % action]
-    for key, value in fields.items():
-        lines.append("- %s: %s" % (key.replace("_", "-"), value))
-    return "\n".join(lines) + "\n"
-
-
 # ================================================================ directive tooling
 #
 # Fixture substrate for `bin/directive` and `bin/check-directive`, per

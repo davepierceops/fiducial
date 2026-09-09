@@ -1,0 +1,8 @@
+.................................................../private/tmp/claude-501/fiducial-ac-rs-8-9/bin/tests/test_check_directive.py:943: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/claude-501/aimeta-home-9t8u_wmh/ai/process/directive-invariants.md' mode='r' encoding='UTF-8'>
+  open(pathlib.Path(self.home) / "process" / "directive-invariants.md").read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+..................................................................................................................................................................................ssss........ss........................................................................................................................s...................................................................................................................................................
+----------------------------------------------------------------------
+Ran 511 tests in 126.209s
+
+OK (skipped=7)

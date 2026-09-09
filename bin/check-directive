@@ -21,14 +21,17 @@ ELEMENT_NAMES = ("M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8")
 #: directive's own citation table lists seven of the eight, and M2's
 #: derivation (Core Vocabulary's "Companion document" and "Directive file")
 #: has no single governed path to name.
+#: AC-RS-9 moved these into history; the citation still names where the text
+#: that grounds each element now lives.
+_HISTORY_CORPUS = "docs/history/corpus-152797090c3ae7242dcfd69ac49ab6d3cb9c4863/"
 ELEMENT_SOURCES = {
-    "M1": "skills/directive-authoring.md",
-    "M3": "skills/directive-authoring.md",
-    "M8": "skills/directive-authoring.md",
-    "M4": "docs/global-context/core.md",
-    "M5": "docs/global-context/core.md",
-    "M7": "docs/global-context/core.md",
-    "M6": "docs/global-context/decision-layer.md",
+    "M1": _HISTORY_CORPUS + "skills/directive-authoring.md",
+    "M3": _HISTORY_CORPUS + "skills/directive-authoring.md",
+    "M8": _HISTORY_CORPUS + "skills/directive-authoring.md",
+    "M4": _HISTORY_CORPUS + "docs/global-context/core.md",
+    "M5": _HISTORY_CORPUS + "docs/global-context/core.md",
+    "M7": _HISTORY_CORPUS + "docs/global-context/core.md",
+    "M6": _HISTORY_CORPUS + "docs/global-context/decision-layer.md",
 }
 
 _UNCHECKED_REPORT = """\

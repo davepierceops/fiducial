@@ -248,12 +248,10 @@ def _is_role_document(path):
     """True when `path`'s first top-level heading is `# Role:` (the convention
     every `roles/*.md` document already follows).
 
-    The rule itself lives in `frontmatter.is_role_document`, which the
-    validator applies to the same documents to decide whether `session:` is
-    required. Two copies of it would let `bin/bundle` and `check-frontmatter`
-    disagree about what a role document is. The heading is looked for in the
-    **body**, so a `#`-prefixed YAML comment inside the frontmatter block is
-    not mistaken for one.
+    The rule itself lives in `frontmatter.is_role_document`; this is the one
+    place that reads it from disk rather than duplicating it. The heading is
+    looked for in the **body**, so a `#`-prefixed YAML comment inside the
+    frontmatter block is not mistaken for one.
     """
     try:
         text = path.read_text(encoding="utf-8")
