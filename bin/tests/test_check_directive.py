@@ -909,7 +909,7 @@ class TestInvariantsDocumentDependency(CheckDirectiveTestCase):
 
     def test_fm_l3_a_missing_invariants_document_refuses_the_invocation(self):
         """Without the label the lint cannot decide M3, and AC-DT-10 forbids exit 0."""
-        (pathlib.Path(self.home) / "skills" / "directive-invariants.md").unlink()
+        (pathlib.Path(self.home) / "process" / "directive-invariants.md").unlink()
         rc, out, err = self.lint(self.fixture())
         self.assertNotEqual(rc, 0, "stdout=%r stderr=%r" % (out, err))
         self.assertIn(
@@ -939,8 +939,8 @@ class TestInvariantsDocumentDependency(CheckDirectiveTestCase):
         """
         write(
             self.home,
-            "skills/directive-invariants.md",
-            open(pathlib.Path(self.home) / "skills" / "directive-invariants.md").read()
+            "process/directive-invariants.md",
+            open(pathlib.Path(self.home) / "process" / "directive-invariants.md").read()
             .replace(DISPOSITION_LABEL, "TREE ASSIGNMENT"),
         )
         relpath = self.fixture()

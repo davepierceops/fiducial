@@ -10,7 +10,7 @@ the `invariants.Document` passed in; this module holds no literal for any of
 them (§3.1). The one exception, disclosed as the TRD discloses it (§3.4): the
 exclusive-assignment narrowing — the `git worktree add` invocation and the
 quoted-or-backticked token — is this TRD's own mechanical decision, not text
-sourced from `skills/directive-invariants.md`, so it is a literal here the
+sourced from `process/directive-invariants.md`, so it is a literal here the
 same way `aimeta/directive.py`'s destination template is.
 
 M2's object-type step reads the type word by exclusion (tag/blob/tree fail;

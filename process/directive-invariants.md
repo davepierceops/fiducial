@@ -1,9 +1,3 @@
----
-status: agreed
-last-reviewed: reviews/directive-invariants-cycle-7.md @ afbe7df9924f0449a2f48a408c26c67399595eb8
-audience: [chief-of-staff, human]
----
-
 # Directive Invariants
 
 The regions a generated directive skeleton is assembled from, and the strings

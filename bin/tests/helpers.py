@@ -261,7 +261,7 @@ def make_home(case, policy_text=None, roles=DEFAULT_ROLE_SLUGS, parent=None, nam
     copy this test can vary (AC-CF-13).
 
     TRD §4.1 and §3.9's migration make the home a git repository with
-    `skills/directive-invariants.md` committed in it: §3.2 resolves that
+    `process/directive-invariants.md` committed in it: §3.2 resolves that
     document's revision in the home, so the substrate must give it one.
     `git_init=False` withholds both, for FM-G1's no-committed-body refusal.
     """
@@ -540,7 +540,7 @@ def plan_block(path, action="migrate", **fields):
 #: `bin/tests/stubs/`. Test-only; no production code reads it.
 DT_BIN_ENV_VAR = "DIRECTIVE_TOOLING_BIN"
 
-INVARIANTS_RELPATH = "skills/directive-invariants.md"
+INVARIANTS_RELPATH = "process/directive-invariants.md"
 AUTHORING_RELPATH = "skills/directive-authoring.md"
 
 #: TRD §3.4's Q9 decision. The fixture substrate sources it from one place so
@@ -807,7 +807,7 @@ def invariants_text(overrides=None, drop=()):
 
 def invariants_doc(home, overrides=None, drop=(), env=None, commit_it=True,
                    message="invariants"):
-    """Install `skills/directive-invariants.md` into `home` and commit it there.
+    """Install `process/directive-invariants.md` into `home` and commit it there.
 
     §3.2 resolves the document's revision in the **methodology home**, so the
     fixture must give the home a history (F-2's resolution). Returns the
