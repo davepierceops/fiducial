@@ -758,3 +758,8 @@ Context: the human read the PRD redrafted against main at 8d21cd3 to state what 
 Date: 2026-09-08
 Decision: specs/rule-store.md is agreed at 70971887e92c80790f962b6cb68aae2aba17cc1d. AC-RS-9 now reads the old corpus as the 62 in-scope files less skills/directive-invariants.md, a tool input that moves to process/directive-invariants.md rather than to docs/history/.
 Context: bin/directive and bin/check-directive read their regions from the invariants document, and rows R1302 and R1304 name its path; moving it to history with the corpus would leave the generator, the lint and two rows in force pointing at nothing. Supersedes nothing: DEC-000670 agreed the PRD at db94962 and stands as history; this entry names the current agreed SHA.
+
+## DEC-000690 — Rule-store PRD revised: AC-RS-9 moves the agent-facing corpus only
+Date: 2026-09-09
+Decision: specs/rule-store.md is agreed at 8ee33c8daeae0d5511c44758969a1b59f3a272a3. AC-RS-9 names no count: the old corpus moved to docs/history/ is the agent-facing in-scope files at the baseline SHA less skills/directive-invariants.md; the [human] files OQ-3 names stay as files.
+Context: the 62 in-scope files at 4a118f5 include 8 [human] documents — specs, vendor notes, the voice template, README.md — that OQ-3 keeps as files and G10 reads from the root at release; moving them with the corpus contradicted both. DEC-000680 stands as history; this entry names the current agreed SHA.
