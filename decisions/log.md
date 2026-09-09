@@ -753,3 +753,8 @@ Context: the human's ruling of 2026-09-06 on distribution: a stable asset name g
 Date: 2026-09-07
 Decision: specs/rule-store.md is agreed at db94962d2c9c596f2ee1dc07fbf58d8bd48ea92b as the standing product specification for the rule store, the bundle tool and the release, superseding specs/bundle-system.md; process/named-queries.md is agreed at 0eb0085f9f564e5bac1e32d3b31090073b0ecb74 as the one place a bundle and the render order are defined.
 Context: the human read the PRD redrafted against main at 8d21cd3 to state what was built, and called it version one.
+
+## DEC-000680 — Rule-store PRD revised: AC-RS-9 exempts the invariants document
+Date: 2026-09-08
+Decision: specs/rule-store.md is agreed at 70971887e92c80790f962b6cb68aae2aba17cc1d. AC-RS-9 now reads the old corpus as the 62 in-scope files less skills/directive-invariants.md, a tool input that moves to process/directive-invariants.md rather than to docs/history/.
+Context: bin/directive and bin/check-directive read their regions from the invariants document, and rows R1302 and R1304 name its path; moving it to history with the corpus would leave the generator, the lint and two rows in force pointing at nothing. Supersedes nothing: DEC-000670 agreed the PRD at db94962 and stands as history; this entry names the current agreed SHA.
