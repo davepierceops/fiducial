@@ -778,3 +778,8 @@ Context: intake finding F-3 on prose-criteria-rows; chosen over forbidding citat
 Date: 2026-09-09
 Decision: The prose-criteria-rows delta is agreed, at 09cb08cd9bf3f9db0a6fef825c5d4a1e1af6e703, the SHA its merge to main (pull request #343) landed at: R1604 replaces R1161, R0953 and R1001; R1013 cites four structure rows by ID; R0038 drops its citation; R1605 is added.
 Context: the independent read prose-criteria-rows-read-3 returned ready-with-findings with no blocking finding.
+
+## DEC-000730 — process-criteria-refs delta signed off
+Date: 2026-09-10
+Decision: The process delta process-criteria-refs — process/outline.md and process/voice.md stop naming the Public Prose Criteria as a document — is signed off at b3a8f008884bc47ca9447f784afe29be16ec367f.
+Context: one frontier read, reviews/process-criteria-refs-read-20260910T193000Z.md @ 79c9263, returned ready-with-findings with no blocking finding; its findings go to the loose-end tracker under DEC-000700.

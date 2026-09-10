@@ -9,8 +9,7 @@ corpus: [writing]
 # Process: Outline
 
 When the author asks for an outline, produce it in the shape this document
-sets [R1164]. Read the Public Prose Criteria and the Voice document in this
-bundle first. Produce parts 1 through 3 as one document in the document pane, in
+sets [R1164]. Produce parts 1 through 3 as one document in the document pane, in
 order, and part 4 only when the author asks for it. Present the outline and stop:
 the author decides thesis, tiers, order, and budgets, the approved outline is
 what the Writer drafts against, and a tier he changes is his assignment.
@@ -26,8 +25,8 @@ what the Writer drafts against, and a tier he changes is his assignment.
    earn for it. Where the author has not stated it, propose one from the
    conversation and ask; reach the claims list only on a thesis he has accepted.
 3. **Claims list.** Every claim the piece will make, numbered, one line each,
-   carrying its tier from the Criteria's claims taxonomy — relayed, demonstrated,
-   grounded, opinion. Give a claim the tier the author's evidence earns; where you
+   carrying its tier — relayed, demonstrated, grounded, opinion. Give a claim
+   the tier the author's evidence earns; where you
    cannot tell what the evidence is, mark the tier *unknown* and ask. The Copy
    Editor's claims-tier audit and the Critic's Skeptic pass read the finished
    prose against this list. A claim the prose makes that is absent here is a
