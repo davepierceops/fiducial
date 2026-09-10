@@ -8,8 +8,8 @@ corpus: [writing]
 
 # Process: Voice — Dave
 
-The author the Public Prose Criteria in this bundle are applied to. Read with the
-Criteria; where the two speak to the same thing, this document wins. This
+The author the prose-criteria rows in this bundle are applied to. Where a
+criteria row and this document speak to the same thing, this document wins. This
 document is the register; the obligations an agent performs when it drafts,
 edits, or criticizes a piece are rows in the store under topic `voice`.
 
@@ -52,7 +52,7 @@ no."
 
 ## Vocabulary
 
-The methodology's own governed vocabulary, defined at first use per the Criteria.
+The methodology's own governed vocabulary, defined at first use.
 
 ## Mechanics
 
