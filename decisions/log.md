@@ -763,3 +763,18 @@ Context: bin/directive and bin/check-directive read their regions from the invar
 Date: 2026-09-09
 Decision: specs/rule-store.md is agreed at 8ee33c8daeae0d5511c44758969a1b59f3a272a3. AC-RS-9 names no count: the old corpus moved to docs/history/ is the agent-facing in-scope files at the baseline SHA less skills/directive-invariants.md; the [human] files OQ-3 names stay as files.
 Context: the 62 in-scope files at 4a118f5 include 8 [human] documents — specs, vendor notes, the voice template, README.md — that OQ-3 keeps as files and G10 reads from the root at release; moving them with the corpus contradicted both. DEC-000680 stands as history; this entry names the current agreed SHA.
+
+## DEC-000700 — A non-blocking finding never reopens a delta
+Date: 2026-09-09
+Decision: A non-blocking finding never reopens a delta or delays its landing; it goes to the loose-end tracker and is fixed in a later package of its own. Only a blocking finding reopens a delta.
+Context: the AC-RS-8/9 and prose-criteria-rows reads of 2026-09-09, whose non-blocking findings this package files.
+
+## DEC-000710 — A row citation must co-render with what it cites
+Date: 2026-09-09
+Decision: A row may cite another row by ID in square brackets only where every value the citing row carries on role, session and corpus the cited row carries too, so the two always co-render; a citation that cannot co-render is a defect. Landed as R1605 in topic intake.
+Context: intake finding F-3 on prose-criteria-rows; chosen over forbidding citations because a paraphrase drifts silently while a dangling pointer is lintable — F-7 on the loose-end tracker records that R1605's test passes a keyless citing row vacuously.
+
+## DEC-000720 — prose-criteria-rows delta agreed
+Date: 2026-09-09
+Decision: The prose-criteria-rows delta is agreed, at 09cb08cd9bf3f9db0a6fef825c5d4a1e1af6e703, the SHA its merge to main (pull request #343) landed at: R1604 replaces R1161, R0953 and R1001; R1013 cites four structure rows by ID; R0038 drops its citation; R1605 is added.
+Context: the independent read prose-criteria-rows-read-3 returned ready-with-findings with no blocking finding.
