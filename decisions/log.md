@@ -783,3 +783,33 @@ Context: the independent read prose-criteria-rows-read-3 returned ready-with-fin
 Date: 2026-09-10
 Decision: The process delta process-criteria-refs — process/outline.md and process/voice.md stop naming the Public Prose Criteria as a document — is signed off at b3a8f008884bc47ca9447f784afe29be16ec367f.
 Context: one frontier read, reviews/process-criteria-refs-read-20260910T193000Z.md @ 79c9263, returned ready-with-findings with no blocking finding; its findings go to the loose-end tracker under DEC-000700.
+
+## DEC-000740 — Six rows from the 2026-09-10 retro synthesis enter the store
+Date: 2026-09-11
+Decision: Rows 1 through 6 above, by their bodies, are agreed. Landed as R1606 in topic directive-invariants.
+Context: 09-09 E4–E10 and 09-10 E5–E10.
+
+## DEC-000750 — Six rows from the 2026-09-10 retro synthesis enter the store
+Date: 2026-09-11
+Decision: Rows 1 through 6 above, by their bodies, are agreed. Landed as R1607 in topic directive-invariants.
+Context: 09-09 E4–E10 and 09-10 E5–E10.
+
+## DEC-000760 — Six rows from the 2026-09-10 retro synthesis enter the store
+Date: 2026-09-11
+Decision: Rows 1 through 6 above, by their bodies, are agreed. Landed as R1608 in topic directive-invariants.
+Context: the 09-09 self-review.
+
+## DEC-000770 — Six rows from the 2026-09-10 retro synthesis enter the store
+Date: 2026-09-11
+Decision: Rows 1 through 6 above, by their bodies, are agreed. Landed as R1609 in topic command-blocks.
+Context: 09-07 E10 and 09-08 E11.
+
+## DEC-000780 — Six rows from the 2026-09-10 retro synthesis enter the store
+Date: 2026-09-11
+Decision: Rows 1 through 6 above, by their bodies, are agreed. Landed as R1610 in topic directive-invariants.
+Context: 09-04 #314 and 09-08 F1.
+
+## DEC-000790 — Six rows from the 2026-09-10 retro synthesis enter the store
+Date: 2026-09-11
+Decision: Rows 1 through 6 above, by their bodies, are agreed. Landed as R1611 in topic chief-of-staff.
+Context: 09-09 E4/E5/E7.
