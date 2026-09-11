@@ -783,3 +783,38 @@ Context: the independent read prose-criteria-rows-read-3 returned ready-with-fin
 Date: 2026-09-10
 Decision: The process delta process-criteria-refs — process/outline.md and process/voice.md stop naming the Public Prose Criteria as a document — is signed off at b3a8f008884bc47ca9447f784afe29be16ec367f.
 Context: one frontier read, reviews/process-criteria-refs-read-20260910T193000Z.md @ 79c9263, returned ready-with-findings with no blocking finding; its findings go to the loose-end tracker under DEC-000700.
+
+## DEC-000740 — R1606: dictate intent and agreed prose, never tree facts
+Date: 2026-09-11
+Decision: R1606 (directive-invariants) is agreed: Dictate intent, acceptance criteria, and prose the human agreed; dictate no tree fact — an id, a key value, a position, which rows carry a term, a tool's existence, a count, a SHA. The executor derives each fact it needs from the tree and reports the derivation with its evidence.
+Context: 09-09 E4–E10 and 09-10 E5–E10.
+
+## DEC-000750 — R1607: a tree-resolvable precondition is resolved, not stopped on
+Date: 2026-09-11
+Decision: R1607 (directive-invariants) is agreed: A precondition the tree resolves with no judgment call and no change of intent is resolved and reported, not stopped on. Stop on what the tree does not resolve.
+Context: 09-09 E4–E10 and 09-10 E5–E10.
+
+## DEC-000760 — R1608: every new directive routes to a fresh session
+Date: 2026-09-11
+Decision: R1608 (directive-invariants) is agreed: Route every new directive to a fresh session. An amendment goes to the session whose stopped report it answers, supersedes named instructions in that directive, and is the only use of the existing-session route.
+Context: the 09-09 self-review.
+
+## DEC-000770 — R1609: a block is tested end-to-end, substitution bound
+Date: 2026-09-11
+Decision: R1609 (command-blocks) is agreed: Before handing over a block, run it end-to-end against a local stand-in for the remote, guard and re-run paths included; a block carrying a substituted value is run with the value bound, since the substitution is the untested part.
+Context: 09-07 E10 and 09-08 E11.
+
+## DEC-000780 — R1610: dictated text is verified by byte-for-byte diff
+Date: 2026-09-11
+Decision: R1610 (directive-invariants) is agreed: Verify dictated text by diffing the landed file against the directive's own fenced block, byte for byte; a heading, a count, or the executor's report is not the check.
+Context: 09-04 #314 and 09-08 F1.
+
+## DEC-000790 — R1611: read the spec spine whole before directing against it
+Date: 2026-09-11
+Decision: R1611 (chief-of-staff) is agreed: Before directing against a spec, read the PRD, the TRD, and the decision-log entries that agree them, whole. A question put to the human that the spec answers is a defect in the read, not a question.
+Context: 09-09 E4/E5/E7.
+
+## DEC-000800 — R1283 retires into R1608
+Date: 2026-09-11
+Decision: rules/R1283.md is deleted; R1608 carries the route obligation, and the amendment route is the only existing-session route.
+Context: the 2026-09-09 read that became a self-review; the three citations of R1283 under docs/rule-register/ are derived records and stand as written.
