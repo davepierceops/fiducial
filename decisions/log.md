@@ -818,3 +818,33 @@ Context: 09-09 E4/E5/E7.
 Date: 2026-09-11
 Decision: rules/R1283.md is deleted; R1608 carries the route obligation, and the amendment route is the only existing-session route.
 Context: the 2026-09-09 read that became a self-review; the three citations of R1283 under docs/rule-register/ are derived records and stand as written.
+
+## DEC-000810 — R1606 distinguishes a pinned ref from a dictated tree fact
+Date: 2026-09-11
+Decision: R1606 (directive-invariants) is amended to: Dictate intent, acceptance criteria, and prose the human agreed; dictate no tree fact for the executor to land — an id, a key value, a position, which rows carry a term, a tool's existence, a count. A ref pinned for the executor to verify is a claim, read from the tree and cited, not a dictated fact.
+Context: NB-1 and NB-2 of reviews/tree-fact-rows-read-20260911T180000Z.md.
+
+## DEC-000820 — R1607 carries the executor's derivation and the stop boundary
+Date: 2026-09-11
+Decision: R1607 (directive-invariants) is amended to: A precondition the tree resolves with no judgment call and no change of intent is resolved and reported, not stopped on; a fact derived from the tree — an id, a position, a key value — is reported with the evidence it was derived from. Stop on what the tree does not resolve.
+Context: NB-2 and NB-4 of reviews/tree-fact-rows-read-20260911T180000Z.md.
+
+## DEC-000830 — R1609 is the one pre-handover check for a block — R1220 and R1228 retire into it
+Date: 2026-09-11
+Decision: R1609 (command-blocks) is amended to: Before handing over a block: every command in it is valid and non-harmful, and re-running it compounds no damage; it has been run end-to-end against a local stand-in for the remote, guard and re-run paths included, with any substituted value bound; its expected output is stated in one line below it, and its blast radius above it where it is destructive. rules/R1220.md and rules/R1228.md are deleted; R1609 carries their obligation.
+Context: NB-3 of reviews/tree-fact-rows-read-20260911T180000Z.md.
+
+## DEC-000840 — R0188 retires into R1607
+Date: 2026-09-11
+Decision: rules/R0188.md is deleted; R1607 carries its obligation.
+Context: NB-4 of reviews/tree-fact-rows-read-20260911T180000Z.md.
+
+## DEC-000850 — R1610 covers text carried by pointer
+Date: 2026-09-11
+Decision: R1610 (directive-invariants) is amended to: Verify dictated text by diffing the landed file against the directive's own fenced block, byte for byte; a heading, a count, or the executor's report is not the check. Text carried by pointer is diffed against its source.
+Context: NB-5 of reviews/tree-fact-rows-read-20260911T180000Z.md.
+
+## DEC-000860 — A pull request handed for merging is its URL alone
+Date: 2026-09-11
+Decision: R1612 (decision-layer) is agreed: Hand a pull request to the human for merging as its URL, alone in a paste block with nothing else in it.
+Context: the human's stated preference, 2026-09-11.
