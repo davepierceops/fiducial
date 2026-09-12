@@ -848,3 +848,8 @@ Context: NB-5 of reviews/tree-fact-rows-read-20260911T180000Z.md.
 Date: 2026-09-11
 Decision: R1612 (decision-layer) is agreed: Hand a pull request to the human for merging as its URL, alone in a paste block with nothing else in it.
 Context: the human's stated preference, 2026-09-11.
+
+## DEC-000870 — Retired rows live under rules/retired/, per AC-RS-10
+Date: 2026-09-11
+Decision: R1283, R1220, R1228 and R0188 are restored under rules/retired/, each with a retired: line naming its successor; DEC-000800 and DEC-000840 stand as written, and "deleted" there reads as "retired" from this entry on.
+Context: the decision session directed deletion twice against the agreed PRD (specs/rule-store.md, AC-RS-10), which moves a retired row and never deletes it; the executor of the tree-fact-rows-nb package flagged the conflict.
