@@ -1,74 +1,92 @@
-# fiducial
+# Fiducial
 
-Rules for getting real work out of LLM agents without losing track of what is true.
+A working method for directing LLM agents and evaluating what they deliver, with roles and instructions that persist across sessions. Download a role’s Markdown bundle, load it into your agent, and put it to work.
 
-Use it for two kinds of project: software, or writing. To try either in two minutes or less:
+I built Fiducial to understand the problem space: agent harnesses, context delivery, switching roles, keeping intent intact across sessions. I expect the tools here to get much better. Building something that tries to solve the problem is the best way I know to understand it.
 
-**Software.** Download `fiducial-bundle-chief-of-staff.md` from the link below, put it in a fresh chat project, and say what you want built. It will tell you what it needs.
+One question I’m exploring is whether we can produce software without human code review. I think we’ll get there. I’m not comfortable relying on it for production today. I want to understand what would have to be true for me to trust it.
 
-**Writing.** Download `fiducial-bundle-writer.md`, put it in a fresh chat project, and dump your notes. It drafts from an outline if you give it one, and from the conversation if you don't.
+The most interesting part, to me, is the evidence model. What did you check? What does that establish? What remains unknown? What would close the gap? A passing test against a fixture tells you something about your parser. It tells you nothing about whether the live service accepted your credentials.
 
+Fiducial currently supports spec-driven software development—specifications and tests before implementation—and a writing workflow with separate drafting, copy editing, and criticism. Both carry human intent through the work and its evaluation.
+
+It’s open source. Clone it and make it your own, or send me a PR. I’ll read it. [License](https://github.com/davepierceops/fiducial/blob/main/LICENSE).
+
+[Try it](#try-it) · [Current issues](https://github.com/davepierceops/fiducial/issues) · [Milestones](https://github.com/davepierceops/fiducial/milestones)
+
+## Manage the proof
+
+An agent’s report that something works is a claim. Fiducial asks it to carry the evidence with that claim, including the boundary the evidence does not cross.
+
+For the parser example, that means reporting the fixture tested, the result observed, the live connection still unchecked, and the check needed to resolve it. The gap follows the work into review and the release decision. It should not disappear into “all tests pass.”
+
+The software workflow separates test authorship, implementation, quality review, and skeptical review. Tests must fail on incorrect behavior; reviewers examine whether the tests establish what the implementation claims. The skeptic examines the evidence chain, including mocks, assumptions, and unverified boundaries.
+
+Separate agents can share the same wrong assumption. These procedures give us things to examine and challenge; their existence does not settle the question of trust. Humans still own product intent, risk decisions, and consequential approval. The experiment concerns human inspection of code, not the removal of human judgment.
+
+## Try it
+
+### Software
+
+Download the [chief-of-staff bundle](https://github.com/davepierceops/fiducial/releases/latest/download/fiducial-bundle-chief-of-staff.md), load it into a fresh chat project, and describe the problem you want to solve.
+
+> Help me write a PRD for this idea. Let’s work out the users, their needs, and what success would look like.
+
+The bundle includes a PRD template and assigns drafting it with you to the chief of staff. We’re [validating that guided starting experience](https://github.com/davepierceops/fiducial/issues/373).
+
+The workflow proceeds through product requirements, technical design, specification/test reconciliation, implementation, review, and a release decision. This is spec-driven and test-driven development; the coding roles assume that way of working. See the [change flow](https://github.com/davepierceops/fiducial/blob/main/process/change-flow.md).
+
+Before directing repository writes, establish the [project setup requirements](https://github.com/davepierceops/fiducial/blob/main/process/project-setup.md): default-branch protection against force-push and deletion, changes through pull requests without administrator bypass, and a runner-level force-push prohibition. Planning can begin before those controls are in place.
+
+### Writing
+
+Start with the [writer bundle](https://github.com/davepierceops/fiducial/releases/latest/download/fiducial-bundle-writer.md). It can develop a piece from conversation or notes, or draft from an agreed outline. Separate copy-editor and critic sessions then propose tracked edits and anchored comments; the author decides what stays.
+
+**The released writing bundles currently contain my voice and publication preferences.** The [voice template](https://github.com/davepierceops/fiducial/blob/main/voice-template.md) is a starting aid for adapting the source; uploading it alone does not replace the embedded preferences. [Portable author profiles and optional sample-based setup](https://github.com/davepierceops/fiducial/issues/355) are planned work.
+
+### Loading and handoffs
+
+Have the agent read the complete bundle before starting. Your chat application or coding harness supplies sessions and tool access. You or the host starts the next role’s session and passes its instructions and artifacts along. Git work needs repository tools; tracked DOCX edits need document-editing capabilities.
+
+For repeatable use, pin your bundle to a dated [release](https://github.com/davepierceops/fiducial/releases). In a coding project, keep a local copy and point the harness’s instruction file at it. Confirm that the harness actually reads it. Adopting a newer bundle should be deliberate.
+
+## What we know so far
+
+The repository contains the method’s own development record: specifications, implementations, tests, reviews, mistakes, and revisions. The [bundle-tool skeptic review](https://github.com/davepierceops/fiducial/blob/main/reviews/bundle-tool-skeptic-20260906T150000Z.md) is one example of scrutiny uncovering misleading test evidence. It describes its reviewed revision; its findings are not a current bug list.
+
+The tool suite checks software behavior. We have not established Fiducial’s comparative effect on agent outcomes, human effort, cost, or context overhead. [Annotated examples](https://github.com/davepierceops/fiducial/issues/371) and [comparative evaluations](https://github.com/davepierceops/fiducial/issues/372) are on the roadmap.
+
+Current adoption work also includes [resolving references inside bundles](https://github.com/davepierceops/fiducial/issues/358), [thin harness adapters](https://github.com/davepierceops/fiducial/issues/360), and [retiring obsolete entry points](https://github.com/davepierceops/fiducial/issues/361). GitHub issues and milestones carry the live status.
+
+## Make it yours
+
+Each rule lives in a Markdown file with selection keys such as role and topic. Shared instructions have one source; a query selects a role’s rules and process documents, with definitions added by term matching. Git carries the history.
+
+Every rule gets its own file. Managing that is exactly as tedious as it sounds. Fortunately, I have LLMs. Thank you, LLM.
+
+To work with the source, clone the repository. The tooling uses Python’s standard library and Git:
+
+```sh
+bin/bundle --keys
+bin/bundle --where role=writer --name writer
+bin/tests/run
 ```
-https://github.com/davepierceops/fiducial/releases/latest/download/fiducial-bundle-<slug>.md
-```
 
-That is the whole quick start. The rest of this file is the detail.
+Generation currently requires a successful fetch of `origin/main`, HEAD matching that ref, and no uncommitted changes under `rules/` or `process/`. Output goes to `~/Downloads` unless you supply `--out`. [Ordinary offline generation from local edits](https://github.com/davepierceops/fiducial/issues/366) is planned.
 
-## What this is
+See the [named queries](https://github.com/davepierceops/fiducial/blob/main/process/named-queries.md) for the twelve distributed roles and their selection. The [rule-store design](https://github.com/davepierceops/fiducial/blob/main/specs/rule-store.md) explains the underlying model.
 
-An agent will write code, tests, specs, reviews, and essays all day, and will tell you they are done with the same confidence whether they are or not. fiducial is a set of rules that fixes that: every claim carries its evidence, every artifact lands somewhere you can inspect, and the decisions stay with you. Agents propose. You decide. The thesis, for software, is manage the proof, not the code.
+<details>
+<summary>Repository map</summary>
 
-The two paths:
-
-- **Software.** A chief of staff runs the session; architect, spec reviewer, test designer, coder, reviewer, skeptic, and release manager do the work, each in its own lane, each handing back evidence rather than assurances.
-- **Writing.** A writer drafts in your voice from an outline you agreed; a copy editor and a critic read it against that outline and say what moved.
-
-Each role is one Markdown file, called a bundle. Load the bundle, and the session is that role.
-
-## Which bundle to take
-
-Every rule in this repository is keyed to a role. A bundle is the rules for one role, with every term it uses defined at the end. Take the bundle for the role the session is about to play.
-
-| bundle | what the role does |
+| Location | Contents |
 |---|---|
-| `chief-of-staff` | Runs the decision session: assesses state, drafts directives, triages reports, opens and merges pull requests. Never carries out the work a directive specifies. |
-| `architect-agent` | Derives a per-change architecture summary from the TRD; the tracker issue is cut from it. |
-| `spec-reviewer-agent` | Gates the PRD, TRD, and acceptance criteria before agreement; runs the continuity scan. |
-| `test-designer-agent` | Writes tests from acceptance criteria and confirms they fail on bad logic before any implementation. Edits tests only. |
-| `coder-agent` | Writes the minimum code that turns the failing tests green, with lint, types, and static analysis passing as part of green. |
-| `reviewer-agent` | The quality pass: maintainability, correctness, consistency, test adequacy, over the diff and the mechanical results. |
-| `skeptic-risk-agent` | The skepticism pass: false confidence, mocked boundaries, config and deploy risk, release overclaims, over the whole evidence chain. |
-| `release-manager-agent` | Assembles the change package and the ship recommendation. The human makes the release decision. |
-| `context-quality-reviewer` | Runs intake: shapes a proposed rule, checks it against the store, sets its keys, lands it or refuses it with the id of the row that already says it. |
-| `writer` | Drafts public prose in the author's voice from an agreed outline. |
-| `copy-editor` | Edits prose for register and the public prose criteria without changing what it claims. |
-| `critic` | Reads a draft against its outline and the criteria; a claim added or dropped is a finding. |
+| `rules/` | Individual rules and definitions |
+| `process/` | Workflows, templates, and bundle queries |
+| `bin/` | Bundle, release, directive, and Git tools; tests |
+| `specs/` | Tooling specifications |
+| `decisions/log.md` | Recorded human decisions |
+| `reviews/`, `retros/`, `docs/cycles/` | Development records at their stated revisions |
+| `docs/history/` | Earlier forms of the methodology |
 
-A session runs as the role its directive names. In chat, the session is the chief of staff, the writer, the copy editor, or the critic. Every other role runs as an execution session against a working tree.
-
-## How to load one
-
-The bundle is the first thing in context, before any task. Nothing else about loading it matters as much as that.
-
-- **Chat** (Claude.ai or equivalent): add the file to the project, or paste it as the first message.
-- **Claude Code**: commit a copy of the file to the repository and put one line in `CLAUDE.md` pointing at it, ahead of anything else.
-- **Any other harness**: same idea. Get the file read, whole, before the session does anything.
-
-## How to stay current
-
-Bundles are release assets, and the asset name carries no timestamp, so the URL above is stable. When a release lands, replace the file. Tags are dated (`v2026.09.07`), so the tag says how old a bundle is; the header inside the file names the commit it was generated from, so a session can tell which version of the methodology it is running under.
-
-## How to make it yours
-
-The rules are a store, not a document: one rule per file under `rules/`, each with an id, an instruction, and free key-value pairs. A bundle is a query over that store. `bin/bundle --where role=writer` selects the rows carrying that value, the process documents the same query selects, and every definition a selected row uses. Clone the repository and run it; the store needs Python and git and nothing else. A new role is a new value on the `role` key and one line in `process/named-queries.md`; the tool does not change.
-
-A rule enters the store through one gate, intake. Propose it in a sentence. A context-quality-reviewer session shapes it into one instruction an agent can act on, checks it against the store for a row that already says it, sets its keys, and lands one commit. There is no status field; a row in `rules/` is in force. If the vocabulary or the rules do not fit your practice, fork the store and run intake against your own. The model is in the rule-store PRD under `specs/`.
-
-## What it asks of your repository
-
-Agents push and merge. That is safe only because the default branch cannot be rewritten, so before the methodology governs work in a repository:
-
-- `main` is protected: no force-push, no deletion, changes land by pull request, and the protection binds administrators too.
-- The copy of the bundle the repository carries is pinned to a release tag. Bumping the tag is how a release is adopted.
-
-Branch protection lives in the forge's settings, where nothing in the repository can check it. Confirm it by hand, once, before the first agent session.
+</details>
