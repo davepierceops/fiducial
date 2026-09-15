@@ -8,7 +8,7 @@ One question I’m exploring is whether we can produce software without human co
 
 The most interesting part, to me, is the evidence model. What did you check? What does that establish? What remains unknown? What would close the gap? A passing test against a fixture tells you something about your parser. It tells you nothing about whether the live service accepted your credentials.
 
-Fiducial currently supports spec-driven software development—specifications and tests before implementation—and a writing workflow with separate drafting, copy editing, and criticism. Both carry human intent through the work and its evaluation.
+Fiducial currently supports spec-driven software development – specifications and tests before implementation – and a writing workflow with separate drafting, copy editing, and criticism. Both carry human intent through the work and its evaluation.
 
 It’s open source. Clone it and make it your own, or send me a PR. I’ll read it. [License](https://github.com/davepierceops/fiducial/blob/main/LICENSE).
 
@@ -74,7 +74,7 @@ bin/tests/run
 
 Generation currently requires a successful fetch of `origin/main`, HEAD matching that ref, and no uncommitted changes under `rules/` or `process/`. Output goes to `~/Downloads` unless you supply `--out`. [Ordinary offline generation from local edits](https://github.com/davepierceops/fiducial/issues/366) is planned.
 
-See the [named queries](https://github.com/davepierceops/fiducial/blob/main/process/named-queries.md) for the twelve distributed roles and their selection. The [rule-store design](https://github.com/davepierceops/fiducial/blob/main/specs/rule-store.md) explains the underlying model.
+See the [named queries](https://github.com/davepierceops/fiducial/blob/main/process/named-queries.md) for the 12 distributed roles and their selection. The [rule-store design](https://github.com/davepierceops/fiducial/blob/main/specs/rule-store.md) explains the underlying model.
 
 <details>
 <summary>Repository map</summary>
