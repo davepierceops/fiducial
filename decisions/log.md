@@ -853,3 +853,39 @@ Context: the human's stated preference, 2026-09-11.
 Date: 2026-09-11
 Decision: R1283, R1220, R1228 and R0188 are restored under rules/retired/, each with a retired: line naming its successor; DEC-000800 and DEC-000840 stand as written, and "deleted" there reads as "retired" from this entry on.
 Context: the decision session directed deletion twice against the agreed PRD (specs/rule-store.md, AC-RS-10), which moves a retired row and never deletes it; the executor of the tree-fact-rows-nb package flagged the conflict.
+
+## DEC-000880 — The loose-end tracker is GitHub Issues
+Date: 2026-09-16
+Decision: The loose-end tracker for fiducial is the repository's GitHub Issues and Milestones on davepierceops/fiducial; an open item is an issue, and a pending gate keeps its human-gate label there. OPEN-ITEMS.md is retired: its open residue is filed as issues under #370 and the file moves to docs/history/ once every open entry has a destination.
+Context: the human's ruling, 2026-09-16, confirming the direction recorded in docs/research/evaluation-work-plan-2026-09-14.md and #370; two trackers had claimed the same items since #355–#375 were filed.
+
+## DEC-000890 — The 2026-09-14 evaluation and its work plan are agreed; #355–#375 are the derived work
+Date: 2026-09-16
+Decision: docs/research/repository-evaluation-2026-09-14.md and docs/research/evaluation-work-plan-2026-09-14.md are the record of the 2026-09-14 evaluation session, baseline 8ea66f527cf0114441b34976b09a8326fccbf3c2; issues #355 through #375 and their milestones are the work agreed from them. A plan item the work plan marks proposed or not yet agreed is issue text, not a decision, until an entry here says otherwise.
+Context: the session ran outside the change flow and left no directive, review artifact or entry; the human handed the two files over on 2026-09-16 and they landed at 1a41ea75d37b10280d3601abb0e16c8f60e001a2.
+
+## DEC-000900 — README agreed at 10471df
+Date: 2026-09-16
+Decision: README.md is agreed at 10471df5096fc5d5e236423a424b8eaddb998361, the version pull requests #376 and #377 landed; it links GitHub Issues and Milestones as the live roadmap and carries no duplicated task list.
+Context: the rewrite closed #369 on 2026-09-15 with the human's own read as its gate; README.md is outside the four delta kinds process/change-flow.md gates, so no read was owed, and this entry is its record.
+
+## DEC-000910 — Harness adapters are thin pointers to a pinned local bundle
+Date: 2026-09-16
+Decision: CLAUDE.md, AGENTS.md and any other harness entry file are kept as thin pointers that tell the agent where the substantive instructions are — a pinned local bundle — and carry no restated rules. This reverses the removals at 8e26700 and 23c1a57, which deleted the adapters rather than thinning them; the package that lands them is #360.
+Context: docs/research/evaluation-work-plan-2026-09-14.md section D, agreed adapter design; it settles the executor-context question open since 2026-09-11, when the decision session found Claude Code executors had carried no repository standing context since 8e26700.
+
+## DEC-000920 — Routine releases run on standing authorization; consequential ones wait for explicit approval
+Date: 2026-09-16
+Decision: A routine release has the human's standing authorization once the required checks and reviews pass and needs no fresh approval prompt; a consequential release waits for the human's explicit go. Passing checks does not make a consequential change routine, and a merge that exposes nothing is not the release event. The row edits that state this consistently — R0490 and the consequential-class definition among them — land under #364 as an intake delta; the classification itself is unchanged by this entry.
+Context: docs/research/evaluation-work-plan-2026-09-14.md section E item 3, agreed; the evaluation found R0490 and the consequential-class definition read as contradicting each other.
+Supersedes: DEC-000330
+
+## DEC-000930 — Bundles label a rule's ID only where another bundle member cites it
+Date: 2026-09-16
+Decision: A rendered bundle carries a rule's ID only when a retained reference elsewhere in the same bundle cites it; unreferenced rules render unlabelled as today. Authors decide which citations are necessary instruction and which are provenance only, and the bundler labels the targets of the former and refuses to render when a retained target is absent. The specification and tooling change lands under #358 as a spec delta on the rule-store PRD.
+Context: docs/research/evaluation-work-plan-2026-09-14.md section B, agreed; the evaluation found process text citing rule IDs the renderer omits and 15 cited rules absent from the chief-of-staff bundle.
+
+## DEC-000940 — Ordinary bundle generation renders the local tree; only release generation checks its inputs against origin
+Date: 2026-09-16
+Decision: bin/bundle renders local files as they stand — uncommitted edits included, offline, on any branch — with input validation kept; the fetch and the HEAD-equals-origin/main refusal move to the release path, where cleanliness is checked over the files that generate the release assets and nothing else. The specification and tooling change lands under #366 as a spec delta on the bundle-system PRD.
+Context: docs/research/evaluation-work-plan-2026-09-14.md section F2, agreed; the sync refusal blocked every pre-merge bundle check on a delta branch, recorded on the loose-end tracker on 2026-09-10.
