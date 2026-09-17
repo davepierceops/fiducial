@@ -894,3 +894,55 @@ Context: docs/research/evaluation-work-plan-2026-09-14.md section F2, agreed; th
 Date: 2026-09-16
 Decision: bin/land is agent-facing from this entry: a directive may instruct an executor to invoke it, and the executor lands the directive file and the session's work with it rather than by hand. The precondition set on 2026-08-23 — a governed usage document agreed first — is withdrawn; specs/bin-land.md's user journeys J1 and J2 are the tool's usage statement, and the directive that invokes it says what its report and exit status mean. The four untriaged finding classes against specs/bin-land-trd.md are filed on the tracker as deferred and do not hold the tool.
 Context: the human's ruling of 2026-09-16 on learning the tool had been built, tested and unused since August; the sequencing decision it withdraws lives in docs/cycles/bin-land-spec-7-20260823T203500Z.md @ 8a77c2a and specs/bin-land.md §8 Q3, not in this log, so there is no entry to supersede. The first directive to invoke bin/land is the one that lands this entry.
+
+## DEC-000960 — R0225 carries the ruling-question form
+Date: 2026-09-16
+Decision: R0225 (decision-layer) is amended to: Ask one question at a time, the one that matters most; name the item before the choice and shape it yes/no where it can be; after handing over a report or a block, restate the question still open. A ruling question defines the corpus term it turns on in one sentence, restates the situation from the ground floor where it arrives without its context, and names which option matches the human's prior rulings, offering the reversible one.
+Context: items 10 and 11 of retros/retro-synthesis-20260910T225935Z.md, ruled 2026-09-16; item 11 folds into item 10.
+
+## DEC-000970 — R0148 names per-clone state as boundary-sensitive
+Date: 2026-09-16
+Decision: R0148 (verification) is amended to add per-clone state — hooks, local config, credential helpers — to the boundary-sensitive list, and one sentence: a package that retires or changes a tool which installs per-clone state names the operator step that removes it and where that step is published.
+Context: item 13 of retros/retro-synthesis-20260910T225935Z.md, ruled 2026-09-16; bin/install-hooks left a pre-commit hook in the human's clone after its retirement.
+
+## DEC-000980 — R0829 carries the plain-phrase alternative for readers outside software
+Date: 2026-09-16
+Decision: R0829 (public-prose-criteria) is amended to: Define each governed or specialist term where it first appears, for a public reader; where the audience includes readers outside software, use the plain phrase for a software term or define it in the sentence that first uses it. R0983 stays as the copy-editor's check.
+Context: item 14 of retros/retro-synthesis-20260910T225935Z.md, first ruled a new row on 2026-09-16, then ruled an amendment the same day because a new row would carry the obligation R0829 already states.
+
+## DEC-000990 — An untracked file under retros/ lands with the next flush package
+Date: 2026-09-16
+Decision: A file under retros/ that is untracked in the clone lands with the next flush package; a row in topic chief-of-staff carries this, and R0880's invocation state check names every such file. R1244 stands: a retro never reads from or writes to a remote.
+Context: a standing-preference candidate of retros/retro-synthesis-20260910T225935Z.md, confirmed as a row on 2026-09-16 after the 09-10 synthesis was found never landed.
+
+## DEC-001000 — A non-blocking finding lands by default; the human may raise it to blocking at triage
+Date: 2026-09-16
+Decision: A non-blocking finding's disposition at triage is file-and-land by default: it goes to the loose-end tracker and the delta lands. The human may raise a finding to blocking at triage, before the pull request merges; one raise buys one read over the diff since the reviewed revision. Nothing else reopens a delta. A row in topic review-artifact-schema carries this for every reviewing role and the chief of staff.
+Context: the human's ruling of 2026-09-16 on DEC-000700's "never": too constraining, and one reviewer must not be the sole gate — while a return to trivial findings reopening deltas is refused. DEC-000700's tracker routing survives in this entry.
+Supersedes: DEC-000700
+
+## DEC-001010 — R1609 regains R1220's expected-output constraint and its Human notes
+Date: 2026-09-16
+Decision: R1609 (command-blocks) is amended so the expected output stated below a block is what was observed in the environment the block will run in, or qualitative — what to look for, with no number; its Human section carries the Human notes of retired R1220 and R1228 verbatim.
+Context: the three tracker findings of reviews/tree-fact-rows-nb-read-20260911T230000Z.md against R1609, ruled 2026-09-16; DEC-000830's merged body had dropped the constraint.
+
+## DEC-001020 — DEC-000830 also reads "deleted" as "retired"
+Date: 2026-09-16
+Decision: R1283, R1220, R1228 and R0188 live under rules/retired/, each with a retired: line naming its successor; DEC-000800, DEC-000830 and DEC-000840 stand as written, and "deleted" in each reads as "retired" from this entry on.
+Context: DEC-000870 named DEC-000800 and DEC-000840 but not DEC-000830, which also says "deleted" (a finding of reviews/tree-fact-rows-nb-read-20260911T230000Z.md); the whole entry is restated here under whole-entry supersession.
+Supersedes: DEC-000870
+
+## DEC-001030 — A directive states the count it lists or none
+Date: 2026-09-16
+Decision: Where a directive states how many items it lists, the count matches the list; otherwise it states no count. A row in topic directive-invariants carries this.
+Context: carried from the 2026-09-04 session, where a directive's stated count and its list disagreed; ruled into this delta 2026-09-16.
+
+## DEC-001040 — R1171 names the public-prose-criteria rows by topic
+Date: 2026-09-16
+Decision: R1171 (writer) is amended so the voice harvest names "the Voice document or the public-prose-criteria rows", replacing "the prose-criteria rows in this bundle".
+Context: F1 of reviews/criteria-rows-read-20260917T033521Z.md, the class F6 of reviews/process-criteria-refs-read-20260910T193000Z.md named: a bundle-relative phrase reads wrong outside the bundle; ruled 2026-09-16.
+
+## DEC-001050 — R0241 states where the loose-end tracker lives
+Date: 2026-09-16
+Decision: R0241 (decision-layer), the row defining the loose-end tracker, is amended to add: The loose-end tracker is the project's issue tracker — on GitHub, the repository's Issues and Milestones: an open item is an issue, and a pending gate carries its human-gate label there.
+Context: the definition row DEC-000880 called for, ruled 2026-09-16; R0551 and R0560 already assume a tracker issue and its label.
