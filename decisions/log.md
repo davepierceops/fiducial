@@ -889,3 +889,8 @@ Context: docs/research/evaluation-work-plan-2026-09-14.md section B, agreed; the
 Date: 2026-09-16
 Decision: bin/bundle renders local files as they stand — uncommitted edits included, offline, on any branch — with input validation kept; the fetch and the HEAD-equals-origin/main refusal move to the release path, where cleanliness is checked over the files that generate the release assets and nothing else. The specification and tooling change lands under #366 as a spec delta on the bundle-system PRD.
 Context: docs/research/evaluation-work-plan-2026-09-14.md section F2, agreed; the sync refusal blocked every pre-merge bundle check on a delta branch, recorded on the loose-end tracker on 2026-09-10.
+
+## DEC-000950 — bin/land is agent-facing
+Date: 2026-09-16
+Decision: bin/land is agent-facing from this entry: a directive may instruct an executor to invoke it, and the executor lands the directive file and the session's work with it rather than by hand. The precondition set on 2026-08-23 — a governed usage document agreed first — is withdrawn; specs/bin-land.md's user journeys J1 and J2 are the tool's usage statement, and the directive that invokes it says what its report and exit status mean. The four untriaged finding classes against specs/bin-land-trd.md are filed on the tracker as deferred and do not hold the tool.
+Context: the human's ruling of 2026-09-16 on learning the tool had been built, tested and unused since August; the sequencing decision it withdraws lives in docs/cycles/bin-land-spec-7-20260823T203500Z.md @ 8a77c2a and specs/bin-land.md §8 Q3, not in this log, so there is no entry to supersede. The first directive to invoke bin/land is the one that lands this entry.
