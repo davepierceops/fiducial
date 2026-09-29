@@ -946,3 +946,9 @@ Context: F1 of reviews/criteria-rows-read-20260917T033521Z.md, the class F6 of r
 Date: 2026-09-16
 Decision: R0241 (decision-layer), the row defining the loose-end tracker, is amended to add: The loose-end tracker is the project's issue tracker — on GitHub, the repository's Issues and Milestones: an open item is an issue, and a pending gate carries its human-gate label there.
 Context: the definition row DEC-000880 called for, ruled 2026-09-16; R0551 and R0560 already assume a tracker issue and its label.
+
+## DEC-001060 — Project Status is a separate skill, not Chief of Staff startup
+Date: 2026-09-29
+Decision: The Chief of Staff begins with the human's requested work; R0880 no longer requires a project-status sweep on invocation, and that assessment moves to the separately invoked Project Status skill. A file under retros/ that is untracked in the clone still lands with the next flush package under R1613, and R1244 still requires that a retro never reads from or writes to a remote.
+Context: the human chose this single change as the starting point for production engineering work with Fiducial; further role changes will be informed by use and session retros rather than prescribed in advance. This replaces DEC-000990's startup-check requirement while retaining its retrospective handling obligations.
+Supersedes: DEC-000990

@@ -44,6 +44,18 @@ Start with the [writer bundle](https://github.com/davepierceops/fiducial/release
 
 **The released writing bundles currently contain my voice and publication preferences.** The [voice template](https://github.com/davepierceops/fiducial/blob/main/voice-template.md) is a starting aid for adapting the source; uploading it alone does not replace the embedded preferences. [Portable author profiles and optional sample-based setup](https://github.com/davepierceops/fiducial/issues/355) are planned work.
 
+### Project status skill
+
+The Chief of Staff starts with the work you request. A project-status sweep is
+available separately through the [Project Status skill](skills/project-status/SKILL.md).
+It checks current work, recent changes, pending decisions, concurrent work, and
+untracked retros, then proposes a next step.
+
+Install the `skills/project-status/` folder in your agent's skill directory, or
+have the agent read its `SKILL.md` when you ask for project status. The skill is
+separate from the role bundles and is distributed in the repository; downloading
+a role bundle alone does not install it.
+
 ### Loading and handoffs
 
 Have the agent read the complete bundle before starting. Your chat application or coding harness supplies sessions and tool access. You or the host starts the next role’s session and passes its instructions and artifacts along. Git work needs repository tools; tracked DOCX edits need document-editing capabilities.
