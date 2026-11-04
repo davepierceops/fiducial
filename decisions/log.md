@@ -988,3 +988,8 @@ Context: The first use of the model on fiducial itself, rather than intake delta
 Date: 2026-11-03
 Decision: Three human-facing forms survive the sort because a harness cannot compute them: the command block (shell the human runs as given), the execution block (the secondary path for an executor the decision session cannot spawn), and the baton (only what a successor cannot recompute from the tree). The directive package — route-and-model line, FIRST ACT, worktree choreography, the M1–M8 lint — retires.
 Context: The human still applies Terraform and pushes from the machine holding the credential, and still ends long chat sessions by choice; those crossings need a form.
+
+## DEC-001140 — SPEC.md for the subtraction is approved
+Date: 2026-11-03
+Decision: The human approves `SPEC.md` at 2c0d491ae5024073a2510834b6794146a62007c2 as the spec for the revision DEC-001080 names. Its definition of done governs the work; its open questions are resolved by the means each names.
+Context: Drafted in the 2026-11-03 session from that day's rulings, corrected in review (Codex artifacts named in the adopter journey; command block, execution block and baton kept), and shipped by the human's word.
