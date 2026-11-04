@@ -54,25 +54,23 @@ core
 chief-of-staff architect-agent spec-reviewer-agent test-designer coder-agent reviewer skeptic release-manager-agent context-quality-reviewer writer copy-editor critic
 decision-layer
 intake
-change-flow convergence change-control commit-control
-directive-invariants command-blocks remote-write-verification-policy
+spec
+change-flow change-control commit-control
+command-blocks remote-write-verification-policy
 verification verification-boundaries human-review-boundary
 review-artifact-schema retro decision-log-policy
-public-prose-criteria voice trd prd-template
+public-prose-criteria voice
 ~~~
 
 The second line holds the twelve role topics at one position: one per
 bundle, and they never co-occur.
 
 ~~~text
+spec-template
 change-flow
-prd-template
-trd-template
 review-artifact
 voice
 outline
-decomposition
-spec-test-suite
 retro
 project-setup
 decision-log
