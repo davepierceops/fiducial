@@ -14,8 +14,7 @@ A retro is `retro-<timestamp>.md`, a synthesis `retro-synthesis-<timestamp>.md`,
 the timestamp taken at generation time as `<YYYYMMDD>T<HHMMSS>Z`. Match a filename
 against those two forms only to tell one from the other; the frontmatter is a
 retro's canonical identity. Retros live in the project's own repo at `retros/`.
-Its inputs are the conversation it covers and the local tree [R1244]; its
-outputs land by the last step below.
+Its inputs are R1244's; its outputs land by the last step below.
 
 A project synthesis runs over one project's `retros/` directory and writes into
 it under the synthesis filename form, overwriting no source retro; its header

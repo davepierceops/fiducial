@@ -24,7 +24,6 @@ says so; report one that does not rather than working around it.
    landing by pull request, never a push to the default branch, recorded in the
    project's decision log as an accepted-risk entry naming the plan that would
    restore the forge layer; the entry is re-examined when the repository moves
-   to one. The pattern is R0564's Human note: on a Free repo the forge layer is
-   absent and the hook is the only layer.
+   to one [R0564].
 2. **A force-push deny in the agent runner** [R0564], holding in every permission
    mode, including the modes that otherwise skip prompting.

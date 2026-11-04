@@ -2,7 +2,7 @@
 order: 20
 topic: [spec-template]
 role: [chief-of-staff, architect-agent, spec-reviewer-agent]
-session: [decision]
+session: [decision, execution]
 corpus: [software]
 ---
 

@@ -56,15 +56,14 @@ The human should inspect: <the few items that need his judgment, or omitted>
 ~~~
 
 The header's `Verdict:` is the overall call and each pass section — quality,
-skepticism, continuity — opens with its own `Verdict (<pass>):` line [R1414];
-`ready` means ready for the human's approval, never approved. A pass that was
-planned and did not run has its section too, stating why in place of a verdict
-[R1617]. `Cross-checked` and `The human should inspect` are omit-if-none;
-`Baseline` is required where the artifact reviews a range — a delta's whole
-diff, or a reconciliation — and names the revision the diff starts from, and a
-review of one revision omits it; the rest are required, `Not inspected`
-included. A pass that finds nothing, or that confirms a prior read's findings
-were fixed, is this header and nothing else.
+skepticism, continuity — opens with its own `Verdict (<pass>):` line [R1414].
+A pass that was planned and did not run has its section too, stating why in
+place of a verdict [R1617]. `Cross-checked` and `The human should inspect` are
+omit-if-none; `Baseline` is required where the artifact reviews a range — a
+delta's whole diff — and names the revision the diff starts from, and a review
+of one revision omits it; the rest are required, `Not inspected` included. A
+pass that finds nothing, or that confirms a prior read's findings were fixed,
+is this header and nothing else.
 
 ## Findings
 
