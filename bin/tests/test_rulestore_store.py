@@ -165,6 +165,49 @@ class TestFileRowSourceDefects(unittest.TestCase):
             FileRowSource(clone).rows()
         self.assertIn("R0001", str(caught.exception))
 
+    def test_dec_001400_an_enforce_value_outside_the_four_raises_row_shape_error(self):
+        """DEC-001400: `enforce: native` on a rules/ file is refused by the source."""
+        files = dict(rs_store_files())
+        files["rules/R0002.md"] = rs_row(
+            "R0002", "State the obligation at its shortest.",
+            order=30, enforce="native", topic=["core"], role=["writer"],
+            verb="require", term=None,
+        )
+        _origin, clone = make_store_repo(self, files=files)
+        with self.assertRaises(RowShapeError) as caught:
+            FileRowSource(clone).rows()
+        message = str(caught.exception)
+        self.assertIn("R0002", message)
+        self.assertIn("enforce", message)
+
+    def test_dec_001400_a_rules_file_carrying_enforce_hook_is_a_row_keyed_on_it(self):
+        """DEC-001400: `enforce: hook` is an ordinary key — selectable, counted."""
+        files = dict(rs_store_files())
+        files["rules/R0002.md"] = rs_row(
+            "R0002", "State the obligation at its shortest.",
+            order=30, enforce="hook", topic=["core"], role=["writer"],
+            verb="require", term=None,
+        )
+        _origin, clone = make_store_repo(self, files=files)
+        rows = by_id(FileRowSource(clone).rows())
+        self.assertEqual(rows["R0002"].keys["enforce"], ["hook"])
+        self.assertNotIn("enforce", rows["R0001"].keys)
+
+    def test_ac_rs_10_a_retired_row_carries_retired_and_is_outside_the_store(self):
+        """AC-RS-10: `rules/retired/R*.md` carries `retired:` naming its
+        successor; the source never returns it, whatever its keys say."""
+        files = dict(rs_store_files())
+        files["rules/retired/R0901.md"] = rs_row(
+            "R0901", "A retired row with a successor.",
+            retired="R0002", order=6, topic=["core"], role=["writer"],
+            session=["decision"], corpus=["writing"], verb="require", term=None,
+        )
+        _origin, clone = make_store_repo(self, files=files)
+        rows = FileRowSource(clone).rows()
+        self.assertNotIn("R0901", by_id(rows))
+        text = (clone / "rules" / "retired" / "R0901.md").read_text()
+        self.assertIn("\nretired: R0002\n", text)
+
 
 if __name__ == "__main__":
     unittest.main()

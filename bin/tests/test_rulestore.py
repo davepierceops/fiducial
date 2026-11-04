@@ -158,6 +158,37 @@ class TestRowShape(unittest.TestCase):
         keys, _ = store.normalize_fields("R0008", {"source": '"12"'})
         self.assertEqual(keys, {"source": ["12"]})
 
+    def test_dec_001400_enforce_admits_exactly_the_four_values(self):
+        """DEC-001400 (SPEC.md §7): `enforce:` is hook, deny, agent or skill."""
+        self.assertEqual(store.ENFORCE_VALUES, ("hook", "deny", "agent", "skill"))
+        for value in store.ENFORCE_VALUES:
+            keys, _ = store.normalize_fields("R0011", {"enforce": value, "topic": "core"})
+            self.assertEqual(keys["enforce"], [value])
+
+    def test_dec_001400_enforce_is_case_insensitive_like_every_key(self):
+        """AC-RS-1: values lower-case, so `enforce: Hook` is `hook`."""
+        keys, _ = store.normalize_fields("R0012", {"enforce": "Hook"})
+        self.assertEqual(keys, {"enforce": ["hook"]})
+
+    def test_dec_001400_an_enforce_value_outside_the_four_is_a_defect(self):
+        """DEC-001400: any other value is a `RowShapeError` naming id and key."""
+        for bad in ("native", "prose", "hooks", "harness:hook", ""):
+            with self.subTest(bad=bad), self.assertRaises(RowShapeError) as caught:
+                store.normalize_fields("R0013", {"enforce": '"%s"' % bad})
+            self.assertIn("R0013", str(caught.exception))
+            self.assertIn("enforce", str(caught.exception))
+
+    def test_dec_001400_enforce_carries_one_value_not_a_list(self):
+        """DEC-001400: a row leaves the store by one mechanism, never two."""
+        with self.assertRaises(RowShapeError) as caught:
+            store.normalize_fields("R0014", {"enforce": "[hook, deny]"})
+        self.assertIn("enforce", str(caught.exception))
+
+    def test_dec_001400_an_absent_enforce_is_a_judgment_row(self):
+        """DEC-001400: no `enforce:` key, no `enforce` entry — the row stays."""
+        keys, _ = store.normalize_fields("R0015", {"enforce": "null", "topic": "core"})
+        self.assertEqual(keys, {"topic": ["core"]})
+
     def test_ac_rs_1_memory_row_source_returns_exactly_what_it_was_given(self):
         """AC-RS-1/AC-RS-4: `MemoryRowSource` is the identity over its rows."""
         given = [row("R0001", topic="core"), row("R0002", topic="intake")]
