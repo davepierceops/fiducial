@@ -11,8 +11,9 @@ entry governs; every override is listed in `DEC_OVERRIDES` with its entry.
 Checks, each fatal on failure (exit 1):
 
 - every row sorted `retired` is under `rules/retired/` with a `retired:` line
-  naming the successor `RETIRED_SUCCESSOR` records (from the table's note or
-  the governing entry), and differs from the base commit only by that line;
+  naming the successor `RETIRED_SUCCESSOR` records — one id, a surviving row
+  id where the table or the entry names one, else the governing DEC id
+  (AC-RS-10) — placed directly after `id:`, the only line added over base;
 - every row sorted `harness:<x>` is under `rules/` with `enforce: <x>`
   (R1408: `hook`, DEC-001230 and plan §1a) and differs from the base only by
   that line;
@@ -51,6 +52,8 @@ TABLE = "docs/research/sort-table-20261103.md"
 DEFAULT_BASE = "28366d4"
 ROW_RE = re.compile(r"^\|\s*(R\d{4}[ab]?)\s*\|([^|]*)\|([^|]*)\|([^|]*)\|")
 ID_RE = re.compile(r"^R\d{4}[ab]?$")
+#: AC-RS-10: a `retired:` value is a successor row id or a decision id.
+RETIRED_VALUE_RE = re.compile(r"^(R\d{4}[ab]?|DEC-\d{6})$")
 
 #: Topics whose process document retires; survivors move (plan §1a).
 RETOPIC = {
@@ -89,96 +92,85 @@ DEFERRED_MERGES = (
 )
 
 #: Every retired row's `retired:` value and where it comes from. A row sorted
-#: `retired` (after overrides) must be here, and nothing else may be.
+#: `retired` (after overrides) must be here, and nothing else may be. One id
+#: per row: the surviving row the table's note or the entry names, else the
+#: DEC id that retired it (review F-1; AC-RS-10).
 RETIRED_SUCCESSOR = {
-    # change-control / lexicon / trd — class 6, DEC-001210
-    "R0561": ("process/spec-template.md", "DEC-001210"),
-    "R0757": ("process/spec-template.md", "DEC-001210"),
-    "R0758": ("process/spec-template.md", "DEC-001210"),
-    "R0871": ("process/spec-template.md", "DEC-001210"),
-    "R1541": ("process/spec-template.md", "DEC-001210"),
-    "R0872": ("process/spec-template.md", "DEC-001210"),
-    "R0046": ("process/spec-template.md", "DEC-001210"),
-    # change-flow
-    "R0470": ("SPEC.md", "DEC-001190; table: SPEC.md definition of done"),
-    "R0474": ("subagents", "DEC-001180"),
-    "R0483": ("R0862b", "table: plan mode + R0862b"),
-    "R0489": ("R1031", "DEC-001310: R0489 retires (R1031 is now an agent description)"),
-    # chief-of-staff
-    "R0896": ("subagents", "DEC-001180"),
-    "R1613": ("none", "DEC-001260"),
-    # convergence
-    "R1468": ("[R0017, R0083]", "table: R0017 + R0083"),
-    "R1476": ("subagents", "DEC-001180"),
-    "R1490": ("R0009", "DEC-001200; table"),
-    "R1491": ("none", "DEC-001200 (table said R0570/R1206)"),
-    "R1602": ("R0006", "DEC-001310"),
-    # core
-    "R0202": ("none", "DEC-001330"),
-    "R0212": ("[R0208, SPEC.md]", "table: R0208 execution block + SPEC.md"),
-    # decision-layer, lexicon — class 1 execution-block invariants
-    "R0256": ("command-blocks", "DEC-001160; table"),
-    "R0060": ("command-blocks", "DEC-001160; table"),
-    # directive-invariants — class 1, DEC-001160, successors per table note
-    "R1302": ("none", "table"),
-    "R1304": ("none", "table"),
-    "R1305": ("none", "table"),
-    "R1306": ("none", "table"),
-    "R1307": ("none", "table"),
-    "R1308": ("none", "table"),
-    "R1310": ("none", "table"),
-    "R1311": ("none", "table"),
-    "R1312": ("R0259", "table"),
-    "R1313": ("none", "table"),
-    "R1314": ("none", "table"),
-    "R1340": ("none", "table"),
-    "R1341": ("none", "table"),
-    "R1344": ("none", "table"),
-    "R1347": ("none", "table"),
-    "R1350": ("none", "table"),
-    "R1286": ("none", "table"),
-    "R1287": ("none", "table"),
-    "R1288": ("PreToolUse path guard", "table"),
-    "R1289": ("PreToolUse path guard allow-list", "table"),
-    "R1290": ("none", "table"),
-    "R1291": ("none", "table"),
-    "R1292": ("none", "table"),
-    "R1293": ("none", "table"),
-    "R1295": ("harness-managed subagent worktrees", "DEC-001170"),
-    "R1296": ("harness-managed subagent worktrees", "DEC-001170 (table said none)"),
-    "R1298": ("R1202", "table"),
-    "R1608": ("subagents and --resume", "table"),
-    "R1610": ("R1048", "table"),
-    "R1615": ("none", "table"),
-    # lexicon — class 5 (DEC-001200), DEC-001370, class 1, duplicates
-    "R0003": ("none", "DEC-001200"),
-    "R0008": ("none", "DEC-001200"),
-    "R0012": ("none", "DEC-001200"),
-    "R0013": ("none", "DEC-001200"),
-    "R0054": ("none", "DEC-001370"),
-    "R0058": ("none", "table"),
-    "R0022": ("R0131", "DEC-001310"),
-    "R0023": ("R0133", "DEC-001310"),
-    "R0024": ("R0135", "DEC-001310"),
-    "R0025": ("R0137", "DEC-001310"),
-    "R0026": ("R0139", "DEC-001310"),
-    # verification / change-flow / test-designer duplicates — DEC-001310
-    "R0113": ("R0485", "DEC-001310"),
-    "R1153": ("R0017", "DEC-001310"),
-    "R1543": ("R0876", "DEC-001310"),
-    # retro
-    "R1246": ("none", "DEC-001260 (table said the retro skill)"),
-    # review-artifact-schema
-    "R1395a": ("subagents", "DEC-001180"),
-    "R1395b": ("subagents", "DEC-001180"),
-    # spec-reviewer-agent
-    "R1101": ("R1107", "table"),
-    "R1106": ("subagents", "DEC-001180"),
-    "R1126": ("[SPEC.md, R0083, R1396]", "table"),
-    # test-designer
-    "R1158": ("R0083", "table"),
-    "R0085": ("SPEC.md", "table: SPEC.md design section"),
-    "R0086": ("R0862b", "table: plan (R0862b)"),
+    'R0561': ('DEC-001210', 'DEC-001210 (into process/spec-template.md)'),
+    'R0757': ('DEC-001210', 'DEC-001210 (into process/spec-template.md)'),
+    'R0758': ('DEC-001210', 'DEC-001210 (into process/spec-template.md)'),
+    'R0871': ('DEC-001210', 'DEC-001210 (into process/spec-template.md)'),
+    'R1541': ('DEC-001210', 'DEC-001210 (into process/spec-template.md)'),
+    'R0872': ('DEC-001210', 'DEC-001210 (into process/spec-template.md)'),
+    'R0046': ('DEC-001210', 'DEC-001210 (into process/spec-template.md)'),
+    'R0470': ('DEC-001190', 'DEC-001190 (table: SPEC.md definition of done)'),
+    'R0474': ('R0007', 'table: R0007 + subagents; class 3 DEC-001180'),
+    'R0483': ('R0862b', 'table: plan mode + R0862b; class 4 DEC-001190'),
+    'R0489': ('R1031', 'DEC-001310: R0489 retires (R1031 is now an agent description)'),
+    'R0896': ('R0229', 'table: subagents; R0229 covers pasted output; class 3 DEC-001180'),
+    'R1613': ('DEC-001260', 'DEC-001260 (no successor)'),
+    'R1468': ('R0017', 'table: R0017 + R0083; class 4 DEC-001190'),
+    'R1476': ('DEC-001180', 'DEC-001180 (subagents)'),
+    'R1490': ('R0009', 'DEC-001200; table'),
+    'R1491': ('DEC-001200', 'DEC-001200 (no successor; table said R0570/R1206)'),
+    'R1602': ('R0006', 'DEC-001310'),
+    'R0202': ('DEC-001330', 'DEC-001330 (no successor)'),
+    'R0212': ('R0208', 'table: R0208 execution block + SPEC.md; class 1 DEC-001160'),
+    'R0256': ('DEC-001160', 'DEC-001160 (class 1; restated under command-blocks)'),
+    'R0060': ('DEC-001160', 'DEC-001160 (class 1; restated under command-blocks)'),
+    'R1302': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1304': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1305': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1306': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1307': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1308': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1310': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1311': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1312': ('R0259', 'table; class 1 DEC-001160'),
+    'R1313': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1314': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1340': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1341': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1344': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1347': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1350': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1286': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1287': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1288': ('DEC-001160', 'DEC-001160 (class 1; table: PreToolUse path guard)'),
+    'R1289': ('DEC-001160', 'DEC-001160 (class 1; table: PreToolUse path guard allow-list)'),
+    'R1290': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1291': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1292': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1293': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R1295': ('DEC-001170', 'DEC-001170 (harness-managed subagent worktrees)'),
+    'R1296': ('DEC-001170', 'DEC-001170 (harness-managed subagent worktrees; table said none)'),
+    'R1298': ('R1202', 'table; class 1 DEC-001160'),
+    'R1608': ('DEC-001160', 'DEC-001160 (class 1; table: subagents and --resume)'),
+    'R1610': ('R1048', 'table; class 1 DEC-001160'),
+    'R1615': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R0003': ('DEC-001200', 'DEC-001200 (no successor)'),
+    'R0008': ('DEC-001200', 'DEC-001200 (no successor)'),
+    'R0012': ('DEC-001200', 'DEC-001200 (no successor)'),
+    'R0013': ('DEC-001200', 'DEC-001200 (no successor)'),
+    'R0054': ('DEC-001370', 'DEC-001370 (no successor)'),
+    'R0058': ('DEC-001160', 'DEC-001160 (class 1; table: none)'),
+    'R0022': ('R0131', 'DEC-001310'),
+    'R0023': ('R0133', 'DEC-001310'),
+    'R0024': ('R0135', 'DEC-001310'),
+    'R0025': ('R0137', 'DEC-001310'),
+    'R0026': ('R0139', 'DEC-001310'),
+    'R0113': ('R0485', 'DEC-001310'),
+    'R1153': ('R0017', 'DEC-001310'),
+    'R1543': ('R0876', 'DEC-001310'),
+    'R1246': ('DEC-001260', 'DEC-001260 (no successor; table said the retro skill)'),
+    'R1395a': ('R1396', 'table: subagents; R1396; class 3 DEC-001180'),
+    'R1395b': ('R1614', 'table: subagents; R1614; class 3 DEC-001180'),
+    'R1101': ('R1107', 'table; class 4 DEC-001190'),
+    'R1106': ('R1107', 'table: subagents; R1107; class 3 DEC-001180'),
+    'R1126': ('R0083', 'table: SPEC.md definition of done + R0083 + R1396; class 4 DEC-001190'),
+    'R1158': ('R0083', 'table; class 4 DEC-001190'),
+    'R0085': ('DEC-001190', 'DEC-001190 (table: SPEC.md design section)'),
+    'R0086': ('R0862b', 'table; class 4 DEC-001190'),
 }
 
 
@@ -257,16 +249,46 @@ def diff_lines(base, now):
     return removed, added
 
 
+def frontmatter_span(data):
+    """Line indexes `(open, close)` of the frontmatter fences, or None."""
+    lines = data.decode("utf-8").splitlines()
+    if not lines or lines[0].strip() != "---":
+        return None
+    for index in range(1, len(lines)):
+        if lines[index].strip() == "---":
+            return 0, index
+    return None
+
+
 def only_added_key(base, now, key):
-    """True when `now` is `base` plus exactly one `<key>:` frontmatter line."""
+    """True when `now` is `base` plus exactly one `<key>:` line, and that line
+    sits directly after `id:` — line 2 of the file, inside the frontmatter."""
     removed, added = diff_lines(base, now)
-    return not removed and len(added) == 1 and added[0].startswith(key + ":")
+    if removed or len(added) != 1 or not added[0].startswith(key + ":"):
+        return False
+    lines = now.decode("utf-8").splitlines()
+    return (
+        len(lines) > 2
+        and lines[0].strip() == "---"
+        and lines[1].startswith("id:")
+        and lines[2] == added[0]
+        and base.decode("utf-8").splitlines()[2:] == lines[3:]
+    )
 
 
 def only_changed_keys(base, now, keys):
-    """True when every changed line is a frontmatter line on one of `keys`."""
+    """True when every changed line is a frontmatter line on one of `keys`,
+    and the frontmatter is the only region that changed."""
     removed, added = diff_lines(base, now)
     allowed = tuple(k + ":" for k in keys)
+    span = frontmatter_span(now)
+    if span is None:
+        return False
+    lines = now.decode("utf-8").splitlines()
+    base_lines = base.decode("utf-8").splitlines()
+    base_span = frontmatter_span(base)
+    if base_span is None or base_lines[base_span[1]:] != lines[span[1]:]:
+        return False
     return (
         all(line.startswith(allowed) for line in removed)
         and all(line.startswith(allowed) for line in added)
@@ -338,6 +360,9 @@ def reconcile(root, base):
             elif fields.get("retired") != expected[0]:
                 note(row_id, ruled, location, state_text, "mismatch",
                      "retired: should be %r (%s)" % (expected[0], expected[1]))
+            elif not RETIRED_VALUE_RE.match(fields["retired"]):
+                note(row_id, ruled, location, state_text, "mismatch",
+                     "retired: is neither a row id nor a DEC id (AC-RS-10)")
             elif not only_added_key(base_bytes, now, "retired"):
                 note(row_id, ruled, location, state_text, "mismatch", "differs from base beyond the retired: line")
             else:
@@ -431,6 +456,13 @@ def reconcile(root, base):
     for path in sorted((root / "rules").glob("R*.md")):
         if "retired" in frontmatter(path.read_bytes()):
             problems.append("%s: retired: under rules/" % path.stem)
+    for path in sorted((root / "rules" / "retired").glob("R*.md")):
+        value = frontmatter(path.read_bytes()).get("retired")
+        if value is None or not RETIRED_VALUE_RE.match(value):
+            problems.append("%s: retired: %r is neither a row id nor a DEC id (AC-RS-10)" % (path.stem, value))
+    for expected, _source in RETIRED_SUCCESSOR.values():
+        if not RETIRED_VALUE_RE.match(expected):
+            problems.append("RETIRED_SUCCESSOR carries a non-id value %r" % expected)
 
     # The store loads, and the count package 3 needs.
     cos_count = None

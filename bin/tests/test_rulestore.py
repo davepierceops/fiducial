@@ -185,8 +185,13 @@ class TestRowShape(unittest.TestCase):
         self.assertIn("enforce", str(caught.exception))
 
     def test_dec_001400_an_absent_enforce_is_a_judgment_row(self):
-        """DEC-001400: no `enforce:` key, no `enforce` entry — the row stays."""
-        keys, _ = store.normalize_fields("R0015", {"enforce": "null", "topic": "core"})
+        """DEC-001400: no `enforce:` key at all — no `enforce` entry, no error."""
+        keys, _ = store.normalize_fields("R0015", {"topic": "core"})
+        self.assertEqual(keys, {"topic": ["core"]})
+
+    def test_dec_001400_a_null_enforce_is_an_absent_key(self):
+        """AC-RS-1: `enforce: null` is an absent key, like every other key."""
+        keys, _ = store.normalize_fields("R0016", {"enforce": "null", "topic": "core"})
         self.assertEqual(keys, {"topic": ["core"]})
 
     def test_ac_rs_1_memory_row_source_returns_exactly_what_it_was_given(self):
