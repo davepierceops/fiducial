@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+"""R0720 (DEC-001350): after any `git push`, fetch the remote and print the
+ref's SHA; fail loudly when it differs from what was sent. `PostToolUse` on
+`Bash`; a command that is not a push passes silently. The evidence printed
+is what R0172 obliges the session to cite."""
+
+import os
+import re
+import shlex
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import _hooklib as lib  # noqa: E402
+
+PUSH_RE = re.compile(r"(^|[;&|]\s*|\s)git\s+push(\s|$)")
+SKIP_FLAGS = ("--delete", "-d", "--tags", "--mirror", "--all", "--dry-run", "-n")
+
+
+def _pushes(command):
+    """`[(remote, refspec)]` for each `git push` in the command."""
+    found = []
+    for segment in re.split(r"&&|\|\||;|\|", command):
+        if not PUSH_RE.search(segment):
+            continue
+        try:
+            words = shlex.split(segment)
+        except ValueError:
+            words = segment.split()
+        try:
+            index = words.index("push")
+        except ValueError:
+            continue
+        args = [w for w in words[index + 1:]]
+        if any(flag in args for flag in SKIP_FLAGS):
+            continue
+        positional = []
+        skip_next = False
+        for word in args:
+            if skip_next:
+                skip_next = False
+                continue
+            if word in ("-o", "--push-option", "--receive-pack", "--exec", "--repo"):
+                skip_next = True
+                continue
+            if word.startswith("-"):
+                continue
+            positional.append(word)
+        remote = positional[0] if positional else "origin"
+        refspecs = positional[1:] or [None]
+        for refspec in refspecs:
+            found.append((remote, refspec))
+    return found
+
+
+def main():
+    data = lib.read_input()
+    command = (data.get("tool_input") or {}).get("command") or ""
+    pushes = _pushes(command)
+    if not pushes:
+        lib.passthrough()
+    root = lib.repo_root(lib.cwd_of(data))
+    if root is None:
+        lib.block("push-readback: a git push ran outside any repository I can read back")
+    failures = []
+    lines = []
+    for remote, refspec in pushes:
+        if refspec is None:
+            src = dst = lib.current_branch(root)
+        elif ":" in refspec:
+            src, dst = refspec.split(":", 1)
+        else:
+            src = dst = refspec
+        src = src.lstrip("+")
+        dst = dst.rsplit("/", 1)[-1] if dst.startswith("refs/heads/") else dst
+        code, _, err = lib.git(root, "fetch", "-q", remote, dst)
+        if code != 0:
+            failures.append("fetch %s %s failed: %s" % (remote, dst, err.strip()))
+            continue
+        _, local, _ = lib.git(root, "rev-parse", src)
+        _, remote_sha, _ = lib.git(root, "rev-parse", "FETCH_HEAD")
+        local, remote_sha = local.strip(), remote_sha.strip()
+        lines.append("push-readback: %s/%s is at %s" % (remote, dst, remote_sha))
+        if local != remote_sha:
+            failures.append("%s/%s reads back %s; local %s is %s"
+                            % (remote, dst, remote_sha, src, local))
+    for line in lines:
+        print(line)
+    if failures:
+        lib.block("push-readback: " + "; ".join(failures))
+    lib.passthrough()
+
+
+if __name__ == "__main__":
+    main()

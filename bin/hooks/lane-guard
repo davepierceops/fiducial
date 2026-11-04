@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+"""R0091 and R1156 (DEC-001240): a lane-bound agent edits its lane and
+nothing else; a change it needs outside is a finding. `PreToolUse` on
+`Edit|Write` in the agent's own frontmatter. `--lane specs` admits
+`specs/**` and `SPEC.md`; `--lane tests` admits the test tree."""
+
+import argparse
+import os
+import re
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import _hooklib as lib  # noqa: E402
+
+LANES = {
+    "specs": [r"^SPEC\.md$", r"^specs/"],
+    "tests": [
+        r"^tests?/", r"(^|/)tests?/", r"(^|/)__tests__/", r"(^|/)test_[^/]*\.py$",
+        r"(^|/)[^/]*_test\.[^/]+$", r"(^|/)[^/]*\.test\.[^/]+$", r"(^|/)[^/]*\.spec\.[^/]+$",
+        r"(^|/)conftest\.py$",
+    ],
+}
+
+
+def main():
+    parser = argparse.ArgumentParser(prog="lane-guard")
+    parser.add_argument("--lane", required=True, choices=sorted(LANES))
+    args = parser.parse_args()
+    data = lib.read_input()
+    root, rel = lib.target_file(data)
+    if rel is None:
+        lib.passthrough()
+    if any(re.search(pattern, rel) for pattern in LANES[args.lane]):
+        lib.passthrough()
+    lib.block("lane-guard: %s is outside the %s lane; a change you need outside "
+              "your lane is a finding, not an edit" % (rel, args.lane))
+
+
+if __name__ == "__main__":
+    main()
