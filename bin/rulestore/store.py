@@ -27,6 +27,11 @@ ORDER_RE = re.compile(r"^[+-]?[0-9]+$")
 #: any key other than `order` this is a defect; quoted, it is text.
 TYPED_SCALAR_RE = re.compile(r"^([+-]?[0-9]+(\.[0-9]+)?|true|false|yes|no)$", re.IGNORECASE)
 
+#: `enforce:`'s value set (DEC-001400; SPEC.md §7): the mechanism a row
+#: leaves the store by. Exactly one value, one of these four; anything else
+#: is a `RowShapeError`. A row without the key is a judgment row.
+ENFORCE_VALUES = ("hook", "deny", "agent", "skill")
+
 #: Any ATX heading whose text is "Human", whatever its level (S2,
 #: bundle-tool-skeptic-20260906T150000Z.md) — a mis-levelled `### Human` must
 #: not publish the rationale it introduces.
@@ -145,7 +150,21 @@ def normalize_fields(row_id, fields):
         if unquoted == text and TYPED_SCALAR_RE.match(text):
             raise RowShapeError(row_id, key, "typed value on a text key: %r" % (raw,))
         keys[key] = [unquoted.strip().lower()]
+    _check_enforce(row_id, keys)
     return keys, order
+
+
+def _check_enforce(row_id, keys):
+    """`enforce:` carries exactly one of `ENFORCE_VALUES` (DEC-001400)."""
+    values = keys.get("enforce")
+    if values is None:
+        return
+    if len(values) != 1 or values[0] not in ENFORCE_VALUES:
+        raise RowShapeError(
+            row_id,
+            "enforce",
+            "not one of %s: %r" % ("|".join(ENFORCE_VALUES), values),
+        )
 
 
 def _parse_frontmatter(text):
