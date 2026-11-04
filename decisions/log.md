@@ -1185,3 +1185,13 @@ Supersedes: DEC-001460
 Date: 2026-11-04
 Decision: Every subagent the decision session dispatches names its model tier explicitly — solid for coding and mechanical review, frontier only where the plan names it — and a frontier dispatch the plan does not name is asked of the human first, yes/no, each time. Briefs point at files in the tree rather than restating rulings; a re-read over an amendment reads only the diff; a package whose findings are all non-blocking lands without a re-read (DEC-001000).
 Context: R0259 already says it; it was not followed because the dispatch tool inherits the session's model when no tier is set. Ruled by the human 2026-11-04.
+## DEC-001480 — Package 1b landed: the sort's bodies
+Date: 2026-11-04
+Decision: Package 1b of the subtraction plan is merged at 19f6760 (PR #401, branch tip 0da3040): 40 rows reworded or pruned per DEC-001170 to DEC-001390, the two DEC-001310 merges (R0472 and R1513 survive), the approve sweep, fenced blocks on all 34 `enforce:` rows under the `bin/hooks/<name>` convention, and new rows R1616 (DEC-001430) and R1617 (DEC-001440). Store: 384 live, 83 retired. Review artifact: `reviews/pkg-1b-store-bodies-read-20261104T203811Z.md` — ready-with-findings on re-read; hand-offs #399, #400.
+Context: Two amendments restored six obligations the first rewording had dropped; the reviewer's independent render confirmed no retired mechanism names a definition.
+
+## DEC-001490 — R0205 retires into R0208
+Date: 2026-11-04
+Decision: R0205 retires into R0208, which already carries the command-block / execution-block distinction in full; DEC-001330's ruling that R0205 stays as one sentence is superseded for that half only — its ruling that R0202 retires stands.
+Context: Found during package 1b's amendment: R0205's one surviving sentence duplicated R0208, and with its layer terms gone it rendered nowhere. Ruled by the human 2026-11-04 under DEC-001310's one-survivor principle.
+Supersedes: DEC-001330

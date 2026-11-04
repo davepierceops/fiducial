@@ -24,6 +24,15 @@ IDs are `DEC-NNNNNN`, running in steps of ten from `DEC-000010`, unique within t
 log and never reused. Take the last entry's number and add ten; append-only
 guarantees that the last entry holds the highest ID [R0583, R0592, R1603].
 
+Entries are appended by the decision session at merge, from the landed work's
+report, and ids are allocated then — never by the subagent that did the work —
+so concurrent packages never take the same id.
+
+Supersession is whole-entry: a new entry whose `Supersedes:` names an old one
+replaces all of it, so where the old entry carried several rulings the new one
+restates every ruling that survives. A ruling the new entry does not restate is
+gone.
+
 Where two entries land on the same number, renumber the later ones by plus one
 within the gap — `DEC-000410` to `DEC-000411`, `DEC-000412` — never by another
 ten. That renumbering is the one edit the append-only rule admits, and it changes

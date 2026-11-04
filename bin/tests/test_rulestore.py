@@ -695,8 +695,8 @@ class TestNamedQueriesRealDocument(unittest.TestCase):
     def test_the_real_document_parses_to_its_full_counts(self):
         text = FileRowSource(REPO_ROOT).named_queries_text()
         topic_positions, process_positions = named_queries.sequences(text)
-        self.assertEqual(len(topic_positions), 9)
-        self.assertEqual(len(process_positions), 11)
+        self.assertEqual(len(topic_positions), 10)
+        self.assertEqual(len(process_positions), 8)
         self.assertEqual(len(named_queries.bundles(text)), 12)
 
 

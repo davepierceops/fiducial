@@ -1,3 +1,4 @@
+<!-- retired 2026-11-04 under DEC-001190: folds into the spec's definition of done and the red gate; kept as history, read by nothing -->
 ---
 order: 80
 topic: [spec-test-suite]
