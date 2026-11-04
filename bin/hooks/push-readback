@@ -13,6 +13,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import _hooklib as lib  # noqa: E402
 
 PUSH_RE = re.compile(r"(^|[;&|]\s*|\s)git\s+push(\s|$)")
+REDIRECT_RE = re.compile(r"^(\d*[<>]|&>)")
 SKIP_FLAGS = ("--delete", "-d", "--tags", "--mirror", "--all", "--dry-run", "-n")
 
 
@@ -42,7 +43,7 @@ def _pushes(command):
             if word in ("-o", "--push-option", "--receive-pack", "--exec", "--repo"):
                 skip_next = True
                 continue
-            if word.startswith("-"):
+            if word.startswith("-") or REDIRECT_RE.match(word):
                 continue
             positional.append(word)
         remote = positional[0] if positional else "origin"
