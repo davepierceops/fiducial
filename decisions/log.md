@@ -1154,3 +1154,8 @@ Context: Ruled 2026-09-16 when the filename rule had no form for a two-document 
 Date: 2026-11-04
 Decision: The human approves `docs/plans/subtraction-plan-20261104.md` at 28366d488f20f01093df1339a109600e066e87c6 (merge of PR #395) as the plan for the revision SPEC.md governs. Packages dispatch in its order from 1a; each package's DEC entries are appended at merge.
 Context: Written in the 2026-11-04 session, reviewed once by a subagent that did not write it, revised, and approved by the human's merge.
+
+## DEC-001470 — Package 1a landed: the sort's moves
+Date: 2026-11-04
+Decision: Package 1a of the subtraction plan is merged at 699a0fa (PR #397, branch tip a270653): 75 rows retired to `rules/retired/` with `retired:` lines naming a row id or a DEC id, `enforce:` on 34 rows (hook 9, deny 3, agent 5, skill 17), 20 rows re-topiced (`directive-invariants` survivors to `chief-of-staff`, `convergence` to `change-flow`, `trd` and `prd-template` to the new topic `spec`), the store admitting `enforce:` with four values, and `bin/tests/reconcile_sort.py` as the proof. Review artifact: `reviews/pkg-1a-store-moves-read-20261104T185942Z.md` — ready on re-read.
+Context: The two DEC-001310 merges with no named survivor (R1533+R0472+R0759; R1513+R1542) were escalated by the coder and pass to package 1b, whose blast radius widens to move the losers.

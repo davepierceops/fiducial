@@ -31,6 +31,19 @@ Also prints the row count for `role=chief-of-staff session=decision`, read
 through `bin/rulestore`'s own query code (package 3 needs it).
 
 Usage: `bin/tests/reconcile_sort.py [--base 28366d4] [--root <repo>]`.
+
+Package 1b rewrites bodies, so after it the "stays, untouched" and
+"differs from base beyond the enforce: line" checks above are noisy by
+design; package 1b's own proof is the `--bodies` mode:
+
+    bin/tests/reconcile_sort.py --bodies
+
+which greps every surviving row (`rules/R*.md`, frontmatter and body) for
+the retired vocabulary — `agree` (word-initial, so `disagree` is not a hit),
+`directive`, `tranche`, `PRD`, `TRD`, `execution session` — and fails on any
+hit outside `rules/retired/` and outside `BODY_GREP_EXCEPTIONS`, the rows
+allowed to keep a word and why. Also checks every `enforce:` row carries
+a fenced block (SPEC.md §7; hook rows: `event:`, `matcher:`, `command:`).
 """
 
 from __future__ import annotations
@@ -172,6 +185,92 @@ RETIRED_SUCCESSOR = {
     'R0085': ('DEC-001190', 'DEC-001190 (table: SPEC.md design section)'),
     'R0086': ('R0862b', 'table; class 4 DEC-001190'),
 }
+
+
+#: Package 1b's grep (plan §1b acceptance; DEC-001090, DEC-001200,
+#: DEC-001330, DEC-001360). Word-initial `agree` so that `disagree`, which
+#: names no act of approval, is not a hit.
+BODY_GREP_PATTERNS = {
+    "agree": re.compile(r"\bagree"),
+    "directive": re.compile(r"\bdirective"),
+    "tranche": re.compile(r"\btranche"),
+    "PRD": re.compile(r"\bPRD\b"),
+    "TRD": re.compile(r"\bTRD\b"),
+    "execution session": re.compile(r"\bexecution session"),
+}
+
+#: Surviving rows allowed to keep a grepped word, each with its reason.
+#: No lexicon row defines a retired term after package 1b (R0611 defines
+#: `approved`; R0202, R0212, R0058 are retired), so the only exceptions are
+#: writing-corpus rows, out of scope under DEC-001110 and byte-identical to
+#: the base, where the word is not the act DEC-001360 renames.
+BODY_GREP_EXCEPTIONS = {
+    "R0963": "copy-editor row, out of scope (DEC-001110): 'pronoun agreement' is grammar",
+    "R1173": "writer row, out of scope (DEC-001110): the author's own 'agreement' over a piece",
+}
+
+FENCE_RE = re.compile(r"^```[a-z]*\n(.*?)^```", re.M | re.S)
+HOOK_BLOCK_KEYS = ("event:", "matcher:", "command:")
+
+
+def check_bodies(root):
+    """`(hits, problems)` — every grep hit in a surviving row, and the
+    problems: hits outside the exceptions, unused exceptions, an `enforce:`
+    row without its block."""
+    hits, problems = [], []
+    used = set()
+    for path in sorted((root / "rules").glob("R*.md")):
+        data = path.read_bytes()
+        text = data.decode("utf-8")
+        for name, pattern in BODY_GREP_PATTERNS.items():
+            for match in pattern.finditer(text):
+                line_no = text.count("\n", 0, match.start()) + 1
+                line = text.splitlines()[line_no - 1].strip()
+                hits.append((path.stem, name, line_no, line))
+                if path.stem in BODY_GREP_EXCEPTIONS:
+                    used.add(path.stem)
+                else:
+                    problems.append("%s:%d: %r — %s" % (path.stem, line_no, name, line))
+        fields = frontmatter(data)
+        if "enforce" in fields:
+            span = frontmatter_span(data)
+            body = "\n".join(text.splitlines()[span[1] + 1:]) + "\n"
+            blocks = FENCE_RE.findall(body)
+            if not blocks:
+                problems.append("%s: enforce: %s row carries no fenced block" % (path.stem, fields["enforce"]))
+            elif fields["enforce"] == "hook":
+                missing = [k for k in HOOK_BLOCK_KEYS if not any(l.startswith(k) for l in blocks[0].splitlines())]
+                if missing:
+                    problems.append("%s: hook block lacks %s" % (path.stem, ", ".join(missing)))
+                elif not any(l.startswith("command: bin/hooks/") for l in blocks[0].splitlines()):
+                    problems.append("%s: hook command does not invoke bin/hooks/<name>" % path.stem)
+            elif fields["enforce"] == "deny" and not any(l.startswith("deny:") for l in blocks[0].splitlines()):
+                problems.append("%s: deny block lacks deny:" % path.stem)
+            elif fields["enforce"] == "agent" and blocks[-1].strip() not in ("field: description", "field: model"):
+                problems.append("%s: agent block names no field" % path.stem)
+            elif fields["enforce"] == "skill" and not blocks[-1].strip().startswith("skill: "):
+                problems.append("%s: skill block names no skill" % path.stem)
+    for row_id in sorted(set(BODY_GREP_EXCEPTIONS) - used):
+        problems.append("%s: listed in BODY_GREP_EXCEPTIONS but has no hit" % row_id)
+    return hits, problems
+
+
+def main_bodies(root):
+    hits, problems = check_bodies(root)
+    print("reconcile_sort --bodies: %d surviving rows under %s" % (
+        len(list((root / "rules").glob("R*.md"))), root / "rules"))
+    for row_id, name, line_no, line in hits:
+        verdict = "allowed" if row_id in BODY_GREP_EXCEPTIONS else "HIT"
+        print("  %-7s %-4s %-18s %d: %s" % (row_id, verdict, name, line_no, line))
+    print("  hits: %d (%d allowed: %s)" % (
+        len(hits), sum(1 for h in hits if h[0] in BODY_GREP_EXCEPTIONS),
+        ", ".join("%s — %s" % kv for kv in sorted(BODY_GREP_EXCEPTIONS.items()))))
+    enforce_rows = [p for p in (root / "rules").glob("R*.md") if "enforce" in frontmatter(p.read_bytes())]
+    print("  enforce: rows with a block checked: %d" % len(enforce_rows))
+    print("  problems: %d" % len(problems))
+    for problem in problems:
+        print("  PROBLEM " + problem)
+    return 1 if problems else 0
 
 
 # ------------------------------------------------------------------ reading
@@ -483,8 +582,13 @@ def main(argv=None):
     parser.add_argument("--base", default=DEFAULT_BASE, help="the commit out-of-scope rows must match")
     parser.add_argument("--root", default=None, help="repository root (default: this script's)")
     parser.add_argument("--quiet", action="store_true", help="summary and mismatches only")
+    parser.add_argument("--bodies", action="store_true",
+                        help="package 1b: grep surviving rows for retired vocabulary; check enforce: blocks")
     args = parser.parse_args(argv)
     root = pathlib.Path(args.root) if args.root else pathlib.Path(__file__).resolve().parents[2]
+
+    if args.bodies:
+        return main_bodies(root)
 
     table, lines, problems, counts, enforce_counts, cos_count, base_ids = reconcile(root, args.base)
 
