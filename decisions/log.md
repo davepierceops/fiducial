@@ -993,3 +993,129 @@ Context: The human still applies Terraform and pushes from the machine holding t
 Date: 2026-11-03
 Decision: The human approves `SPEC.md` at 2c0d491ae5024073a2510834b6794146a62007c2 as the spec for the revision DEC-001080 names. Its definition of done governs the work; its open questions are resolved by the means each names.
 Context: Drafted in the 2026-11-03 session from that day's rulings, corrected in review (Codex artifacts named in the adopter journey; command block, execution block and baton kept), and shipped by the human's word.
+
+## DEC-001150 — The sort table is the evidence record for the subtraction
+Date: 2026-11-03
+Decision: The sort of every row under the DEC-001080 test is recorded in `docs/research/sort-table-20261103.md` as ruled; the execution pass derives the retirements, hooks, agent fields, skill steps and rewordings from it, and ids, orders and successors are derived from the tree, not dictated.
+Context: One subagent read all 461 rows at `4134897` and proposed fifteen classes, five undecided rows and six notes; the human ruled on each on 2026-11-03. 358 rows are in scope; 103 writing-corpus rows are untouched under DEC-001110.
+
+## DEC-001160 — Class 1: the directive-package rows retire
+Date: 2026-11-03
+Decision: Every row that shapes, lints, routes or verifies a directive retires with the package (32 rows, class 1 of the sort table); the two execution-block invariants — self-contained, nothing before the block — restate once under `command-blocks`, and the route-and-model line becomes the agent `model:` field.
+Context: DEC-001130 kept the execution block as a secondary path and retired the directive package around it.
+
+## DEC-001170 — Class 2: worktree choreography retires; R0199 stays
+Date: 2026-11-03
+Decision: R1295 and R1296 retire, successor harness-managed subagent worktrees. R0199 (if a file you did not change moves, HEAD moves or an index lock appears, stop and report rather than recover) stays, reworded from execution session to subagent and working tree.
+Context: The harness denied worktree isolation on 2026-11-02 and worktrees were made by hand, so the condition R0199 guards still arises.
+
+## DEC-001180 — Class 3: the courier rows retire; three judgment rows stay
+Date: 2026-11-03
+Decision: R0896, R0474, R1476, R1395a, R1395b and R1106 retire, successor subagents: the decision session spawns both sides and reads the report in-session. R1478, R1479 and R1480 stay, reworded from session to subagent.
+Context: The six exist only because the human carried reports and findings between sessions; the three are rules about lanes and dispositions that happen to mention sessions.
+
+## DEC-001190 — Class 4: spec-test-suite and convergence sequencing retires; the coherence standard stays
+Date: 2026-11-03
+Decision: R1468, R1101, R1126, R1158, R0470, R0085, R0086 and R0483 retire, successor `SPEC.md`'s definition of done, the red gate and plan mode. R1473 (spec and tests cohere) and R1474 (spec finding versus test-side gap) stay.
+Context: Sequencing is the harness's; the standard the review applies is judgment.
+
+## DEC-001200 — Class 5: the tranche vocabulary retires
+Date: 2026-11-03
+Decision: R0003, R0008, R0012, R0013 and R1491 retire with no successor; R1490 retires into R0009. The open-delta rows (R0004, R0006, R0007, R0009, R0011, R0017) stay, pruned of the word tranche. Issue #383 closes: there is no claimed territory left to enforce.
+Context: One `SPEC.md` per project (DEC-001090) leaves no concurrent spec territory.
+
+## DEC-001210 — Class 6: the PRD/TRD two-document rows retire; R0863 stays
+Date: 2026-11-03
+Decision: R0757, R0758, R0871, R1541, R0872, R0046 and R0561 retire into `process/spec-template.md`. R0863, the Architect's design obligations, stays reworded to the spec's design section.
+Context: R0863 is content the spec's design section must contain, not a statement that there are two documents.
+
+## DEC-001220 — Class 7: secrets and production become deny rules
+Date: 2026-11-03
+Decision: R0164 and R0203 carry `enforce: deny`; the generator emits a `Read` deny on credential paths and a block on apply, destroy, deploy and production commands (a `PreToolUse` hook on Codex, which has no deny rules), and emits the one-line principle into `CLAUDE.md`. The Human note states that a deny matches tool calls, not intent.
+Context: The 2026-11-02 session proved the hook form in two minutes and it held all night.
+
+## DEC-001230 — Class 8: git and record immutability become deny rules and hooks
+Date: 2026-11-03
+Decision: R0564 (no force-push; no per-push approval for a plain push), R0583 (append-only decision log) and R1408 (existing review artifacts are not rewritten) carry `enforce: deny` or `enforce: hook`. R0564's Human note gains: on a GitHub Free repo the forge layer is absent and the hook is the only layer.
+Context: Each is a byte-level check on the tool call.
+
+## DEC-001240 — Class 9: the path-scoped write guards become hooks; the finding sentence moves to the agent definitions
+Date: 2026-11-03
+Decision: R0091 and R1156 carry `enforce: hook` — a `PreToolUse` on Edit and Write keyed on the agent and the path. The sentence "a change you need outside your lane is a finding, not an edit" is emitted into the architect and test-designer agent definitions by the generator.
+Context: The guard is deterministic; the reason for it is not.
+
+## DEC-001250 — Class 10: the store and artifact lint rows become one hook
+Date: 2026-11-03
+Decision: R1605 (citations co-render), R0196 (generated-file timestamp name) and R1414 (the `Verdict:` lines and their enum) carry `enforce: hook` and are emitted as one `PostToolUse` lint over `rules/` and `reviews/`.
+Context: Each has bitten at least once and none needs judgment.
+
+## DEC-001260 — Retros land themselves
+Date: 2026-11-03
+Decision: The retro skill's last step commits `retros/retro-<timestamp>.md` on a branch, pushes, opens the pull request, merges it as a routine change under R0570 and DEC-000920, and reads main back. R1244 keeps its input half (the retro's inputs are the conversation and the local tree) and drops "write nothing to any remote"; R1246 and R1613 retire with no successor; the synthesis procedure lands the same way. The human's `retro-land` shell function retires.
+Context: The no-remote rule existed to keep two sessions off one shared connector; each sandbox session now has its own clone and credential. DEC-001060's other ruling survives unchanged and is restated here: the Chief of Staff begins with the human's requested work, and the project-status assessment is the separately invoked Project Status skill.
+Supersedes: DEC-001060
+
+## DEC-001270 — Class 11: the agent-definition rows become agent-file fields
+Date: 2026-11-03
+Decision: R0259 becomes the `model:` field, the generator mapping the three tiers to each harness's current model names. R0939, R1031, R1056 and R1141 become the `description:` of the coder, release-manager, reviewer and test-designer agents. A role's judgment rules stay rows and are emitted into the agent file's body.
+Context: R1056's Human note (in force until a published code-review standard replaces it) rides with the description.
+
+## DEC-001280 — Class 12: the gate-request procedure becomes the gate skill
+Date: 2026-11-03
+Decision: R0551, R0552, R0553, R0558, R0560, R1039 and R0505 become the steps and template of `gate`, a skill the decision session invokes for a consequential change, with `disable-model-invocation: true`. Whether a change is consequential (R0535, R0536) and that absence of a response is not a go (R0562) stay rows.
+Context: A procedure with a fixed order and a template is a skill.
+
+## DEC-001290 — Class 13: the release-package and report templates become skill templates
+Date: 2026-11-03
+Decision: R0502, R0503, R1032, R1041, R1042, R1044 and R1045 become the `release` skill's templates and their two sentences of instruction; R0506 becomes a shared report template the review skill also reads. R0509 and the verification rows stay.
+Context: A field list is a form, and a form belongs in the skill that fills it.
+
+## DEC-001300 — Class 14: two procedure steps become skill steps; R1611 stays
+Date: 2026-11-03
+Decision: R0486 (a different agent implements than wrote the tests) becomes a step of the build skill and R0944 (record each intake as a review artifact) a step of the intake skill. R1611 stays, reworded for one `SPEC.md`: read the spec and its approving entries whole before directing; a question the spec answers is a defect in the read.
+Context: R1244 and R1246 are disposed by DEC-001260.
+
+## DEC-001310 — Class 15: one survivor per duplicate pair
+Date: 2026-11-03
+Decision: Where two rows define or require the same thing, the copy with content survives: R0131–R0139 over R0022–R0026; R0485 over R0113; R0489 retires (R1031 is now an agent description); R0006 over R1602; R0017 over R1153; R1533, R0472 and R0759 merge into one row about the spec; R0876 over R1543; R1513 and R1542 merge into one row about an approved `SPEC.md`; R0009 over R1490.
+Context: One source of truth per topic (SPEC.md §4).
+
+## DEC-001320 — R0934 becomes a hook
+Date: 2026-11-03
+Decision: R0934 carries `enforce: hook`: governed paths (`rules/`, `process/`) are editable only inside the intake skill. No prose row is kept; R0462 and R0166 carry the judgment halves.
+Context: Traced to the old Chief of Staff role file's constraints with no incident recorded; the mistake it prevents — editing a row and pushing it — is one the harness can prevent outright.
+
+## DEC-001330 — R0202 retires; R0205 is cut to the block distinction
+Date: 2026-11-03
+Decision: R0202 (the execution-session definition) retires with no successor; surviving rows say subagent or the session that runs it, and `session: [execution]` is a schema key, not a term. R0205 stays as one sentence: a command block is shell the human runs; an execution block is instructions a session carries out.
+Context: Thirteen rows used the term; all but seven retire, and those seven read correctly with subagent.
+
+## DEC-001340 — R1606 stays, reworded for plans and subagent prompts
+Date: 2026-11-03
+Decision: R1606 stays: a plan or subagent prompt dictates intent, acceptance criteria and agreed wording; a fact the tree resolves — an id, a position, a key value, a tool name — is derived and reported by the one who runs it. R1607 stays with it.
+Context: The mistake it prevents still happens under subagents and nothing in the harness checks it.
+
+## DEC-001350 — R0720 becomes a hook, successor R0172
+Date: 2026-11-03
+Decision: R0720 carries `enforce: hook`: after any `git push`, fetch the remote and print the ref's SHA, failing loudly if it differs from what was sent. The claim obligation is R0172's. No prose row is kept.
+Context: The incident behind R0720 was a session with no evidence in front of it; the hook supplies the evidence and R0172 obliges the citation. Where no hook fires, the first retro catching a "landed" without a read-back is the signal to revisit.
+
+## DEC-001360 — The verb is approved
+Date: 2026-11-03
+Decision: R0611 stays reworded: something is approved when the human has approved it, and no other word carries the act. The execution pass replaces agree and agreed across surviving rows, process documents and the spec template. Existing decision-log entries keep their wording.
+Context: DEC-001090 adopted Anthropic's vocabulary.
+
+## DEC-001370 — R0054 retires; skill takes the harness meaning
+Date: 2026-11-03
+Decision: R0054 (the skill-document category) retires with no successor. In the lexicon, a skill is a procedure saved as `SKILL.md` that the session reads only when it is invoked.
+Context: The category is empty once the directive-era documents retire, and the word collides with the harness meaning this revision adopts.
+
+## DEC-001380 — R0264 loses its four lintable criteria to the store lint hook
+Date: 2026-11-03
+Decision: The criteria "refers to no file by path", "every key value taken from values the key already holds", "names the session kind", and "speaks in tiers, never model names" leave R0264 and join the `PostToolUse` lint of DEC-001250. The twelve judgment criteria stay in R0264.
+Context: R0264's own criterion: a rule a tool enforces is the tool's.
+
+## DEC-001390 — The author/reviewer separation rows stay; R0065 widens to review
+Date: 2026-11-03
+Decision: R0462, R0065, R0487 and R0488 stay. R0065 widens from code review to review, so a reviewer that did not write a plan reads the plan before dispatch.
+Context: The harness provides the means of separation, not the obligation to use it; the 2026-11-02 retro's evidence 11 is the case. R0038 and R0493 stay as the sort proposed; the one-classification question is #393.
