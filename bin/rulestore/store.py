@@ -32,6 +32,11 @@ TYPED_SCALAR_RE = re.compile(r"^([+-]?[0-9]+(\.[0-9]+)?|true|false|yes|no)$", re
 #: is a `RowShapeError`. A row without the key is a judgment row.
 ENFORCE_VALUES = ("hook", "deny", "agent", "skill")
 
+#: Keys whose values keep their case: `paths:` (SPEC.md §7) carries glob
+#: patterns over the adopting repository, where `SPEC.md` and `spec.md`
+#: differ. Every other key's values are lowercased words.
+CASE_KEYS = ("paths",)
+
 #: Any ATX heading whose text is "Human", whatever its level (S2,
 #: bundle-tool-skeptic-20260906T150000Z.md) — a mis-levelled `### Human` must
 #: not publish the rationale it introduces.
@@ -143,15 +148,22 @@ def normalize_fields(row_id, fields):
                     raise RowShapeError(
                         row_id, key, "typed value on a text key: %r" % (raw,)
                     )
-                values.append(unquoted_part.strip().lower())
+                values.append(_normalize_value(key, unquoted_part))
             keys[key] = values
             continue
         unquoted = _strip_quotes(text)
         if unquoted == text and TYPED_SCALAR_RE.match(text):
             raise RowShapeError(row_id, key, "typed value on a text key: %r" % (raw,))
-        keys[key] = [unquoted.strip().lower()]
+        keys[key] = [_normalize_value(key, unquoted)]
     _check_enforce(row_id, keys)
     return keys, order
+
+
+def _normalize_value(key, value):
+    """A key's value as the store compares it: stripped and lowercased —
+    except on `CASE_KEYS`, whose values are paths and keep their case."""
+    value = value.strip()
+    return value if key in CASE_KEYS else value.lower()
 
 
 def _check_enforce(row_id, keys):

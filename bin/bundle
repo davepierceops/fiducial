@@ -5,9 +5,11 @@ Contract: `docs/cycles/bundle-tool-tests-20260906T110000Z.md` § "INTERFACE
 CONTRACT", landed at `d5b643b48cf0285194d29b09f6755db1b8a16b34`; amended by
 `docs/cycles/bundle-tool-followup-20260907T170000Z.md` items 4 (sequence-
 ordered selection), 5 (the one-line header) and 7 (Q5 plain imports, Q6/Q8/
-Q9/Q11/S8/S12 refusals). Three modes:
+Q9/Q11/S8/S12 refusals); `--emit` added by the subtraction plan's package 3a
+(SPEC.md §7). Four modes:
 
     bin/bundle --where k=v [k=v ...] [--name NAME] [--out DIR]
+    bin/bundle --emit TARGET --out DIR [--where k=v ...] [--name NAME]
     bin/bundle --keys
     bin/bundle --near "TEXT"
 
@@ -15,6 +17,14 @@ Q9/Q11/S8/S12 refusals). Three modes:
 malformed query, an unsynced working tree, or an empty selection; otherwise
 it writes exactly one file and prints its path (exit 0). `--keys` and
 `--near` need no sync and always exit 0.
+
+`--emit TARGET` renders the local tree as it stands — no sync check, no
+clean-tree check (DEC-000940) — through one target of `rulestore.emit`
+(`bundle`, `claude-code`; see that package's docstring for the interface),
+writes the target's files under `--out` and prints each path written; a
+refusal is exit 2, one line on stderr, nothing written. `--emit bundle`
+needs `--where` and writes the same file `--where` writes; `--emit
+claude-code` takes no query.
 """
 
 from __future__ import annotations
@@ -28,6 +38,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+from rulestore import emit as emit_mod
 from rulestore import keys as keys_mod
 from rulestore import named_queries
 from rulestore import near as near_mod
@@ -96,13 +107,25 @@ def _synced_with_main(root):
 
 def build_parser():
     parser = argparse.ArgumentParser(prog="bundle")
-    mode = parser.add_mutually_exclusive_group(required=True)
-    mode.add_argument("--where", nargs="+", metavar="K=V")
-    mode.add_argument("--keys", action="store_true")
-    mode.add_argument("--near", metavar="TEXT")
+    parser.add_argument("--where", nargs="+", metavar="K=V")
+    parser.add_argument("--keys", action="store_true")
+    parser.add_argument("--near", metavar="TEXT")
+    parser.add_argument("--emit", metavar="TARGET")
     parser.add_argument("--name")
     parser.add_argument("--out")
     return parser
+
+
+def _mode(args, parser):
+    """Exactly one of `--keys`, `--near`, `--where`, `--emit` — except that
+    `--emit` may carry `--where` as its query."""
+    chosen = [name for name in ("keys", "near", "where", "emit")
+              if getattr(args, name) not in (None, False)]
+    if "emit" in chosen:
+        chosen = [name for name in chosen if name != "where"]
+    if len(chosen) != 1:
+        parser.error("one of --keys, --near, --where, --emit is required")
+    return chosen[0]
 
 
 def refuse(message):
@@ -174,17 +197,85 @@ def cmd_where(root, tokens, name, out):
     return EXIT_OK
 
 
+def _hook_scripts(root):
+    """`{name: text}` for every file under `bin/hooks/` of the store repo."""
+    hooks_dir = root / "bin" / "hooks"
+    found = {}
+    if hooks_dir.is_dir():
+        for path in sorted(hooks_dir.iterdir()):
+            if path.is_file():
+                found[path.name] = path.read_text(encoding="utf-8")
+    return found
+
+
+def cmd_emit(root, target_name, tokens, name, out):
+    registry = emit_mod.targets()
+    target = registry.get(target_name)
+    if target is None:
+        return refuse("refused: no emit target %r; targets: %s"
+                      % (target_name, ", ".join(sorted(registry))))
+    where = None
+    if tokens:
+        try:
+            where = query.parse_where(tokens)
+        except query.QueryError as exc:
+            return refuse("refused: %s" % exc)
+    if target.takes_query == "required" and where is None:
+        return refuse("refused: --emit %s needs --where" % target_name)
+    if target.takes_query == "none" and where is not None:
+        return refuse("refused: --emit %s takes no --where" % target_name)
+    if name and ("/" in name or "\\" in name or ".." in name):
+        return refuse("refused: --name must not contain a path separator or ..: %r" % name)
+    if not out:
+        return refuse("refused: --emit needs --out DIR")
+
+    try:
+        source = FileRowSource(root)
+        rows = source.rows()
+        tiers = emit_mod.load_tiers()
+    except (store_mod.RowShapeError, emit_mod.EmitError) as exc:
+        return refuse("refused: %s" % exc)
+    sequences = named_queries.sequences(source.named_queries_text())
+    generated = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    inputs = emit_mod.EmitInputs(
+        rows=rows, sequences=sequences, where=where, name=name,
+        repo=_repo_label(root), head=_head(root), generated=generated,
+        tiers=tiers, hooks=_hook_scripts(root),
+    )
+    try:
+        emission = target.emit(inputs)
+    except emit_mod.EmitError as exc:
+        return refuse(str(exc) if str(exc).startswith("refused") else "refused: %s" % exc)
+
+    out_dir = pathlib.Path(out).expanduser()
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for relpath in sorted(emission.files):
+        dest = out_dir / relpath
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_text(emission.files[relpath], encoding="utf-8")
+        if relpath in emission.executable:
+            dest.chmod(dest.stat().st_mode | 0o111)
+        print(str(dest))
+    for note in emission.notes:
+        print("note: %s" % note, file=sys.stderr)
+    return EXIT_OK
+
+
 def main(argv=None):
-    args = build_parser().parse_args(argv)
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    mode = _mode(args, parser)
     root = _repo_root()
     if root is None:
         return refuse("refused: not inside a git repository")
     if not (root / "rules").is_dir() and not (root / "process").is_dir():
         return refuse("refused: no rules/ or process/ under %s" % root)
-    if args.keys:
+    if mode == "keys":
         return cmd_keys(root)
-    if args.near is not None:
+    if mode == "near":
         return cmd_near(root, args.near)
+    if mode == "emit":
+        return cmd_emit(root, args.emit, args.where, args.name, args.out)
     return cmd_where(root, args.where, args.name, args.out)
 
 
