@@ -13,8 +13,9 @@ Run a retro when the human asks for one.
 A retro is `retro-<timestamp>.md`, a synthesis `retro-synthesis-<timestamp>.md`,
 the timestamp taken at generation time as `<YYYYMMDD>T<HHMMSS>Z`. Match a filename
 against those two forms only to tell one from the other; the frontmatter is a
-retro's canonical identity. Retros live in the project's own repo at `retros/`,
-written and committed there by a decision session as a separate later step.
+retro's canonical identity. Retros live in the project's own repo at `retros/`.
+Its inputs are the conversation it covers and the local tree [R1244]; its
+outputs land by the last step below.
 
 A project synthesis runs over one project's `retros/` directory and writes into
 it under the synthesis filename form, overwriting no source retro; its header
@@ -66,3 +67,10 @@ session touched as recorded in the local tree — a merge commit, a commit, a
 review artifact. Where the session touched none, take it from the `source:`
 pointer; where `source:` is null too, `generated:` stands in and the retro states
 the substitution. Where the two disagree, both are correct and both are stated.
+
+## Landing
+
+The retro lands itself, and a synthesis lands the same way (DEC-001260). The
+last step commits `retros/retro-<timestamp>.md` on a branch, pushes, opens the
+pull request, merges it as a routine change [R0570], and reads main back: the
+merge commit's SHA, fetched, is the evidence the retro landed [R0172].
