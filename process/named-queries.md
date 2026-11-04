@@ -69,6 +69,10 @@ bundle, and they never co-occur.
 spec-template
 change-flow
 review-artifact
+gate
+release
+intake
+build
 voice
 outline
 retro
