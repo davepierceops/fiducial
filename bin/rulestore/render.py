@@ -7,6 +7,8 @@ body form (the ordering contract, AC-RS-14 and AC-RS-15, stand).
 
 from __future__ import annotations
 
+from rulestore.emit import blocks
+
 
 def _heading(row):
     """A row's label: its path for a process document, its id for a rule.
@@ -17,10 +19,24 @@ def _heading(row):
     return row.path if row.kind == "process" else row.id
 
 
+def row_text(row):
+    """What a bundle prints for a row: its body — except an `enforce:` row,
+    whose fenced block is the harness's mechanism (a hook's yaml, deny
+    patterns, a field name), not text a reader acts on. Such a row prints its
+    prose, the principle the mechanism enforces; a block-only row prints
+    nothing. A bundle carries no `## Human` content, for any row (#399).
+    """
+    if (row.keys or {}).get("enforce"):
+        block, prose = blocks.split_block(row.body or "")
+        if block is not None:
+            return prose
+    return row.body
+
+
 def render(rows, definitions, *, repo, head, generated):
     """One header line, the selected rows as body text, then definitions.
 
-    No `## Human` content anywhere: only `row.body` is ever emitted.
+    `## Human` content never reaches the output; only `row_text` is emitted.
     """
     rows = list(rows)
     definitions = list(definitions)
@@ -28,7 +44,10 @@ def render(rows, definitions, *, repo, head, generated):
     lines = ["<!-- fiducial %s @ %s %s -->" % (repo, head, generated), ""]
 
     for row in rows:
-        lines.append(row.body)
+        text = row_text(row)
+        if not text:
+            continue
+        lines.append(text)
         lines.append("")
     if definitions:
         lines.append("## Definitions")

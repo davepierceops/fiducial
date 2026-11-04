@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+"""R0934 (DEC-001320): an Edit or Write under `rules/` or `process/` passes
+only on a branch named `intake/*` — the observable the intake skill
+provides. `PreToolUse` on `Edit|Write`; anything else passes."""
+
+import os
+import re
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import _hooklib as lib  # noqa: E402
+
+GOVERNED = ("rules/", "process/")
+BRANCH_RE = re.compile(r"^intake/")
+
+
+def main():
+    data = lib.read_input()
+    root, rel = lib.target_file(data)
+    if root is None or rel is None or not lib.under(rel, *GOVERNED):
+        lib.passthrough()
+    branch = lib.current_branch(root)
+    if BRANCH_RE.match(branch):
+        lib.passthrough()
+    lib.block("intake-branch-guard: %s is governed text (R0934); edit it on an "
+              "intake/* branch through the intake skill, not on %r" % (rel, branch))
+
+
+if __name__ == "__main__":
+    main()

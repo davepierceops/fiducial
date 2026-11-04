@@ -1,0 +1,216 @@
+#!/usr/bin/env python3
+"""The store and artifact lint (DEC-001250, DEC-001380): one `PostToolUse`
+script on `Edit|Write`, one check per invocation, named by the row whose
+block invokes it.
+
+    --check citations           R1605, plus R0264's four lintable criteria
+    --check generated-filename  R0196
+    --check verdict-lines       R1414
+
+Each check reads the file the tool call wrote, as it now stands on disk,
+and fails (exit 2, reasons on stderr) only for the file kinds its row names;
+every other path passes silently.
+
+`citations` runs over a row under `rules/` (not `rules/retired/`): every
+`[R0000]` citation names a row whose `role`, `session` and `corpus` carry
+every value the citing row carries (R1605); and, from R0264: the body refers
+to no file by path — `PATH_EXEMPT` lists the names a body may use, the
+exemptions issue #399 asked for; every key value is one the key already
+holds on another row; a row with `role` names its `session`; the body speaks
+in tiers, never model names.
+"""
+
+import argparse
+import os
+import pathlib
+import re
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import _hooklib as lib  # noqa: E402
+
+TIMESTAMP_RE = re.compile(r"\d{8}T\d{6}Z")
+GENERATED_DIRS = ("retros/", "reviews/")
+
+#: In severity order: the overall verdict is the most severe pass verdict.
+VERDICTS = ("ready", "ready-with-findings", "not-run", "changes-required")
+OVERALL_RE = re.compile(r"^Verdict:\s*(\S+)\s*$", re.MULTILINE)
+PASS_RE = re.compile(r"^#*\s*Verdict \(([^)]+)\):\s*(\S+)\s*$", re.MULTILINE)
+
+CITATION_RE = re.compile(r"\[(R\d{4})\]")
+CO_RENDER_KEYS = ("role", "session", "corpus")
+
+#: R0264's "refers to no file by path": what a body may still name. SPEC.md
+#: and decisions/log.md are the project's two fixed records; a hook block
+#: names its script under bin/hooks/; the governed and generated directories
+#: are the subjects of the rows that govern them (issue #399).
+PATH_EXEMPT = (
+    "SPEC.md", "decisions/log.md", "bin/hooks/", "CLAUDE.md", "README.md",
+    "rules/", "process/", "reviews/", "retros/", "specs/", "docs/", "SKILL.md",
+)
+#: A path is a token ending in a file extension, ending in `/`, or holding
+#: two or more slashes; a lone `go/no-go` is a word pair, not a path.
+PATH_RE = re.compile(
+    r"(?<![\w/.])((?:[\w.-]+/){2,}[\w.-]*|(?:[\w.-]+/)+[\w.-]*\.(?:md|py|json|ya?ml|toml|txt|sh)"
+    r"|[\w.-]+/|[\w-]+\.(?:md|py|json|ya?ml|toml|txt|sh))(?![\w/])"
+)
+#: Keys whose values are an open set — free text, not a vocabulary.
+FREE_KEYS = ("id", "order", "source", "condition", "term", "paths", "retired", "enforce")
+MODEL_NAME_RE = re.compile(
+    r"\b(opus|sonnet|haiku|gpt-?[0-9o]\w*|o[134](?:-mini|-pro)?|gemini(?:-[\w.]+)?|claude-[0-9][\w.-]*)\b",
+    re.IGNORECASE,
+)
+FENCE_RE = re.compile(r"^(`{3,}|~{3,}).*?^\1\s*$", re.MULTILINE | re.DOTALL)
+HUMAN_RE = re.compile(r"^#{1,6}\s+Human\s*$", re.MULTILINE)
+
+
+def _frontmatter(text):
+    lines = text.split("\n")
+    if not lines or lines[0].strip() != "---":
+        return {}, text
+    for index in range(1, len(lines)):
+        if lines[index].strip() == "---":
+            break
+    else:
+        return {}, text
+    fields = {}
+    for line in lines[1:index]:
+        if ":" not in line:
+            continue
+        key, _, raw = line.partition(":")
+        raw = raw.strip()
+        if raw in ("", "null"):
+            values = []
+        elif raw.startswith("[") and raw.endswith("]"):
+            values = [v.strip().strip("'\"") for v in raw[1:-1].split(",") if v.strip()]
+        else:
+            values = [raw.strip("'\"")]
+        fields[key.strip()] = values
+    return fields, "\n".join(lines[index + 1:])
+
+
+def _agent_body(body):
+    """The body above any Human heading, fenced blocks removed."""
+    body = HUMAN_RE.split(body, 1)[0]
+    return FENCE_RE.sub("", body)
+
+
+def _store_rows(root):
+    rows = {}
+    for path in sorted((root / "rules").glob("*.md")):
+        fields, _ = _frontmatter(path.read_text(encoding="utf-8", errors="replace"))
+        row_id = (fields.get("id") or [path.stem])[0]
+        rows[row_id] = fields
+    return rows
+
+
+def check_citations(root, rel, text):
+    if not rel.startswith("rules/") or rel.startswith("rules/retired/") or rel.count("/") != 1:
+        return []
+    fields, body = _frontmatter(text)
+    row_id = (fields.get("id") or [pathlib.Path(rel).stem])[0]
+    agent = _agent_body(body)
+    problems = []
+    store = _store_rows(root)
+    # R1605: a citation co-renders
+    for cited_id in sorted(set(CITATION_RE.findall(agent))):
+        cited = store.get(cited_id)
+        if cited is None:
+            problems.append("[%s] cites a row that is not in the store" % cited_id)
+            continue
+        for key in CO_RENDER_KEYS:
+            missing = [v for v in fields.get(key, []) if v not in cited.get(key, [])]
+            if missing:
+                problems.append("[%s] does not carry %s %s, so it cannot co-render"
+                                % (cited_id, key, ", ".join(missing)))
+    # R0264: no file by path
+    for match in PATH_RE.finditer(agent):
+        token = match.group(1)
+        if any(token == e or token.startswith(e) or token.endswith("/" + e) for e in PATH_EXEMPT):
+            continue
+        problems.append("refers to a file by path: %r" % token)
+    # R0264: every key value is one the key already holds
+    for key, values in fields.items():
+        if key in FREE_KEYS:
+            continue
+        held = set()
+        for other_id, other in store.items():
+            if other_id != row_id:
+                held.update(other.get(key, []))
+        for value in values:
+            if value not in held:
+                problems.append("%s: %r is a value no other row holds" % (key, value))
+    # R0264: names the session kind
+    if fields.get("role") and not fields.get("session"):
+        problems.append("carries role but names no session")
+    # R0264: tiers, never model names
+    for match in MODEL_NAME_RE.finditer(agent):
+        problems.append("names a model, not a tier: %r" % match.group(1))
+    return problems
+
+
+def check_generated_filename(root, rel, text):
+    if not lib.under(rel, *GENERATED_DIRS):
+        return []
+    if lib.tracked_at_head(root, rel):
+        return []
+    name = rel.rsplit("/", 1)[-1]
+    if TIMESTAMP_RE.search(name):
+        return []
+    return ["%s is a new generated file whose name lacks a <YYYYMMDD>T<HHMMSS>Z timestamp" % rel]
+
+
+def check_verdict_lines(root, rel, text):
+    if not lib.under(rel, "reviews/"):
+        return []
+    problems = []
+    overall = OVERALL_RE.findall(text)
+    passes = PASS_RE.findall(text)
+    if len(overall) != 1:
+        problems.append("expected exactly one overall `Verdict:` line, found %d" % len(overall))
+    for value in overall:
+        if value not in VERDICTS:
+            problems.append("overall verdict %r is not one of %s" % (value, "|".join(VERDICTS)))
+    if not passes:
+        problems.append("no `Verdict (<pass>):` line found")
+    for name, value in passes:
+        if value not in VERDICTS:
+            problems.append("pass %r verdict %r is not one of %s" % (name, value, "|".join(VERDICTS)))
+    if len(overall) == 1 and overall[0] in VERDICTS and passes:
+        severities = [VERDICTS.index(v) for _, v in passes if v in VERDICTS]
+        if severities:
+            worst = VERDICTS[max(severities)]
+            if overall[0] != worst:
+                problems.append("overall verdict %r is not the most severe pass verdict %r"
+                                % (overall[0], worst))
+    return problems
+
+
+CHECKS = {
+    "citations": check_citations,
+    "generated-filename": check_generated_filename,
+    "verdict-lines": check_verdict_lines,
+}
+
+
+def main():
+    parser = argparse.ArgumentParser(prog="store-lint")
+    parser.add_argument("--check", required=True, choices=sorted(CHECKS))
+    args = parser.parse_args()
+    data = lib.read_input()
+    root, rel = lib.target_file(data)
+    if root is None or rel is None:
+        lib.passthrough()
+    path = root / rel
+    if not path.is_file():
+        lib.passthrough()
+    text = path.read_text(encoding="utf-8", errors="replace")
+    problems = CHECKS[args.check](root, rel, text)
+    if problems:
+        lib.block("store-lint --check %s: %s:\n  - %s"
+                  % (args.check, rel, "\n  - ".join(problems)))
+    lib.passthrough()
+
+
+if __name__ == "__main__":
+    main()
