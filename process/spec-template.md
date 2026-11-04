@@ -1,6 +1,6 @@
 ---
 order: 20
-topic: [spec]
+topic: [spec-template]
 role: [chief-of-staff, architect-agent, spec-reviewer-agent]
 session: [decision]
 corpus: [software]
