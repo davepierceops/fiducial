@@ -8,8 +8,7 @@ corpus: [software, writing]
 
 # Process: Review Artifact
 
-The form a review emits: one read over one delta, one artifact [R1395a, R1396,
-R1408].
+The form a review emits: one read over one delta, one artifact [R1396, R1408].
 
 Where a role or a policy names a required output, this is where it goes:
 
@@ -25,23 +24,26 @@ Where a role or a policy names a required output, this is where it goes:
 
 The entry field is `Fix`, not `Recommendation`.
 
-A per-entry log of agreements is not an artifact in this sense; its shape
+A per-entry log of dispositions is not an artifact in this sense; its shape
 is set by the policy that mandates it.
 
-A review artifact goes in `reviews/`, its filename beginning with the reviewed
-document's stem and then the discriminator in the repo-wide generated-filename
-convention. The stem of a file in a subdirectory of `engagements/` or `roles/` is
-`<parent-dir>-<basename>`; every other file's is its basename without the
-extension, and where it already ends in a digit the rule applies unchanged.
+A review artifact goes in `reviews/`, named `<stem>-<descriptor>-<timestamp>.md`
+in the repo-wide generated-filename convention [R0196]. Over one document, the
+stem is the document's: for a file in a subdirectory of `engagements/` or
+`roles/`, `<parent-dir>-<basename>`; for every other file, its basename without
+the extension, and where it already ends in a digit the rule applies unchanged.
+Over a delta — a branch's whole diff — the stem is the delta's branch slug and
+the descriptor is `read`: `reviews/<branch-slug>-read-<timestamp>.md`
+(DEC-001450).
 
 ## Header
 
 Every artifact opens with this block, clean pass or not.
 
 ~~~markdown
-# Review: <document path> — <descriptor>-<timestamp>
+# Review: <document path, or the delta's branch> — <descriptor>-<timestamp>
 
-Verdict: ready | ready-with-findings | changes-required
+Verdict: ready | ready-with-findings | not-run | changes-required
 Reviewed: <path> @ <sha, short or full>
 Baseline: <path> @ <sha, short or full>
 Reviewer: <role, agent, or human>
@@ -53,13 +55,15 @@ Findings: <none | count by severity>
 The human should inspect: <the few items that need his judgment, or omitted>
 ~~~
 
-The header's `Verdict:` is the overall call and each pass section opens with its
-own `Verdict (<pass>):` line [R1414]. `Cross-checked` and `The human should
-inspect` are omit-if-none; `Baseline` is required where the artifact reviews a
-range — a delta's whole diff, or a reconciliation — and names the revision the
-diff starts from, and a review of one revision omits it; the rest are required,
-`Not inspected` included. A pass that finds nothing, or that confirms a prior
-read's findings were fixed, is this header and nothing else.
+The header's `Verdict:` is the overall call and each pass section — quality,
+skepticism, continuity — opens with its own `Verdict (<pass>):` line [R1414].
+A pass that was planned and did not run has its section too: its line reads
+`Verdict (<pass>): not-run`, followed by one line saying why [R1617].
+`Cross-checked` and `The human should inspect` are omit-if-none; `Baseline` is
+required where the artifact reviews a range — a delta's whole diff — and names
+the revision the diff starts from, and a review of one revision omits it; the
+rest are required, `Not inspected` included. A pass that finds nothing, or that
+confirms a prior read's findings were fixed, is this header and nothing else.
 
 ## Findings
 

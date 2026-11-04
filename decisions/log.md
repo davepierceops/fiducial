@@ -1159,3 +1159,14 @@ Context: Written in the 2026-11-04 session, reviewed once by a subagent that did
 Date: 2026-11-04
 Decision: Package 1a of the subtraction plan is merged at 699a0fa (PR #397, branch tip a270653): 75 rows retired to `rules/retired/` with `retired:` lines naming a row id or a DEC id, `enforce:` on 34 rows (hook 9, deny 3, agent 5, skill 17), 20 rows re-topiced (`directive-invariants` survivors to `chief-of-staff`, `convergence` to `change-flow`, `trd` and `prd-template` to the new topic `spec`), the store admitting `enforce:` with four values, and `bin/tests/reconcile_sort.py` as the proof. Review artifact: `reviews/pkg-1a-store-moves-read-20261104T185942Z.md` — ready on re-read.
 Context: The two DEC-001310 merges with no named survivor (R1533+R0472+R0759; R1513+R1542) were escalated by the coder and pass to package 1b, whose blast radius widens to move the losers.
+
+## DEC-001480 — Package 1b landed: the sort's bodies
+Date: 2026-11-04
+Decision: Package 1b of the subtraction plan is merged at 19f6760 (PR #401, branch tip 0da3040): 40 rows reworded or pruned per DEC-001170 to DEC-001390, the two DEC-001310 merges (R0472 and R1513 survive), the approve sweep, fenced blocks on all 34 `enforce:` rows under the `bin/hooks/<name>` convention, and new rows R1616 (DEC-001430) and R1617 (DEC-001440). Store: 384 live, 83 retired. Review artifact: `reviews/pkg-1b-store-bodies-read-20261104T203811Z.md` — ready-with-findings on re-read; hand-offs #399, #400.
+Context: Two amendments restored six obligations the first rewording had dropped; the reviewer's independent render confirmed no retired mechanism names a definition.
+
+## DEC-001490 — R0205 retires into R0208
+Date: 2026-11-04
+Decision: R0205 retires into R0208, which already carries the command-block / execution-block distinction in full; DEC-001330's ruling that R0205 stays as one sentence is superseded for that half only — its ruling that R0202 retires stands.
+Context: Found during package 1b's amendment: R0205's one surviving sentence duplicated R0208, and with its layer terms gone it rendered nowhere. Ruled by the human 2026-11-04 under DEC-001310's one-survivor principle.
+Supersedes: DEC-001330

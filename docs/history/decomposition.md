@@ -1,3 +1,4 @@
+<!-- retired 2026-11-04 under DEC-001190 and DEC-001460: plan mode and the plan reviewer replace it; kept as history, read by nothing -->
 ---
 order: 70
 topic: [decomposition]

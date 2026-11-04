@@ -1,3 +1,4 @@
+<!-- retired 2026-11-04 under DEC-001210: folded into process/spec-template.md; kept as history, read by nothing -->
 ---
 order: 30
 topic: [trd-template]
