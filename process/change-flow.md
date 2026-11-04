@@ -8,9 +8,8 @@ corpus: [software]
 
 # Process: Change Flow
 
-A delta is the difference between a thing as it stands and as it will stand when
-the work is done. Review is charged once per delta, at its close — never per
-edit — by a reader that did not produce it [R0462], as one artifact [R1396].
+A delta is the whole of what one piece of work changes. Review is charged once
+per delta, at its close, by a reader that did not produce it [R0462, R1396].
 
 | What changes | Closed by | Who reads |
 |---|---|---|
@@ -19,8 +18,8 @@ edit — by a reader that did not produce it [R0462], as one artifact [R1396].
 | **Spec** — `SPEC.md` | the spec branch's close: one read of its whole diff with the tests, one ruling [R0481] | Spec Reviewer, then the human |
 | **Code** — the implementation | one pull request per unit of work, through the stages below | Reviewer and Skeptic/Risk, then the human at the gate |
 
-Each meaningful change [R0465] runs these in order; the decision session runs
-every step but the human's as a subagent.
+Each meaningful change [R0465] runs these in order, as subagents but for the
+human's own steps.
 
 1. **Spec.** `SPEC.md` is approved [R1513] and the unit's acceptance criteria
    are written from it [R0472]; nothing is built against an open spec [R0017].
@@ -32,10 +31,11 @@ every step but the human's as a subagent.
    [R0492], one artifact, one overall verdict [R1414]; a planned pass that did
    not run is recorded with why [R1617]. At triage a finding files-and-lands
    unless the human raises it to blocking [R1614].
-5. **Gate.** A routine change merges by its pull request [R0570]; one in the
-   consequential class [R0535, R0536] goes through the gate skill, which opens
-   its `human-gate` issue and asks for the go [R0534, R0562].
-6. **Release.** The human's call [R0490]; done is the definition of done [R0509].
+5. **Gate.** A pull request merges as routine [R0570]; a consequential change
+   [R0535, R0536] goes through the gate skill: its `human-gate` issue, its go.
+6. **Release.** A routine change flows to release on its evidence under standing
+   authorization [R0570]; a consequential one waits for the human's explicit go
+   at the gate [R0534, R0562, R0490]. Done is the definition of done [R0509].
 
-The human, or the Chief of Staff for him, may call for a deep read of anything
-at any time, whole rather than diff [R1137, R1138].
+The human, or the Chief of Staff for him, may call a deep read — whole, not
+diff — of anything at any time [R1137, R1138].

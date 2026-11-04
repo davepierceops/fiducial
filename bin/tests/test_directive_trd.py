@@ -256,9 +256,14 @@ class TestMarkerManifestPartition(TrdTestCase):
         self.assert_lint_passes(rc, out, err, "M5")
 
 
+_RETIRED = ("process/directive-invariants.md retired to docs/history/ by "
+            "DEC-001160; the directive-tooling tests are removed in package 6")
+
+
 class TestInvariantsDocumentIsGovernedText(TrdTestCase):
     """§4.2's B1 — represented as a fixture copy plus one live-verified read."""
 
+    @unittest.skip(_RETIRED)
     def test_b1_the_real_invariants_document_shows_the_label_only_inside_fences(self):
         """Live-verified against the committed document (§4.2, B1).
 
@@ -276,6 +281,7 @@ class TestInvariantsDocumentIsGovernedText(TrdTestCase):
             hits, [], "the committed invariants document carries the label unfenced"
         )
 
+    @unittest.skip(_RETIRED)
     def test_b1_the_real_invariants_document_carries_every_named_section(self):
         """§3.3's tables name each region's source section by heading."""
         path = REPO_ROOT / INVARIANTS_RELPATH
