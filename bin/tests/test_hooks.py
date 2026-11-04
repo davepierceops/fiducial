@@ -137,6 +137,35 @@ class TestReviewArtifactImmutable(HookTestCase):
         self.assert_passes(self.run_hook("review-artifact-immutable", tool="Edit",
                                          file_path="reviews/draft-20260102T000000Z.md"))
 
+    def test_passes_an_amended_artifact_tracked_only_on_the_authors_branch(self):
+        """F-11: committed on a branch, not on main: the reviewer may amend it."""
+        self.checkout("review/x")
+        write(self.repo, "reviews/draft-20260102T000000Z.md", "Verdict: ready\n")
+        commit(self.repo, "a draft", env=self.env)
+        self.assert_passes(self.run_hook("review-artifact-immutable", tool="Edit",
+                                         file_path="reviews/draft-20260102T000000Z.md"))
+
+    def test_blocks_a_landed_artifact_from_any_branch(self):
+        self.checkout("review/y")
+        self.assert_blocks(self.run_hook("review-artifact-immutable",
+                                         file_path="reviews/landed-20260101T000000Z.md"),
+                           "landed review artifact")
+
+    def test_an_artifact_on_origin_main_only_is_landed(self):
+        parent = temp_dir(self, "immutable-origin-")
+        origin = parent / "origin.git"
+        git(parent, "init", "--bare", "-q", "-b", "main", str(origin), env=self.env, check=True)
+        git(self.repo, "remote", "add", "origin", str(origin), env=self.env, check=True)
+        self.checkout("work")
+        write(self.repo, "reviews/other-20260103T000000Z.md", "Verdict: ready\n")
+        commit(self.repo, "landed upstream", env=self.env)
+        git(self.repo, "push", "-q", "origin", "work:main", env=self.env, check=True)
+        git(self.repo, "fetch", "-q", "origin", env=self.env, check=True)
+        git(self.repo, "checkout", "-q", "-b", "later", "main", env=self.env, check=True)
+        git(self.repo, "branch", "-q", "-D", "work", env=self.env, check=True)
+        self.assert_blocks(self.run_hook("review-artifact-immutable",
+                                         file_path="reviews/other-20260103T000000Z.md"))
+
     def test_passes_a_tracked_file_outside_reviews(self):
         self.assert_passes(self.run_hook("review-artifact-immutable", file_path="README.md"))
 
@@ -220,6 +249,14 @@ class TestLaneGuard(HookTestCase):
                            "outside the tests lane")
         self.assert_blocks(self.run_hook("lane-guard", "--lane", "tests", file_path="SPEC.md"))
 
+    def test_reviews_lane_passes_reviews_and_nothing_else(self):
+        self.assert_passes(self.run_hook("lane-guard", "--lane", "reviews",
+                                         file_path="reviews/pkg-3a-20260105T000000Z.md"))
+        for path in ("src/one.py", "tests/test_one.py", "SPEC.md", "specs/one.md",
+                     "rules/R0001.md", "docs/reviews/x.md", "reviewsx/y.md"):
+            self.assert_blocks(self.run_hook("lane-guard", "--lane", "reviews", file_path=path),
+                               "outside the reviews lane", "finding, not an edit")
+
     def test_a_call_naming_no_file_passes(self):
         self.assert_passes(self.run_hook("lane-guard", "--lane", "tests", tool="Bash",
                                          extra={"command": "pytest"}))
@@ -278,12 +315,20 @@ class TestStoreLintVerdictLines(HookTestCase):
 
     def test_blocks_a_value_outside_the_enum(self):
         self.assert_blocks(self.lint("Verdict: approved\n\n## Verdict (Quality): approved\n"),
-                           "not one of ready|ready-with-findings|changes-required")
+                           "not one of ready|ready-with-findings|not-run|changes-required")
 
     def test_blocks_an_overall_milder_than_a_pass(self):
         self.assert_blocks(self.lint(
             "Verdict: ready\n\n## Verdict (Quality): ready\n\n"
             "## Verdict (Skepticism): ready-with-findings\n"), "most severe")
+
+    def test_not_run_ranks_above_ready_with_findings(self):
+        self.assert_passes(self.lint(
+            "Verdict: not-run\n\n## Verdict (Quality): ready\n\n## Verdict (Tests): not-run\n"))
+        self.assert_blocks(self.lint(
+            "Verdict: ready-with-findings\n\n## Verdict (Quality): not-run\n"), "most severe")
+        self.assert_blocks(self.lint(
+            "Verdict: not-run\n\n## Verdict (Quality): changes-required\n"), "most severe")
 
     def test_blocks_an_artifact_with_no_pass_verdict(self):
         self.assert_blocks(self.lint("Verdict: ready\n"), "no `Verdict (<pass>):`")
@@ -321,6 +366,16 @@ class TestStoreLintCitations(HookTestCase):
     def test_blocks_a_file_path_in_the_body(self):
         self.assert_blocks(self.row("R0003", "Read src/main.py first."),
                            "refers to a file by path: 'src/main.py'")
+
+    def test_blocks_a_backticked_file_path_in_the_body(self):
+        """F-5: the store writes paths in backticks."""
+        self.assert_blocks(self.row("R0003", "Read `src/main.py` first."),
+                           "refers to a file by path: 'src/main.py'")
+        self.assert_blocks(self.row("R0003", "Read `tools/helper.py` first."))
+
+    def test_passes_backticked_exempt_names(self):
+        self.assert_passes(self.row(
+            "R0003", "Append to `decisions/log.md`; run `bin/hooks/store-lint`; read `SPEC.md`."))
 
     def test_passes_the_exempt_names(self):
         self.assert_passes(self.row(
@@ -412,6 +467,50 @@ class TestPushReadback(HookTestCase):
         code, out, err = self.bash("git add -A && git push origin main 2>&1 | tail -1")
         self.assertEqual(code, 0, err)
         self.assertIn("origin/main is at", out)
+
+    def test_git_dash_c_push_is_read_back(self):
+        """F-2: `git -C <dir> push` is the form subagent briefs use."""
+        git(self.repo, "push", "-q", "origin", "main", env=self.env, check=True)
+        elsewhere = temp_dir(self, "elsewhere-")
+        code, out, err = self.run_hook(
+            "push-readback", tool="Bash", cwd=elsewhere,
+            extra={"command": "git -C %s push origin main" % self.repo})
+        self.assertEqual(code, 0, err)
+        self.assertIn("origin/main is at %s" % self.head(), out)
+
+    def test_git_dash_c_push_the_remote_did_not_take_fails_loudly(self):
+        git(self.repo, "push", "-q", "origin", "main", env=self.env, check=True)
+        write(self.repo, "README.md", "changed\n")
+        commit(self.repo, "never pushed", env=self.env)
+        elsewhere = temp_dir(self, "elsewhere-")
+        code, out, err = self.run_hook(
+            "push-readback", tool="Bash", cwd=elsewhere,
+            extra={"command": "git -C %s push origin main" % self.repo})
+        self.assertEqual(code, 2, out)
+        self.assertIn("reads back", err)
+
+    def test_other_global_options_before_push_are_found(self):
+        git(self.repo, "push", "-q", "origin", "main", env=self.env, check=True)
+        for command in ("git --no-pager push origin main", "git -c push.default=simple push origin main",
+                        "git --git-dir=.git push origin main"):
+            code, out, err = self.bash(command)
+            self.assertEqual(code, 0, (command, err))
+            self.assertIn("origin/main is at", out, command)
+
+    def test_push_origin_head_reads_back_the_current_branch(self):
+        """F-12."""
+        git(self.repo, "push", "-q", "origin", "main", env=self.env, check=True)
+        code, out, err = self.bash("git push origin HEAD")
+        self.assertEqual(code, 0, err)
+        self.assertNotIn("Traceback", err)
+        self.assertIn("origin/main is at %s" % self.head(), out)
+
+    def test_push_origin_head_colon_branch_and_bare_push_do_not_fail_on_parsing(self):
+        git(self.repo, "push", "-q", "-u", "origin", "main", env=self.env, check=True)
+        for command in ("git push origin HEAD:main", "git push", "git push -u origin HEAD"):
+            code, out, err = self.bash(command)
+            self.assertEqual(code, 0, (command, err))
+            self.assertIn("origin/main is at", out, command)
 
     def test_a_command_that_is_not_a_push_passes_silently(self):
         code, out, err = self.bash("git status && echo 'git pushover'")

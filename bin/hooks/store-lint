@@ -32,7 +32,8 @@ import _hooklib as lib  # noqa: E402
 TIMESTAMP_RE = re.compile(r"\d{8}T\d{6}Z")
 GENERATED_DIRS = ("retros/", "reviews/")
 
-VERDICTS = ("ready", "ready-with-findings", "changes-required")
+#: In severity order: the overall verdict is the most severe pass verdict.
+VERDICTS = ("ready", "ready-with-findings", "not-run", "changes-required")
 OVERALL_RE = re.compile(r"^Verdict:\s*(\S+)\s*$", re.MULTILINE)
 PASS_RE = re.compile(r"^#*\s*Verdict \(([^)]+)\):\s*(\S+)\s*$", re.MULTILINE)
 
@@ -50,7 +51,7 @@ PATH_EXEMPT = (
 #: A path is a token ending in a file extension, ending in `/`, or holding
 #: two or more slashes; a lone `go/no-go` is a word pair, not a path.
 PATH_RE = re.compile(
-    r"(?<![\w/`.])((?:[\w.-]+/){2,}[\w.-]*|(?:[\w.-]+/)+[\w.-]*\.(?:md|py|json|ya?ml|toml|txt|sh)"
+    r"(?<![\w/.])((?:[\w.-]+/){2,}[\w.-]*|(?:[\w.-]+/)+[\w.-]*\.(?:md|py|json|ya?ml|toml|txt|sh)"
     r"|[\w.-]+/|[\w-]+\.(?:md|py|json|ya?ml|toml|txt|sh))(?![\w/])"
 )
 #: Keys whose values are an open set — free text, not a vocabulary.

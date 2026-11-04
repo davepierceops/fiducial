@@ -2,7 +2,8 @@
 """R0091 and R1156 (DEC-001240): a lane-bound agent edits its lane and
 nothing else; a change it needs outside is a finding. `PreToolUse` on
 `Edit|Write` in the agent's own frontmatter. `--lane specs` admits
-`specs/**` and `SPEC.md`; `--lane tests` admits the test tree."""
+`specs/**` and `SPEC.md`; `--lane tests` admits the test tree;
+`--lane reviews` admits `reviews/**` and nothing else."""
 
 import argparse
 import os
@@ -14,6 +15,7 @@ import _hooklib as lib  # noqa: E402
 
 LANES = {
     "specs": [r"^SPEC\.md$", r"^specs/"],
+    "reviews": [r"^reviews/"],
     "tests": [
         r"^tests?/", r"(^|/)tests?/", r"(^|/)__tests__/", r"(^|/)test_[^/]*\.py$",
         r"(^|/)[^/]*_test\.[^/]+$", r"(^|/)[^/]*\.test\.[^/]+$", r"(^|/)[^/]*\.spec\.[^/]+$",

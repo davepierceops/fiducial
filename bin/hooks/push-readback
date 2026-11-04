@@ -12,13 +12,16 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import _hooklib as lib  # noqa: E402
 
-PUSH_RE = re.compile(r"(^|[;&|]\s*|\s)git\s+push(\s|$)")
+PUSH_RE = re.compile(
+    r"(^|[;&|]\s*|\s)git(\s+(-C\s+\S+|-c\s+\S+|--\S+|-\S))*\s+push(\s|$)")
 REDIRECT_RE = re.compile(r"^(\d*[<>]|&>)")
 SKIP_FLAGS = ("--delete", "-d", "--tags", "--mirror", "--all", "--dry-run", "-n")
 
 
 def _pushes(command):
-    """`[(remote, refspec)]` for each `git push` in the command."""
+    """`[(remote, refspec, chdir)]` for each `git push` in the command; `remote`
+    is `None` when the push names none, `chdir` the `-C <dir>` values before
+    `push`, in order."""
     found = []
     for segment in re.split(r"&&|\|\||;|\|", command):
         if not PUSH_RE.search(segment):
@@ -27,9 +30,25 @@ def _pushes(command):
             words = shlex.split(segment)
         except ValueError:
             words = segment.split()
-        try:
-            index = words.index("push")
-        except ValueError:
+        chdir = []
+        index = None
+        for start, word in enumerate(words):
+            if word != "git":
+                continue
+            probe = start + 1
+            while probe < len(words) and words[probe] != "push":
+                if words[probe] in ("-C", "-c") and probe + 1 < len(words):
+                    if words[probe] == "-C":
+                        chdir.append(words[probe + 1])
+                    probe += 2
+                elif words[probe].startswith("-"):
+                    probe += 1
+                else:
+                    break
+            if probe < len(words) and words[probe] == "push":
+                index = probe
+                break
+        if index is None:
             continue
         args = [w for w in words[index + 1:]]
         if any(flag in args for flag in SKIP_FLAGS):
@@ -46,10 +65,10 @@ def _pushes(command):
             if word.startswith("-") or REDIRECT_RE.match(word):
                 continue
             positional.append(word)
-        remote = positional[0] if positional else "origin"
+        remote = positional[0] if positional else None
         refspecs = positional[1:] or [None]
         for refspec in refspecs:
-            found.append((remote, refspec))
+            found.append((remote, refspec, chdir))
     return found
 
 
@@ -59,19 +78,28 @@ def main():
     pushes = _pushes(command)
     if not pushes:
         lib.passthrough()
-    root = lib.repo_root(lib.cwd_of(data))
-    if root is None:
-        lib.block("push-readback: a git push ran outside any repository I can read back")
     failures = []
     lines = []
-    for remote, refspec in pushes:
+    for remote, refspec, chdir in pushes:
+        base = lib.cwd_of(data)
+        for directory in chdir:
+            base = base / os.path.expanduser(directory)
+        root = lib.repo_root(base)
+        if root is None:
+            lib.block("push-readback: a git push ran outside any repository I can read back")
+        branch = lib.current_branch(root)
+        if remote is None:
+            _, configured, _ = lib.git(root, "config", "branch.%s.remote" % branch)
+            remote = configured.strip() or "origin"
         if refspec is None:
-            src = dst = lib.current_branch(root)
+            src = dst = branch
         elif ":" in refspec:
             src, dst = refspec.split(":", 1)
         else:
             src = dst = refspec
         src = src.lstrip("+")
+        if dst == "HEAD":
+            dst = branch
         dst = dst.rsplit("/", 1)[-1] if dst.startswith("refs/heads/") else dst
         code, _, err = lib.git(root, "fetch", "-q", remote, dst)
         if code != 0:

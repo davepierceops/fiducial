@@ -95,6 +95,20 @@ def tracked_at_head(root, relpath):
     return code == 0
 
 
+DEFAULT_BRANCH_REFS = ("origin/main", "main")
+
+
+def on_default_branch(root, relpath):
+    """Whether `relpath` exists on the default branch (`origin/main` or
+    `main`, whichever exist; either holding it counts). With neither ref
+    present, falls back to being tracked at HEAD."""
+    refs = [ref for ref in DEFAULT_BRANCH_REFS
+            if git(root, "rev-parse", "--verify", "-q", ref + "^{commit}")[0] == 0]
+    if not refs:
+        return tracked_at_head(root, relpath)
+    return any(git(root, "cat-file", "-e", "%s:%s" % (ref, relpath))[0] == 0 for ref in refs)
+
+
 def current_branch(root):
     code, out, _ = git(root, "rev-parse", "--abbrev-ref", "HEAD")
     return out.strip() if code == 0 else ""

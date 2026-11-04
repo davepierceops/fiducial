@@ -9,18 +9,23 @@ What it emits, from what:
   mechanism is in `settings.json`; the principle is what the model reads —
   DEC-001220), then the definitions those rows use. No row carrying
   `paths:` (those go to `.claude/rules/`), no `enforce: agent|skill` row
-  (fields and skills), no process document (skills). Over `CLAUDE_MD_LIMIT`
-  lines the target refuses and reports the count.
+  (fields and skills), no process document (skills). A row whose first topic
+  names an emitted skill (`common.topic_stem`: the topic is, or extends with
+  `-`, a stem `named-queries.md` lists) spills: it is omitted here and
+  appended to that `SKILL.md` under `## Rules`. Over `CLAUDE_MD_LIMIT` lines
+  the target warns with the count on stderr and still emits; the limit is
+  guidance.
 - `.claude/rules/<topic>.md` — one file per first topic of the rows carrying
   `paths:`, with `paths:` the union of their patterns, body the rows.
 - `.claude/agents/<role>.md` — one per role the tier map gives a tier
   (`tiers["roles"]`): `description` from the role's `field: description`
   rows (R1056's Human note rides with it, DEC-001270), `model` from the
-  role's tier through the harness column, `tools` read-only for a reviewer
-  or skeptic role and writing for the rest (`READ_ONLY_MARKERS`), `skills`
+  role's tier through the harness column, `tools` the same list for every
+  agent (a role's lane is a `scope: agent` hook row, not a tool list), `skills`
   the skills the role's `enforce: skill` rows name and the emission
   provides, `hooks` the role's `scope: agent` hook rows, and the body the
-  role's rows rendered as a bundle renders them, definitions last.
+  role's rows rendered as a bundle renders them, definitions last, minus the
+  rows (and definitions) `CLAUDE.md` already carries, which the agent also loads.
 - `.claude/skills/<stem>/SKILL.md` — one per process document except
   `project-setup` and `named-queries`; `name` the stem, `description` the document's first
   sentence, `disable-model-invocation: true` for `gate`; the body is the
@@ -30,7 +35,11 @@ What it emits, from what:
   `enforce: hook` blocks, grouped by event then matcher.
 - `.claude/hooks/<name>` — every script under `bin/hooks/`, marked
   executable; every block command is rewritten from `bin/hooks/<name>` to
-  `.claude/hooks/<name>`.
+  `"$CLAUDE_PROJECT_DIR"/.claude/hooks/<name>`, so a session started in a
+  subdirectory still finds it.
+
+What a row prints, the standing selection and the skill rules live in
+`common.py`, which every harness target shares.
 
 Two consistency checks run before anything is returned: every hook a block
 names is a script the emission carries (a refusal otherwise), and every
@@ -43,141 +52,29 @@ from __future__ import annotations
 import json
 import re
 
-from rulestore import query, render, terms
+from rulestore import query
 
-from . import EmitError, Emission, Target, blocks
+from . import EmitError, Emission, Target
+from .common import (
+    NO_MODEL_INVOCATION,
+    definition_ids,
+    first_sentence,
+    read_enforced,
+    render_rows,
+    skill_documents,
+    standing_selection,
+    topic_stem,
+)
 
 HARNESS = "claude-code"
-CLAUDE_MD_QUERY = {"role": "chief-of-staff", "session": "decision"}
+#: `CLAUDE.md` over this many lines is a warning with the count, not a
+#: refusal: the limit is guidance (the human's ruling, 2026-11-04).
 CLAUDE_MD_LIMIT = 200
 HOOKS_DIR = ".claude/hooks"
-BLOCK_HOOK_PREFIX = "bin/hooks/"
-
-#: A role whose slug carries one of these reads and reports; it does not edit.
-READ_ONLY_MARKERS = ("reviewer", "skeptic")
-READ_ONLY_TOOLS = ["Read", "Grep", "Glob"]
-WRITING_TOOLS = ["Read", "Grep", "Glob", "Edit", "Write", "Bash"]
-
-#: Process documents that are not skills: `project-setup` (the plan, §3a)
-#: and `named-queries`, which is this tool's own input, not a procedure.
-NOT_A_SKILL = ("project-setup", "named-queries")
-#: Skills the model may not invoke on its own (DEC-001280: the gate).
-NO_MODEL_INVOCATION = ("gate",)
-
-_SENTENCE_END_RE = re.compile(r"(?<=[.!?])\s")
-_HEADING_RE = re.compile(r"^#{1,6}\s+")
-
-
-# ------------------------------------------------------------- classification
-
-
-def enforce_of(row):
-    values = (row.keys or {}).get("enforce") or []
-    return values[0] if values else None
-
-
-class Enforced:
-    """One `enforce:` row read: its kind, its block fields, its prose."""
-
-    def __init__(self, row):
-        self.row = row
-        self.kind = enforce_of(row)
-        fields, prose = blocks.parse(row.body)
-        if fields is None:
-            raise EmitError(
-                "refused: %s carries enforce: %s and no fenced block" % (row.id, self.kind)
-            )
-        self.fields = fields
-        self.prose = prose
-
-    @property
-    def roles(self):
-        return self.row.keys.get("role") or []
-
-    # hook rows
-    @property
-    def event(self):
-        return self.fields.get("event")
-
-    @property
-    def matcher(self):
-        return self.fields.get("matcher")
-
-    @property
-    def command(self):
-        return self.fields.get("command")
-
-    @property
-    def agent_scoped(self):
-        return self.fields.get("scope") == "agent"
-
-    @property
-    def hook_name(self):
-        command = self.command or ""
-        if not command.startswith(BLOCK_HOOK_PREFIX):
-            raise EmitError("refused: %s's hook command does not invoke %s<name>: %r"
-                            % (self.row.id, BLOCK_HOOK_PREFIX, command))
-        return command[len(BLOCK_HOOK_PREFIX):].split()[0]
-
-    def emitted_command(self):
-        return HOOKS_DIR + "/" + self.command[len(BLOCK_HOOK_PREFIX):]
-
-    # deny rows
-    @property
-    def deny(self):
-        return blocks.as_list(self.fields.get("deny"))
-
-    # agent rows
-    @property
-    def field(self):
-        return self.fields.get("field")
-
-    # skill rows
-    @property
-    def skills(self):
-        return blocks.as_list(self.fields.get("skill"))
-
-
-def read_enforced(rows):
-    """`{id: Enforced}` over every `enforce:` rule, refusing a blockless one."""
-    found = {}
-    for row in rows:
-        if row.kind == "rule" and enforce_of(row):
-            found[row.id] = Enforced(row)
-    return found
-
-
-def text_of(row, enforced):
-    """What a harness text file prints for a row: a judgment row's body; an
-    `enforce: hook|deny` row's principle prose (nothing for a block-only
-    row); nothing for an `enforce: agent|skill` row."""
-    item = enforced.get(row.id)
-    if item is None:
-        return row.body
-    if item.kind in ("hook", "deny"):
-        return item.prose
-    return ""
-
-
-def render_rows(rows, all_rows, enforced):
-    """Rows as a bundle body: text per row, blank-line separated, definitions
-    last under `## Definitions` — `rulestore.render`'s form without its
-    header line."""
-    lines = []
-    for row in rows:
-        text = text_of(row, enforced)
-        if text:
-            lines.append(text)
-            lines.append("")
-    definitions = terms.pull_definitions(rows, all_rows)
-    if definitions:
-        lines.append("## Definitions")
-        lines.append("")
-        for definition in definitions:
-            names = definition.keys.get("term") or []
-            lines.append("**%s** — %s" % (names[0] if names else definition.id, definition.body))
-            lines.append("")
-    return "\n".join(lines).rstrip("\n") + "\n" if lines else ""
+#: How a hook command reaches its script: from the project root the harness
+#: names, not the session's working directory.
+HOOK_COMMAND_DIR = '"$CLAUDE_PROJECT_DIR"/' + HOOKS_DIR
+TOOLS = ["Read", "Grep", "Glob", "Edit", "Write", "Bash"]
 
 
 # ------------------------------------------------------------------ frontmatter
@@ -246,30 +143,9 @@ def group_hooks(items):
         else:
             entry = {"matcher": item.matcher, "hooks": []}
             entries.append(entry)
-        entry["hooks"].append({"type": "command", "command": item.emitted_command()})
+        entry["hooks"].append({"type": "command",
+                               "command": HOOK_COMMAND_DIR + "/" + item.hook_invocation})
     return grouped
-
-
-def first_sentence(body):
-    """The first sentence of a document's prose, headings skipped."""
-    paragraph = []
-    for line in body.split("\n"):
-        stripped = line.strip()
-        if not stripped or _HEADING_RE.match(stripped):
-            if paragraph:
-                break
-            continue
-        paragraph.append(stripped)
-    text = " ".join(paragraph)
-    if not text:
-        return ""
-    return _SENTENCE_END_RE.split(text, 1)[0].strip()
-
-
-def tools_for(role):
-    if any(marker in role for marker in READ_ONLY_MARKERS):
-        return list(READ_ONLY_TOOLS)
-    return list(WRITING_TOOLS)
 
 
 # ---------------------------------------------------------------------- target
@@ -292,38 +168,50 @@ class ClaudeCodeTarget(Target):
         emission = Emission()
         files = emission.files
 
-        # --- skills, first: agents and the consistency check name them
+        # --- the standing selection, and which of its rows spill into skills
+        standing = standing_selection(rules, inputs.sequences)
+        documents = skill_documents(processes)
+        stems = [stem for stem in inputs.sequences[1] if stem in dict(documents)]
+        spill = {}
+        in_claude_md = []
+        for row in standing:
+            topics = row.keys.get("topic") or []
+            stem = topic_stem(topics[0], stems) if topics else None
+            if stem is None:
+                in_claude_md.append(row)
+            else:
+                spill.setdefault(stem, []).append(row)
+
+        # --- CLAUDE.md
+        body = render_rows(in_claude_md, rows, enforced)
+        claude_md = "<!-- fiducial %s @ %s -->\n\n%s" % (inputs.repo, inputs.head, body)
+        count = claude_md.count("\n")
+        if count > CLAUDE_MD_LIMIT:
+            emission.notes.append(
+                "warning: CLAUDE.md is %d lines, over the %d-line guidance; emitted anyway"
+                % (count, CLAUDE_MD_LIMIT))
+        files["CLAUDE.md"] = claude_md
+        claude_md_rows = {row.id for row in in_claude_md}
+        claude_md_definitions = definition_ids(in_claude_md, rows)
+
+        # --- skills: agents and the consistency check name them
         skill_names = set()
-        for doc in processes:
-            stem = (doc.path or doc.id).rsplit("/", 1)[-1]
-            stem = stem[:-3] if stem.endswith(".md") else stem
-            if stem in NOT_A_SKILL:
-                continue
+        for stem, doc in documents:
             fields = [("name", stem), ("description", first_sentence(doc.body) or stem)]
             if stem in NO_MODEL_INVOCATION:
                 fields.append(("disable-model-invocation", True))
-            files[".claude/skills/%s/SKILL.md" % stem] = (
-                frontmatter(fields) + "\n" + doc.body.strip() + "\n"
-            )
+            text = frontmatter(fields) + "\n" + doc.body.strip() + "\n"
+            if stem in spill:
+                text += "\n## Rules\n\n" + render_rows(
+                    spill[stem], rows, enforced, skip_definitions=claude_md_definitions,
+                    definitions_heading="### Definitions")
+            files[".claude/skills/%s/SKILL.md" % stem] = text
             skill_names.add(stem)
 
         # --- hook scripts
         for name, text in sorted(inputs.hooks.items()):
             files["%s/%s" % (HOOKS_DIR, name)] = text
             emission.executable.add("%s/%s" % (HOOKS_DIR, name))
-
-        # --- CLAUDE.md
-        standing = [
-            row for row in query.select(rules, CLAUDE_MD_QUERY, inputs.sequences)
-            if not row.keys.get("paths")
-        ]
-        body = render_rows(standing, rows, enforced)
-        claude_md = "<!-- fiducial %s @ %s -->\n\n%s" % (inputs.repo, inputs.head, body)
-        count = claude_md.count("\n")
-        if count > CLAUDE_MD_LIMIT:
-            raise EmitError("refused: CLAUDE.md would be %d lines, over the %d-line limit"
-                            % (count, CLAUDE_MD_LIMIT))
-        files["CLAUDE.md"] = claude_md
 
         # --- .claude/rules/<topic>.md
         scoped = {}
@@ -373,7 +261,7 @@ class ClaudeCodeTarget(Target):
                 ("name", role),
                 ("description", description),
                 ("model", column[tier]),
-                ("tools", tools_for(role)),
+                ("tools", list(TOOLS)),
             ]
             provided = [skill for skill in skills if skill in skill_names]
             for skill in skills:
@@ -385,8 +273,11 @@ class ClaudeCodeTarget(Target):
                 fields.append(("skills", provided))
             if agent_hooks:
                 fields.append(("hooks", group_hooks(agent_hooks)))
+            # the agent also loads CLAUDE.md: its body carries only what that lacks
+            specific = [row for row in own if row.id not in claude_md_rows]
             files[".claude/agents/%s.md" % role] = (
-                frontmatter(fields) + "\n" + render_rows(own, rows, enforced)
+                frontmatter(fields) + "\n"
+                + render_rows(specific, rows, enforced, skip_definitions=claude_md_definitions)
             )
 
         # --- settings.json

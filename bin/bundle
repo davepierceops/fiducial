@@ -257,7 +257,7 @@ def cmd_emit(root, target_name, tokens, name, out):
             dest.chmod(dest.stat().st_mode | 0o111)
         print(str(dest))
     for note in emission.notes:
-        print("note: %s" % note, file=sys.stderr)
+        print(note if note.startswith("warning:") else "note: %s" % note, file=sys.stderr)
     return EXIT_OK
 
 

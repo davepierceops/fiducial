@@ -2,8 +2,8 @@
 (the plan, §3a; SPEC.md §7).
 
 Two things are held: `--emit bundle` writes the bytes `--where` writes for
-the same query (the header's timestamp aside), and a block-only hook row
-renders as its Human note, not orphan yaml (issue #399). The sync refusal is
+the same query (the header's timestamp aside), and an `enforce:` row
+prints its prose and never its block or Human note (issue #399). The sync refusal is
 dropped from `--emit` (DEC-000940): a dirty tree and a HEAD behind origin
 both emit.
 """
@@ -76,29 +76,42 @@ class TestEmitBundleRegression(EmitBundleTestCase):
         self.assertEqual(code, 0, err)
         self.assertRegex(self.only_file(self.out_emit).name, r"^fiducial-bundle-desk-")
 
-    def test_issue_399_a_block_only_hook_row_renders_as_its_human_note(self):
-        """R0720 has no prose, only a block: the writer bundle carries its
-        Human note and no yaml fence for it (#399)."""
+    def test_issue_399_a_block_only_hook_row_is_skipped_entirely(self):
+        """R0720 has no prose, only a block: the writer bundle carries
+        neither its yaml nor its Human note (bundles carry no Human content)."""
         code, _, err = self.bundle(
             "--emit", "bundle", "--where", "role=writer", "--out", str(self.out_emit)
         )
         self.assertEqual(code, 0, err)
         text = self.only_file(self.out_emit).read_text()
-        self.assertIn("After a `git push` it fetches the remote and prints the ref's SHA.", text)
+        self.assertNotIn("After a `git push` it fetches the remote", text)
         self.assertNotIn("bin/hooks/push-readback", text)
         self.assertNotIn("event: PostToolUse\nmatcher: Bash", text)
-        # a hook row with prose still prints its body as today, block included
-        self.assertIn("Append to `decisions/log.md`", text)
-        self.assertIn("command: bin/hooks/decision-log-append-only", text)
+        self.assertNotIn("## Human", text)
 
-    def test_where_renders_the_same_human_note_substitution(self):
-        """The substitution lives in the shared renderer, so `--where` and
+    def test_an_enforce_row_with_prose_prints_the_prose_and_not_the_block(self):
+        code, _, err = self.bundle(
+            "--emit", "bundle", "--where", "role=writer", "--out", str(self.out_emit)
+        )
+        self.assertEqual(code, 0, err)
+        text = self.only_file(self.out_emit).read_text()
+        self.assertIn("Append to `decisions/log.md`", text)
+        self.assertNotIn("bin/hooks/decision-log-append-only", text)
+        self.assertNotIn("```", text)
+        self.assertNotIn("deny:", text)
+        self.assertNotIn("field: model", text)
+        self.assertIn("Never let a secret value enter context.", text)
+        self.assertNotIn("Read(./.env)", text)
+
+    def test_where_renders_the_same_way(self):
+        """The rule lives in the shared renderer, so `--where` and
         `--emit bundle` cannot disagree on it."""
         code, _, err = self.bundle("--where", "role=writer", "--out", str(self.out_where))
         self.assertEqual(code, 0, err)
         text = self.only_file(self.out_where).read_text()
-        self.assertIn("After a `git push` it fetches the remote", text)
-        self.assertNotIn("bin/hooks/push-readback", text)
+        self.assertNotIn("After a `git push` it fetches the remote", text)
+        self.assertNotIn("bin/hooks/", text)
+        self.assertNotIn("```", text)
 
 
 class TestEmitDropsTheSyncRefusal(EmitBundleTestCase):

@@ -85,11 +85,14 @@ ADDING A TARGET
 1. Write `bin/rulestore/emit/<name>.py` with a `Target` subclass; set
    `name`, `takes_query`, and implement `emit`. Import only the standard
    library, `rulestore.query`, `rulestore.terms`, `rulestore.render` and
-   `rulestore.emit.blocks`; take no name from `rulestore.store` but `Row`.
+   `rulestore.emit.blocks` and `rulestore.emit.common` (the standing selection,
+   `Enforced`/`read_enforced`, `text_of`/`render_rows`, `first_sentence`,
+   `skill_documents`, `topic_stem`, `NOT_A_SKILL`, `NO_MODEL_INVOCATION`: what
+   every harness shares); take no name from `rulestore.store` but `Row`.
 2. Add the class to the tuple in `targets()` below.
 3. Add the harness's column to `tiers.json` — three model names.
 4. Add `bin/tests/test_emit_<name>.py` with a fixture for every row carrying
-   `enforce:` (`tests.helpers.emit_store_files` is the fixture store the
+   `enforce:` (`tests.emit_fixtures.emit_store_files` is the fixture store the
    claude-code tests use; reuse it) and a run of `bin/bundle --emit <name>`
    against a stand-in repository.
 

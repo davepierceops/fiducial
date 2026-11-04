@@ -28,6 +28,7 @@ from tests.helpers import (
     commit,
     make_store_repo,
     no_traceback,
+    rs_process,
     rs_row,
     run_bundle,
     temp_dir,
@@ -35,6 +36,7 @@ from tests.helpers import (
 )
 
 HOOKS_SRC = BIN_DIR / "hooks"
+HOOKS_PREFIX = '"$CLAUDE_PROJECT_DIR"/.claude/hooks/'
 FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
 
 
@@ -167,31 +169,34 @@ class TestEmittedTree(ClaudeCodeTestCase):
         hooks = json.loads(self.read(".claude/settings.json"))["hooks"]
         pre = {e["matcher"]: [h["command"] for h in e["hooks"]] for e in hooks["PreToolUse"]}
         post = {e["matcher"]: [h["command"] for h in e["hooks"]] for e in hooks["PostToolUse"]}
+        d = HOOKS_PREFIX
         self.assertEqual(sorted(pre["Edit|Write"]), [
-            ".claude/hooks/decision-log-append-only",
-            ".claude/hooks/intake-branch-guard",
-            ".claude/hooks/review-artifact-immutable",
+            d + "decision-log-append-only",
+            d + "intake-branch-guard",
+            d + "review-artifact-immutable",
         ])
         self.assertEqual(sorted(post["Edit|Write"]), [
-            ".claude/hooks/store-lint --check citations",
-            ".claude/hooks/store-lint --check generated-filename",
-            ".claude/hooks/store-lint --check verdict-lines",
+            d + "store-lint --check citations",
+            d + "store-lint --check generated-filename",
+            d + "store-lint --check verdict-lines",
         ])
-        self.assertEqual(post["Bash"], [".claude/hooks/push-readback"])
+        self.assertEqual(post["Bash"], [d + "push-readback"])
         flat = json.dumps(hooks)
         self.assertNotIn("lane-guard", flat)
         self.assertNotIn("bin/hooks/", flat)
         for entry in hooks["PreToolUse"] + hooks["PostToolUse"]:
             for hook in entry["hooks"]:
                 self.assertEqual(hook["type"], "command")
-                script = hook["command"].split()[0]
+                # F-1: from the project root the harness names, not the cwd
+                self.assertTrue(hook["command"].startswith(HOOKS_PREFIX), hook["command"])
+                script = hook["command"].split()[0][len('"$CLAUDE_PROJECT_DIR"/'):]
                 self.assertTrue((self.out / script).is_file(), script)
 
     def test_every_agent_scoped_hook_row_lands_in_its_roles_agent_file(self):
         architect, _ = frontmatter_of(self.read(".claude/agents/architect-agent.md"))
         designer, _ = frontmatter_of(self.read(".claude/agents/test-designer-agent.md"))
-        self.assertIn('command: ".claude/hooks/lane-guard --lane specs"', architect)
-        self.assertIn('command: ".claude/hooks/lane-guard --lane tests"', designer)
+        self.assertIn("command: " + json.dumps(HOOKS_PREFIX + "lane-guard --lane specs"), architect)
+        self.assertIn("command: " + json.dumps(HOOKS_PREFIX + "lane-guard --lane tests"), designer)
         self.assertIn("hooks:\n  PreToolUse:\n    - matcher: \"Edit|Write\"", designer)
         self.assertIn("type: command", designer)
         coder, _ = frontmatter_of(self.read(".claude/agents/coder-agent.md"))
@@ -224,13 +229,11 @@ class TestEmittedTree(ClaudeCodeTestCase):
         architect, _ = frontmatter_of(self.read(".claude/agents/architect-agent.md"))
         self.assertEqual(field(architect, "description"), "Fiducial's architect-agent role.")
 
-    def test_agent_tools_are_read_only_for_reviewers_and_skeptics(self):
+    def test_every_agent_gets_the_same_tools(self):
+        """A role's lane is a `scope: agent` lane-guard row, not a tool list."""
         for role in ("reviewer-agent", "skeptic-risk-agent", "spec-reviewer-agent",
-                     "context-quality-reviewer"):
-            front, _ = frontmatter_of(self.read(".claude/agents/%s.md" % role))
-            self.assertEqual(field(front, "tools"), "[Read, Grep, Glob]", role)
-        for role in ("coder-agent", "test-designer-agent", "architect-agent",
-                     "release-manager-agent"):
+                     "context-quality-reviewer", "coder-agent", "test-designer-agent",
+                     "architect-agent", "release-manager-agent"):
             front, _ = frontmatter_of(self.read(".claude/agents/%s.md" % role))
             self.assertEqual(field(front, "tools"), "[Read, Grep, Glob, Edit, Write, Bash]", role)
 
@@ -252,11 +255,23 @@ class TestEmittedTree(ClaudeCodeTestCase):
         self.assertNotIn("lane-guard", body)
         self.assertNotIn("Give a unit's implementation", body, "a skill row is the skill's")
         self.assertNotIn("A test asserts one behaviour", body, "a paths: row is .claude/rules/'")
-        self.assertIn("Propose; do not decide.", body)
         _, coder_body = frontmatter_of(self.read(".claude/agents/coder-agent.md"))
         self.assertIn("Run the red gate before any implementation.", coder_body)
-        self.assertIn("**tranche** —", self.read(".claude/agents/coder-agent.md")
-                      if "tranche" in coder_body else "**tranche** —")
+
+    def test_agent_body_subtracts_what_claude_md_already_carries(self):
+        """F-4: the subagent loads CLAUDE.md too; its body is what that lacks."""
+        claude_md = self.read("CLAUDE.md")
+        self.assertIn("Propose; do not decide.", claude_md)
+        self.assertIn("**tranche** —", claude_md)
+        for role in ("coder-agent", "reviewer-agent", "test-designer-agent"):
+            _, body = frontmatter_of(self.read(".claude/agents/%s.md" % role))
+            self.assertNotIn("Propose; do not decide.", body, role)
+            self.assertNotIn("**tranche**", body, role)
+        _, reviewer = frontmatter_of(self.read(".claude/agents/reviewer-agent.md"))
+        self.assertIn("Read the whole delta before the first finding.", reviewer)
+        # a hook row the standing selection carries is not repeated either
+        _, designer = frontmatter_of(self.read(".claude/agents/test-designer-agent.md"))
+        self.assertNotIn("Never let a secret value enter context.", designer)
 
     def test_rules_file_carries_the_paths_rows_under_their_topic(self):
         front, body = frontmatter_of(self.read(".claude/rules/verification.md"))
@@ -319,17 +334,21 @@ class TestClaudeCodeRefusals(ClaudeCodeTestCase):
         code, out, err = self.emit("--where", "role=writer")
         self.assert_refused(code, out, err)
 
-    def test_claude_md_over_200_lines_is_refused_with_the_count(self):
+    def test_claude_md_over_200_lines_warns_with_the_count_and_still_emits(self):
         long_body = "\n\n".join("Line %d of a long standing rule." % i for i in range(120))
         write(self.clone, "rules/R0050.md", rs_row(
             "R0050", long_body, order=15, topic=["core"], role=["chief-of-staff"],
             session=["decision"], corpus=["software"], verb="require", term=None))
         commit(self.clone, "store: a long row", env=self.env)
         code, out, err = self.emit()
-        self.assert_refused(code, out, err)
-        match = re.search(r"CLAUDE\.md would be (\d+) lines, over the 200-line limit", err)
+        self.assertEqual(code, 0, err)
+        self.assertTrue(no_traceback(out, err), err)
+        match = re.search(r"^warning: CLAUDE\.md is (\d+) lines, over the 200-line guidance",
+                          err, re.MULTILINE)
         self.assertIsNotNone(match, err)
         self.assertGreater(int(match.group(1)), 200)
+        self.assertEqual(int(match.group(1)), self.read("CLAUDE.md").count("\n"))
+        self.assertIn("Line 119 of a long standing rule.", self.read("CLAUDE.md"))
 
     def test_an_enforce_row_without_a_block_is_refused(self):
         write(self.clone, "rules/R0051.md", rs_row(
@@ -361,26 +380,80 @@ class TestClaudeCodeWithoutPathsRows(ClaudeCodeTestCase):
         self.assertEqual([f for f in self.emitted() if f.startswith(".claude/rules/")], [])
 
 
-class TestClaudeCodeOverTheRealStore(unittest.TestCase):
-    """The plan, §3a acceptance: over this repository's own store, the
-    emitted CLAUDE.md is under 200 lines or the emitter refused with the
-    count. Either way, no traceback and nothing half-written."""
+class TestClaudeCodeSpill(ClaudeCodeTestCase):
+    """A topic whose process document is emitted as a skill has its standing
+    rows appended to that SKILL.md and omitted from CLAUDE.md; a topic with
+    no document stays."""
 
-    def test_the_real_store_emits_under_the_limit_or_refuses_with_the_count(self):
+    files = dict(emit_store_files())
+    files["process/decision-log.md"] = rs_process(
+        "# Process: Decision Log\n\nHow entries are written.\n",
+        order=30, topic=["decision-log"], role=["chief-of-staff"], session=["decision"],
+        corpus=["software"])
+    files["process/named-queries.md"] = files["process/named-queries.md"].replace(
+        "```text\ngate\nrelease\n```", "```text\ngate\nrelease\ndecision-log\n```")
+
+    def setUp(self):
+        super().setUp()
+        self.code, self.stdout, self.stderr = self.emit()
+        self.assertEqual(self.code, 0, self.stderr)
+
+    def test_the_topic_with_a_document_moves_to_the_skill(self):
+        # R0583's topic is decision-log-policy; the stem is decision-log
+        skill = self.read(".claude/skills/decision-log/SKILL.md")
+        self.assertIn("How entries are written.", skill)
+        self.assertIn("\n## Rules\n\n", skill)
+        rules = skill.split("\n## Rules\n\n", 1)[1]
+        self.assertIn("Append to `decisions/log.md`", rules)
+        self.assertNotIn("```", rules)
+        self.assertNotIn("Append to `decisions/log.md`", self.read("CLAUDE.md"))
+
+    def test_a_topic_with_no_document_stays_in_claude_md(self):
+        claude_md = self.read("CLAUDE.md")
+        self.assertIn("Propose; do not decide.", claude_md)  # core
+        self.assertIn("Never let a secret value enter context.", claude_md)
+
+    def test_a_skill_with_no_rows_gets_no_rules_heading(self):
+        self.assertNotIn("## Rules", self.read(".claude/skills/release/SKILL.md"))
+        self.assertNotIn("## Rules", self.read(".claude/skills/gate/SKILL.md"))
+
+    def test_the_stem_must_be_one_named_queries_lists(self):
+        from rulestore.emit.common import topic_stem
+        stems = ["decision-log", "review-artifact", "change-flow", "voice"]
+        self.assertEqual(topic_stem("decision-log-policy", stems), "decision-log")
+        self.assertEqual(topic_stem("review-artifact-schema", stems), "review-artifact")
+        self.assertEqual(topic_stem("change-flow", stems), "change-flow")
+        self.assertIsNone(topic_stem("core", stems))
+        self.assertIsNone(topic_stem("voices", stems))
+        self.assertIsNone(topic_stem("decision-layer", stems))
+
+
+class TestClaudeCodeWithoutASpillingDocument(ClaudeCodeTestCase):
+    def test_without_the_document_the_rows_stay_in_claude_md(self):
+        code, _, err = self.emit()
+        self.assertEqual(code, 0, err)
+        self.assertIn("Append to `decisions/log.md`", self.read("CLAUDE.md"))
+
+
+class TestClaudeCodeOverTheRealStore(unittest.TestCase):
+    """The plan, §3a acceptance: over this repository's own store the
+    emission succeeds, CLAUDE.md warns with its count when over the 200-line
+    guidance, and the topics that have a skill live in that skill."""
+
+    def test_the_real_store_emits_and_spills_topics_into_their_skills(self):
         out = temp_dir(self, "emit-real-")
         code, stdout, stderr = run_bundle("--emit", "claude-code", "--out", str(out),
                                           cwd=BIN_DIR.parent, env=base_env())
         self.assertTrue(no_traceback(stdout, stderr), stderr)
-        if code == 0:
-            self.assertLess(len((out / "CLAUDE.md").read_text().splitlines()), 200)
-            self.assertTrue((out / ".claude/settings.json").is_file())
+        self.assertEqual(code, 0, stderr)
+        count = (out / "CLAUDE.md").read_text().count("\n")
+        if count > 200:
+            self.assertIn("warning: CLAUDE.md is %d lines" % count, stderr)
         else:
-            self.assertEqual(code, 2, stderr)
-            match = re.search(r"CLAUDE\.md would be (\d+) lines, over the 200-line limit",
-                              stderr)
-            self.assertIsNotNone(match, stderr)
-            self.assertGreater(int(match.group(1)), 200)
-            self.assertEqual(sorted(out.iterdir()), [])
+            self.assertNotIn("warning: CLAUDE.md", stderr)
+        self.assertTrue((out / ".claude/settings.json").is_file())
+        retro = (out / ".claude/skills/retro/SKILL.md").read_text()
+        self.assertIn("\n## Rules\n", retro)
 
 
 if __name__ == "__main__":
