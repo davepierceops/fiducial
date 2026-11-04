@@ -29,9 +29,10 @@ Each meaningful change [R0465] runs these in order, by subagents but the human.
 4. **Review.** Quality, skepticism and continuity passes, each its own verdict
    [R0492] under one overall verdict [R1414]; a planned pass that did not run
    is recorded with why [R1617]. A non-blocking finding files-and-lands unless
-   the human raises it [R1614]; `changes-required` reopens it for one more read.
+   the human raises it [R1614]; `changes-required` means the delta has not closed; one more read over the
+   diff since then closes it.
 5. **Merge.** Every pull request merges [R0570], with an agent review on each
-   [R0065]. No human gate fires here; the gate is the release.
+   [R0065].
 6. **Release.** A routine change flows to release on its evidence under standing
    authorization [R0535]. A consequential change [R0535, R0536] goes through the
    gate skill — its `human-gate` issue, the human's explicit go [R0534, R0562,
