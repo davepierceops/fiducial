@@ -1,3 +1,4 @@
+<!-- retired 2026-11-04 under DEC-001160: the directive package retires; kept as history, read by nothing -->
 # Directive Invariants
 
 The regions a generated directive skeleton is assembled from, and the strings
