@@ -1159,3 +1159,29 @@ Context: Written in the 2026-11-04 session, reviewed once by a subagent that did
 Date: 2026-11-04
 Decision: Package 1a of the subtraction plan is merged at 699a0fa (PR #397, branch tip a270653): 75 rows retired to `rules/retired/` with `retired:` lines naming a row id or a DEC id, `enforce:` on 34 rows (hook 9, deny 3, agent 5, skill 17), 20 rows re-topiced (`directive-invariants` survivors to `chief-of-staff`, `convergence` to `change-flow`, `trd` and `prd-template` to the new topic `spec`), the store admitting `enforce:` with four values, and `bin/tests/reconcile_sort.py` as the proof. Review artifact: `reviews/pkg-1a-store-moves-read-20261104T185942Z.md` — ready on re-read.
 Context: The two DEC-001310 merges with no named survivor (R1533+R0472+R0759; R1513+R1542) were escalated by the coder and pass to package 1b, whose blast radius widens to move the losers.
+
+## DEC-001500 — Package 2 landed: the process documents
+Date: 2026-11-04
+Decision: Package 2 of the subtraction plan is merged at b4f1909 (PR #402, branch tip 26f4df7): three documents retired to `docs/history/`, `process/spec-template.md` written from the two templates, `change-flow.md` rewritten around the subagent model at 42 lines, retros landing themselves, the decision-log and review-artifact rules as DEC-001260 and DEC-001450 state, project-setup's Free-tier fallback (closes #389), `spec` and `spec-template` sequenced before `change-flow`. Review artifact: `reviews/pkg-2-process-docs-read-20261104T224509Z.md`.
+Context: One read found the gate placed at the merge; three amendments; re-read ready-with-findings.
+
+## DEC-001510 — A planned review pass that did not run is recorded as not-run
+Date: 2026-11-04
+Decision: R1414 gains a fourth pass verdict, `not-run`, more severe than `ready-with-findings` and less than `changes-required`; a pass that was planned and did not run carries `Verdict (<pass>): not-run` and one line saying why (R1617), and the overall verdict is still the most severe pass verdict on that order. Landed in package 2.
+Context: R1617 (DEC-001440) and R1414 conflicted as written; the store-lint hook of DEC-001250 would have refused the first artifact recording an unrun pass.
+
+## DEC-001520 — process/project-setup.md renders to the Chief of Staff
+Date: 2026-11-04
+Decision: `process/project-setup.md` carries `role: [chief-of-staff]` and renders into that bundle. The 2026-09-06 choice to drop its role key (commit 85f6e43, recorded in no entry) is reversed: under the subagent model the Chief of Staff runs the adopter, whose first act is the document's preconditions.
+Context: Issue #389's first item — the document said the Chief of Staff confirms the preconditions but never rendered to him.
+
+## DEC-001530 — Packages 3b and 4 go to a Codex session; package 6 splits
+Date: 2026-11-04
+Decision: Packages 3b and 4 of the subtraction plan are handed together, as one execution block, to a Codex session on the human's machine, which orchestrates both with its own subagents — a coder and a reviewer that did not write the work per package — and opens one pull request per package. Package 6 splits: 6a (remove the four tools and `bin/aimeta/`, archive the root residue and the old specs, reconcile `specs/rule-store.md` to the template per DEC-001410) depends on 1 and 3a and runs now in this session at the solid tier; 6b (self-adoption, README) depends on 5. Packages 5 and 6b are routed when 4 lands. The package 7 close read stays in this session at the frontier tier, gated by the human. DEC-001460's routing is superseded to that extent and stands otherwise.
+Context: The subtraction's first day consumed half the human's weekly Anthropic usage, every subagent having run at the frontier tier by an unset default; he is cash-constrained. The execution block is DEC-001130's secondary path.
+Supersedes: DEC-001460
+
+## DEC-001540 — Subagent dispatch names its model tier; the frontier tier is gated
+Date: 2026-11-04
+Decision: Every subagent the decision session dispatches names its model tier explicitly — solid for coding and mechanical review, frontier only where the plan names it — and a frontier dispatch the plan does not name is asked of the human first, yes/no, each time. Briefs point at files in the tree rather than restating rulings; a re-read over an amendment reads only the diff; a package whose findings are all non-blocking lands without a re-read (DEC-001000).
+Context: R0259 already says it; it was not followed because the dispatch tool inherits the session's model when no tier is set. Ruled by the human 2026-11-04.

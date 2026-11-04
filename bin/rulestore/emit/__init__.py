@@ -77,7 +77,14 @@ ends in a fenced yaml block that `blocks.parse` reads (see that module):
 Process documents (`row.kind == "process"`) are the skills: one `SKILL.md`
 per document, named by its file stem, described by its first sentence; the
 `gate` document carries `disable-model-invocation: true`;
-`project-setup` is not a skill (the plan, §3a).
+`project-setup` and `named-queries` are not skills (`common.NOT_A_SKILL`; the
+plan, §3a). Two further conventions a target should know: a note the target
+returns starting `warning:` is printed by the CLI without the `note:` prefix;
+and the spill rule (DEC, 2026-11-04) — a standing row whose first topic is a
+process-document stem leaves the standing file and is appended under `## Rules`
+in that document's skill — is implemented inline in `claude_code.emit`; a
+harness with no skill directory keeps those rows in its standing file, and a
+target that needs the grouping may lift it into `common`.
 
 ADDING A TARGET
 ---------------
