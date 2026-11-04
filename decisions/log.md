@@ -1119,3 +1119,33 @@ Context: R0264's own criterion: a rule a tool enforces is the tool's.
 Date: 2026-11-03
 Decision: R0462, R0065, R0487 and R0488 stay. R0065 widens from code review to review, so a reviewer that did not write a plan reads the plan before dispatch.
 Context: The harness provides the means of separation, not the obligation to use it; the 2026-11-02 retro's evidence 11 is the case. R0038 and R0493 stay as the sort proposed; the one-classification question is #393.
+
+## DEC-001400 — enforce: takes four values
+Date: 2026-11-04
+Decision: A row's `enforce:` field takes `hook`, `deny`, `agent` or `skill`; `SPEC.md` §7 is amended from its three values, since an agent-field row and a skill-step row also leave the store with the generator still reading them.
+Context: The plan's review (2026-11-04, F-2) found the spec and the sort disagreeing on the value set.
+
+## DEC-001410 — The two live specs reconcile into one specs/rule-store.md
+Date: 2026-11-04
+Decision: `specs/rule-store.md` and `specs/bundle-system.md` are reconciled in package 6 of the subtraction plan into one `specs/rule-store.md` in the spec-template form, the generator as its design section.
+Context: The store and the generator are one system once the emitters land, and a superseded PRD left live is drift.
+
+## DEC-001420 — The Codex emitter is built by a Codex session
+Date: 2026-11-04
+Decision: `SPEC.md` open question 4 resolves: the Codex emitter is in this revision as package 3b, handed to a Codex session on the human's machine as an execution block written from package 3a's landed interface, and live-verified there — the session emits into a stand-in repo, starts itself in it, and reports what loaded.
+Context: A Codex session is the one executor that can verify a Codex emitter by loading its own output; this is DEC-001130's secondary path in use.
+
+## DEC-001430 — Search current documentation before diagnosing an external failure
+Date: 2026-11-04
+Decision: A new row in `core`, every software role, decision and execution: on a failure from an external system, search current documentation before offering a mechanism from memory, and prefer a probe that distinguishes hypotheses over a diagnosis. Package 1b lands it.
+Context: The 2026-11-02 retro's evidence 16 and 17 — two wrong mechanisms asserted from training in one night, each settled by one search or one probe.
+
+## DEC-001440 — A review pass that did not run is recorded, never read as clean
+Date: 2026-11-04
+Decision: A new row in `review-artifact-schema`, the reviewer roles and the Chief of Staff: a review artifact names every pass that was planned, and a pass that did not run — a subagent killed by a usage cap, say — is recorded with why, so a missing verdict is never read as a clean one. Package 1b lands it.
+Context: The 2026-11-02 retro's evidence 12 — the env-roots skeptic pass never ran and only the retro noticed.
+
+## DEC-001450 — A review artifact over a delta is named by the delta's branch slug
+Date: 2026-11-04
+Decision: A review artifact over a delta takes its name from the delta's branch slug. Package 2 applies it to `process/review-artifact.md`.
+Context: Ruled 2026-09-16 when the filename rule had no form for a two-document delta; carried in the 09-17 baton and never recorded until the plan's review found the plan citing it.

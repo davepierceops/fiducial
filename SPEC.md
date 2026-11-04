@@ -1,6 +1,6 @@
 ---
 audience: [human]
-status: approved 2026-11-03
+status: approved 2026-11-03; §7 amended 2026-11-04 (DEC-001400)
 ---
 
 # SPEC: fiducial, the subtraction
@@ -174,8 +174,8 @@ shorter), `decomposition` (plan mode and the plan reviewer replace it),
 table: id, topic, current body, proposed sort, replacement if any. The human
 rules on the sort by class, not by row (R1448); the table is the evidence.
 
-**The store's new field.** `enforce: <hook|deny|none>` on a row; the generator
-reads it. A row with `enforce: hook` carries the hook's event and command in a
+**The store's new field.** `enforce: <hook|deny|agent|skill>` on a row
+(amended from three values by DEC-001400); the generator reads it. A row with `enforce: hook` carries the hook's event and command in a
 fenced block; the generator emits it into `.claude/settings.json` and refuses
 a row whose block is missing.
 
