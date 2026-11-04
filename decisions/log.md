@@ -952,3 +952,39 @@ Date: 2026-09-29
 Decision: The Chief of Staff begins with the human's requested work; R0880 no longer requires a project-status sweep on invocation, and that assessment moves to the separately invoked Project Status skill. A file under retros/ that is untracked in the clone still lands with the next flush package under R1613, and R1244 still requires that a retro never reads from or writes to a remote.
 Context: the human chose this single change as the starting point for production engineering work with Fiducial; further role changes will be informed by use and session retros rather than prescribed in advance. This replaces DEC-000990's startup-check requirement while retaining its retrospective handling obligations.
 Supersedes: DEC-000990
+
+## DEC-001070 — The decision session runs its executors; the human is a gate
+Date: 2026-11-03
+Decision: Fiducial's standing model is that the decision session runs execution and review as subagents in the harness it is in; the human receives triage lines, pull requests, and gate requests, and carries nothing between sessions. A command block, execution block, or baton is handed only where a subagent cannot reach.
+Context: The 2026-11-02 Illuminait session ran this way under a one-night amendment (its DEC-000010) and the retro's evidence supported making it standing. The courier model — the human as message bus — was fiducial's assumption from June.
+
+## DEC-001080 — Orchestration leaves fiducial; the sort test
+Date: 2026-11-03
+Decision: Fiducial stops carrying orchestration. Every row is sorted by one test: if a harness (Claude Code, Claude, Codex) can enforce it deterministically it leaves the store — as a hook, a deny rule, an agent file, a skill, or nothing; if it requires judgment it stays. The sort is recorded per row; retired rows go to `rules/retired/` naming their successor.
+Context: Fiducial was built to understand the harness problem space. The lesson it taught is that orchestration belongs in deterministic code around the model, and the harnesses now carry that code.
+
+## DEC-001090 — One SPEC.md; Anthropic's vocabulary where it names the same thing
+Date: 2026-11-03
+Decision: The PRD and TRD collapse into one `SPEC.md` per project. Fiducial adopts Anthropic's terms where the two name the same thing — spec, definition of done, approve, reviewer, a check to run, subagent, hook, deny rule, skill, agent — and keeps its own where Anthropic has none: evidence class, verification boundary, consequential class, decision log, retro.
+Context: Anthropic's best-practices document (read 2026-11-03) names exactly one document, `SPEC.md`, and no architecture document; OpenAI's Codex documentation names none.
+
+## DEC-001100 — The store stays the source; the adopter reconciles into repos
+Date: 2026-11-03
+Decision: The row store remains the source of truth (provisionally — revisited if the generator rework proves costly). The generator emits per-harness shapes, and an adopter skill reconciles them into a repo that already has harness files: inventory what exists, read for contradictions, create what is missing, append what is wanted; re-runnable.
+Context: A repo being adopted may already carry `CLAUDE.md`, `.claude/settings.json`, `AGENTS.md`, `.codex/` and the rest; fiducial must merge into it, not overwrite it. This replaces the thin-pointer adapter model.
+Supersedes: DEC-000910
+
+## DEC-001110 — The writing corpus is out of scope; writing roles stay standalone bundles
+Date: 2026-11-03
+Decision: The writer, copy-editor and critic rows and their topics, `voice.md`, `outline.md` and the public-prose criteria are unchanged by this revision, and those roles keep a standalone bundle form invoked by name.
+Context: The writing roles are used differently — loaded by name as a context, not reconciled into a repo.
+
+## DEC-001120 — This revision runs under the new model
+Date: 2026-11-03
+Decision: The revision is specified in one `SPEC.md` the human approves; the decision session then runs execution and review as subagents and hands the human pull requests and gates. Every ruling still lands here as a DEC entry.
+Context: The first use of the model on fiducial itself, rather than intake deltas carried as directives.
+
+## DEC-001130 — Command block, execution block and baton stay, pruned
+Date: 2026-11-03
+Decision: Three human-facing forms survive the sort because a harness cannot compute them: the command block (shell the human runs as given), the execution block (the secondary path for an executor the decision session cannot spawn), and the baton (only what a successor cannot recompute from the tree). The directive package — route-and-model line, FIRST ACT, worktree choreography, the M1–M8 lint — retires.
+Context: The human still applies Terraform and pushes from the machine holding the credential, and still ends long chat sessions by choice; those crossings need a form.
