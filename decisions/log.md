@@ -1149,3 +1149,8 @@ Context: The 2026-11-02 retro's evidence 12 — the env-roots skeptic pass never
 Date: 2026-11-04
 Decision: A review artifact over a delta takes its name from the delta's branch slug. Package 2 applies it to `process/review-artifact.md`.
 Context: Ruled 2026-09-16 when the filename rule had no form for a two-document delta; carried in the 09-17 baton and never recorded until the plan's review found the plan citing it.
+
+## DEC-001460 — The subtraction plan is approved
+Date: 2026-11-04
+Decision: The human approves `docs/plans/subtraction-plan-20261104.md` at 28366d488f20f01093df1339a109600e066e87c6 (merge of PR #395) as the plan for the revision SPEC.md governs. Packages dispatch in its order from 1a; each package's DEC entries are appended at merge.
+Context: Written in the 2026-11-04 session, reviewed once by a subagent that did not write it, revised, and approved by the human's merge.
