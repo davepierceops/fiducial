@@ -43,4 +43,6 @@ Approved R0110 wording:
 
 - R0462: Dave answered “y” to: “Required reviews must be performed by a reviewer who did not author the work.” The verb and condition metadata now match the required-review obligation; role/session/corpus scopes are unchanged. The Human note clarifies that self-checking does not replace independent review. Approval authority remains governed by R0166.
 
+- R0460: Dave answered “agreed” to retiring this separate prohibition into R0110 and adding the positive obligation: “Keep verification aligned with approved requirements, and justify changes to checks against those requirements.” The sentence is prepended to the approved consolidated verification wording. The original R0460 is archived with retired: R0110. This preserves verification against requirements while allowing justified corrections to checks. Dave also stated a preference for eliminating “never”/“don’t” rules; assess the useful positive obligation rather than preserving a prohibition by default.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
