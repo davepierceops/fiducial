@@ -124,7 +124,7 @@ class TestCliSurface(unittest.TestCase):
 
     def test_x4_every_cli_fails_cleanly_outside_a_git_repository(self):
         """AC-X-4: outside a repo, exit 2 or 3 with no traceback."""
-        outside = temp_dir(self, "aimeta-not-a-repo-")
+        outside = temp_dir(self, "fiducial-not-a-repo-")
         for name in CLI_NAMES:
             with self.subTest(cli=name):
                 rc, out, err = run_cli(
@@ -280,7 +280,7 @@ class TestExplicitEncoding(unittest.TestCase):
 
 class TestWriteContainment(unittest.TestCase):
     def setUp(self):
-        self.sandbox = temp_dir(self, "aimeta-sandbox-")
+        self.sandbox = temp_dir(self, "fiducial-sandbox-")
         self.repo = make_repo(self, name="proj", parent=self.sandbox)
         self.home = make_home(self, parent=self.sandbox, name="home")
         self.env = base_env(methodology_home=self.home)
