@@ -161,8 +161,9 @@ with the target interface written so a further target plugs in as one module
 
 - `claude-code`: `CLAUDE.md` from the rows keyed to the chief-of-staff role and
   the decision session — the standing context, nothing the model can read
-  from the repo; if the selection exceeds 200 lines the emitter refuses and
-  reports the count, and the human decides what spills to `.claude/rules/`.
+  from the repo. Reconciled by DEC-001640: over 200 lines it warns and emits;
+  standing topics with matching emitted skills spill into those skills.
+  Further evidence-based pruning remains #403.
   `.claude/rules/<topic>.md` for rows carrying `paths:` (the field is
   admitted; none carry it yet). `.claude/agents/<role>.md` with `description:`
   and `model:` from the `enforce: agent` rows, `tools:` from the role's rows,
@@ -190,8 +191,8 @@ emitted file names exists.
 R0091, R1156, R1605, R0196, R1414, R0934, R0720), the five agent rows, the
 skill rows — and a stub process document for the skill emitter. Every hook
 and deny, emitted into a stand-in repo, blocks what its row says and nothing
-else, exercised by a test. The emitted `CLAUDE.md` is under 200 lines or the
-emitter refused. The target interface is documented in the module docstring
+else, exercised by a test. The emitted `CLAUDE.md` reports a warning above
+200 lines and still emits (DEC-001640, ratifying the package 3a amendment). The target interface is documented in the module docstring
 well enough that 3b needs nothing from this conversation. The `/context`
 live check is not this package's: it is a command block to the human in
 package 6.

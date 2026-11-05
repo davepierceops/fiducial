@@ -1,6 +1,6 @@
 ---
 audience: [human]
-status: approved 2026-11-03; §7 amended 2026-11-04 (DEC-001400)
+status: approved 2026-11-03; reconciled 2026-11-04 under DEC-001610–001650; close approval pending
 ---
 
 # SPEC: fiducial, the subtraction
@@ -58,7 +58,8 @@ retros, and the context each role needs.
    the spec and reports gaps that affect correctness; a skeptic pass carries its
    own verdict. Findings file-and-land unless the human raises one to blocking.
 4. **Record.** Every ruling the human makes lands in `decisions/log.md`; a retro
-   is written when the human asks and never touches a remote.
+   is written when the human asks and lands itself through the retro procedure
+   (DEC-001260).
 
 ## 4. Goals and non-goals
 
@@ -93,7 +94,7 @@ retros, and the context each role needs.
   deny rule, skill, agent. Fiducial keeps its own words where Anthropic has
   none: evidence class, verification boundary, consequential class, decision
   log, retro.
-- The store stays the source of truth (provisional). The generator emits
+- The store stays the source of truth (confirmed by DEC-001630). The generator emits
   per-harness shapes: `CLAUDE.md` plus `.claude/{rules,agents,skills,settings}`
   for Claude Code; `AGENTS.md` for Codex; a project file for Claude chat. The
   store can mark a row as enforced rather than advised, and the generator
@@ -116,8 +117,9 @@ retros, and the context each role needs.
   process document and no process step restated as a row.
 - **Portability:** the same store serves three harnesses; a harness-specific
   fact lives in the generator's emitter for that harness, never in a row.
-- **Usability:** `CLAUDE.md` emitted for a repo stays under 200 lines; only
-  what the model cannot find by reading the repo.
+- **Usability:** 200 emitted `CLAUDE.md` lines are guidance: exceeding it warns
+  and still emits. Standing topics with matching emitted skills spill there;
+  further pruning is the later evidence-based work in #403 (DEC-001640).
 - Performance, reliability, scalability, security, observability, compliance:
   `N/A` — this is a text repository with a small Python tool.
 
@@ -126,7 +128,8 @@ retros, and the context each role needs.
 - The writing corpus: writer, copy-editor, critic rows and their topics,
   `voice.md`, `outline.md`, the public-prose criteria. Unchanged.
 - A new harness. Fiducial does not orchestrate; the harness does.
-- Retiring the dated bundle release. Open question 1.
+- Retiring the dated bundle downloads: all twelve plus README.md remain;
+  software adoption uses tagged source (DEC-001610).
 
 ## 5. User outcomes and measurement
 
@@ -211,16 +214,17 @@ tests.
 - The adopter writing into a repo the human does not own is consequential;
   its first real run is on a repo the human controls.
 
-## 9. Open questions
+## 9. Open questions — resolved
 
-1. Does the dated bundle release (`v<YYYY>.<MM>.<DD>`, twelve assets) survive
-   for the software roles, or does the adopter read a tagged store directly?
-   Resolved by: the first adopter run — whether it wants a tag or a file.
-2. Where does the Claude chat Chief of Staff load from once bundles are a
-   writing-role form — a project file emitted by the generator, or the same
-   bundle? Resolved by: trying both in the next chat session.
-3. Does the store stay the source of truth once the generator has three
-   emitters? Provisional yes (2026-11-03). Resolved by: the cost of the
-   generator rework, observed.
-4. Is the Codex emitter in this revision or the next? Resolved by: whether a
-   Codex session is planned before the next revision.
+1. **Software adoption and release form:** tagged repository source supplies
+   the adopter; the release retains twelve role bundles plus README.md and
+   requires no harness archives (DEC-001610). Package 5 consumed a pinned
+   source checkout, not downloaded bundles.
+2. **Claude-chat Chief of Staff:** the released chief-of-staff bundle remains
+   the uploaded project file (DEC-001620). The human selected that existing
+   path without a comparison trial; comparative behavior remains unverified.
+3. **Source of truth:** rules/ and process/ remain the master sources, with
+   three generated forms (DEC-001630). Rework required review amendments;
+   aggregate time and monetary cost were not recorded.
+4. **Codex emitter:** included in this revision as package 3b (DEC-001420;
+   landing DEC-001550), with the live and contract boundaries in its review.

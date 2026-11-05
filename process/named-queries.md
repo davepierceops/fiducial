@@ -100,11 +100,12 @@ version of record for that role until the next release.
 
 - A chat session loads its bundle as a project file, replaced at each
   release.
-- A project repository's adapter vendors the bundle file at a pinned
-  release tag and points the harness at it; the session reads, never
-  fetches. Bumping the tag is the adoption of a release.
+- A software project uses the adoption procedure with this repository checked
+  out at a release tag. The procedure generates and reconciles the harness
+  files; an update repeats that reviewed adoption at the new tag (DEC-001610).
 - Anyone else reaches a bundle by its release URL:
   `releases/latest/download/fiducial-bundle-<slug>.md`.
 
-The store itself is not distributed. An agent needs its bundle, not the
-rows.
+The tagged repository is the software-adoption source. The twelve bundles
+and README.md remain release downloads; ordinary Claude chat loads the
+chief-of-staff bundle as its project file (DEC-001610, DEC-001620).

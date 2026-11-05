@@ -63,8 +63,10 @@ release preparation. The host supplies tool access and subagent execution.
 
 Pin repeatable bundle use to a dated [release](https://github.com/davepierceops/fiducial/releases).
 The [named queries](process/named-queries.md) define the distributed roles.
-The dated bundle release remains available; its future form is an open
-question in the revision spec.
+Software adoption uses the store checked out at a release tag. Releases
+retain all twelve role bundles plus README.md for chat and compatibility
+(DEC-001610); Claude chat keeps the Chief of Staff bundle as its project file
+(DEC-001620).
 
 ## Generate locally
 
