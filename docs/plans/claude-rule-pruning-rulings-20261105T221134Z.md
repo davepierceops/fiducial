@@ -57,4 +57,6 @@ Approved R0110 wording:
 
 - R0880: Dave answered “yes” to retiring the startup instruction without replacement in standing context. Project status remains a separately requested skill. Its body now explicitly states the request/orientation trigger and that starting Chief of Staff alone is not a trigger, so this scope survives the generator’s first-sentence skill-description derivation. Archive the original R0880 at batch finalization with the retirement decision ID allocated at merge.
 
+- R0889: Dave answered “y” to retiring exclusive connector ownership without replacement. Remove the standing requirement to inspect other chats and stop writes merely because another decision session is active. This retires the shared-connector assumption; it does not assert that genuinely conflicting writes are safe. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
