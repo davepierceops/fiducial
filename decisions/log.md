@@ -1239,3 +1239,10 @@ Context: Package 5 consumed source checkout bb2ebcb4ea140deb40d7148d7dbffcae5680
 Date: 2026-11-04
 Decision: The human resolves SPEC.md §9 OQ2: the Chief of Staff in ordinary Claude chat continues to load the generated chief-of-staff bundle uploaded as a Claude project file. No separate chat-specific file format or loading workflow is introduced in this revision.
 Context: README.md already describes this path and bin/release includes the bundle. The human answered yes after the question was clarified in ordinary workflow terms. No comparison trial against a separate chat format is recorded; that comparison remains unverified, and this ruling makes no claim that it ran or that Claude Code's separate /context evidence establishes Claude-chat behavior.
+
+
+## DEC-001630 — OQ3: the store remains the source of truth
+Date: 2026-11-04
+Decision: The human confirms SPEC.md §9 OQ3: rules/ and process/ remain the master sources, with the generator deriving Claude Code, Codex and standalone bundle forms. The adopter still inventories existing harness context, obtains independent contradiction review and human rulings, then creates or reconciles owned output without overwriting unrelated project context; DEC-000910's thin-pointer adapter model remains superseded.
+Context: The generator rework produced shared emitter code and three output targets, required review amendments, and the package 7 baseline passes 303 tests (contract-verified); no aggregate time or monetary cost is recorded. The human judged this sufficient to retain one source rather than maintain harness files independently, confirming DEC-001100's provisional choice; no claim of measured cost savings is made.
+Supersedes: DEC-001100
