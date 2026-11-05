@@ -51,4 +51,6 @@ Approved R0110 wording:
 
 - R1616: Dave answered “y” to keeping the external-failure investigation rule unchanged. DEC-001430 records its concrete motivation: two incorrect mechanisms asserted from memory, each settled by a search or probe. No source change.
 
+- R1626: Dave answered “y” to keeping the command-blocks skill trigger unchanged, including explicit delegation and the ordinary internal-tool-call exclusion. No source change.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
