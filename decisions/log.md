@@ -1195,3 +1195,13 @@ Supersedes: DEC-001460
 Date: 2026-11-04
 Decision: Every subagent the decision session dispatches names its model tier explicitly — solid for coding and mechanical review, frontier only where the plan names it — and a frontier dispatch the plan does not name is asked of the human first, yes/no, each time. Briefs point at files in the tree rather than restating rulings; a re-read over an amendment reads only the diff; a package whose findings are all non-blocking lands without a re-read (DEC-001000).
 Context: R0259 already says it; it was not followed because the dispatch tool inherits the session's model when no tier is set. Ruled by the human 2026-11-04.
+
+## DEC-001550 — Packages 3b and 4 landed, by a Codex session
+Date: 2026-11-04
+Decision: Package 3b (the `codex` emission target; PR #408, tip 23c2850, verdict ready, live-verified in a Codex session) and package 4 (the procedure documents `gate.md`, `release.md`, `intake.md`, `build.md`, `project-status.md` under `process/`, `skills/` retired, rows R1618–R1622 — four role descriptions and the reviewer lane guard; PR #407, tip eb64fe6, ready after one amendment) are merged at 9c0dcbd and 17861e1. Both were orchestrated by a Codex session on the human's machine from one execution block (DEC-001530).
+Context: The first packages run on the secondary path; Codex settled the per-agent scope question from inside Codex and recorded it in 3b's artifact.
+
+## DEC-001560 — bin/bundle --where renders the local tree
+Date: 2026-11-04
+Decision: `bin/bundle --where` no longer refuses on a dirty `rules/` or `process/` tree or on HEAD differing from `origin/main`; it renders the local tree as `--emit` does. `bin/release` keeps its own sync check. Landed in package 6a.
+Context: DEC-000940 ruled this for ordinary generation; package 3a applied it to `--emit` only, and the 6a review found the reconciled spec ratifying the old refusal. Ruled by the human 2026-11-04.
