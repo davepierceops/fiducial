@@ -1227,3 +1227,15 @@ Date: 2026-11-04
 Decision: The human's package 7 execution block assigns the close to this Codex decision session on pkg-7-close from e3850f6, with one pull request, plain pushes, append-only decisions and no agent merge or release. One fresh frontier reviewer that authored none of the packages reads the whole revision; independence from the authors but not from the executor family is an accepted-risk gap for the human to ratify at release.
 Context: This replaces DEC-001530's package 7 routing only; its other rulings survive: packages 3b/4 were routed together to Codex with separate coder/reviewer work and one PR each; package 6 splits into 6a cleanup depending on 1/3a and 6b self-adoption/README depending on 5; packages 5/6b route after 4; DEC-001460's approved plan and remaining routing stand. The human answers OQ1–3 before the close read; OQ4 remains resolved by DEC-001420; the human retains merge and release.
 Supersedes: DEC-001530
+
+
+## DEC-001610 — OQ1: tagged source for software adoption; existing downloads retained
+Date: 2026-11-04
+Decision: The human resolves SPEC.md §9 OQ1: software adoption consumes the repository source pinned to a release tag and generates the harness trees from it; this release retains all twelve role bundles plus README.md as compatibility and chat downloads. No generated harness archives are required as release assets, and the writing-role bundles remain available unchanged in form.
+Context: Package 5 consumed source checkout bb2ebcb4ea140deb40d7148d7dbffcae56806fe2 rather than downloaded bundle files. bin/release currently generates the twelve process/named-queries.md bundles plus README.md and prints the human-run publication command; that asset set already matches this ruling. The human answered yes to tagged-source adoption with existing downloads retained; OQ2 separately settles the Claude-chat Chief of Staff loading form.
+
+
+## DEC-001620 — OQ2: Claude chat keeps the Chief of Staff bundle
+Date: 2026-11-04
+Decision: The human resolves SPEC.md §9 OQ2: the Chief of Staff in ordinary Claude chat continues to load the generated chief-of-staff bundle uploaded as a Claude project file. No separate chat-specific file format or loading workflow is introduced in this revision.
+Context: README.md already describes this path and bin/release includes the bundle. The human answered yes after the question was clarified in ordinary workflow terms. No comparison trial against a separate chat format is recorded; that comparison remains unverified, and this ruling makes no claim that it ran or that Claude Code's separate /context evidence establishes Claude-chat behavior.
