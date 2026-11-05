@@ -4,7 +4,7 @@ Verdict: changes-required
 Reviewed: /private/tmp/illuminait-adoption-initial-plan/candidate @ plan SHA256 d8425b9dd6cc4df91fb1f43770052dc10d3ae18b6f8a56775d7e98be20aaf1c6; emitted store 95e77f71c771de5a216a2c3f4900c0ff21435eed plus uncommitted adopt skill
 Baseline: /private/tmp/illuminait-fiducial-adoption @ 9220705453ecc042eedef5dc0ac0da99a78f62c9
 Reviewer: independent adopter contradiction reader (adoption_contradictions); wrote none of candidate or adopter
-Date: 2026-11-05
+Date: 2026-11-04
 Scope: semantic adoption comparison of both harness layouts; every existing inventoried harness file; emitted root context, agent instructions, skill prose and hook configuration; relevant project decisions and local roles/core; proposed candidate append
 Cross-checked: SPEC.md §§3.1, 7; docs/plans/subtraction-plan-20261104.md §5; process/review-artifact.md; initial emission /private/tmp/fiducial-pkg5-initial-stage
 Not inspected: adopter Python implementation and package 5 tests (separate reviewer); hook implementations as an enforcement audit; unrelated evaluated codebases; live Claude /context, Codex trust or forge settings; old bundles beyond the clauses needed to establish loader conflicts
