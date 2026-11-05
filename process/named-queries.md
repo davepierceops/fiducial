@@ -73,6 +73,8 @@ gate
 release
 intake
 build
+command-blocks
+verification-checklists
 voice
 outline
 retro
