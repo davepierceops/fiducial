@@ -1,5 +1,5 @@
 <!-- fiducial:begin -->
-<!-- fiducial davepierceops/fiducial @ 33ff36411f231c611152e4473a2b6f1262ca2561 -->
+<!-- fiducial davepierceops/fiducial @ 15da4ad0b8780b60600cbb522825f5f4bded8683 -->
 
 Never let a secret value enter context. Reference that a secret exists and where it lives instead.
 
@@ -151,6 +151,10 @@ One purpose per block, and no placeholders in it: ask an unknown value as a ques
 
 Before handing over a block: every command in it is valid and non-harmful, and re-running it compounds no damage; it has been run end-to-end against a local stand-in for the remote, guard and re-run paths included, with any substituted value bound; its expected output is stated in one line below it — what was observed in the environment the block will run in, or qualitatively, what to look for, with no number — and its blast radius above it where it is destructive.
 
+Write an execution block so the executor needs only the block and the repository, with no dependency on the conversation that produced it.
+
+When handing off an execution block, put the block first, with no preceding prose.
+
 After a write that timed out or came back unconfirmable, read state before anything else: landed — continue from it; not landed — re-create it once; the read itself fails — state is unknown, stop.
 
 A second consecutive failure of that kind is a signal, not a retry: stop and establish state. Auth errors, not-found, and your own malformed calls don't count.
@@ -286,4 +290,6 @@ When you write "tier", say which axis you mean — model tier or claim tier.
 **tracker issue** — A tracker issue is a derived PM artifact that tracks and organizes work — a view onto the specs, never an independent source of truth.
 
 **known gap** — A known gap is a place where the evidence for a change stops short of what the release claims: an unverified behavior, an unresolved finding, a boundary not yet crossed.
+
+**skill** — A skill is a procedure saved as `SKILL.md` that the session reads only when it is invoked.
 <!-- fiducial:end -->

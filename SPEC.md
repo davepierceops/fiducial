@@ -142,19 +142,24 @@ retros, and the context each role needs.
 
 ## 6. Definition of done
 
-- [ ] Every row carries a recorded sort: `stays`, `harness:<hook|deny|agent|skill>`, or `retired:<successor>`.
-- [ ] Every row sorted `retired` is under `rules/retired/` with a `retired:` line; none is deleted.
-- [ ] Every row sorted `harness:*` has a corresponding emitter in the generator, and the emitted object exists in the generator's test fixtures.
-- [ ] `process/` holds no document that governs a retired mechanism; each retired document is in `docs/history/` with the DEC entry that retired it.
-- [ ] `process/spec-template.md` exists; `prd-template.md` and `trd-template.md` are retired into it; `specs/*.md` and the PRD rows in topic `prd-template` and `trd` are reconciled to it.
-- [ ] The generator emits the three harness shapes from the store, with tests.
-- [ ] The adopter skill exists, with its contradiction read and its append step, and has run once against a real repo; the run's report is committed as evidence.
-- [ ] `bin/directive`, `bin/check-directive`, `bin/land`, `bin/cycle-open`, and the dead members of `bin/aimeta/` are removed (#382 closes).
-- [ ] `.claude/agents/architect.md` and `test-designer.md` are regenerated from the store or removed.
-- [ ] `README.md` describes fiducial as it now is, in Anthropic's vocabulary where adopted.
-- [ ] Every ruling from the 2026-11-03 session is a DEC entry; DEC-000910 (adapters as thin pointers) is superseded by name.
-- [ ] A review by a subagent that wrote none of it reads the whole delta against this spec and returns a verdict; the human approves the merge.
-- [ ] The root residue (`BACKLOG-v2.md`, `COLLAB-STATE.md`, `MANIFEST.md`, `MERGE-NOTES-v0.4.md`, `REVIEW-NOTES-*.md`, `REVIEW-v0.4.md`, `OPEN-ITEMS.md`, `ACCEPTED-RISKS.md`, `voice-inbox.md`) is archived under `docs/history/` (#361, #370 close).
+- [x] Every row carries a recorded sort: `stays`, `harness:<hook|deny|agent|skill>`, or `retired:<successor>`. Evidence: docs/research/sort-table-20261103.md; DEC-001650.
+- [x] Every row sorted `retired` is under `rules/retired/` with a `retired:` line; none is deleted. Evidence: rules/retired/; reviews/pkg-7-close-read-20261105T024910Z.md.
+- [x] Every row sorted `harness:*` has a corresponding emitter in the generator, and the emitted object exists in the generator's test fixtures. Evidence: bin/rulestore/emit/; bin/tests/emit_fixtures.py; bin/tests/emit_codex_fixtures.py.
+- [x] `process/` holds no document that governs a retired mechanism; each retired document is in `docs/history/` with the DEC entry that retired it. Evidence: process/named-queries.md; docs/history/; amendment review.
+- [x] `process/spec-template.md` exists; `prd-template.md` and `trd-template.md` are retired into it; `specs/*.md` and the PRD rows in topic `prd-template` and `trd` are reconciled to it. Evidence: process/spec-template.md; specs/rule-store.md; amendment review.
+- [x] The generator emits the three harness shapes from the store, with tests. Evidence: bin/tests/test_emit_bundle.py; bin/tests/test_emit_claude_code.py; bin/tests/test_emit_codex.py.
+- [x] The adopter skill exists, with its contradiction read and its append step, and has run once against a real repo; the run's report is committed as evidence. Evidence: process/adopt.md; reviews/fiducial-adoption-20261105T011135Z.md; #413.
+- [x] `bin/directive`, `bin/check-directive`, `bin/land`, `bin/cycle-open`, and the dead members of `bin/aimeta/` are removed (#382 closes). Evidence: bin/tests/test_removed_tools.py; #409.
+- [x] `.claude/agents/architect.md` and `test-designer.md` are regenerated from the store or removed. Evidence: .claude/agents/architect-agent.md; .claude/agents/test-designer-agent.md; #414.
+- [x] `README.md` describes fiducial as it now is, in Anthropic's vocabulary where adopted. Evidence: README.md; DEC-001610–001620; amendment review.
+- [x] Every ruling from the 2026-11-03 session is a DEC entry; DEC-000910 (adapters as thin pointers) is superseded by name. Evidence: decisions/log.md: DEC-001070–001390, DEC-001100, DEC-001630.
+- [ ] A review by a subagent that wrote none of it reads the whole delta against this spec and returns a verdict; the human approves the merge. Evidence: Whole-delta read and amendment read complete; human merge of pkg-7-close remains pending. Required before release; not waived.
+- [x] The root residue (`BACKLOG-v2.md`, `COLLAB-STATE.md`, `MANIFEST.md`, `MERGE-NOTES-v0.4.md`, `REVIEW-NOTES-*.md`, `REVIEW-v0.4.md`, `OPEN-ITEMS.md`, `ACCEPTED-RISKS.md`, `voice-inbox.md`) is archived under `docs/history/` (#361, #370 close). Evidence: docs/history/; reviews/pkg-7-close-read-20261105T024910Z.md. Archival proof does not assert completion of #370’s broader migration scope.
+
+Amendment review: `reviews/pkg-7-close-amendment-read-20261105T033515Z.md`,
+source `15da4ad0b8780b60600cbb522825f5f4bded8683`; verification is contract-level
+except the separately bounded human loading evidence. The unchecked merge
+item is a required human action, not an accepted-risk exception.
 
 ## 7. Design
 
