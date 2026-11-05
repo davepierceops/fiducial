@@ -1205,3 +1205,61 @@ Context: The first packages run on the secondary path; Codex settled the per-age
 Date: 2026-11-04
 Decision: `bin/bundle --where` no longer refuses on a dirty `rules/` or `process/` tree or on HEAD differing from `origin/main`; it renders the local tree as `--emit` does. `bin/release` keeps its own sync check. Landed in package 6a.
 Context: DEC-000940 ruled this for ordinary generation; package 3a applied it to `--emit` only, and the 6a review found the reconciled spec ratifying the old refusal. Ruled by the human 2026-11-04.
+
+
+## DEC-001570 — Package 5 landed: adopter and first real adoption
+Date: 2026-11-04
+Decision: Package 5 is merged by PR #413 at f21939831ac72dacfb24ae450e83ff47198f3d51, branch tip e8dc0252d87f2460ae2c6a33ffcd3270f6ae101f; its procedure review is ready-with-findings, with non-blocking follow-ups #411 and #412. The first real adoption is https://github.com/davepierceops/illuminait/pull/26: the package execution artifact records installation and push but no merge, and the later committed live-check artifact records that PR still open at its read-back; these are dated evidence, not a claim about its present merge state.
+Context: reviews/pkg-5-adopter-execution-20261105T012406Z.md and reviews/fiducial-adoption-20261105T011135Z.md record the pinned-source run, independent contradiction read, human C1–C4 rulings and no-op repeat apply. The human subsequently ran the supplied fresh-session check and supplied a screenshot and /context all output, recorded in reviews/fiducial-adoption-live-check-20261105T020041Z.md: CLAUDE.md (8.6k tokens), eight project agents and twelve model-invocable project skills were discovered (live-verified for loading/discovery only); actual native hook firing, manual gate invocation and Codex trust in that target remain unverified.
+
+## DEC-001580 — Package 6a landed: cleanup and reconciled tooling spec
+Date: 2026-11-04
+Decision: Package 6a is merged by PR #409 at 95e77f71c771de5a216a2c3f4900c0ff21435eed, branch tip 3f6a815122befe8fae6731e5b645f3739f04717c: obsolete directive tools and bin/aimeta are removed, root residue and obsolete specs archived, and specs/rule-store.md reconciled to the single-spec form and all three emitters. DEC-001560 records the accompanying local-tree --where behavior.
+Context: reviews/pkg-6a-cleanup-read-20261105T005654Z.md preserves the changes-required first read and records the decision session's amendment verification without a second independent read; its reported suite passed 290 tests (contract-verified), with remaining non-blocking findings carried for the close read.
+
+## DEC-001590 — Package 6b landed: self-adoption and README
+Date: 2026-11-04
+Decision: Package 6b is merged by PR #414 at e3850f6587a242920bd04c90cb48e8f2e3ba2b62, branch tip f07277464924c3fc11a321b79c1603d258ffee1c: Fiducial installs both emitted harness trees, preserves existing denies, removes the four stale adapters/placeholders and rewrites README.md. Its independent review is ready in quality, skepticism and continuity.
+Context: reviews/pkg-6b-self-adopt-read-20261105T013508Z.md and reviews/pkg-6b-self-adopt-execution-20261105T013113Z.md record 303 passing tests, unchanged repeat apply, and installed intake-hook subprocess refusals (contract-verified); actual harness-driven enforcement and fresh-session loading in this separate target remain unverified. The Illuminait loading evidence in DEC-001570 does not establish Fiducial target loading.
+
+## DEC-001600 — Package 7 routes to this Codex decision session
+Date: 2026-11-04
+Decision: The human's package 7 execution block assigns the close to this Codex decision session on pkg-7-close from e3850f6, with one pull request, plain pushes, append-only decisions and no agent merge or release. One fresh frontier reviewer that authored none of the packages reads the whole revision; independence from the authors but not from the executor family is an accepted-risk gap for the human to ratify at release.
+Context: This replaces DEC-001530's package 7 routing only; its other rulings survive: packages 3b/4 were routed together to Codex with separate coder/reviewer work and one PR each; package 6 splits into 6a cleanup depending on 1/3a and 6b self-adoption/README depending on 5; packages 5/6b route after 4; DEC-001460's approved plan and remaining routing stand. The human answers OQ1–3 before the close read; OQ4 remains resolved by DEC-001420; the human retains merge and release.
+Supersedes: DEC-001530
+
+
+## DEC-001610 — OQ1: tagged source for software adoption; existing downloads retained
+Date: 2026-11-04
+Decision: The human resolves SPEC.md §9 OQ1: software adoption consumes the repository source pinned to a release tag and generates the harness trees from it; this release retains all twelve role bundles plus README.md as compatibility and chat downloads. No generated harness archives are required as release assets, and the writing-role bundles remain available unchanged in form.
+Context: Package 5 consumed source checkout bb2ebcb4ea140deb40d7148d7dbffcae56806fe2 rather than downloaded bundle files. bin/release currently generates the twelve process/named-queries.md bundles plus README.md and prints the human-run publication command; that asset set already matches this ruling. The human answered yes to tagged-source adoption with existing downloads retained; OQ2 separately settles the Claude-chat Chief of Staff loading form.
+
+
+## DEC-001620 — OQ2: Claude chat keeps the Chief of Staff bundle
+Date: 2026-11-04
+Decision: The human resolves SPEC.md §9 OQ2: the Chief of Staff in ordinary Claude chat continues to load the generated chief-of-staff bundle uploaded as a Claude project file. No separate chat-specific file format or loading workflow is introduced in this revision.
+Context: README.md already describes this path and bin/release includes the bundle. The human answered yes after the question was clarified in ordinary workflow terms. No comparison trial against a separate chat format is recorded; that comparison remains unverified, and this ruling makes no claim that it ran or that Claude Code's separate /context evidence establishes Claude-chat behavior.
+
+
+## DEC-001630 — OQ3: the store remains the source of truth
+Date: 2026-11-04
+Decision: The human confirms SPEC.md §9 OQ3: rules/ and process/ remain the master sources, with the generator deriving Claude Code, Codex and standalone bundle forms. The adopter still inventories existing harness context, obtains independent contradiction review and human rulings, then creates or reconciles owned output without overwriting unrelated project context; DEC-000910's thin-pointer adapter model remains superseded.
+Context: The generator rework produced shared emitter code and three output targets, required review amendments, and the package 7 baseline passes 303 tests (contract-verified); no aggregate time or monetary cost is recorded. The human judged this sufficient to retain one source rather than maintain harness files independently, confirming DEC-001100's provisional choice; no claim of measured cost savings is made.
+Supersedes: DEC-001100
+
+
+## DEC-001640 — Package 3a landed; its reviewed policy amendments are ratified
+Date: 2026-11-04
+Decision: Package 3a landed by PR #404 at 3f6fc8c276d5f095aba51b6a77e76e2e4c992ead, branch tip 57467011afe144c2e32d46d14dfe4a104dfd4ae9; the human now ratifies its implemented policy amendments: 200 CLAUDE.md lines are guidance with warning-and-emission, matching standing topics spill into skills, agents retain the shared tool list with scoped guards, and bundles render enforcement rows as prose only, omitting enforcement YAML and Human notes. Review immutability protects files on origin/main or main, permits unlanded branch drafts, and falls back to tracked-at-HEAD protection only when neither default-branch ref exists; R1408 and the governing spec/plan are reconciled to that behavior.
+Context: reviews/pkg-3a-generator-read-20261104T231554Z.md records the frontier first read, amendment and ready-with-findings re-read; the original landing had omitted its DEC entry. The human explicitly approved this complete close amendment on 2026-11-04 after reviews/pkg-7-close-read-20261105T024910Z.md exposed the gap. This amends SPEC.md §4's strict line limit and the plan §3a refusal requirement; it does not authorize a broader context-pruning project (#403), change the tier map, or claim native enforcement.
+
+## DEC-001650 — The close restores retained obligations and reconciles current guidance
+Date: 2026-11-04
+Decision: The human approves the complete package 7 continuity amendment: restore the two retained execution-block obligations once under command-blocks, add the promised skill definition, and reconcile live spec, plan, README and procedure text to DEC-001260 and DEC-001610–001640. The two new implementation findings in the close read, push-readback payload/ref handling and source-only paths in emitted skills, remain non-blocking file-and-land follow-ups; the same independent reader reviews only the amendment.
+Context: The restored obligations implement DEC-001160 and DEC-001370 without reviving the directive package. R1623 and R1624 are judgment rows sorted stays; R1625 is the live skill definition, sorted stays. The candidate follows intake on intake/pkg-7-close-reconciliation before incorporation into the single pkg-7-close PR; derived context is regenerated and independently checked. No prior decision or review artifact is rewritten, and the human retains merge and release.
+
+
+## DEC-001660 — The close read finds twelve definition-of-done items met; human merge remains
+Date: 2026-11-04
+Decision: Record SPEC.md §6 as read at 15da4ad0b8780b60600cbb522825f5f4bded8683, with staged plan d6600cc35af4efc93a0d85e365b33c5767853be420aa85044dca0a7f55426667: items 1–11 and 13 are met, and item 12 remains unchecked solely for the required human merge. This records the independent assessment and evidence pointers, not human merge, release approval, or a waiver of that remaining condition.
+Context: reviews/pkg-7-close-read-20261105T024910Z.md reads 3c686e0..8dddcd2; the same independent reader's reviews/pkg-7-close-amendment-read-20261105T033515Z.md resolves F1–F3 and is ready-with-findings in quality, skepticism and continuity. The parent installed and verified the five reviewed writes exactly; reviews/pkg-7-regeneration-evidence-20261105T033230Z.md records that read-back and an empty repeat plan. Process amendments in process/adopt.md and process/named-queries.md were read at the named SHA under the human's DEC-001650 authorization; the human's PR merge remains their final reconciliation approval. F4/#415 and F5/#416 remain non-blocking, with executor-family risk reserved for release ratification.

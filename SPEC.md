@@ -1,6 +1,6 @@
 ---
 audience: [human]
-status: approved 2026-11-03; §7 amended 2026-11-04 (DEC-001400)
+status: approved 2026-11-03; reconciled 2026-11-04 under DEC-001610–001650; close approval pending
 ---
 
 # SPEC: fiducial, the subtraction
@@ -58,7 +58,8 @@ retros, and the context each role needs.
    the spec and reports gaps that affect correctness; a skeptic pass carries its
    own verdict. Findings file-and-land unless the human raises one to blocking.
 4. **Record.** Every ruling the human makes lands in `decisions/log.md`; a retro
-   is written when the human asks and never touches a remote.
+   is written when the human asks and lands itself through the retro procedure
+   (DEC-001260).
 
 ## 4. Goals and non-goals
 
@@ -93,7 +94,7 @@ retros, and the context each role needs.
   deny rule, skill, agent. Fiducial keeps its own words where Anthropic has
   none: evidence class, verification boundary, consequential class, decision
   log, retro.
-- The store stays the source of truth (provisional). The generator emits
+- The store stays the source of truth (confirmed by DEC-001630). The generator emits
   per-harness shapes: `CLAUDE.md` plus `.claude/{rules,agents,skills,settings}`
   for Claude Code; `AGENTS.md` for Codex; a project file for Claude chat. The
   store can mark a row as enforced rather than advised, and the generator
@@ -116,8 +117,9 @@ retros, and the context each role needs.
   process document and no process step restated as a row.
 - **Portability:** the same store serves three harnesses; a harness-specific
   fact lives in the generator's emitter for that harness, never in a row.
-- **Usability:** `CLAUDE.md` emitted for a repo stays under 200 lines; only
-  what the model cannot find by reading the repo.
+- **Usability:** 200 emitted `CLAUDE.md` lines are guidance: exceeding it warns
+  and still emits. Standing topics with matching emitted skills spill there;
+  further pruning is the later evidence-based work in #403 (DEC-001640).
 - Performance, reliability, scalability, security, observability, compliance:
   `N/A` — this is a text repository with a small Python tool.
 
@@ -126,7 +128,8 @@ retros, and the context each role needs.
 - The writing corpus: writer, copy-editor, critic rows and their topics,
   `voice.md`, `outline.md`, the public-prose criteria. Unchanged.
 - A new harness. Fiducial does not orchestrate; the harness does.
-- Retiring the dated bundle release. Open question 1.
+- Retiring the dated bundle downloads: all twelve plus README.md remain;
+  software adoption uses tagged source (DEC-001610).
 
 ## 5. User outcomes and measurement
 
@@ -139,19 +142,24 @@ retros, and the context each role needs.
 
 ## 6. Definition of done
 
-- [ ] Every row carries a recorded sort: `stays`, `harness:<hook|deny|agent|skill>`, or `retired:<successor>`.
-- [ ] Every row sorted `retired` is under `rules/retired/` with a `retired:` line; none is deleted.
-- [ ] Every row sorted `harness:*` has a corresponding emitter in the generator, and the emitted object exists in the generator's test fixtures.
-- [ ] `process/` holds no document that governs a retired mechanism; each retired document is in `docs/history/` with the DEC entry that retired it.
-- [ ] `process/spec-template.md` exists; `prd-template.md` and `trd-template.md` are retired into it; `specs/*.md` and the PRD rows in topic `prd-template` and `trd` are reconciled to it.
-- [ ] The generator emits the three harness shapes from the store, with tests.
-- [ ] The adopter skill exists, with its contradiction read and its append step, and has run once against a real repo; the run's report is committed as evidence.
-- [ ] `bin/directive`, `bin/check-directive`, `bin/land`, `bin/cycle-open`, and the dead members of `bin/aimeta/` are removed (#382 closes).
-- [ ] `.claude/agents/architect.md` and `test-designer.md` are regenerated from the store or removed.
-- [ ] `README.md` describes fiducial as it now is, in Anthropic's vocabulary where adopted.
-- [ ] Every ruling from the 2026-11-03 session is a DEC entry; DEC-000910 (adapters as thin pointers) is superseded by name.
-- [ ] A review by a subagent that wrote none of it reads the whole delta against this spec and returns a verdict; the human approves the merge.
-- [ ] The root residue (`BACKLOG-v2.md`, `COLLAB-STATE.md`, `MANIFEST.md`, `MERGE-NOTES-v0.4.md`, `REVIEW-NOTES-*.md`, `REVIEW-v0.4.md`, `OPEN-ITEMS.md`, `ACCEPTED-RISKS.md`, `voice-inbox.md`) is archived under `docs/history/` (#361, #370 close).
+- [x] Every row carries a recorded sort: `stays`, `harness:<hook|deny|agent|skill>`, or `retired:<successor>`. Evidence: docs/research/sort-table-20261103.md; DEC-001650.
+- [x] Every row sorted `retired` is under `rules/retired/` with a `retired:` line; none is deleted. Evidence: rules/retired/; reviews/pkg-7-close-read-20261105T024910Z.md.
+- [x] Every row sorted `harness:*` has a corresponding emitter in the generator, and the emitted object exists in the generator's test fixtures. Evidence: bin/rulestore/emit/; bin/tests/emit_fixtures.py; bin/tests/emit_codex_fixtures.py.
+- [x] `process/` holds no document that governs a retired mechanism; each retired document is in `docs/history/` with the DEC entry that retired it. Evidence: process/named-queries.md; docs/history/; amendment review.
+- [x] `process/spec-template.md` exists; `prd-template.md` and `trd-template.md` are retired into it; `specs/*.md` and the PRD rows in topic `prd-template` and `trd` are reconciled to it. Evidence: process/spec-template.md; specs/rule-store.md; amendment review.
+- [x] The generator emits the three harness shapes from the store, with tests. Evidence: bin/tests/test_emit_bundle.py; bin/tests/test_emit_claude_code.py; bin/tests/test_emit_codex.py.
+- [x] The adopter skill exists, with its contradiction read and its append step, and has run once against a real repo; the run's report is committed as evidence. Evidence: process/adopt.md; reviews/fiducial-adoption-20261105T011135Z.md; #413.
+- [x] `bin/directive`, `bin/check-directive`, `bin/land`, `bin/cycle-open`, and the dead members of `bin/aimeta/` are removed (#382 closes). Evidence: bin/tests/test_removed_tools.py; #409.
+- [x] `.claude/agents/architect.md` and `test-designer.md` are regenerated from the store or removed. Evidence: .claude/agents/architect-agent.md; .claude/agents/test-designer-agent.md; #414.
+- [x] `README.md` describes fiducial as it now is, in Anthropic's vocabulary where adopted. Evidence: README.md; DEC-001610–001620; amendment review.
+- [x] Every ruling from the 2026-11-03 session is a DEC entry; DEC-000910 (adapters as thin pointers) is superseded by name. Evidence: decisions/log.md: DEC-001070–001390, DEC-001100, DEC-001630.
+- [ ] A review by a subagent that wrote none of it reads the whole delta against this spec and returns a verdict; the human approves the merge. Evidence: Whole-delta read and amendment read complete; human merge of pkg-7-close remains pending. Required before release; not waived.
+- [x] The root residue (`BACKLOG-v2.md`, `COLLAB-STATE.md`, `MANIFEST.md`, `MERGE-NOTES-v0.4.md`, `REVIEW-NOTES-*.md`, `REVIEW-v0.4.md`, `OPEN-ITEMS.md`, `ACCEPTED-RISKS.md`, `voice-inbox.md`) is archived under `docs/history/` (#361, #370 close). Evidence: docs/history/; reviews/pkg-7-close-read-20261105T024910Z.md. Archival proof does not assert completion of #370’s broader migration scope.
+
+Amendment review: `reviews/pkg-7-close-amendment-read-20261105T033515Z.md`,
+source `15da4ad0b8780b60600cbb522825f5f4bded8683`; verification is contract-level
+except the separately bounded human loading evidence. The unchecked merge
+item is a required human action, not an accepted-risk exception.
 
 ## 7. Design
 
@@ -211,16 +219,17 @@ tests.
 - The adopter writing into a repo the human does not own is consequential;
   its first real run is on a repo the human controls.
 
-## 9. Open questions
+## 9. Open questions — resolved
 
-1. Does the dated bundle release (`v<YYYY>.<MM>.<DD>`, twelve assets) survive
-   for the software roles, or does the adopter read a tagged store directly?
-   Resolved by: the first adopter run — whether it wants a tag or a file.
-2. Where does the Claude chat Chief of Staff load from once bundles are a
-   writing-role form — a project file emitted by the generator, or the same
-   bundle? Resolved by: trying both in the next chat session.
-3. Does the store stay the source of truth once the generator has three
-   emitters? Provisional yes (2026-11-03). Resolved by: the cost of the
-   generator rework, observed.
-4. Is the Codex emitter in this revision or the next? Resolved by: whether a
-   Codex session is planned before the next revision.
+1. **Software adoption and release form:** tagged repository source supplies
+   the adopter; the release retains twelve role bundles plus README.md and
+   requires no harness archives (DEC-001610). Package 5 consumed a pinned
+   source checkout, not downloaded bundles.
+2. **Claude-chat Chief of Staff:** the released chief-of-staff bundle remains
+   the uploaded project file (DEC-001620). The human selected that existing
+   path without a comparison trial; comparative behavior remains unverified.
+3. **Source of truth:** rules/ and process/ remain the master sources, with
+   three generated forms (DEC-001630). Rework required review amendments;
+   aggregate time and monetary cost were not recorded.
+4. **Codex emitter:** included in this revision as package 3b (DEC-001420;
+   landing DEC-001550), with the live and contract boundaries in its review.

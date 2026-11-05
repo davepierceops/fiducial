@@ -12,16 +12,16 @@ Fiducial's rules were held in 62 governed files, and the file was a bag of rules
 
 Ruled (the human, 2026-09-04): the methodology and the repository keep the name `fiducial`; history is preserved; the store becomes rows — one rule, one record, selected by key-value query — and gating moves from documents to content: one intake gate, at the row, and nothing else certifies a rule. Documents that describe sequences stay prose with a lighter gate.
 
-The product is the same as before — the bundle any session loads as its first act, the governed text it needs and nothing else, from one command — now assembled from rows instead of files.
+The store supplies the governed context each role needs. Chat and writing roles load a generated bundle; repository harnesses load files emitted and reconciled by the adoption procedure from tagged source (DEC-001610–001630).
 
 ## 2. Users and use cases
 
-- **The human, operator.** Regenerates bundles after a rule changes; uploads one per project; cuts a release. One command, one directory.
-- **Agent sessions, any model, any harness.** Load a bundle first. Need the rows for their role, in order, with a header that says what it was made from and how old it is.
+- **The human, operator.** Regenerates chat bundles, authorizes reviewed harness adoption from a source tag, and cuts releases.
+- **Agent sessions.** Chat sessions load the role bundle; Claude Code and Codex load their adopted harness files. Both forms identify the source revision and carry role context.
 - **The Context Quality Reviewer, as intake.** Receives a proposed rule, shapes it, checks it against the store, lands it. Needs the store queryable and a mechanical shortlist of near-duplicates.
 - **Methodology authors** — the human in chat, a retro, a finding. Propose a rule in a sentence and expect it to land through intake without a cycle.
 - **Writers who are not repository users.** Have a document and a chat and nothing else; download the one file named for the role from the latest release and paste it; never see git.
-- **Adopting projects.** State in one place which bundle their sessions load and at which release tag, and obtain it by the same URL; changing methodology changes the tag the project points at, not the project.
+- **Adopting projects.** Pin the source repository to a release tag, stage both harness shapes, obtain independent contradiction review and human rulings, and reconcile owned content while preserving project context. Updates repeat adoption at the new tag (DEC-001610, DEC-001630).
 
 ## 3. User journeys
 
@@ -35,7 +35,7 @@ Trigger: anyone proposes a rule. Steps: a Context Quality Reviewer session reads
 Trigger: a row is wrong, too loose, too strict. Steps: the same act as J2 over the existing row; a row whose meaning changes keeps its id; a row whose obligation is replaced is retired with a pointer to its successor. Outcome: no history is lost and no second row says the old thing.
 
 ### J4 — a session judges its bundle's freshness
-Trigger: the session is about to cite a path, a rule, or a count from the bundle. Steps: it reads the header's HEAD; where it can reach the repository it computes commits behind the default branch from that HEAD; where it cannot, it states the generation time as the bound on what it knows. Outcome: a stale bundle is named as stale before anything is cited from it, and a directive derived from it pins the bundle's HEAD as the revision it read.
+Trigger: the session is about to cite a path, a rule, or a count from the bundle. Steps: it reads the header's HEAD; where it can reach the repository it computes commits behind the default branch from that HEAD; where it cannot, it states the generation time as the bound on what it knows. Outcome: a stale bundle is named as stale before anything is cited from it, and an execution block derived from it pins the bundle's HEAD as the revision it read.
 
 ### J5 — a role is added
 Trigger: a new role. Steps: rows carry the role's value under `role`; one line in `process/named-queries.md` names the bundle and its query (DEC-000650). Outcome: `bin/bundle --where role=<new>` works, and the next release attaches the bundle, with no tool edit.
@@ -111,7 +111,7 @@ Performance: generation in seconds; the shortlist over the store in under 30 s. 
 - **AC-RS-16a — Codex target.** `bin/bundle --emit codex --out DIR` writes `AGENTS.md`, one `.codex/agents/<role>.toml` per role in the tier map (and no others), `.agents/skills/<stem>/SKILL.md`, `.codex/hooks.json`, every `bin/hooks/` script byte-for-byte and executable under `.codex/hooks/`, and the `codex-hook` adapter; the tree is byte-identical across runs; the CLI prints exactly the files written; `AGENTS.md` of 32768 bytes is accepted and 32769 refused with exit 2, one line, and nothing written; a hook block naming a script `bin/hooks/` lacks, an agent-scoped block with no role, or an unsupported deny pattern is a refusal; every real `enforce: deny` pattern blocks and harmless calls pass; the intake, decision-log, review-artifact, lane and push-readback hooks behave under the adapter as under the Claude Code target, and malformed patch or hook input fails closed.
 - **AC-RS-17 — Enforcement rows.** A row carrying `enforce:` has exactly one of `hook`, `deny`, `agent`, `skill` and its body ends in the fenced yaml block `emit/blocks.py` parses; any other value is a store defect (AC-RS-1).
 - **AC-RS-18 — Tier map.** `bin/rulestore/emit/tiers.json` names, for every harness, a model for each of `frontier`, `solid`, `cheap`, and for every role it lists a tier among those three; a file that fails either is refused. Rows speak in tiers and only the emitter names models (R0259, DEC-001270).
-- **AC-RS-19 — Adopting-project route.** A project states in one place which bundle its sessions load and at which release, obtained by the same URL as a writer's, and restates no rule. Not yet evidenced in the tree: the route is documented by `README.md`, which package 6b rewrites.
+- **AC-RS-19 — Adopting-project route.** The adoption procedure consumes pinned source, records inventory, independent contradictions and human rulings, and reconciles owned harness files with no change on a repeat run. Evidence: `reviews/pkg-5-adopter-execution-20261105T012406Z.md` and `reviews/pkg-6b-self-adopt-execution-20261105T013113Z.md` (contract-verified); bounded Illuminait loading evidence: `reviews/fiducial-adoption-live-check-20261105T020041Z.md`. Native enforcement and target-specific trust remain unverified.
 
 ## 7. Design
 
@@ -193,7 +193,7 @@ The tool refuses over emitting: a malformed query or row; for `bin/release`, an 
 
 ### Deployment assumptions
 
-Deploy and release are separate events: merging to `main` changes the store; a release is cut only on the human's go at one SHA of `main` (J7). A harness tree emitted by `--emit` is committed into the adopting repository and regenerated by the same command.
+Deploy and release are separate events: merging to `main` changes the store; a release is cut only on the human's go at one SHA of `main` (J7). A harness tree is staged by `--emit`, reconciled by the reviewed adoption procedure, and committed into the adopting repository. Updates repeat that procedure, preserving ownership and project exceptions.
 
 ### User journeys and SLOs
 

@@ -7,7 +7,7 @@ description: "Reconcile the store's current harness context into a repository, i
 
 Reconcile the store's current harness context into a repository, including a
 repository already using fiducial; use the same procedure for upgrades.
-The source of truth and reconciliation ruling are DEC-001100; project
+The source of truth and reconciliation ruling are DEC-001630; project
 preconditions are in `project-setup`, review separation is [R0462], and gate
 classification and authority are [R0534, R0535, R0536, R0562].
 
