@@ -33,4 +33,6 @@ Approved R0110 wording:
 
 - R0191, R0730 and R0725: Dave answered “yes” to retiring all three retry/readback procedure rows without replacement, hook or skill. The historical contention detector and prescribed retry procedure no longer earn standing context; the consolidated evidence rule remains the requirement for claims of success. Preserve the original rows in rules/retired/ at batch finalization with the retirement decision ID allocated at merge. This approves removing the instructions; it does not claim universal connector idempotency or change existing hooks.
 
+- R0193: Dave answered “yes” to replacing the consistency rule with: “When a fact changes, update its current references and report any you cannot update. Preserve historical records.” All selectors remain unchanged.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
