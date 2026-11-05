@@ -1,3 +1,4 @@
+<!-- archived 2026-11-04 under the subtraction plan §6 (DEC-001460) -->
 # Voice inbox
 
 Append-only capture point for voice learnings harvested by Writer sessions.

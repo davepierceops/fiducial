@@ -1,3 +1,4 @@
+<!-- archived 2026-11-04 under the subtraction plan §6 (DEC-001460) -->
 # Review Notes: v0.3
 
 ## Scope
