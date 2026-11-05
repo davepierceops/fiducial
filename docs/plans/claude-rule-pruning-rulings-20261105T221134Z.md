@@ -41,4 +41,6 @@ Approved R0110 wording:
 
 - R0457: Dave answered “y” to retiring the documentation-update row into revised R0193, which covers current references to changed facts. The original row is archived unchanged except for retired: R0193.
 
+- R0462: Dave answered “y” to: “Required reviews must be performed by a reviewer who did not author the work.” The verb and condition metadata now match the required-review obligation; role/session/corpus scopes are unchanged. The Human note clarifies that self-checking does not replace independent review. Approval authority remains governed by R0166.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
