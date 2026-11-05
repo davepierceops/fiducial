@@ -10,13 +10,19 @@
       "header": "---\nname: \"build\"\ndescription: \"Take a unit of work from the spec read through implementation, review, and release preparation.\"\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "a02de2523cb5699283656767a784e58e6403854ffdbf5c2f1fdf87daf9c9265b"
+      "section": "cee7c1b2225f5b47866408c4e2dccf31e84d6e7d5ef7c692c9fdfae269ad8617"
     },
     ".agents/skills/change-flow/SKILL.md": {
       "header": "---\nname: \"change-flow\"\ndescription: \"A delta is the whole of what one piece of work changes.\"\n---\n",
       "kind": "markdown",
       "owns_header": true,
       "section": "1b911a60bf673aa92841263b5e4a2d76546b1cc17fd1ebb9558c9765ebeaff3c"
+    },
+    ".agents/skills/command-blocks/SKILL.md": {
+      "header": "---\nname: \"command-blocks\"\ndescription: \"Use before composing human-run shell commands or instructions for another agent session; ordinary internal tool calls do not trigger this skill.\"\n---\n",
+      "kind": "markdown",
+      "owns_header": true,
+      "section": "6c4811e95b61003293af4e201460af4aed083509b78aae543e2fe510a5d061d3"
     },
     ".agents/skills/decision-log/SKILL.md": {
       "header": "---\nname: \"decision-log\"\ndescription: \"Each project keeps one log at `decisions/log.md`, and the methodology repo keeps its own for methodology decisions.\"\n---\n",
@@ -52,7 +58,7 @@
       "header": "---\nname: \"release\"\ndescription: \"Assemble the change package, release readiness review, and report from the work's evidence.\"\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "8930f42f3a9cfaf7210965e48dd6373894e7bb5ec7ec1b3ee540e39fc289ddd4"
+      "section": "7c0106b5f58258ac2e433faea21a26e1dacc09fc18eb8054f75fbb3f63f0976a"
     },
     ".agents/skills/retro/SKILL.md": {
       "header": "---\nname: \"retro\"\ndescription: \"Run a retro when the human asks for one.\"\n---\n",
@@ -71,6 +77,12 @@
       "kind": "markdown",
       "owns_header": true,
       "section": "47009bfe385251c2483859c2c3f6bc0459e86ba1d2672c93606d3c71700a334b"
+    },
+    ".agents/skills/verification-checklists/SKILL.md": {
+      "header": "---\nname: \"verification-checklists\"\ndescription: \"Use when planning, performing or reporting verification, declaring or updating verification boundaries, or assessing deployment and release evidence, including error-budget conditions.\"\n---\n",
+      "kind": "markdown",
+      "owns_header": true,
+      "section": "e863c7b4bb9085df399e5bde0d20f65323ac29e7b27df786d958f4a4a6c80b11"
     },
     ".agents/skills/voice/SKILL.md": {
       "header": "---\nname: \"voice\"\ndescription: \"The author the prose-criteria rows in this bundle are applied to.\"\n---\n",
@@ -472,13 +484,19 @@
       "header": "---\nname: build\ndescription: Take a unit of work from the spec read through implementation, review, and release preparation.\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "a02de2523cb5699283656767a784e58e6403854ffdbf5c2f1fdf87daf9c9265b"
+      "section": "cee7c1b2225f5b47866408c4e2dccf31e84d6e7d5ef7c692c9fdfae269ad8617"
     },
     ".claude/skills/change-flow/SKILL.md": {
       "header": "---\nname: change-flow\ndescription: A delta is the whole of what one piece of work changes.\n---\n",
       "kind": "markdown",
       "owns_header": true,
       "section": "1b911a60bf673aa92841263b5e4a2d76546b1cc17fd1ebb9558c9765ebeaff3c"
+    },
+    ".claude/skills/command-blocks/SKILL.md": {
+      "header": "---\nname: command-blocks\ndescription: Use before composing human-run shell commands or instructions for another agent session; ordinary internal tool calls do not trigger this skill.\n---\n",
+      "kind": "markdown",
+      "owns_header": true,
+      "section": "6c4811e95b61003293af4e201460af4aed083509b78aae543e2fe510a5d061d3"
     },
     ".claude/skills/decision-log/SKILL.md": {
       "header": "---\nname: decision-log\ndescription: \"Each project keeps one log at `decisions/log.md`, and the methodology repo keeps its own for methodology decisions.\"\n---\n",
@@ -514,7 +532,7 @@
       "header": "---\nname: release\ndescription: Assemble the change package, release readiness review, and report from the work's evidence.\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "8930f42f3a9cfaf7210965e48dd6373894e7bb5ec7ec1b3ee540e39fc289ddd4"
+      "section": "7c0106b5f58258ac2e433faea21a26e1dacc09fc18eb8054f75fbb3f63f0976a"
     },
     ".claude/skills/retro/SKILL.md": {
       "header": "---\nname: retro\ndescription: Run a retro when the human asks for one.\n---\n",
@@ -533,6 +551,12 @@
       "kind": "markdown",
       "owns_header": true,
       "section": "47009bfe385251c2483859c2c3f6bc0459e86ba1d2672c93606d3c71700a334b"
+    },
+    ".claude/skills/verification-checklists/SKILL.md": {
+      "header": "---\nname: verification-checklists\ndescription: Use when planning, performing or reporting verification, declaring or updating verification boundaries, or assessing deployment and release evidence, including error-budget conditions.\n---\n",
+      "kind": "markdown",
+      "owns_header": true,
+      "section": "e863c7b4bb9085df399e5bde0d20f65323ac29e7b27df786d958f4a4a6c80b11"
     },
     ".claude/skills/voice/SKILL.md": {
       "header": "---\nname: voice\ndescription: The author the prose-criteria rows in this bundle are applied to.\n---\n",
@@ -729,13 +753,13 @@
       "header": "",
       "kind": "markdown",
       "owns_header": true,
-      "section": "9997e83dc0fb88b1a7e91b48472c603e0e4552658fa49694bd2f47bb5546c41a"
+      "section": "511726f91774b6dfe845c66bb761c5e3a7375c7ce84f57d1523220d68b6adc72"
     },
     "CLAUDE.md": {
       "header": "",
       "kind": "markdown",
       "owns_header": true,
-      "section": "9997e83dc0fb88b1a7e91b48472c603e0e4552658fa49694bd2f47bb5546c41a"
+      "section": "511726f91774b6dfe845c66bb761c5e3a7375c7ce84f57d1523220d68b6adc72"
     }
   },
   "version": 1

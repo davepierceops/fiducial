@@ -10,6 +10,10 @@ release preparation.
 Use `process/change-flow.md` for the delta's close and
 `process/review-artifact.md` for its review record.
 
+Invoke the verification-checklists skill for applicable verification work, and
+pass that invocation explicitly to the relevant subagents; apply its role-specific
+sections.
+
 1. **Spec read.** Start with [R1611, R1513]; select the unit and its acceptance
    criteria [R0472].
 2. **Plan.** Enter plan mode from that read, then take the plan through review

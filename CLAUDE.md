@@ -1,5 +1,5 @@
 <!-- fiducial:begin -->
-<!-- fiducial davepierceops/fiducial @ 0ca563ee53c309840be4ab94dda74f9b075149ba -->
+<!-- fiducial davepierceops/fiducial @ badcff7090fdb9d91399a0255ba2885d842e9f20 -->
 
 Never let a secret value enter context. Reference that a secret exists and where it lives instead.
 
@@ -43,8 +43,6 @@ Call an artifact by its defined name — baton, command block, review artifact �
 
 State the assumptions your work rests on.
 
-Label every verification claim with its evidence class.
-
 When behavior changes, update the documentation that describes it.
 
 Never approve, review, or gate an artifact you produced or a document you drafted.
@@ -58,6 +56,10 @@ Escalate rather than decide when requirements are ambiguous, risk tolerance is u
 A durable rule lives in the store, never only in vendor tooling. An adapter is derived from it: update the store first, keep the adapter short, note every deliberate deviation.
 
 On a failure from an external system, search current documentation before offering a mechanism from memory, and prefer a probe that distinguishes hypotheses over a diagnosis.
+
+Before composing a command block or execution block, invoke the command-blocks skill; pass that explicit invocation to any subagent composing one. Ordinary internal tool calls do not trigger it.
+
+Invoke the verification-checklists skill when planning, performing or reporting verification, including meaningful changes and boundary-sensitive work; when declaring or updating verification boundaries; or when assessing deployment, release, production claims or exhausted or critical error budgets; pass that explicit invocation to relevant subagents and apply its role-specific sections.
 
 On invocation, begin with the human's requested work without requiring a project-status assessment.
 
@@ -129,32 +131,6 @@ Push plainly; never force-push. Seek no per-push approval for a plain push.
 
 For a routine change, open a pull request and merge it. No human gate fires at the merge; the gate is the release decision.
 
-A block runs verbatim as pasted, with no manual step inside the fence: a manual step goes in prose outside it.
-
-A command producing evidence captures its output to a named file with `tee` or equivalent, and the block or its surrounding instruction names the path; where a block's output is consumed in the moment and never cited, say so where the block is defined.
-
-Name the remote and the ref in every sync or remote command a block runs, rather than leaning on branch-upstream configuration or an implied default. `origin` counts: it is a remote name.
-
-Nothing downstream acts on the tree a sync produced until that sync's exit status has been checked; a bad sync fails loudly, with a non-zero exit.
-
-A block pushes a branch, never the default branch; the decision session merges that branch through a pull request.
-
-A block renders copyable whole in the surface that delivers it, with that surface's copy control intact; avoid constructs known to break the surface in use — a heredoc (`<<'EOF'`) suppresses the desktop copy control, so a multi-paragraph commit message is written as repeated `-m` flags.
-
-Fence a block nested inside a paste block with `~~~`, preceded by a one-line fence note stating that the inner fence is `~~~` and why.
-
-Where a human must relay output between blocks, send one block per turn: wait for the output, then compose the next.
-
-A block carries no construct that can end the shell it is pasted into — `exit`, `exec`, `logout`, `|| { …; exit; }`, and `set -e` are known instances, not the extent of the rule; guard a precondition by branching (`if…elif…else…fi`) instead, so a failed check prints and the block ends without ending the session.
-
-One purpose per block, and no placeholders in it: ask an unknown value as a question above the block rather than leaving a token for the reader to substitute.
-
-Before handing over a block: every command in it is valid and non-harmful, and re-running it compounds no damage; it has been run end-to-end against a local stand-in for the remote, guard and re-run paths included, with any substituted value bound; its expected output is stated in one line below it — what was observed in the environment the block will run in, or qualitatively, what to look for, with no number — and its blast radius above it where it is destructive.
-
-Write an execution block so the executor needs only the block and the repository, with no dependency on the conversation that produced it.
-
-When handing off an execution block, put the block first, with no preceding prose.
-
 After a write that timed out or came back unconfirmable, read state before anything else: landed — continue from it; not landed — re-create it once; the read itself fails — state is unknown, stop.
 
 A second consecutive failure of that kind is a signal, not a retry: stop and establish state. Auth errors, not-found, and your own malformed calls don't count.
@@ -167,39 +143,11 @@ Claim only what a test actually proves. A passing test, a green suite, or a smal
 
 Never treat a test that passes before the implementation it covers exists as a head start: it is a broken test, and fixing it comes before anything rests on it.
 
-Treat a verification claim made against an exhausted or critical error budget as materially weaker than the same claim made with headroom, and say so wherever the claim bears on a release.
-
-A production-verified claim states which SLO was checked and its current status — healthy, degraded, or exhausted — the error budget remaining where that is known, and whether error budget state was a factor in the release decision.
-
-A production-verified claim never stands in for pre-deploy checks on a known high-risk path; run those checks as well.
-
-For a meaningful change, be able to produce a confidence ledger — for each claim, the evidence, the boundary that evidence does not cross, and the deferred verification that would close it — kept no heavier than it takes to prevent false confidence.
-
-A test plan for a meaningful change states acceptance criteria, behaviors under test, test levels used, mocked dependencies, fixture sources, contract assumptions, live verification needs, browser and PWA verification needs, production monitoring or synthetic checks where relevant, known unverified behavior, the release impact of each gap, and failure cases.
-
-Treat these areas as boundary-sensitive by default: external APIs; auth and authorization; environment variables; per-clone state — hooks, local config, credential helpers; browser-only behavior; maps, tiles, geolocation, and rendering libraries; service workers and PWA offline behavior; payment, email, notification, and messaging services; storage and persistence; time, timers, and scheduling; rate limits, quotas, and billing; hosted databases; analytics and telemetry providers; domain and CORS restrictions; SLO targets and error budget state; and security and privacy controls. A package that retires or changes a tool which installs per-clone state names the operator step that removes it and where that step is published.
-
 Judge verification by boundary analysis, never by line coverage: coverage shows that code executed, not that it was verified against production-relevant conditions.
-
-Every meaningful change answers: what happens if it fails; how the failure would be known, including whether it hits a Top K journey SLO and burns error budget; what the user would see; whether the system recovers; whether the human can debug or roll back; and whether the failure is acceptable.
 
 Give every meaningful mock, stub, fake, fixture, simulated service, generated response, assumed external behavior, browser substitute, or deployment assumption a declared verification boundary.
 
 Do not let a test imply broader confidence than it actually supports.
-
-State in a boundary declaration its boundary name, production surface, representation mechanism, verification class, verified claims, unverified claims, deferred verification path, release impact, cadence — how often the verification is re-run — failure response, and the owner or trigger for follow-up.
-
-Create or update a boundary declaration when you add a mock, change a fixture for external data, add or change an external integration, add browser, PWA or service-worker behavior, change authentication or authorization behavior, change production environment or config assumptions, change monitoring or synthetic checks, discover that a test passed despite unverified production behavior, or ship with a known unverified dependency.
-
-Put boundary information in one of these: the spec's standing verification-boundary section, a feature-specific verification ledger, inline test comments for a small or local boundary, a change package, a release-readiness review, or a pre-release checklist.
-
-Declare durable or repeated boundaries in the spec's standing verification-boundary section or verification ledger; drift from it is a continuity finding.
-
-Choose when a boundary's verification runs — manually before release, in a dedicated CI job, on a schedule, or after deploy as synthetic monitoring — by the risk of the boundary, not by a fixed schedule.
-
-Verify a boundary material to user-visible behavior or release risk before release.
-
-Verify a boundary that can drift after deployment by production monitoring.
 
 When you edit a file for any other reason, conform it to this lexicon as part of that edit.
 
