@@ -39,4 +39,6 @@ Approved R0110 wording:
 
 - R0207: Dave answered “y” to retiring the artifact-terminology rule without replacement. Specific artifact names remain in their skills; the blanket ban on generic words is removed. Preserve the original row under rules/retired/ at batch finalization with the actual retirement decision ID allocated at merge.
 
+- R0457: Dave answered “y” to retiring the documentation-update row into revised R0193, which covers current references to changed facts. The original row is archived unchanged except for retired: R0193.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
