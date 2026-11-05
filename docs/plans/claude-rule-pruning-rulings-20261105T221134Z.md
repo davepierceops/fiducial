@@ -11,4 +11,6 @@ Baseline: fb310dd9c1ea56e4fa2e1b9b671a50c128fdec0f, after PR #423. Dave requeste
 
 - R0170: Dave answered “y” to keeping the durable-records rule as written. No source change. Its session-end requirement covers persistent work beyond the specific decision-log and tracker records.
 
+- R0172: Dave answered “yes” to keeping “Support every claim with inspectable evidence.” unchanged. No source change; inspectable support is distinct from labeling a claim.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
