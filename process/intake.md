@@ -13,6 +13,8 @@ landing.
 The judgment governing the proposal and its ruling is [R0166, R0462]; the
 intake rubric is [R0264, R0266, R0284, R0950].
 
+A durable rule lives in the store, never only in vendor tooling. An adapter is derived from it: update the store first, keep the adapter short, note every deliberate deviation.
+
 1. **Proposal.** Collect the proposed wording or diff, its reason and evidence,
    and the affected rows or process documents.
 2. **Candidate.** Create an `intake/<proposal-slug>` branch and apply the

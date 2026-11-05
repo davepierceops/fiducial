@@ -47,4 +47,6 @@ Approved R0110 wording:
 
 - R0458/R0166: Dave answered “yes” to combining escalation and authority in R0166: “Use existing guidance for routine implementation decisions. Bring unresolved requirements, material review disagreements, and product or risk tradeoffs to the human. Approval, release, prioritization, and publication remain the human's.” This supersedes the shorter R0166 wording approved earlier in this review. The original R0458 is archived with retired: R0166; scopes are unchanged.
 
+- R0763: Dave answered “yes” to moving the source-of-truth instruction out of standing context into the intake skill. Its exact body is now in process/intake.md. Adoption continues to follow DEC-001630; no duplicate rule text is added there. Archive R0763 at batch finalization with the actual retirement decision ID; ensure the body does not reappear in root or agent output. The installed harness files remain unchanged while the review batch is collected.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
