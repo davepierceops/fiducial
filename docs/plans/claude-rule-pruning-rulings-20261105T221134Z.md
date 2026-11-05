@@ -13,4 +13,6 @@ Baseline: fb310dd9c1ea56e4fa2e1b9b671a50c128fdec0f, after PR #423. Dave requeste
 
 - R0172: Dave answered “yes” to keeping “Support every claim with inspectable evidence.” unchanged. No source change; inspectable support is distinct from labeling a claim.
 
+- R0174: Dave rejected retirement and said the observed/inferred/told/unknown labels are useful and should stay. Preserve the labeling obligation. He requested a semantic overlap survey of R0021, R0172, R0174 and related rows to consider consolidation; no consolidated wording or additional retirement is approved. The prior R0172 keep ruling remains in force while its possible consolidation is discussed.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
