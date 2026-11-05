@@ -49,4 +49,6 @@ Approved R0110 wording:
 
 - R0763: Dave answered “yes” to moving the source-of-truth instruction out of standing context into the intake skill. Its exact body is now in process/intake.md. Adoption continues to follow DEC-001630; no duplicate rule text is added there. Archive R0763 at batch finalization with the actual retirement decision ID; ensure the body does not reappear in root or agent output. The installed harness files remain unchanged while the review batch is collected.
 
+- R1616: Dave answered “y” to keeping the external-failure investigation rule unchanged. DEC-001430 records its concrete motivation: two incorrect mechanisms asserted from memory, each settled by a search or probe. No source change.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
