@@ -55,4 +55,6 @@ Approved R0110 wording:
 
 - R1627: Dave explicitly approved: “Use verification-checklists for verification work, and require subagents doing that work to use it too.” Replace the previous long trigger with this exact wording. Detailed conditions and role-specific sections remain in the verification-checklists skill. At batch finalization, check any definition availability affected by removing the old trigger’s incidental term mentions; keep that detail out of the approved short trigger. No specialized verification rule or definition is retired by this wording change.
 
+- R0880: Dave answered “yes” to retiring the startup instruction without replacement in standing context. Project status remains a separately requested skill. Its body now explicitly states the request/orientation trigger and that starting Chief of Staff alone is not a trigger, so this scope survives the generator’s first-sentence skill-description derivation. Archive the original R0880 at batch finalization with the retirement decision ID allocated at merge.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
