@@ -1,7 +1,7 @@
 """The tier map, `bin/rulestore/emit/tiers.json` (R0259, DEC-001270): one
 file the emitters read, never a row. The claude-code column names Claude
-Code's aliases; the codex column is a placeholder package 3b fills; every
-role with an agent file has a tier.
+Code's aliases; the codex column names the verified installed model ids;
+every role with an agent file has a tier.
 """
 
 from __future__ import annotations
@@ -20,11 +20,11 @@ class TestTierMap(unittest.TestCase):
         self.assertEqual(tiers["harnesses"]["claude-code"],
                          {"frontier": "opus", "solid": "sonnet", "cheap": "haiku"})
 
-    def test_the_codex_column_is_a_placeholder_for_package_3b(self):
+    def test_the_codex_column_names_the_verified_installed_models(self):
         column = load_tiers()["harnesses"]["codex"]
         self.assertEqual(sorted(column), sorted(TIER_NAMES))
-        for tier, model in column.items():
-            self.assertTrue(model.startswith("TODO"), (tier, model))
+        self.assertEqual(column, {"frontier": "gpt-6-astra",
+                                  "solid": "gpt-6.1-sol", "cheap": "gpt-6-luna"})
 
     def test_every_role_maps_to_a_tier(self):
         roles = load_tiers()["roles"]
