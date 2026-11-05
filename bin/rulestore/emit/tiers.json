@@ -1,5 +1,5 @@
 {
-  "_comment": "The tier map (R0259, DEC-001270): rows speak in tiers; this file names the model each harness loads for a tier, and the tier each role runs at. One file, read by the emitters, never a row. claude-code names are Claude Code's model aliases. The codex column is a placeholder package 3b fills; the claude-code emitter never reads it.",
+  "_comment": "The tier map (R0259, DEC-001270): rows speak in tiers; this file names the model each harness loads for a tier, and the tier each role runs at. One file, read by the emitters, never a row. claude-code names are Claude Code's model aliases. Codex names are the model ids verified in the installed Codex model catalog. Each emitter reads only its own column.",
   "harnesses": {
     "claude-code": {
       "frontier": "opus",
@@ -7,9 +7,9 @@
       "cheap": "haiku"
     },
     "codex": {
-      "frontier": "TODO-3b",
-      "solid": "TODO-3b",
-      "cheap": "TODO-3b"
+      "frontier": "gpt-6-astra",
+      "solid": "gpt-6.1-sol",
+      "cheap": "gpt-6-luna"
     }
   },
   "roles": {

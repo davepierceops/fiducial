@@ -179,9 +179,9 @@ def load_tiers(path=TIERS_PATH):
 def targets():
     """`{name: Target instance}` — the registry. Import here, not at module
     top, so a broken target module fails at `--emit` time with its name."""
-    from . import bundle, claude_code
+    from . import bundle, claude_code, codex
 
     registry = {}
-    for cls in (bundle.BundleTarget, claude_code.ClaudeCodeTarget):
+    for cls in (bundle.BundleTarget, claude_code.ClaudeCodeTarget, codex.CodexTarget):
         registry[cls.name] = cls()
     return registry
