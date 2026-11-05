@@ -1,3 +1,4 @@
+<!-- retired 2026-11-04: DEC-001160 (directive tooling) -->
 ---
 status: agreed
 last-reviewed: reviews/directive-tooling-cycle-23.md @ d3ab472

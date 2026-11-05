@@ -1,3 +1,4 @@
+<!-- retired 2026-11-04: DEC-001160 and DEC-001200 (bin/land) -->
 ---
 status: agreed
 last-reviewed: reviews/bin-land-cycle-7.md @ 3716ae6
