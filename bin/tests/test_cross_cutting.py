@@ -30,7 +30,9 @@ from tests.helpers import (
     in_review_doc,
     make_home,
     make_repo,
+    make_store_repo,
     no_traceback,
+    run_bundle,
     run_cli,
     snapshot_tree,
     temp_dir,
@@ -280,31 +282,32 @@ class TestExplicitEncoding(unittest.TestCase):
 
 class TestWriteContainment(unittest.TestCase):
     def setUp(self):
-        self.sandbox = temp_dir(self, "fiducial-sandbox-")
-        self.repo = make_repo(self, name="proj", parent=self.sandbox)
-        self.home = make_home(self, parent=self.sandbox, name="home")
-        self.env = base_env(methodology_home=self.home)
+        # A fixture store clone; its parent is the sandbox, so a write beside
+        # the clone, or anywhere under the sandbox but the clone and --out,
+        # shows in the snapshot.
+        self.origin, self.repo = make_store_repo(self)
+        self.sandbox = self.repo.parent
+        self.env = base_env()
 
-        write(self.repo, "policies/sample.md", in_review_doc())
-        write(self.repo, "reviews/r.md", "# Review\n\nNo findings.\n")
-        write(self.repo, "context-sets/entry.md", context_set_doc("entry"))
-        self.sha = commit(self.repo, "seed", env=self.env)
-
-    def test_x5_no_tool_writes_outside_the_invoking_repo(self):
-        """AC-X-5: every CLI confines its writes to the repo it was invoked in."""
-        skip = [self.repo, self.home / "bin"]
+    def test_x5_no_tool_writes_outside_the_invoking_repo_or_out(self):
+        """AC-X-5: `bundle` confines its writes to the repo and `--out`."""
+        out = self.sandbox / "out"
+        skip = [self.repo, self.origin, out]
         before = snapshot_tree(self.sandbox, skip=skip)
 
         invocations = [
-            ("bundle", ["entry"]),
+            ["--keys"],
+            ["--near", "read governed text"],
+            ["--where", "role=writer", "--out", str(out)],
+            ["--emit", "bundle", "--where", "role=writer", "--out", str(out)],
         ]
-        for name, args in invocations:
-            run_cli(name, *args, cwd=self.repo, env=self.env)
+        for args in invocations:
+            rc, o, e = run_bundle(*args, cwd=self.repo, env=self.env)
+            self.assertEqual(rc, 0, "bundle %s: stdout=%r stderr=%r" % (" ".join(args), o, e))
 
         after = snapshot_tree(self.sandbox, skip=skip)
-        self.assertEqual(
-            after, before, "a tool wrote outside the invoking repo"
-        )
+        self.assertEqual(after, before, "a tool wrote outside the invoking repo and --out")
+        self.assertTrue(list(out.iterdir()), "containment is vacuous if nothing was written")
 
 
 if __name__ == "__main__":

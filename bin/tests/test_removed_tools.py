@@ -1,6 +1,6 @@
 """No live file names a removed tool (subtraction plan section 6, DEC-001160, DEC-001200).
 
-For each removed tool name, every hit across `bin/`, `process/`, `README.md`,
+For each removed tool name, every hit across `bin/`, `process/`, `rules/`, `README.md`,
 `specs/` and `.claude/` must be under `docs/history/` or `decisions/log.md`
 (neither is in the scanned set, so the check is: no hit at all, this file
 excepted). README.md is rewritten in package 6b; until then its hits are
@@ -28,12 +28,9 @@ PATTERNS = {
     "aimeta": re.compile(r"aimeta"),
     "bin/land": re.compile(r"bin/land\b"),
 }
-SCANNED = ["bin", "process", "README.md", "specs", ".claude"]
+SCANNED = ["bin", "process", "rules", "README.md", "specs", ".claude"]
 #: Package 6b rewrites README.md; its hits are listed, not failed.
 README_PENDING = True
-#: Hits in files this package may not touch (bin/rulestore is outside 6a's
-#: blast radius); reported, not failed, until the owning package clears them.
-KNOWN_PENDING = {("aimeta", "bin/rulestore/store.py")}
 
 
 def hits():
@@ -58,8 +55,7 @@ def hits():
 class TestRemovedToolNames(unittest.TestCase):
     def test_no_live_file_names_a_removed_tool(self):
         offenders = [h for h in hits()
-                     if not (README_PENDING and h[1] == "README.md")
-                     and (h[0], h[1]) not in KNOWN_PENDING]
+                     if not (README_PENDING and h[1] == "README.md")]
         self.assertEqual(
             offenders, [],
             "\n".join("%s: %s:%d: %s" % h for h in offenders),

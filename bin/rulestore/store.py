@@ -20,7 +20,7 @@ import re
 import subprocess
 from typing import Protocol
 
-#: `order:`'s integer spelling, the dialect `bin/aimeta/frontmatter.py` fixes.
+#: `order:`'s integer spelling, an optional sign and decimal digits only.
 ORDER_RE = re.compile(r"^[+-]?[0-9]+$")
 
 #: A bare (unquoted) scalar that YAML would type as a number or a boolean. On

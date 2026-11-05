@@ -60,7 +60,7 @@ Trigger: the human's go at one SHA of `main`. Steps: `bin/release` on a synced c
 - **G9 — Prose stays prose.** Sequence documents live in `process/`, carry `topic:` as their stem, are selected by the same query, cite rows by id, and are gated by one frontier read plus the human's sign-off recorded in the decision log.
 - **G10 — Releases and reach.** A release attaches `README.md` and one `fiducial-bundle-<slug>.md` per entry in `process/named-queries.md`, each generated at the release's SHA, tagged `v<YYYY>.<MM>.<DD>`; the asset name carries no timestamp, so `releases/latest/download/` is a stable URL (DEC-000660).
 - **G11 — History preserved.** No force-push, no rewrite; the old corpus is moved, never deleted; every row's `source` resolves.
-- **G13 — One store, several harnesses.** `bin/bundle --emit <target>` renders the local tree through one emission target into the files one harness loads (design, "Emission targets"); a new target is one module, one registry line, one `tiers.json` column and its tests, and nothing else in `bin/` changes (DEC-001400).
+- **G13 — One store, several harnesses.** `bin/bundle --emit <target>` renders the local tree through one emission target into the files one harness loads (design, "Emission targets"); a new target is one module, one registry line, one `tiers.json` column and its tests, and nothing else in `bin/` changes (DEC-001400). Targets today: `bundle`, `claude-code`, `codex`.
 - **G12 — Definitions by term.** A bundle carries every definition a selected row uses, found by term, transitively, rendered last under one heading; a session never needs the store to read its bundle.
 
 ### Non-functional goals
@@ -108,6 +108,7 @@ Performance: generation in seconds; the shortlist over the store in under 30 s. 
 - **AC-RS-14 — Header and staleness.** A bundle's first line is the one-line header of G6; from it alone a consumer with repository access computes commits behind the default branch, and without it the generation time bounds what it knows (J4).
 - **AC-RS-15 — Emission.** `bin/bundle --emit <target> --out DIR` writes the target's files under `DIR` and prints each path; `--emit bundle` needs `--where` and writes the file `--where` writes, byte-identical; `--emit claude-code` takes no query; an unknown target, a missing `--out`, a `--name` with a path separator or `..`, or an `EmitError` exits 2 with one line on stderr and nothing written. A harness target never emits the generation timestamp, so its tree is byte-stable across runs over the same store.
 - **AC-RS-16 — Emission targets.** The `claude-code` target emits exactly what the design section's emission table states, and refuses (exit 2) when a hook a block names is not a script under `bin/hooks/`; a skill a row names that no process document provides is a note on stderr, not a refusal.
+- **AC-RS-16a — Codex target.** `bin/bundle --emit codex --out DIR` writes `AGENTS.md`, one `.codex/agents/<role>.toml` per role in the tier map (and no others), `.agents/skills/<stem>/SKILL.md`, `.codex/hooks.json`, every `bin/hooks/` script byte-for-byte and executable under `.codex/hooks/`, and the `codex-hook` adapter; the tree is byte-identical across runs; the CLI prints exactly the files written; `AGENTS.md` of 32768 bytes is accepted and 32769 refused with exit 2, one line, and nothing written; a hook block naming a script `bin/hooks/` lacks, an agent-scoped block with no role, or an unsupported deny pattern is a refusal; every real `enforce: deny` pattern blocks and harmless calls pass; the intake, decision-log, review-artifact, lane and push-readback hooks behave under the adapter as under the Claude Code target, and malformed patch or hook input fails closed.
 - **AC-RS-17 — Enforcement rows.** A row carrying `enforce:` has exactly one of `hook`, `deny`, `agent`, `skill` and its body ends in the fenced yaml block `emit/blocks.py` parses; any other value is a store defect (AC-RS-1).
 - **AC-RS-18 — Tier map.** `bin/rulestore/emit/tiers.json` names, for every harness, a model for each of `frontier`, `solid`, `cheap`, and for every role it lists a tier among those three; a file that fails either is refused. Rows speak in tiers and only the emitter names models (R0259, DEC-001270).
 - **AC-RS-19 — Adopting-project route.** A project states in one place which bundle its sessions load and at which release, obtained by the same URL as a writer's, and restates no rule. Not yet evidenced in the tree: the route is documented by `README.md`, which package 6b rewrites.
@@ -127,14 +128,15 @@ Interfaces: rows reach the processing code as `rulestore.store.Row` objects only
 
 ### Emission targets
 
-The registry is `emit.targets()`; adding a target is the four steps in `emit/__init__.py`'s docstring. Two targets exist.
+The registry is `emit.targets()`; adding a target is the four steps in `emit/__init__.py`'s docstring. Three targets exist: `bundle`, `claude-code` and `codex`.
 
 | Target | Query | Emits |
 | --- | --- | --- |
 | `bundle` | required | `fiducial-bundle-<name>-<generated>.md`, rendered exactly as `--where` renders it |
 | `claude-code` | none | `CLAUDE.md` (the judgment rows of `role=chief-of-staff session=decision` in bundle order, plus the principle prose of the selection's `enforce: hook\|deny` rows, then definitions; rows with `paths:`, `enforce: agent\|skill` rows and process documents are excluded; a row whose first topic names an emitted skill spills to that skill under `## Rules`; over `CLAUDE_MD_LIMIT` lines it warns and still emits); `.claude/rules/<topic>.md` (one per first topic of rows carrying `paths:`); `.claude/agents/<role>.md` (one per role in `tiers["roles"]`: description from the role's `field: description` rows, model from its tier, a shared `tools` list, the skills its `enforce: skill` rows name, its `scope: agent` hooks, body the role's rows minus what `CLAUDE.md` carries); `.claude/skills/<stem>/SKILL.md` (one per process document except `project-setup` and `named-queries`; `gate` carries `disable-model-invocation: true`); `.claude/settings.json` (`permissions.deny` from `enforce: deny` blocks, `hooks` from repo-level `enforce: hook` blocks); `.claude/hooks/<name>` (every script under `bin/hooks/`, executable, block commands rewritten to `"$CLAUDE_PROJECT_DIR"/.claude/hooks/<name>`) |
+| `codex` | none | `AGENTS.md` (the standing selection as `CLAUDE.md` has it, refused over `AGENTS_MD_LIMIT` = 32768 bytes); `.codex/agents/<role>.toml` (one per role in `tiers["roles"]`, model from its tier through the `codex` column); `.agents/skills/<stem>/SKILL.md` (one per process document, as for `claude-code`); `.codex/hooks.json` (repo-level `enforce: hook` blocks and each `enforce: deny` block as a `PreToolUse` hook, Codex having no deny rules; agent-scoped hooks are scoped by the runtime `agent_type`); `.codex/hooks/<name>` (every script under `bin/hooks/`, executable, unchanged) and `.codex/hooks/codex-hook` (the adapter that turns `apply_patch` commands into per-file `Write` payloads for those scripts). No `.codex/config.toml`: standalone agents are discovered directly |
 
-A `codex` column exists in `tiers.json` as a placeholder with no target behind it (package 3b); the `claude-code` target never reads it.
+Each target reads only its own column of `tiers.json` (`codex`: `gpt-6-astra`, `gpt-6.1-sol`, `gpt-6-luna` for frontier, solid, cheap).
 
 ### The hooks
 
@@ -206,7 +208,7 @@ Derived from the tree, not stated by either source document:
 | `origin` (fetch, tag existence) | live in `bin/release` and `--where`; `git` stubbed by local repositories in tests | test with real git against a stand-in remote | none |
 | GitHub release creation | assumed: the tool prints the `gh release create` command and the human runs it | none in-tree | the human's read-back of the release |
 | Claude Code loading the emitted tree | contract: the emitter's output is tested against the documented file forms | tests over the emission; no in-tree live load | the package 6b self-adoption run |
-| Codex loading its tree | not built | none | package 3b |
+| Codex loading its tree | contract: emission and hook behaviour tested in a stand-in repository; the tests make no model call and never claim a model honoured an instruction | tests over the emission and the executable hooks; live discovery and trust acceptance reported with the package that landed the target, not in-tree | an adopting repository must trust the project hooks; the 6b self-adoption run |
 
 ## 8. Risk tolerance
 
@@ -222,4 +224,5 @@ Derived from the tree, not stated by either source document:
 - **OQ-2 — Engagement material.** Resolved: none written as rows now; `engagements/` waits for the next engagement and is written then through intake (DEC-000430).
 - **OQ-3 — Human-only documents.** Confirmed: `[human]` files — specs, vendor notes, `README.md` — are not rows and not process; they stay files under `specs/`, `docs/` and the root, agreed by the human and gated by nothing else.
 - **OQ-4 — Decision-log numbering.** Confirmed: continues (`process/decision-log.md`).
+- **OQ-6 — `--where` and DEC-000940.** `bin/bundle --where` still refuses on uncommitted changes under `rules/` or `process/` and on a HEAD that is not `origin/main`; DEC-000940 says ordinary generation renders the local tree and only release generation checks origin. Only `--emit` follows the decision. The spec states the tree (J1, AC-RS-6); the human rules whether the code or the decision changes.
 - **OQ-5 — SLOs.** None of J1-J7 has an SLO, a measurement mechanism or an alerting threshold; each is unverified. Resolved by the human ruling which journeys warrant one.
