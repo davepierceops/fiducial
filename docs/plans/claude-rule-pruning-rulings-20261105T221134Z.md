@@ -59,4 +59,6 @@ Approved R0110 wording:
 
 - R0889: Dave answered “y” to retiring exclusive connector ownership without replacement. Remove the standing requirement to inspect other chats and stop writes merely because another decision session is active. This retires the shared-connector assumption; it does not assert that genuinely conflicting writes are safe. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge.
 
+- R1138: Dave answered “yes” to moving milestone deep-read guidance into change-flow. The exact sentence is added with its Chief of Staff/decision-session scope, and the process no longer cites R1138 as a live dependency. Archive the original standing row at batch finalization with the actual retirement decision ID; verify it does not reappear in generated root or agent bodies.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.

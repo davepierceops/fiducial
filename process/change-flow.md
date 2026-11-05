@@ -39,4 +39,8 @@ Each meaningful change [R0465] runs these in order, by subagents but the human.
    R0490] — before release. Done is the definition of done [R0509].
 
 The human, or the Chief of Staff for him, may call a deep read of anything,
-whole not diff, at any time [R1137, R1138].
+whole not diff, at any time [R1137].
+
+For the Chief of Staff in decision sessions:
+
+Propose a deep read at milestone moments — a major version cut, a significant structural change — without being asked.
