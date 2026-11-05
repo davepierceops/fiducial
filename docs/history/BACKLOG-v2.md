@@ -1,3 +1,4 @@
+<!-- archived 2026-11-04 under the subtraction plan §6 (DEC-001460) -->
 # Backlog: AI Operating Model v2
 
 Items deferred from the v0.4 spine review. Each entry names the idea and

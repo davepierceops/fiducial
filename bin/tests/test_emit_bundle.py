@@ -4,8 +4,8 @@
 Two things are held: `--emit bundle` writes the bytes `--where` writes for
 the same query (the header's timestamp aside), and an `enforce:` row
 prints its prose and never its block or Human note (issue #399). The sync refusal is
-dropped from `--emit` (DEC-000940): a dirty tree and a HEAD behind origin
-both emit.
+dropped from `--emit` and `--where` alike (DEC-000940): a dirty tree and a
+HEAD behind origin both render.
 """
 
 from __future__ import annotations
@@ -139,12 +139,12 @@ class TestEmitDropsTheSyncRefusal(EmitBundleTestCase):
         )
         self.assertEqual(code, 0, err)
 
-    def test_where_still_refuses_a_dirty_tree(self):
+    def test_where_renders_a_dirty_tree_too(self):
         write(self.clone, "rules/R0002.md",
               (self.clone / "rules/R0002.md").read_text() + "\nAn uncommitted line.\n")
-        code, out, err = self.bundle("--where", "role=writer", "--out", str(self.out_where))
-        self.assertEqual(code, 2, err)
-        self.assertEqual(sorted(self.out_where.iterdir()), [])
+        code, out, err = self.bundle("--where", "role=chief-of-staff", "--out", str(self.out_where))
+        self.assertEqual(code, 0, err)
+        self.assertIn("An uncommitted line.", self.only_file(self.out_where).read_text())
 
 
 class TestEmitRefusals(EmitBundleTestCase):

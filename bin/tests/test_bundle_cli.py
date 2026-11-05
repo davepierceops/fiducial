@@ -244,36 +244,37 @@ class TestBundleRefusals(BundleCliTestCase):
         )
         self.assert_refused(code, out, err)
 
-    def test_ac_rs_6_an_uncommitted_change_under_rules_is_refused(self):
-        """AC-RS-6: an unsynced tree refuses — a bundle must be reproducible."""
-        self.dirty_the_store()
+    def test_ac_rs_6_an_uncommitted_change_under_rules_is_rendered(self):
+        """AC-RS-6 (DEC-000940): `--where` renders the local tree as it stands."""
+        path = self.clone / "rules/R0002.md"
+        write(self.clone, "rules/R0002.md", path.read_text().replace(
+            "State the obligation at its shortest.", "An uncommitted body."))
         code, out, err = self.bundle("--where", "role=writer", "--out", str(self.out))
-        self.assert_refused(code, out, err)
+        self.assertEqual(code, EXIT_OK, err)
+        self.assertIn("An uncommitted body.", next(self.out.iterdir()).read_text())
 
-    def test_ac_rs_6_a_head_behind_origin_main_is_refused(self):
-        """AC-RS-6: "HEAD is not equal to origin/main after a fetch"."""
+    def test_ac_rs_6_a_head_behind_origin_main_is_rendered(self):
+        """AC-RS-6 (DEC-000940): no origin comparison on `--where`."""
         self.put_origin_ahead()
         code, out, err = self.bundle("--where", "role=writer", "--out", str(self.out))
-        self.assert_refused(code, out, err)
+        self.assertEqual(code, EXIT_OK, err)
+        self.assertEqual(len(list(self.out.iterdir())), 1)
 
-    def test_s8_a_failed_fetch_is_distinguished_from_an_unsynced_head(self):
-        """S8: a fetch that cannot reach origin refuses with its own message
-        — it must not fall back to comparing against a stale local
-        origin/main and report success."""
+    def test_s8_an_unreachable_origin_does_not_stop_where(self):
+        """DEC-000940: `--where` works offline; only `bin/release` needs origin."""
         git(self.clone, "remote", "set-url", "origin", "/nonexistent/origin.git",
             env=self.env, check=True)
         code, out, err = self.bundle("--where", "role=writer", "--out", str(self.out))
-        self.assert_refused(code, out, err)
-        self.assertIn("could not reach origin", err)
+        self.assertEqual(code, EXIT_OK, err)
+        self.assertEqual(len(list(self.out.iterdir())), 1)
 
     def test_ac_rs_6_an_empty_selection_is_refused(self):
         """AC-RS-6: "An empty selection is refused, not written"."""
         code, out, err = self.bundle("--where", "role=nobody", "--out", str(self.out))
         self.assert_refused(code, out, err)
 
-    def test_q9_the_malformed_query_message_wins_over_a_dirty_tree(self):
-        """Q9: both conditions at once still reports the query defect — the
-        malformed-query refusal is checked before the dirty-tree one."""
+    def test_q9_the_malformed_query_is_refused_on_a_dirty_tree(self):
+        """Q9: a malformed query still reports its defect on a dirty tree."""
         self.dirty_the_store()
         code, out, err = self.bundle("--where", "role", "--out", str(self.out))
         self.assert_refused(code, out, err)

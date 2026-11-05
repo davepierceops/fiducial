@@ -1,3 +1,4 @@
+<!-- retired 2026-11-04: DEC-001160 and DEC-001200 (bin/land) -->
 ---
 status: agreed
 last-reviewed: reviews/expedited-log.md @ b31b75af12648585d7ac86f7c0d11ad85f883f5f

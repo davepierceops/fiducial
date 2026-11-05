@@ -1,3 +1,4 @@
+<!-- retired 2026-11-04: DEC-001410 (reconciled into specs/rule-store.md) -->
 ---
 status: agreed
 last-reviewed: reviews/bundle-system-cycle-2.md @ 7c50f0fd1c8f648d3e95a527edaf7125b7b07ab4

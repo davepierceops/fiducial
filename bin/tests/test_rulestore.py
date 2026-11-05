@@ -29,7 +29,7 @@ suite fixes it as
 taking the **raw** value text as it stands after `key: `, quotes included —
 because "a quoted number on another key is text" is only decidable before the
 quotes come off. `id` and `order` are excluded from `keys`; `order`'s integer
-spelling is `bin/aimeta/frontmatter.py`'s `^[+-]?[0-9]+$`. That choice is
+spelling is the retired frontmatter module's `^[+-]?[0-9]+$`. That choice is
 reported to the decision session with this branch.
 """
 

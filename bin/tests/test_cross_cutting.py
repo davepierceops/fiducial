@@ -3,7 +3,7 @@
 Contract: `docs/packages/package-a-spec.md` §4.
 
 The static scans (AC-X-1, AC-X-2) deliberately cover **production files only**
-— every file directly under `bin/` plus `bin/aimeta/*.py`. `bin/tests/` is
+— every file directly under `bin/` plus `bin/rulestore/*.py`. `bin/tests/` is
 excluded on purpose: the test suite legitimately references the repository
 root (it has to know where the fixtures and the scripts under test live), and
 it is not shipped as part of the tool.
@@ -30,7 +30,9 @@ from tests.helpers import (
     in_review_doc,
     make_home,
     make_repo,
+    make_store_repo,
     no_traceback,
+    run_bundle,
     run_cli,
     snapshot_tree,
     temp_dir,
@@ -38,13 +40,12 @@ from tests.helpers import (
 )
 
 def production_files():
-    """Every shipped file under `bin/` — CLIs, `aimeta`, and `rulestore`."""
+    """Every shipped file under `bin/` — CLIs and `rulestore`."""
     files = [
         p
         for p in sorted(BIN_DIR.iterdir())
         if p.is_file() and not p.name.startswith(".")
     ]
-    files += sorted((BIN_DIR / "aimeta").glob("*.py"))
     files += sorted((BIN_DIR / "rulestore").glob("*.py"))
     return files
 
@@ -76,7 +77,7 @@ class TestStdlibOnly(unittest.TestCase):
     #: `rulestore` plainly, so it needs the name here to pass this scan; the
     #: rest of Q5's fix — `bin/rulestore/*.py` in `production_files()` and
     #: `bin/bundle`'s own plain imports — lands with that finding, item 7.
-    LOCAL_MODULES = {"aimeta", "rulestore"}
+    LOCAL_MODULES = {"rulestore"}
 
     def imported_top_level_modules(self, path):
         tree = ast.parse(path.read_text(), filename=str(path))
@@ -125,7 +126,7 @@ class TestCliSurface(unittest.TestCase):
 
     def test_x4_every_cli_fails_cleanly_outside_a_git_repository(self):
         """AC-X-4: outside a repo, exit 2 or 3 with no traceback."""
-        outside = temp_dir(self, "aimeta-not-a-repo-")
+        outside = temp_dir(self, "fiducial-not-a-repo-")
         for name in CLI_NAMES:
             with self.subTest(cli=name):
                 rc, out, err = run_cli(
@@ -281,47 +282,32 @@ class TestExplicitEncoding(unittest.TestCase):
 
 class TestWriteContainment(unittest.TestCase):
     def setUp(self):
-        self.sandbox = temp_dir(self, "aimeta-sandbox-")
-        self.repo = make_repo(self, name="proj", parent=self.sandbox)
-        self.home = make_home(self, parent=self.sandbox, name="home")
-        self.env = base_env(methodology_home=self.home)
+        # A fixture store clone; its parent is the sandbox, so a write beside
+        # the clone, or anywhere under the sandbox but the clone and --out,
+        # shows in the snapshot.
+        self.origin, self.repo = make_store_repo(self)
+        self.sandbox = self.repo.parent
+        self.env = base_env()
 
-        write(self.repo, "policies/sample.md", in_review_doc())
-        write(self.repo, "reviews/r.md", "# Review\n\nNo findings.\n")
-        write(self.repo, "context-sets/entry.md", context_set_doc("entry"))
-        self.sha = commit(self.repo, "seed", env=self.env)
-
-    def test_x5_no_tool_writes_outside_the_invoking_repo(self):
-        """AC-X-5: every CLI confines its writes to the repo it was invoked in."""
-        skip = [self.repo, self.home / "bin"]
+    def test_x5_no_tool_writes_outside_the_invoking_repo_or_out(self):
+        """AC-X-5: `bundle` confines its writes to the repo and `--out`."""
+        out = self.sandbox / "out"
+        skip = [self.repo, self.origin, out]
         before = snapshot_tree(self.sandbox, skip=skip)
 
         invocations = [
-            ("bundle", ["entry"]),
-            ("cycle-open", ["--cycle", "1", "--title", "T", "policies/sample.md"]),
+            ["--keys"],
+            ["--near", "read governed text"],
+            ["--where", "role=writer", "--out", str(out)],
+            ["--emit", "bundle", "--where", "role=writer", "--out", str(out)],
         ]
-        for name, args in invocations:
-            run_cli(name, *args, cwd=self.repo, env=self.env)
+        for args in invocations:
+            rc, o, e = run_bundle(*args, cwd=self.repo, env=self.env)
+            self.assertEqual(rc, 0, "bundle %s: stdout=%r stderr=%r" % (" ".join(args), o, e))
 
         after = snapshot_tree(self.sandbox, skip=skip)
-        self.assertEqual(
-            after, before, "a tool wrote outside the invoking repo"
-        )
-
-    def test_x5_tools_do_write_inside_the_invoking_repo(self):
-        """AC-X-5: containment is not vacuous — the tools do produce output."""
-        rc, out, err = run_cli(
-            "cycle-open",
-            "--cycle",
-            "1",
-            "--title",
-            "T",
-            "policies/sample.md",
-            cwd=self.repo,
-            env=self.env,
-        )
-        self.assertEqual(rc, 0, "stdout=%r stderr=%r" % (out, err))
-        self.assertTrue((self.repo / "docs/cycles/cycle-1-directive.md").is_file())
+        self.assertEqual(after, before, "a tool wrote outside the invoking repo and --out")
+        self.assertTrue(list(out.iterdir()), "containment is vacuous if nothing was written")
 
 
 if __name__ == "__main__":

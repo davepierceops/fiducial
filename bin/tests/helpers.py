@@ -33,17 +33,13 @@ POLICY_RELPATH = "policies/document-metadata-policy.md"
 DISPOSITION_RELPATH = "reviews/frontmatter-disposition.md"
 
 CLI_NAMES = [
-    "cycle-open",
     "bundle",
-    "directive",
-    "check-directive",
     "release",
 ]
 
 #: Minimal argv that gets each CLI past argparse, for tests that only care
 #: about environmental preconditions (e.g. AC-X-4, "run outside a repo").
 CLI_MINIMAL_ARGS = {
-    "cycle-open": ["--cycle", "1"],
     #: `["base"]` no longer gets `bundle` past argparse (S1, bundle-tool-
     #: skeptic review 20260906T150000Z): the mode flags are
     #: `--where`/`--keys`/`--near`, not a positional. A live argv is needed
@@ -51,8 +47,6 @@ CLI_MINIMAL_ARGS = {
     #: file and encoding handling (Q10/S11, bundle-tool-quality-reread and
     #: bundle-tool-skeptic-reread, both 20260906T170000Z).
     "bundle": ["--keys"],
-    "directive": ["--descriptor", "x", "--title", "T"],
-    "check-directive": ["docs/cycles/x-20260828T170000.md"],
     "release": [],
 }
 
@@ -80,12 +74,12 @@ def _session_home():
     """A process-wide throwaway `$HOME`, so global git config cannot leak in."""
     global _SESSION_HOME
     if _SESSION_HOME is None:
-        _SESSION_HOME = tempfile.mkdtemp(prefix="aimeta-session-home-")
+        _SESSION_HOME = tempfile.mkdtemp(prefix="fiducial-session-home-")
         atexit.register(shutil.rmtree, _SESSION_HOME, ignore_errors=True)
     return _SESSION_HOME
 
 
-def temp_dir(case, prefix="aimeta-"):
+def temp_dir(case, prefix="fiducial-"):
     """Create a temp directory and register its removal with `case`."""
     path = pathlib.Path(tempfile.mkdtemp(prefix=prefix))
     case.addCleanup(shutil.rmtree, str(path), ignore_errors=True)
@@ -146,7 +140,7 @@ def make_repo(case, name="proj", parent=None, env=None):
     `parent` lets a test control the repo's *sibling* directory layout, which
     AC-RP-2's `<parent>/ai` fallback needs.
     """
-    parent = pathlib.Path(parent) if parent is not None else temp_dir(case, "aimeta-work-")
+    parent = pathlib.Path(parent) if parent is not None else temp_dir(case, "fiducial-work-")
     root = parent / name
     root.mkdir(parents=True, exist_ok=True)
     env = env or base_env()
@@ -270,7 +264,7 @@ def make_home(case, policy_text=None, roles=DEFAULT_ROLE_SLUGS, parent=None, nam
     document's revision in the home, so the substrate must give it one.
     `git_init=False` withholds both, for FM-G1's no-committed-body refusal.
     """
-    parent = pathlib.Path(parent) if parent is not None else temp_dir(case, "aimeta-home-")
+    parent = pathlib.Path(parent) if parent is not None else temp_dir(case, "fiducial-home-")
     home = parent / name
     home.mkdir(parents=True, exist_ok=True)
     write(home, POLICY_RELPATH, REAL_POLICY_TEXT if policy_text is None else policy_text)
@@ -368,7 +362,7 @@ def ascii_env(methodology_home=None, **overrides):
     )
 
 
-def fake_path_dir(case, tools=("git", "dirname"), prefix="aimeta-path-"):
+def fake_path_dir(case, tools=("git", "dirname"), prefix="fiducial-path-"):
     """A directory of symlinks to exactly `tools` — a deliberately sparse PATH.
 
     Used by AC-IH-9 to remove `python3` from PATH while leaving the utilities
@@ -515,22 +509,8 @@ def disposition_doc(paths):
 
 # ================================================================ directive tooling
 #
-# Fixture substrate for `bin/directive` and `bin/check-directive`, per
-# `specs/directive-tooling-trd.md` §4.1. Everything below is **additive**: no
-# existing helper's behaviour changes, so the pre-existing suite is untouched.
-#
-# Two deviations from §4.1 were deliberate at test-authorship time and are
-# closed by the implementation landing (§3.9 steps 1-2):
-#
-#   * `make_home` IS now a git repository with the invariants document
-#     committed in it, per §4.1. It was not at test-authorship time, because
-#     making it so before a tool read the home would have reddened the existing
-#     suite. `make_home_repo` survives as a thin alias.
-#   * `directive` IS now in `CLI_NAMES` / `CLI_MINIMAL_ARGS`, so AC-X-1..X-7
-#     cover it. `check-directive` is still absent: its binary does not exist
-#     yet, and adding the name would redden those seven against nothing.
-#     `test_directive_trd.py` carries the red test asserting that remaining
-#     integration point.
+# Fixture substrate left from the retired directive tooling (DEC-001160); the
+# home fixture `make_home` still builds on it. The binaries are gone.
 
 #: Where the two binaries are looked up. Overridden by `$DIRECTIVE_TOOLING_BIN`
 #: for the red-gate run against the deliberately-wrong stubs in
