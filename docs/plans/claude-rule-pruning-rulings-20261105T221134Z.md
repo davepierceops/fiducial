@@ -35,4 +35,6 @@ Approved R0110 wording:
 
 - R0193: Dave answered “yes” to replacing the consistency rule with: “When a fact changes, update its current references and report any you cannot update. Preserve historical records.” All selectors remain unchanged.
 
+- R0196: Dave approved dropping the blanket filename convention after explicitly confirming that the Chief of Staff would lose its general filename rule. No shortened global replacement. Keep prescribed review, retro and adoption artifact naming in their skills/tooling; arbitrary generated files no longer acquire a Fiducial-wide timestamp requirement. The review skill now states its timestamp format directly. During batch finalization, remove the blanket prose from roots and agent outputs while preserving the existing generated-filename hook for reviews/retros; do not silently lose its registration by retiring the hook-bearing row. This ruling changes the broad naming policy, not the specific artifact conventions or existing enforcement scope.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.

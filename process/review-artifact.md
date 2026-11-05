@@ -28,7 +28,7 @@ A per-entry log of dispositions is not an artifact in this sense; its shape
 is set by the policy that mandates it.
 
 A review artifact goes in `reviews/`, named `<stem>-<descriptor>-<timestamp>.md`
-in the repo-wide generated-filename convention [R0196]. Over one document, the
+using generation time in UTC as `<YYYYMMDD>T<HHMMSS>Z`. Over one document, the
 stem is the document's: for a file in a subdirectory of `engagements/` or
 `roles/`, `<parent-dir>-<basename>`; for every other file, its basename without
 the extension, and where it already ends in a digit the rule applies unchanged.
