@@ -9,4 +9,6 @@ Baseline: fb310dd9c1ea56e4fa2e1b9b671a50c128fdec0f, after PR #423. Dave requeste
 
 - R0168: Dave answered “y” to retiring the rule entirely, with no replacement and no move to a skill. The previously proposed rewrite is rejected. Generic scope advice does not earn standing context; R0458 already covers escalation and routine implementation decisions. At batch finalization, archive the unchanged original under rules/retired/ with the actual retirement decision ID allocated at merge (AC-RS-10); do not invent a successor or preallocate a decision ID.
 
+- R0170: Dave answered “y” to keeping the durable-records rule as written. No source change. Its session-end requirement covers persistent work beyond the specific decision-log and tracker records.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
