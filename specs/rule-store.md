@@ -26,7 +26,7 @@ The product is the same as before — the bundle any session loads as its first 
 ## 3. User journeys
 
 ### J1 — the human regenerates a bundle
-Trigger: a row landed, was retired, or was re-keyed; or a new project needs its first bundle. Steps: one command names a query; the tool refuses on uncommitted changes under `rules/` or `process/` and on a HEAD that is not `origin/main`; writes one file to `~/Downloads` under the ruled name. Outcome: the bundle is the query's rows in order, then the process documents the query selects, then the definitions the rows use, under a one-line header naming repository, HEAD and generation time (DEC-000630, DEC-000640).
+Trigger: a row landed, was retired, or was re-keyed; or a new project needs its first bundle. Steps: one command names a query; the tool renders the local tree as it stands — uncommitted edits included, offline, on any branch (DEC-000940) — and writes one file to `~/Downloads` under the ruled name. Outcome: the bundle is the query's rows in order, then the process documents the query selects, then the definitions the rows use, under a one-line header naming repository, HEAD and generation time (DEC-000630, DEC-000640).
 
 ### J2 — a rule enters through intake
 Trigger: anyone proposes a rule. Steps: a Context Quality Reviewer session reads the proposal against the store; shapes it into one instruction an agent can act on; runs the shortlist and reads the candidates; sets keys normalized to the keys in use; lands one commit. Outcome: either one new row exists, or the proposal is refused with the id of the row that already says it.
@@ -49,7 +49,7 @@ Trigger: the human's go at one SHA of `main`. Steps: `bin/release` on a synced c
 ## 4. Goals and non-goals
 
 ### Functional goals
-- **G1 — One command.** `bin/bundle --where <query> --name <name>` on a synced clone writes one file to `~/Downloads` named `fiducial-bundle-<name>-<timestamp>Z.md` (DEC-000200, DEC-000290, DEC-000320 filename clause); an unsynced tree is refused.
+- **G1 — One command.** `bin/bundle --where <query> --name <name>` writes one file to `~/Downloads` named `fiducial-bundle-<name>-<timestamp>Z.md` (DEC-000200, DEC-000290, DEC-000320 filename clause), rendering the local tree as it stands; only `bin/release` checks origin (DEC-000940).
 - **G2 — Each rule once.** One row per distinct rule; intake refuses a restatement with the existing id.
 - **G3 — Only what the query names, in the ruled order.** A bundle is exactly the rows matching the query, in three bands: rules by their topic's position in the topic sequence, then topic name, then `order`, then id; the process documents the query selects, by their position in the process sequence; the definitions the selected rows use (DEC-000640).
 - **G4 — Two forms, one row.** Agent form is the body; human form is `## Human`; the human form is never lost.
@@ -96,7 +96,7 @@ Performance: generation in seconds; the shortlist over the store in under 30 s. 
 - **AC-RS-3 — Keys computed.** `bin/bundle --keys` lists every key in use with its values and counts, computed from the store at invocation; no key list exists anywhere else.
 - **AC-RS-4 — Storage boundary.** The processing package imports one row-source interface; the file-backed implementation is the only place that names `rules/`, reads a directory, parses frontmatter, or opens a file; the processing tests construct rows in memory and pass without a filesystem, with one named exception: a guard test over the real `process/named-queries.md`.
 - **AC-RS-5 — Intake refusal.** `bin/bundle --near "<text>"` returns the rows whose normalized body scores above threshold against the text; a proposal that scores as a restatement is refused by intake with the existing id, and the refusal is recorded.
-- **AC-RS-6 — One command, header, refusal.** One file, the ruled name and directory; the header is the one line G6 states; non-zero exit with a reason on an unsynced tree, an unreachable origin, a malformed query, a malformed row, a `--name` that would escape `--out`, or a directory that is not the store, and nothing written.
+- **AC-RS-6 — One command, header, refusal.** One file, the ruled name and directory; the header is the one line G6 states; non-zero exit with a reason on a malformed query, an empty selection, a malformed row, a `--name` that would escape `--out`, or a directory that is not the store, and nothing written.
 - **AC-RS-7 — Ruled sets.** The writer, copy-editor, and critic queries return rows whose `source` lies in exactly these files of the old corpus, and no other: for `writer`, `docs/global-context/core.md`, `docs/global-context/decision-layer.md`, `roles/writer.md`, `public-prose-criteria.md`, `voice.md`, `skills/outline.md`; for `copy-editor` and `critic`, the same set less `skills/outline.md` with the role's own document in place of `roles/writer.md`. No writing bundle carries another writing role, the command-blocks skill, or an engineering-only context set.
 - **AC-RS-8 — No lifecycle fields.** No file under `rules/` or `process/` carries `status` or `last-reviewed`; `check-frontmatter`, `flip-agreed`, `install-hooks`, `migrate-frontmatter`, and `reviews/expedited-log.md` are absent from the tree; no tool installs a hook into a clone — `--emit` writes hook scripts only under the `--out` it is given.
 - **AC-RS-9 — History.** Every row's `source` resolves to a file and line at the named SHA; `docs/history/corpus-<sha>/` holds the old corpus byte-identical to that SHA — the agent-facing in-scope files at that SHA less `skills/directive-invariants.md`, which sits beside it at `docs/history/directive-invariants.md`; the `[human]` files OQ-3 names stay as files; `git log --all` shows no rewritten ref.
@@ -185,11 +185,11 @@ The other half of the ruling is that no database is introduced now to satisfy th
 
 ### External dependencies
 
-Python standard library and git; `origin` for the sync check and the release; `gh` for the release command the human runs. No third-party module (AC-X-2 of the test suite).
+Python standard library and git; `origin` for the release's sync check; `gh` for the release command the human runs. No third-party module (AC-X-2 of the test suite).
 
 ### Failure modes
 
-The tool refuses over emitting: an unsynced tree or a dirty `rules/`/`process/` for `--where`; an unreachable origin; a malformed query or row; an empty selection; a `--name` that would escape `--out`; a directory that is not the store; an emission target's `EmitError`. Each is exit 2, one line on stderr, nothing written. A hook that cannot run is exit 2, never a silent pass.
+The tool refuses over emitting: a malformed query or row; for `bin/release`, an unsynced or dirty tree and an unreachable origin; an empty selection; a `--name` that would escape `--out`; a directory that is not the store; an emission target's `EmitError`. Each is exit 2, one line on stderr, nothing written. A hook that cannot run is exit 2, never a silent pass.
 
 ### Deployment assumptions
 
@@ -205,7 +205,7 @@ Derived from the tree, not stated by either source document:
 
 | Boundary | Representation | Evidence class | Deferred path |
 | --- | --- | --- | --- |
-| `origin` (fetch, tag existence) | live in `bin/release` and `--where`; `git` stubbed by local repositories in tests | test with real git against a stand-in remote | none |
+| `origin` (fetch, tag existence) | live in `bin/release` only (`--where` and `--emit` do not touch it); `git` stubbed by local repositories in tests | test with real git against a stand-in remote | none |
 | GitHub release creation | assumed: the tool prints the `gh release create` command and the human runs it | none in-tree | the human's read-back of the release |
 | Claude Code loading the emitted tree | contract: the emitter's output is tested against the documented file forms | tests over the emission; no in-tree live load | the package 6b self-adoption run |
 | Codex loading its tree | contract: emission and hook behaviour tested in a stand-in repository; the tests make no model call and never claim a model honoured an instruction | tests over the emission and the executable hooks; live discovery and trust acceptance reported with the package that landed the target, not in-tree | an adopting repository must trust the project hooks; the 6b self-adoption run |
@@ -224,5 +224,4 @@ Derived from the tree, not stated by either source document:
 - **OQ-2 — Engagement material.** Resolved: none written as rows now; `engagements/` waits for the next engagement and is written then through intake (DEC-000430).
 - **OQ-3 — Human-only documents.** Confirmed: `[human]` files — specs, vendor notes, `README.md` — are not rows and not process; they stay files under `specs/`, `docs/` and the root, agreed by the human and gated by nothing else.
 - **OQ-4 — Decision-log numbering.** Confirmed: continues (`process/decision-log.md`).
-- **OQ-6 — `--where` and DEC-000940.** `bin/bundle --where` still refuses on uncommitted changes under `rules/` or `process/` and on a HEAD that is not `origin/main`; DEC-000940 says ordinary generation renders the local tree and only release generation checks origin. Only `--emit` follows the decision. The spec states the tree (J1, AC-RS-6); the human rules whether the code or the decision changes.
 - **OQ-5 — SLOs.** None of J1-J7 has an SLO, a measurement mechanism or an alerting threshold; each is unverified. Resolved by the human ruling which journeys warrant one.
