@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+"""R1408 (DEC-001230): a review artifact already landed is never rewritten.
+`PreToolUse` on `Edit|Write`: refuses a write to a file under `reviews/`
+that exists on the default branch (`origin/main` or `main`); an artifact
+not yet landed, tracked on the author's branch or not, may still be amended."""
+
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import _hooklib as lib  # noqa: E402
+
+GOVERNED = ("reviews/",)
+
+
+def main():
+    data = lib.read_input()
+    root, rel = lib.target_file(data)
+    if root is None or rel is None or not lib.under(rel, *GOVERNED):
+        lib.passthrough()
+    if lib.on_default_branch(root, rel):
+        lib.block("review-artifact-immutable: %s is a landed review artifact (R1408); "
+                  "write a new artifact instead of rewriting it" % rel)
+    lib.passthrough()
+
+
+if __name__ == "__main__":
+    main()

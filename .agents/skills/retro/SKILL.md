@@ -1,0 +1,85 @@
+---
+name: "retro"
+description: "Run a retro when the human asks for one."
+---
+<!-- fiducial:begin -->
+# Process: Retro
+
+Run a retro when the human asks for one.
+
+A retro is `retro-<timestamp>.md`, a synthesis `retro-synthesis-<timestamp>.md`,
+the timestamp taken at generation time as `<YYYYMMDD>T<HHMMSS>Z`. Match a filename
+against those two forms only to tell one from the other; the frontmatter is a
+retro's canonical identity. Retros live in the project's own repo at `retros/`.
+Its inputs are R1244's; its outputs land by the last step below.
+
+A project synthesis runs over one project's `retros/` directory and writes into
+it under the synthesis filename form, overwriting no source retro; its header
+carries a `covers:` list naming every retro it read. The next synthesis computes
+its input set by comparing earlier syntheses' `covers:` lists against that
+directory's files matching the retro filename form, and states the count it read.
+A cross-project synthesis concatenates the relevant `retros/` directories.
+
+## The schema
+
+~~~markdown
+---
+project: <project slug>
+date: <YYYY-MM-DD; the session's last interaction>
+generated: <YYYYMMDDTHHMMSSZ; when this retro was written>
+source: <conversation pointer: title, URL, or export filename; null if none>
+---
+
+# Retro — <project> — <date>
+
+## Context
+<one paragraph: what the conversation was about, what was attempted>
+
+## Evidence
+<numbered, concrete observations of what happened; quotes or close
+paraphrases of pivotal moments; no interpretation here; a correction the
+human made inside the session belongs here>
+
+## Interpretation
+<what the evidence suggests; each item references the evidence numbers
+it rests on>
+
+## Standing preferences
+<preferences the human stated this session that he has stated in earlier
+sessions too, each as a candidate standing rule and each naming where it
+was stated before; empty-with-a-statement if none>
+
+## Durable insights
+<techniques, workflow changes, belief changes that transfer beyond this
+session; empty-with-a-statement if none>
+
+## Candidate methodology changes
+<specific proposed edits to methodology documents, if any, phrased as
+findings for the delta that would carry them — not as decisions>
+~~~
+
+`date:` is the session's last interaction, taken from the last dated artifact the
+session touched as recorded in the local tree — a merge commit, a commit, a
+review artifact. Where the session touched none, take it from the `source:`
+pointer; where `source:` is null too, `generated:` stands in and the retro states
+the substitution. Where the two disagree, both are correct and both are stated.
+
+## Landing
+
+The retro lands itself, and a synthesis lands the same way (DEC-001260). The
+last step commits `retros/retro-<timestamp>.md` on a branch, pushes, opens the
+pull request, merges it as a routine change [R0570], and reads main back: the
+merge commit's SHA, fetched, is the evidence the retro landed [R0172].
+
+## Rules
+
+Ground every retro in concrete evidence from the conversation it covers.
+
+Carry into a retro what is durable and new: the techniques, workflows, belief changes, and engineering practices that transfer beyond the session, and what is new or materially changed in it. Leave out the implementation details that do not transfer and the restatements of standing methodology; where there are none to carry, say so.
+
+Take a retro's inputs from the conversation it covers and the local tree, and from no remote.
+
+Answer in every retro, explicitly, which preferences the human stated this session that he has also stated in earlier sessions; name each as a candidate standing rule and stop there. Encoding one into governed text is the human's decision.
+
+Phrase a methodology change a retro or synthesis proposes as a finding for the delta it feeds — intake for a rules delta, one frontier read and the human's sign-off for a process delta — never as a decision taken.
+<!-- fiducial:end -->

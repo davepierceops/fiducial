@@ -1,0 +1,179 @@
+#!/usr/bin/env python3
+"""Translate Codex tool-hook inputs for fiducial's unchanged hook scripts."""
+import fnmatch
+import json
+import os
+import pathlib
+import re
+import subprocess
+import sys
+
+
+def refuse(reason):
+    print("codex-hook: " + reason, file=sys.stderr)
+    raise SystemExit(2)
+
+
+def patch_files(data):
+    """Yield synthetic Writes for every path, including both sides of moves.
+
+    Only the decision-log guard needs proposed content. Other pre hooks need
+    paths, and post hooks inspect the file after the tool has run. Avoid
+    reconstructing old content from a post-tool filesystem.
+    """
+    raw = data.get("tool_input") or {}
+    patch = raw.get("command") if isinstance(raw, dict) else raw
+    if not isinstance(patch, str):
+        refuse("apply_patch carries no command")
+    lines = patch.strip().splitlines()
+    if not lines or lines[0] != "*** Begin Patch" or lines[-1] != "*** End Patch":
+        refuse("unrecognized apply_patch envelope")
+    i = 1
+    while i < len(lines) - 1:
+        header = re.fullmatch(r"\*\*\* (Add|Update|Delete) File: (.+)", lines[i])
+        if not header:
+            refuse("unrecognized apply_patch file header")
+        kind, name = header.groups()
+        i += 1
+        move = None
+        if i < len(lines) and lines[i].startswith("*** Move to: "):
+            move = lines[i][len("*** Move to: "):]
+            i += 1
+        start = i
+        while i < len(lines) and not lines[i].startswith(("*** Add File: ", "*** Update File: ",
+                                                        "*** Delete File: ", "*** End Patch")):
+            i += 1
+        chunks = lines[start:i]
+        path = pathlib.Path(name)
+        if not path.is_absolute():
+            path = pathlib.Path(data.get("cwd") or os.getcwd()) / path
+        content = ""
+        # Reconstruct just the governed log, before the patch is applied. Full
+        # content lets the existing Write guard decide append-only semantics.
+        if (kind == "Update" and data.get("hook_event_name") != "PostToolUse"
+                and path.as_posix().endswith("/decisions/log.md")):
+            old = path.read_text(encoding="utf-8") if path.exists() else ""
+            current = old.splitlines()
+            cursor, output = 0, []
+            pos = 0
+            while pos < len(chunks):
+                if chunks[pos].startswith("@@"):
+                    pos += 1
+                    continue
+                before, after = [], []
+                while pos < len(chunks) and not chunks[pos].startswith("@@"):
+                    line = chunks[pos]
+                    pos += 1
+                    if line == "*** End of File":
+                        continue
+                    if not line or line[0] not in " +-":
+                        refuse("unrecognized apply_patch hunk")
+                    if line[0] in " -":
+                        before.append(line[1:])
+                    if line[0] in " +":
+                        after.append(line[1:])
+                matches = [n for n in range(cursor, len(current) + 1)
+                           if current[n:n + len(before)] == before]
+                if len(matches) != 1:
+                    refuse("decision-log patch context is absent or ambiguous")
+                at = matches[0]
+                output.extend(current[cursor:at])
+                output.extend(after)
+                cursor = at + len(before)
+            output.extend(current[cursor:])
+            content = "\n".join(output) + ("\n" if output else "")
+        elif kind == "Add":
+            if any(not line.startswith("+") for line in chunks):
+                refuse("unrecognized apply_patch added content")
+            content = "\n".join(line[1:] for line in chunks) + ("\n" if chunks else "")
+        yield dict(data, tool_name="Write", tool_input={"file_path": str(path), "content": content})
+        if move:
+            destination = pathlib.Path(move)
+            if not destination.is_absolute():
+                destination = pathlib.Path(data.get("cwd") or os.getcwd()) / destination
+            # Moving the log removes it, even if its old bytes move intact.
+            if name.endswith("decisions/log.md"):
+                yield dict(data, tool_name="Write", tool_input={"file_path": str(path), "content": ""})
+            yield dict(data, tool_name="Write", tool_input={"file_path": str(destination), "content": content})
+
+
+def path_match(name, pattern):
+    """Credential path globs: ** spans zero or more path components."""
+    names, patterns = name.split("/"), pattern.split("/")
+    def match(parts, globs):
+        if not globs:
+            return not parts
+        if globs[0] == "**":
+            return any(match(parts[n:], globs[1:]) for n in range(len(parts) + 1))
+        return bool(parts and fnmatch.fnmatchcase(parts[0], globs[0])
+                    and match(parts[1:], globs[1:]))
+    return match(names, patterns)
+
+
+def deny(data, patterns):
+    tool = data.get("tool_name", "")
+    args = data.get("tool_input") or {}
+    if not isinstance(args, dict):
+        return
+    command = args.get("command", args.get("cmd", ""))
+    if isinstance(command, list):
+        command = " ".join(command)
+    for pattern in patterns:
+        match = re.fullmatch(r"(Read|Bash)\((.*)\)", pattern)
+        if not match:
+            refuse("unsupported deny pattern " + repr(pattern))
+        kind, glob = match.groups()
+        if kind == "Bash" and tool in ("Bash", "exec_command", "shell", "shell_command"):
+            if fnmatch.fnmatchcase(command, glob):
+                refuse("denied by " + pattern)
+        elif kind == "Read" and tool in ("Read", "read_file"):
+            name = args.get("file_path", args.get("path", ""))
+            if not name:
+                continue
+            path = pathlib.Path(name).expanduser()
+            if not path.is_absolute():
+                path = pathlib.Path(data.get("cwd") or os.getcwd()) / path
+            if glob.startswith("~/"):
+                candidate = str(path.resolve())
+                glob = str(pathlib.Path.home().resolve()) + "/" + glob[2:]
+            else:
+                candidate = os.path.relpath(path, data.get("cwd") or os.getcwd())
+                glob = glob.removeprefix("./")
+            if path_match(candidate, glob):
+                refuse("denied by " + pattern)
+
+
+def main():
+    data = json.load(sys.stdin)
+    if not isinstance(data, dict):
+        refuse("hook input is not an object")
+    if sys.argv[1] == "deny":
+        deny(data, json.loads(sys.argv[2]))
+        return
+    roles = json.loads(sys.argv[2])
+    if roles and data.get("agent_type") not in roles:
+        return
+    script = pathlib.Path(__file__).resolve().parent / sys.argv[3]
+    if data.get("tool_name") == "apply_patch":
+        payloads = list(patch_files(data))
+    else:
+        payloads = [data]
+    messages = []
+    for payload in payloads:
+        proc = subprocess.run([sys.executable, str(script), *sys.argv[4:]],
+                              input=json.dumps(payload), text=True, capture_output=True)
+        if proc.returncode:
+            refuse(proc.stderr.strip() or "hook script failed: " + script.name)
+        if proc.stdout.strip():
+            messages.append(proc.stdout.strip())
+    if messages:
+        print(json.dumps({"hookSpecificOutput": {
+            "hookEventName": data.get("hook_event_name", "PostToolUse"),
+            "additionalContext": "\n".join(messages)}}))
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except (ValueError, OSError, TypeError, KeyError, IndexError) as exc:
+        refuse(str(exc))
