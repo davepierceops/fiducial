@@ -29,4 +29,6 @@ Approved R0110 wording:
 
 - R0180: Dave answered “y” to retiring “Read governed text before emitting anything it governs.” without replacement. The rule is general and vague; specific spec, decision-log and Voice reading obligations remain. Preserve the original in rules/retired/ at batch finalization, using the actual retirement decision ID allocated at merge.
 
+- R0183: Dave answered “y” to replacing the conflicting-sources rule with: “When sources conflict, name them and the disagreement; ask the human to resolve it before relying on either.” All selectors remain unchanged.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
