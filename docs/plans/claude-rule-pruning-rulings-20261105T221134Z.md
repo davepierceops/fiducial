@@ -31,4 +31,6 @@ Approved R0110 wording:
 
 - R0183: Dave answered “y” to replacing the conflicting-sources rule with: “When sources conflict, name them and the disagreement; ask the human to resolve it before relying on either.” All selectors remain unchanged.
 
+- R0191, R0730 and R0725: Dave answered “yes” to retiring all three retry/readback procedure rows without replacement, hook or skill. The historical contention detector and prescribed retry procedure no longer earn standing context; the consolidated evidence rule remains the requirement for claims of success. Preserve the original rows in rules/retired/ at batch finalization with the retirement decision ID allocated at merge. This approves removing the instructions; it does not claim universal connector idempotency or change existing hooks.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
