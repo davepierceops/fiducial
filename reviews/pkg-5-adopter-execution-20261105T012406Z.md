@@ -1,0 +1,11 @@
+# Package 5 execution report
+
+Observed: verified package 6a base 95e77f71c771de5a216a2c3f4900c0ff21435eed. Coder gpt-6.1-sol and independent procedure reviewer gpt-6-astra ran in separate branches/worktrees. Implementation bb2ebcb4ea140deb40d7148d7dbffcae56806fe2 adds process/adopt.md and tests extracting its executable Python fence. The semantic contradiction reader used gpt-6.1-sol in its own branch/worktree.
+
+Observed: baseline bin/tests/run passed 290 tests. Implementation full suite passed 301; the final committed focused suite passed all 13, including two hardening tests added during the full run. Independent reviewer also passed all 13. Contract-verified for create/append, fixture idempotency, ownership and guard logic; label tests use mocked responses.
+
+Observed: procedure verdict ready-with-findings, with two nonblocking findings filed as https://github.com/davepierceops/fiducial/issues/411 and https://github.com/davepierceops/fiducial/issues/412. No review amendment or reread was required. Exact legacy-loader replacements resolved the first semantic contradiction; the follow-up semantic verdict is ready-with-findings. Dave explicitly approved C1–C4 and publication after the automatic approval reviewer initially blocked the issue payload.
+
+Observed: the first real run installed into davepierceops/illuminait branch codex/fiducial-adoption. Origin was fetched after push and read as a0e8611f26f4a88f7a180502362d97f1080c78b1. Gate https://github.com/davepierceops/illuminait/issues/25 exists. A second prepare and actual apply made zero content, mode or report changes; an independent reader verified the 62-entry inventory and both staged trees. All required labels already existed and were unchanged. Target base 9220705453ecc042eedef5dc0ac0da99a78f62c9; existing decisions, roles and v2026.09.29 archive preserved; only v2026.09.17 removed; one adoption DEC appended. The report copy reviews/fiducial-adoption-20261105T011135Z.md is byte-identical to the target report.
+
+Observed: no Fiducial decision-log entry was edited; the human’s other session records entries at merge. No PR was merged. The live Claude check remains the human’s and is contract-verified until run; its command and expected first line are in the copied report. Codex trust remains unverified. This report does not resolve SPEC.md open question 1 or alter bin/release.
