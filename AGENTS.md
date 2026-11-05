@@ -1,5 +1,5 @@
 <!-- fiducial:begin -->
-<!-- fiducial davepierceops/fiducial @ 15da4ad0b8780b60600cbb522825f5f4bded8683 -->
+<!-- fiducial davepierceops/fiducial @ 0ca563ee53c309840be4ab94dda74f9b075149ba -->
 
 Never let a secret value enter context. Reference that a secret exists and where it lives instead.
 
