@@ -11,7 +11,9 @@ corpus: [software, writing]
 Assemble the change package, release readiness review, and report from the
 work's evidence.
 The completion standard is [R0509]; verification is governed by the
-verification and verification-boundaries rows, and the gate by
+verification and verification-boundaries rows and the verification-checklists
+skill (apply its role-specific sections and explicitly invoke it for relevant
+subagents), and the gate by
 `process/gate.md` [R0534, R0535, R0536, R0562].
 
 Assemble each readiness field from the change package wherever it already

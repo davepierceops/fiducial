@@ -60,6 +60,12 @@ as a project file. Start with a problem and work toward an approved
 [gate](process/gate.md) and [release](process/release.md) cover approval and
 release preparation. The host supplies tool access and subagent execution.
 [Project status](process/project-status.md) is a separately invoked skill.
+[Command blocks](process/command-blocks.md) supplies the procedure before
+composing human-run commands or instructions for another agent session.
+[Verification checklists](process/verification-checklists.md) supplies the
+applicable role sections for verification planning, execution, reporting and
+boundary or release assessment. Harness context carries invocation triggers;
+standalone bundles retain the applicable procedures.
 
 Pin repeatable bundle use to a dated [release](https://github.com/davepierceops/fiducial/releases).
 The [named queries](process/named-queries.md) define the distributed roles.
