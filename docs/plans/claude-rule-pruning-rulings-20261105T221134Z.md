@@ -37,4 +37,6 @@ Approved R0110 wording:
 
 - R0196: Dave approved dropping the blanket filename convention after explicitly confirming that the Chief of Staff would lose its general filename rule. No shortened global replacement. Keep prescribed review, retro and adoption artifact naming in their skills/tooling; arbitrary generated files no longer acquire a Fiducial-wide timestamp requirement. The review skill now states its timestamp format directly. During batch finalization, remove the blanket prose from roots and agent outputs while preserving the existing generated-filename hook for reviews/retros; do not silently lose its registration by retiring the hook-bearing row. This ruling changes the broad naming policy, not the specific artifact conventions or existing enforcement scope.
 
+- R0207: Dave answered “y” to retiring the artifact-terminology rule without replacement. Specific artifact names remain in their skills; the blanket ban on generic words is removed. Preserve the original row under rules/retired/ at batch finalization with the actual retirement decision ID allocated at merge.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
