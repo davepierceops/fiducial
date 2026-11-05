@@ -1205,3 +1205,25 @@ Context: The first packages run on the secondary path; Codex settled the per-age
 Date: 2026-11-04
 Decision: `bin/bundle --where` no longer refuses on a dirty `rules/` or `process/` tree or on HEAD differing from `origin/main`; it renders the local tree as `--emit` does. `bin/release` keeps its own sync check. Landed in package 6a.
 Context: DEC-000940 ruled this for ordinary generation; package 3a applied it to `--emit` only, and the 6a review found the reconciled spec ratifying the old refusal. Ruled by the human 2026-11-04.
+
+
+## DEC-001570 — Package 5 landed: adopter and first real adoption
+Date: 2026-11-04
+Decision: Package 5 is merged by PR #413 at f21939831ac72dacfb24ae450e83ff47198f3d51, branch tip e8dc0252d87f2460ae2c6a33ffcd3270f6ae101f; its procedure review is ready-with-findings, with non-blocking follow-ups #411 and #412. The first real adoption is https://github.com/davepierceops/illuminait/pull/26: the package execution artifact records installation and push but no merge, and the later committed live-check artifact records that PR still open at its read-back; these are dated evidence, not a claim about its present merge state.
+Context: reviews/pkg-5-adopter-execution-20261105T012406Z.md and reviews/fiducial-adoption-20261105T011135Z.md record the pinned-source run, independent contradiction read, human C1–C4 rulings and no-op repeat apply. The human subsequently ran the supplied fresh-session check and supplied a screenshot and /context all output, recorded in reviews/fiducial-adoption-live-check-20261105T020041Z.md: CLAUDE.md (8.6k tokens), eight project agents and twelve model-invocable project skills were discovered (live-verified for loading/discovery only); actual native hook firing, manual gate invocation and Codex trust in that target remain unverified.
+
+## DEC-001580 — Package 6a landed: cleanup and reconciled tooling spec
+Date: 2026-11-04
+Decision: Package 6a is merged by PR #409 at 95e77f71c771de5a216a2c3f4900c0ff21435eed, branch tip 3f6a815122befe8fae6731e5b645f3739f04717c: obsolete directive tools and bin/aimeta are removed, root residue and obsolete specs archived, and specs/rule-store.md reconciled to the single-spec form and all three emitters. DEC-001560 records the accompanying local-tree --where behavior.
+Context: reviews/pkg-6a-cleanup-read-20261105T005654Z.md preserves the changes-required first read and records the decision session's amendment verification without a second independent read; its reported suite passed 290 tests (contract-verified), with remaining non-blocking findings carried for the close read.
+
+## DEC-001590 — Package 6b landed: self-adoption and README
+Date: 2026-11-04
+Decision: Package 6b is merged by PR #414 at e3850f6587a242920bd04c90cb48e8f2e3ba2b62, branch tip f07277464924c3fc11a321b79c1603d258ffee1c: Fiducial installs both emitted harness trees, preserves existing denies, removes the four stale adapters/placeholders and rewrites README.md. Its independent review is ready in quality, skepticism and continuity.
+Context: reviews/pkg-6b-self-adopt-read-20261105T013508Z.md and reviews/pkg-6b-self-adopt-execution-20261105T013113Z.md record 303 passing tests, unchanged repeat apply, and installed intake-hook subprocess refusals (contract-verified); actual harness-driven enforcement and fresh-session loading in this separate target remain unverified. The Illuminait loading evidence in DEC-001570 does not establish Fiducial target loading.
+
+## DEC-001600 — Package 7 routes to this Codex decision session
+Date: 2026-11-04
+Decision: The human's package 7 execution block assigns the close to this Codex decision session on pkg-7-close from e3850f6, with one pull request, plain pushes, append-only decisions and no agent merge or release. One fresh frontier reviewer that authored none of the packages reads the whole revision; independence from the authors but not from the executor family is an accepted-risk gap for the human to ratify at release.
+Context: This replaces DEC-001530's package 7 routing only; its other rulings survive: packages 3b/4 were routed together to Codex with separate coder/reviewer work and one PR each; package 6 splits into 6a cleanup depending on 1/3a and 6b self-adoption/README depending on 5; packages 5/6b route after 4; DEC-001460's approved plan and remaining routing stand. The human answers OQ1–3 before the close read; OQ4 remains resolved by DEC-001420; the human retains merge and release.
+Supersedes: DEC-001530
