@@ -53,4 +53,6 @@ Approved R0110 wording:
 
 - R1626: Dave answered “y” to keeping the command-blocks skill trigger unchanged, including explicit delegation and the ordinary internal-tool-call exclusion. No source change.
 
+- R1627: Dave explicitly approved: “Use verification-checklists for verification work, and require subagents doing that work to use it too.” Replace the previous long trigger with this exact wording. Detailed conditions and role-specific sections remain in the verification-checklists skill. At batch finalization, check any definition availability affected by removing the old trigger’s incidental term mentions; keep that detail out of the approved short trigger. No specialized verification rule or definition is retired by this wording change.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
