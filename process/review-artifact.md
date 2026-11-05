@@ -69,9 +69,15 @@ confirms a prior read's findings were fixed, is this header and nothing else.
 
 One entry per finding, after the header.
 
+Flag only what you can demonstrate, cite the location, and label each finding defect, suggestion, or accepted risk.
+A finding labeled accepted risk cites the recorded authorization to accept it.
+Classification describes the kind of finding; the entry heading continues to
+state its severity. Observations are not findings and omit Classification.
+
 ~~~markdown
 ## <finding id> — <blocking | non-blocking | observation>
-Claim: <one sentence — what is wrong>
+Claim: <one sentence stating the finding or observation>
+Classification: <defect | suggestion | accepted risk>
 Location: <path:line, or section name>
 Evidence: <what was checked; verified by running vs. inferred by reading>
 Consequence: <what goes wrong, concretely>
@@ -79,7 +85,9 @@ Fix: <what would resolve it>
 Related: <other finding ids that are the same defect elsewhere, if any>
 ~~~
 
-`Related` is omit-if-none; the other four fields are required. An entry whose
+`Related` is omit-if-none. `Classification` is required for findings and omitted
+for observations. `Claim`, `Location`, `Evidence`, `Consequence` and `Fix` are
+required. An entry whose
 `Evidence` cannot be filled in, or whose `Consequence` cannot state concretely
 what goes wrong, is an observation rather than a finding. Order `blocking`
 entries by weight, heaviest first. Write prose only where judgment does not

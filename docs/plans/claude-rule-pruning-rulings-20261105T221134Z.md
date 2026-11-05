@@ -15,4 +15,6 @@ Baseline: fb310dd9c1ea56e4fa2e1b9b671a50c128fdec0f, after PR #423. Dave requeste
 
 - R0174: Dave rejected retirement and said the observed/inferred/told/unknown labels are useful and should stay. Preserve the labeling obligation. He requested a semantic overlap survey of R0021, R0172, R0174 and related rows to consider consolidation; no consolidated wording or additional retirement is approved. The prior R0172 keep ruling remains in force while its possible consolidation is discussed.
 
+- R0186: Dave answered “agreed” to preserving finding classification in the review skill and retiring R0186 from standing context after that move. The complete original sentence (including demonstration and location) is preserved in process/review-artifact.md, with a Classification field distinct from severity and a requirement to cite authorization for accepted risk. The existing row remains live until batch finalization assigns the retirement decision ID. This agreement concerns the R0186 move; the latest two consolidated claim/verification rows remain proposals awaiting an explicit ruling.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
