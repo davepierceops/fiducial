@@ -27,4 +27,6 @@ Approved R0110 wording:
 
 > Support verification claims with the checks performed. Identify relevant simulations and untested assumptions, state what remains unverified, and claim only what the evidence establishes. Claims about state, results, or completeness require checking the underlying source or result.
 
+- R0180: Dave answered “y” to retiring “Read governed text before emitting anything it governs.” without replacement. The rule is general and vague; specific spec, decision-log and Voice reading obligations remain. Preserve the original in rules/retired/ at batch finalization, using the actual retirement decision ID allocated at merge.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
