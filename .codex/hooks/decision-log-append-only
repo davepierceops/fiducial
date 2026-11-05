@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+"""R0583 (DEC-001230): `decisions/log.md` is append-only. `PreToolUse` on
+`Edit|Write`: the proposed edit must leave every byte already in the file in
+place and add after the last entry — a `Write` whose content starts with the
+file as it stands, or an `Edit` whose `old_string` is the file's tail and
+whose `new_string` begins with it."""
+
+import os
+import pathlib
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import _hooklib as lib  # noqa: E402
+
+LOG = "decisions/log.md"
+
+
+def _refuse(why):
+    lib.block("decision-log-append-only: %s (R0583): %s" % (LOG, why))
+
+
+def main():
+    data = lib.read_input()
+    root, rel = lib.target_file(data)
+    if rel != LOG:
+        lib.passthrough()
+    path = root / rel if root else pathlib.Path(rel)
+    current = path.read_text(encoding="utf-8") if path.exists() else ""
+    tool = data.get("tool_name", "")
+    tool_input = data.get("tool_input") or {}
+
+    if tool == "Write":
+        content = tool_input.get("content")
+        if content is None:
+            _refuse("Write carries no content")
+        if not current:
+            lib.passthrough()
+        if not content.startswith(current.rstrip("\n")):
+            _refuse("the new content does not begin with the log as it stands; only an append is allowed")
+        lib.passthrough()
+
+    if tool == "Edit":
+        old = tool_input.get("old_string") or ""
+        new = tool_input.get("new_string") or ""
+        if tool_input.get("replace_all"):
+            _refuse("replace_all rewrites entries")
+        if not old:
+            _refuse("an Edit with an empty old_string is not an append")
+        if not new.startswith(old):
+            _refuse("new_string does not begin with old_string; an entry would be changed or removed")
+        stripped = current.rstrip("\n")
+        if not stripped.endswith(old.rstrip("\n")):
+            _refuse("old_string is not the end of the log; an append goes after the last entry")
+        if stripped.count(old.rstrip("\n")) != 1 and current.count(old) != 1:
+            _refuse("old_string occurs more than once; make it unique to the log's tail")
+        lib.passthrough()
+
+    _refuse("tool %r is not an append" % tool)
+
+
+if __name__ == "__main__":
+    main()

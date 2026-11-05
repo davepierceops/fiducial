@@ -1,0 +1,80 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/codex-hook\" script '[]' store-lint --check generated-filename",
+            "type": "command"
+          },
+          {
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/codex-hook\" script '[]' store-lint --check citations",
+            "type": "command"
+          },
+          {
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/codex-hook\" script '[]' store-lint --check verdict-lines",
+            "type": "command"
+          }
+        ],
+        "matcher": "Edit|Write"
+      },
+      {
+        "hooks": [
+          {
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/codex-hook\" script '[]' push-readback",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/codex-hook\" deny '[\"Read(./.env)\", \"Read(./.env.*)\", \"Read(./**/.env)\", \"Read(./**/.env.*)\", \"Read(./**/secrets/**)\", \"Read(~/.aws/**)\", \"Read(~/.ssh/**)\", \"Bash(printenv*)\", \"Bash(cat *.env*)\", \"Bash(cat ~/.aws/*)\", \"Bash(cat ~/.ssh/*)\"]'",
+            "type": "command"
+          },
+          {
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/codex-hook\" deny '[\"Bash(kubectl apply*)\", \"Bash(kubectl delete*)\", \"Bash(terraform apply*)\", \"Bash(terraform destroy*)\", \"Bash(tofu apply*)\", \"Bash(tofu destroy*)\", \"Bash(pulumi up*)\", \"Bash(pulumi destroy*)\", \"Bash(gcloud * deploy*)\", \"Bash(gcloud run deploy*)\", \"Bash(aws * deploy*)\", \"Bash(helm install*)\", \"Bash(helm upgrade*)\", \"Bash(ssh *prod*)\"]'",
+            "type": "command"
+          },
+          {
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/codex-hook\" deny '[\"Bash(git push --force*)\", \"Bash(git push -f*)\", \"Bash(git push --force-with-lease*)\", \"Bash(git push * --force*)\", \"Bash(git push * -f*)\", \"Bash(git push * --force-with-lease*)\", \"Bash(git push origin +*)\", \"Bash(git push * +*)\"]'",
+            "type": "command"
+          }
+        ],
+        "matcher": ".*"
+      },
+      {
+        "hooks": [
+          {
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/codex-hook\" script '[]' intake-branch-guard",
+            "type": "command"
+          },
+          {
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/codex-hook\" script '[\"test-designer-agent\"]' lane-guard --lane tests",
+            "type": "command"
+          },
+          {
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/codex-hook\" script '[\"architect-agent\"]' lane-guard --lane specs",
+            "type": "command"
+          },
+          {
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/codex-hook\" script '[]' decision-log-append-only",
+            "type": "command"
+          },
+          {
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/codex-hook\" script '[]' review-artifact-immutable",
+            "type": "command"
+          },
+          {
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/codex-hook\" script '[\"spec-reviewer-agent\", \"context-quality-reviewer\", \"reviewer-agent\", \"skeptic-risk-agent\"]' lane-guard --lane reviews",
+            "type": "command"
+          }
+        ],
+        "matcher": "Edit|Write"
+      }
+    ]
+  }
+}
