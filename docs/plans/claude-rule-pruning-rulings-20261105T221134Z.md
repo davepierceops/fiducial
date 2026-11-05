@@ -17,4 +17,14 @@ Baseline: fb310dd9c1ea56e4fa2e1b9b671a50c128fdec0f, after PR #423. Dave requeste
 
 - R0186: Dave answered “agreed” to preserving finding classification in the review skill and retiring R0186 from standing context after that move. The complete original sentence (including demonstration and location) is preserved in process/review-artifact.md, with a Classification field distinct from severity and a requirement to cite authorization for accepted risk. The existing row remains live until batch finalization assigns the retirement decision ID. This agreement concerns the R0186 move; the latest two consolidated claim/verification rows remain proposals awaiting an explicit ruling.
 
+- Claim/evidence consolidation: Dave answered “y” to adopting the two final proposed rows. This replaces the earlier separate R0172 keep wording and R0174 keep-as-a-row proposal while preserving the provenance labels. R0172 now carries the approved claims/basis wording; R0110 carries the approved verification/limits wording, with the union of the replaced rows' role/session/corpus scopes. The thirteen overlapping live rows are archived to these successors: R0174, R0179 and R0455 → R0172; R0021, R0177, R0111, R0783, R0461, R0161, R0181, R0182, R0190 and R0192 → R0110. R0186's separately approved skill move and retirement remain as recorded above. Specialized role rows and definitions are unchanged. This removes the standing requirement to assign exactly one of the six evidence classes; it does not rewrite specialized procedures that still use those terms.
+
+Approved R0172 wording:
+
+> Label every claim observed, inferred, told, or unknown, and provide inspectable support. Make assumptions and uncertainty explicit; say what could not be determined rather than guess.
+
+Approved R0110 wording:
+
+> Support verification claims with the checks performed. Identify relevant simulations and untested assumptions, state what remains unverified, and claim only what the evidence establishes. Claims about state, results, or completeness require checking the underlying source or result.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
