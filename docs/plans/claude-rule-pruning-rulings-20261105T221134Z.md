@@ -45,4 +45,6 @@ Approved R0110 wording:
 
 - R0460: Dave answered “agreed” to retiring this separate prohibition into R0110 and adding the positive obligation: “Keep verification aligned with approved requirements, and justify changes to checks against those requirements.” The sentence is prepended to the approved consolidated verification wording. The original R0460 is archived with retired: R0110. This preserves verification against requirements while allowing justified corrections to checks. Dave also stated a preference for eliminating “never”/“don’t” rules; assess the useful positive obligation rather than preserving a prohibition by default.
 
+- R0458/R0166: Dave answered “yes” to combining escalation and authority in R0166: “Use existing guidance for routine implementation decisions. Bring unresolved requirements, material review disagreements, and product or risk tradeoffs to the human. Approval, release, prioritization, and publication remain the human's.” This supersedes the shorter R0166 wording approved earlier in this review. The original R0458 is archived with retired: R0166; scopes are unchanged.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
