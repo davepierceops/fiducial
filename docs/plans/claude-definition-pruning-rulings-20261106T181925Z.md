@@ -22,6 +22,8 @@ Baseline: cb0194aee512f48f3046e5ba9be445d85f97fbd3, after PR #424. Dave requeste
 
 - R0043 (tier): Dave instructed “Yes, retire it. Next.” Retire without replacement. R0259 already names the model categories and when to use them; the definition adds little and refers to four claim-strength tiers without explaining them. Model-selection rules remain unchanged. No active process or other live-rule ID citations were found. At batch finalization, archive the original with the actual retirement decision ID allocated at merge, and verify removal from roots, agents, skills and standalone bundles.
 
-No further definition retirement or generator-selection change is approved yet. The observed generator behavior—term matching in non-emitted enforced rows and transitive definition pulling—is review evidence, not authorization to change it. R0045 is next for discussion.
+- R0045 (Top K): Dave answered “Sure” to the shortened wording: “Top K means the K highest-priority user journeys listed in SPEC.md.” Metadata remains unchanged. Dave also noted that he has not really used the user-journey machinery and introduced it early in his thinking. Preserve that concern for a separate review of journey-dependent spec, release and consequential-change requirements; this is not authorization to remove or alter those requirements in this definition edit.
+
+No further definition retirement or generator-selection change is approved yet. The observed generator behavior—term matching in non-emitted enforced rows and transitive definition pulling—is review evidence, not authorization to change it. R0055 is next for discussion.
 
 These are human wording/scope rulings, not an independent intake review or a claim of landing. Formal decision-log entries are allocated at merge under the decision-log procedure.
