@@ -93,4 +93,6 @@ Approved R0110 wording:
 
 - R0245: Dave answered “yes” to retiring the session-end decision-log deadline without replacement or a move to a skill. R0170 retains the durable-record requirement; the decision-log skill governs recording procedure and allocation at merge. Removing R0245 resolves the competing session-end timing requirement. No active process citations were found. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge, and ensure its body does not reappear in generated roots or agents.
 
+- R0246: Dave answered “yes” to retiring the automatic same-turn rule-proposal trigger without replacement or a move to a skill. Dave identified easy rule creation as a contributor to excess rows and wants more friction before adding them. Stating an ongoing preference no longer automatically triggers a new-row proposal; explicit requests for durable rules can still use intake. No active process citations were found. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge, and ensure its body does not reappear in generated roots or agents.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
