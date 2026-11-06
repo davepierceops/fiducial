@@ -64,18 +64,9 @@ The recommendation is exactly one of: `ship`; `ship with accepted risks`;
 
 ## Shared report
 
-Use this reply template for substantial implementation, review, or release
-work. Reviewers use it alongside the artifact in `process/review-artifact.md`;
-it reports on the package or artifact rather than replacing either.
+For substantial implementation, review, or release work, report on the change
+package or review artifact without replacing it.
 
-~~~markdown
-Role: <the role reporting>
-Intent: <what the work was for>
-Evidence: <what was inspected or run; results and pointers>
-Boundary: <what the evidence covers>
-Gaps: <what remains unknown or unverified>
-Recommendation: <the role's recommendation>
-Human decision points: <what needs a ruling; none if none>
-~~~
+Lead with the outcome and recommendation. Summarize supporting evidence, verification limits, material gaps, and decisions needed from the human; link the detailed artifact.
 
 Provenance: DEC-001290; R0502, R0503, R1032, R1041, R1042, R1044, R1045, R0506; retained judgment cited above.
