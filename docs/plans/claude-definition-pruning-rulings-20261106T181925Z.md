@@ -8,6 +8,8 @@ Baseline: cb0194aee512f48f3046e5ba9be445d85f97fbd3, after PR #424. Dave requeste
 
 - R0780 (verification boundary): Dave answered “yes” to: “A verification boundary separates what the evidence establishes from what remains unverified.” Metadata is unchanged. This retains the custom term used by consequential-change policy while removing the list of uncertainty types.
 
-No further definition retirement or generator-selection change is approved yet. The observed generator behavior—term matching in non-emitted enforced rows and transitive definition pulling—is review evidence, not authorization to change it. R1200 is next for discussion.
+- R1200 (evidence): Dave answered “yes” to retiring the definition without replacement or a move to a skill. The definition conflates evidence with retained command output; evidence can support an immediate conclusion without leaving the session. Existing recordkeeping and claim-support rules remain unchanged. No active process or other live-rule ID citations were found. At batch finalization, archive the original with the actual retirement decision ID allocated at merge, and verify that its body disappears from roots, agents, skills and standalone bundles.
+
+No further definition retirement or generator-selection change is approved yet. The observed generator behavior—term matching in non-emitted enforced rows and transitive definition pulling—is review evidence, not authorization to change it. R0497 is next for discussion.
 
 These are human wording/scope rulings, not an independent intake review or a claim of landing. Formal decision-log entries are allocated at merge under the decision-log procedure.
