@@ -1,15 +1,17 @@
 ---
 order: 10
 topic: [change-flow]
-role: [architect-agent, chief-of-staff, coder-agent, context-quality-reviewer, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent, test-designer-agent]
+role: [architect-agent, chief-of-staff, coder-agent, context-quality-reviewer, copy-editor, critic, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent, test-designer-agent, writer]
 session: [decision, execution]
-corpus: [software]
+corpus: [software, writing]
 ---
 
 # Process: Change Flow
 
 A delta is the whole of what one piece of work changes. Review is charged once
 per delta, at its close, by a reader that did not produce it [R0462, R1396].
+
+The following closure table applies to architect-agent, chief-of-staff, coder-agent, context-quality-reviewer, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent and test-designer-agent in software decision and execution sessions.
 
 | What changes | Closed by | Who reads |
 |---|---|---|
@@ -23,7 +25,7 @@ and execution sessions:
 
 Attach approval at reconciliation, to the version of record on the default branch; never to a revision the spec branch held before it.
 
-Each meaningful change [R0465] runs these in order, by subagents but the human.
+For those same software roles and sessions, each meaningful change [R0465] runs these in order, by subagents but the human.
 
 1. **Spec.** `SPEC.md` is approved [R1513] and the unit's acceptance criteria
    are written from it [R0472].
@@ -59,9 +61,11 @@ Route a finding below the reviewed document's stage — a spec read raising an i
 
 ## Deep reads
 
+For the software roles and sessions listed above:
+
 The human, or the Chief of Staff for him, may call a deep read of anything,
 whole not diff, at any time [R1137].
 
-For the Chief of Staff in decision sessions:
+For the Chief of Staff in software and writing decision sessions:
 
 Propose a deep read at milestone moments — a major version cut, a significant structural change — without being asked.

@@ -1,7 +1,7 @@
 ---
 order: 40
 topic: [review-artifact]
-role: [spec-reviewer-agent, context-quality-reviewer, reviewer-agent, skeptic-risk-agent, release-manager-agent, copy-editor, critic]
+role: [architect-agent, chief-of-staff, coder-agent, context-quality-reviewer, copy-editor, critic, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent, test-designer-agent, writer]
 session: [decision, execution]
 corpus: [software, writing]
 ---
@@ -9,6 +9,8 @@ corpus: [software, writing]
 # Process: Review Artifact
 
 The form a review emits: one read over one delta, one artifact [R1396, R1408].
+
+The artifact format applies to spec-reviewer-agent, context-quality-reviewer, reviewer-agent, skeptic-risk-agent, release-manager-agent, copy-editor and critic in software and writing decision and execution sessions. The finding-classification instruction below applies to all roles in those sessions and corpora.
 
 Where a role or a policy names a required output, this is where it goes:
 

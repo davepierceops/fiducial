@@ -201,10 +201,15 @@ class ClaudeCodeTarget(Target):
             if stem in NO_MODEL_INVOCATION:
                 fields.append(("disable-model-invocation", True))
             text = frontmatter(fields) + "\n" + doc.body.strip() + "\n"
-            if stem in spill:
-                text += "\n## Rules\n\n" + render_rows(
-                    spill[stem], rows, enforced, skip_definitions=claude_md_definitions,
-                    definitions_heading="### Definitions")
+            extra = spill.get(stem, [])
+            if extra:
+                text += "\n## Rules\n\n"
+            supplement = render_rows(
+                extra, rows, enforced, skip_definitions=claude_md_definitions,
+                definitions_heading="### Definitions" if extra else "## Definitions",
+                definition_sources=[doc, *extra])
+            if supplement:
+                text += "\n" + supplement
             files[".claude/skills/%s/SKILL.md" % stem] = text
             skill_names.add(stem)
 

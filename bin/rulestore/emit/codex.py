@@ -270,10 +270,15 @@ class CodexTarget(Target):
         skill_names = {stem for stem, _ in documents}
         for stem, doc in documents:
             text = _skill(stem, doc)
-            if stem in spill:
-                text += "\n## Rules\n\n" + render_rows(
-                    spill[stem], rows, enforced, skip_definitions=definitions,
-                    definitions_heading="### Definitions")
+            extra = spill.get(stem, [])
+            if extra:
+                text += "\n## Rules\n\n"
+            supplement = render_rows(
+                extra, rows, enforced, skip_definitions=definitions,
+                definitions_heading="### Definitions" if extra else "## Definitions",
+                definition_sources=[doc, *extra])
+            if supplement:
+                text += "\n" + supplement
             files[".agents/skills/%s/SKILL.md" % stem] = text
 
         hooks = {}

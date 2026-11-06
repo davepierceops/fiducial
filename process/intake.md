@@ -1,7 +1,7 @@
 ---
 order: 43
 topic: [intake]
-role: [chief-of-staff, context-quality-reviewer]
+role: [chief-of-staff, coder-agent, context-quality-reviewer]
 session: [decision, execution]
 corpus: [software, writing]
 ---
@@ -13,7 +13,11 @@ landing.
 The judgment governing the proposal and its ruling is [R0166, R0462]; the
 intake rubric is [R0264, R0266, R0284, R0950].
 
+For chief-of-staff and coder-agent in software and writing decision and execution sessions, when creating or changing a vendor-specific artifact:
+
 A durable rule lives in the store, never only in vendor tooling. An adapter is derived from it: update the store first, keep the adapter short, note every deliberate deviation.
+
+The intake steps below apply to chief-of-staff and context-quality-reviewer in software and writing decision and execution sessions.
 
 1. **Proposal.** Collect the proposed wording or diff, its reason and evidence,
    and the affected rows or process documents.
