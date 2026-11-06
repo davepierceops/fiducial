@@ -1,0 +1,43 @@
+# Review and verification pruning — map and proposed review order
+
+Baseline: 1df9a4ec813e5cec756665123d8a5298c7597cef (PR #426). Dave asked whether role instructions, quality gates and workflow procedures should receive the same scrutiny as shared standing context, then answered “go” to mapping requirements and reviewing decisions one by one. This is an observed structural map and proposal, not authorization to delete or relocate any requirement. No live source or generated context is changed by this document.
+
+Source files, rather than generated copies, are the editing authority. An identical paragraph in multiple role files can come from one shared row: R1073 is one source row selected for Reviewer, Skeptic/Risk and Release Manager. Repetition across independently invoked roles is not by itself a defect. Review actual overlapping obligations, their triggers and audiences before consolidating.
+
+## Map
+
+| Concern | Current owners and sources | Required work/output | Candidate for discussion |
+|---|---|---|---|
+| Work sequence | change-flow and build; R0478, R0485, R0486 | approved spec, reviewed plan, test designer, separate implementer, review, release preparation | Two skills narrate the same lifecycle. Choose one owner and retain unique close/disposition requirements. |
+| Review independence and perspectives | R0462, R0487, R0488, R0492; build and change-flow | reviewer separate from author; quality and skepticism verdicts | Distinguish separate perspectives from separate agent invocations; do not silently collapse them. DEC-000460 deliberately requires the two passes. |
+| Continuity | R1104, R1105; build and change-flow | spec consistency scan; wider scan when boundaries/policy are affected | Compare scoped row triggers with general workflow language before deciding how often this pass is needed. |
+| Evidence and verification | R0110, R1073, R0156, R0157; verification-checklists; Reviewer, Skeptic/Risk, Test Designer | match claims to evidence; identify mocks, untested assumptions and material gaps; choose checks | Long evidence inventory and specialized guardrails overlap with shared claim-support guidance. Preserve incident-driven protections where they add something. |
+| Review artifact and findings | R1396, R1414, R1617; review-artifact and change-flow | one artifact per read/delta, overall and pass verdicts, supported findings, scope and uninspected areas, dispositions | Compare standing role prose with the skill template; distinguish required metadata from narration and repeated instructions. R1414 also drives a hook. |
+| Release assessment | R0509 and release's enforced rows; release skill | change package, readiness assessment, final report | Three shapes repeat intent, evidence, boundaries, gaps and recommendation. Decide which are distinct deliverables versus views of the same evidence. DEC-001290 intentionally moved the field lists into skill templates. |
+| Human release gate | R0534/R0535; gate skill and R0551/R0552/R0553/R0558/R0560/R1039/R0505 | consequential classification, issue derived from package, linked pending gate, human go | Preserve approval boundary while reviewing issue/notification ceremony. Tracker portability remains separate in #425. |
+
+## Roles
+
+- Test Designer derives checks from the spec and supplies failing-test evidence; Coder implements to green. Their independence is deliberate (R0486 / DEC-001300).
+- Reviewer assesses correctness, maintainability, consistency and test adequacy (R0487).
+- Skeptic/Risk assesses false confidence, boundary gaps, operational risk and overclaims (R0488).
+- Spec Reviewer checks spec acceptance and continuity (R1104/R1105).
+- Context Quality Reviewer checks governed context through the intake rubric; it does not replace engineering review.
+- Release Manager assembles the release recommendation. Chief of Staff coordinates required reviews and human decisions.
+- Architect's design obligations, and writing-only Critic/Copy Editor/Writer rows, remain distinct audiences. Shared rows spanning writing must preserve that scope; no blanket rewriting of writing rules is authorized by this map.
+
+## Observed size, for prioritization only
+
+Installed Claude role files: Reviewer 1,652 words; Skeptic/Risk 1,643; Test Designer 1,207; Spec Reviewer 915; Coder 897; Release Manager 833; Context Quality Reviewer 790; Architect 671. Counts include metadata and definitions and are whitespace word counts, not token measurements.
+
+Relevant installed skills: change-flow 1,101 words; review-artifact 939; verification-checklists 936; release 479; gate 332; build 244. These are emitted files, including pulled definitions. Adopt is larger partly because it embeds executable code; file size alone is not a retirement criterion.
+
+## First proposed decision — one owner for the execution sequence
+
+Recommendation: build owns the spec-to-release execution sequence. Change-flow owns how each type of delta closes, review dispositions and deep-read routing, and directs execution to build instead of repeating six stages.
+
+This is a consolidation proposal, not a proposal to remove tests, author/reviewer separation, plan review, quality/skepticism passes, continuity checks, per-PR agent review, routine release authority or the consequential human gate. Build must carry any unique required step currently expressed only in change-flow. Preserve change-flow's existing software role/session scope, and ensure every affected audience can obtain build in native harnesses and standalone bundles; current process selectors differ. Record and review any required availability change explicitly. No relocation into generated role files by accident.
+
+Prior decisions consulted: DEC-000460 (review per PR and distinct quality/skepticism passes), DEC-001280 (gate procedure), DEC-001290 (release templates), DEC-001300 (build/intake procedure extraction), DEC-001310 (one source per duplicate obligation), DEC-001390 (separation), DEC-001450 (review artifact naming), DEC-001690/DEC-001700 (prior pruning scope).
+
+No ruling on this first proposal has been received. Subsequent wording and scope rulings will be recorded here or in a companion rulings log, with formal decision IDs allocated at landing. Independent intake/process review is required before landing; this inventory is not that review.
