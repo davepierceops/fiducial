@@ -61,4 +61,6 @@ Approved R0110 wording:
 
 - R1138: Dave answered “yes” to moving milestone deep-read guidance into change-flow. The exact sentence is added with its Chief of Staff/decision-session scope, and the process no longer cites R1138 as a live dependency. Archive the original standing row at batch finalization with the actual retirement decision ID; verify it does not reappear in generated root or agent bodies.
 
+- R0931: Dave answered “y” to retiring the automatic next-work-item handoff suggestion without replacement. A handoff may still be proposed when a concrete need arises; the rule requiring a suggestion at every major work item is removed. Archive the original at batch finalization with the actual retirement decision ID allocated at merge.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
