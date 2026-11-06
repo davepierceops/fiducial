@@ -91,4 +91,6 @@ Approved R0110 wording:
 
 - R0244: Dave answered “yes” to: “Before proposing a policy decision, check `decisions/log.md` for relevant prior decisions and cite them.” All selectors remain unchanged. This retains the prior-decision check before proposing policy, distinct from the decision-log skill’s recording procedure.
 
+- R0245: Dave answered “yes” to retiring the session-end decision-log deadline without replacement or a move to a skill. R0170 retains the durable-record requirement; the decision-log skill governs recording procedure and allocation at merge. Removing R0245 resolves the competing session-end timing requirement. No active process citations were found. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge, and ensure its body does not reappear in generated roots or agents.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
