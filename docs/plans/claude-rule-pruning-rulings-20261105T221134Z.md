@@ -81,4 +81,6 @@ Approved R0110 wording:
 
 - R0228: Dave answered “yes” to: “Lead with the point. Be concise, preserve important detail, and prefer bullets to paragraphs.” All selectors remain unchanged. Dave explicitly retained the bullet preference and chose concise over terse to value brevity without losing important detail. Earlier proposals dropping the bullet preference or retaining terse are superseded.
 
+- R0229: Dave answered “yes” to retiring the pasted-output triage rule without replacement or a move to a skill. Revised R0228 covers focused presentation while preserving important detail; R0229 could suppress relevant information merely because it needs no human judgment. No active process citations were found. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge, and ensure its body does not reappear in generated roots or agents.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
