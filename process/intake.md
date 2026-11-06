@@ -19,7 +19,7 @@ A durable rule lives in the store, never only in vendor tooling. An adapter is d
    and the affected rows or process documents.
 2. **Candidate.** Create an `intake/<proposal-slug>` branch and apply the
    candidate change there. This is the branch observable used by R0934's
-   governed-path hook. Tree-derived fields use [R1606, R1607].
+   governed-path hook. Tree-derived fields use [R1607].
 3. **Review.** Give the candidate diff and proposal to a Context Quality
    Reviewer subagent, using the rubric cited above and the separation in
    [R0462]. For a process delta, use the process read and sign-off path

@@ -67,4 +67,6 @@ Approved R0110 wording:
 
 - R1611: Dave answered “y” to retiring the full-spec-and-approval-log reading rule without replacement or a move to a skill. The build skill retains its existing spec-read step and R1513 approval requirement; its active R1611 citation is removed. The historical provenance citation remains. The proposed shorter R1611 wording is not adopted. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge; ensure its body disappears from generated roots and agents.
 
+- R1606: Dave answered “yes” to retiring the plan/subagent tree-fact instruction without replacement or a move to a skill. The consolidated evidence rule already requires checking underlying sources; a separate requirement for the executor to derive repository details does not earn standing context. Remove its active citation from process/intake.md; R1607 remains pending its own review. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge, and ensure its body does not reappear in generated roots or agents.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
