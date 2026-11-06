@@ -278,7 +278,7 @@ class CodexTarget(Target):
                 definitions_heading="### Definitions" if extra else "## Definitions",
                 definition_sources=[doc, *extra])
             if supplement:
-                text += "\n" + supplement
+                text += ("" if extra else "\n") + supplement
             files[".agents/skills/%s/SKILL.md" % stem] = text
 
         hooks = {}
