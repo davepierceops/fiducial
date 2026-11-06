@@ -23,7 +23,7 @@ Each meaningful change [R0465] runs these in order, by subagents but the human.
 1. **Spec.** `SPEC.md` is approved [R1513] and the unit's acceptance criteria
    are written from it [R0472]; nothing is built against an open spec [R0017].
 2. **Plan.** Plan mode, from the spec; a reviewer that
-   did not write the plan reads it before anything dispatches [R0065].
+   did not write the plan reads it before anything dispatches [R0462].
 3. **Build.** A test designer writes the unit's tests and confirms them red
    [R0478]; a different subagent implements to green [R0486, R0485].
 4. **Review.** Quality, skepticism and continuity passes, each its own verdict
@@ -31,7 +31,7 @@ Each meaningful change [R0465] runs these in order, by subagents but the human.
    is recorded with why [R1617]. Apply the review dispositions below;
    `changes-required` means the delta has not closed; one more read over the
    diff since then closes it.
-5. **Merge.** Each pull request receives an agent review [R0065] before merge.
+5. **Merge.** Each pull request receives an agent review before merge.
 6. **Release.** A routine change flows to release on its evidence under standing
    authorization [R0535]. A consequential change [R0534, R0535] goes through the
    gate skill — its `human-gate` issue, the human's explicit go [R0534] —
