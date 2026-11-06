@@ -86,3 +86,9 @@ Release recommendation and human decision points: ship. Existing human merge aut
 - Independent repeat read: reviews/review-verification-pruning-repeat-read-20261106T221108Z.md. Zero conflicts/writes; all inventory/emitted bytes and modes match. Repeat apply returned `[]`, preserved report hashes and created no report.
 - Execution report: docs/fiducial-adoption-20261106T220656Z.md; retained copy: reviews/fiducial-consolidation-adoption-report-20261106T220656Z.md.
 - Full-suite log: 326 tests passed in 110.275s. No code/source changes after that run; installation changes match the independently reviewed generated outputs.
+
+## Existing report-format follow-up
+
+The final independent reader identified a pre-existing procedure/hook mismatch: adopt requires a retained execution-report copy under reviews/, while store-lint’s generic verdict-lines check expects review headers for every file in that directory. The PR426 report copy already follows the execution-report convention. This batch preserves the hook and report-copy procedure; it does not fabricate a review verdict for execution evidence. The three actual independent review artifacts pass their filename/verdict checks. The execution-report copy is not an independent review and would not pass that generic review-format check. Tracked as a non-blocking existing discrepancy in #427, confirmed by issue readback. Resolve it during the broader artifact/review-policy reconsideration; no new policy change or waiver is included here.
+
+Additional local validation: changed source citation/row lint passed for all 29 applicable changed live source files; actual independent review filename/verdict checks passed.
