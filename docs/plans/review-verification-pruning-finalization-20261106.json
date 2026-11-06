@@ -1,0 +1,75 @@
+{
+  "baseline": "1df9a4ec813e5cec756665123d8a5298c7597cef",
+  "rulings": "docs/plans/review-verification-pruning-map-20261106T200257Z.md",
+  "retirement_decision": "DEC-001710",
+  "retired_without_replacement": [
+    "R1077",
+    "R1094",
+    "R1054",
+    "R1055",
+    "R0187",
+    "R0114",
+    "R0151",
+    "R0123",
+    "R0124",
+    "R0125",
+    "R0156",
+    "R0157"
+  ],
+  "successors": {
+    "R0487": "R1048",
+    "R0488": "R1058",
+    "R0127": "R0126",
+    "R0128": "R0126",
+    "R0505": "R1039"
+  },
+  "hook_only": [
+    "R1414"
+  ],
+  "rewritten": [
+    "R1073",
+    "R1058",
+    "R1068",
+    "R1396",
+    "R1617",
+    "R1047",
+    "R1048",
+    "R1104",
+    "R1105",
+    "R1137",
+    "R0126",
+    "R1496",
+    "R1497",
+    "R1178",
+    "R1179",
+    "R0506",
+    "R1041",
+    "R1042",
+    "R0509",
+    "R0552",
+    "R0553",
+    "R1039"
+  ],
+  "kept": [
+    "R0492",
+    "R0121",
+    "R1045",
+    "R0551",
+    "R0560"
+  ],
+  "deferred": {
+    "R0129": 428,
+    "R0130": 428,
+    "R1183": 428,
+    "R0152": 427,
+    "R0558": 427
+  },
+  "process_changed": [
+    "build",
+    "change-flow",
+    "review-artifact",
+    "release",
+    "gate"
+  ],
+  "note": "No emitter implementation change. Preserve archive originals except retirement reference; preserve all other metadata except approved R0126 condition union and R1137 trigger. No unapproved gate, review, SLO or tracker-policy redesign."
+}
