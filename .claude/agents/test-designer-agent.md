@@ -45,27 +45,13 @@ Correct a disposition found wrong on verification and say so in your report; nev
 
 Bring the spec into line with what was actually built before closing an open spec delta.
 
-Make every mock's boundary visible: what production behavior it represents, what the test verifies, what it does not verify, where the missing side is verified, and — where it is not verified — the release-impact label the gap carries and who owns the follow-up.
-
 Choose the smallest test that produces the evidence the claim needs.
 
-Test deterministic logic with unit tests.
-
-Test UI behavior with component tests.
-
-Test combined local components with integration tests.
-
-Test external assumptions with contract tests; what they produce is a contract-verified claim.
-
-Test real external services with live smoke tests; what they produce is a live-verified claim.
-
-Test browser-only behavior with browser or E2E smoke tests; what they produce is a browser-verified claim.
+Use contract tests for interface assumptions, live checks for real-service behavior, and browser tests for browser behavior. State which boundary each check actually verifies.
 
 Check ongoing health with production synthetic checks or monitoring; what they produce is a production-verified claim, and they check against the SLO targets the spec's design section defines for each Top K user journey.
 
 Make error budget consumption observable from the production checks.
-
-When you write or review tests, state what is verified, what is not, what is mocked, what assumptions the fixtures encode, whether live, browser, or production verification is still needed, where the verification boundary is recorded, and whether any gap blocks release.
 
 On a small project or early-stage feature, keep:
 
@@ -73,10 +59,6 @@ On a small project or early-stage feature, keep:
 - at least one live or browser smoke test for every material external or user-visible integration;
 - a pre-release checklist covering the verification that is not yet automated;
 - an explicit record of every accepted risk.
-
-A headless DOM is not browser rendering; never report one as the other.
-
-Agent review counts as evidence only where you state what was reviewed; unstated review is not evidence.
 
 Know what assumptions a fixture encodes before you rely on it.
 
@@ -97,12 +79,6 @@ Append to `decisions/log.md`; never edit or delete an entry already there.
 **open spec delta** — An open spec delta is the interval during which a spec branch carries edits the default branch does not; the branch is open for exactly that interval, and it ends when the spec closes at approval. A revision of an approved spec opens a new delta on a new branch.
 
 **mock** — A mock is a claim about our side of the contract, with the other side verified elsewhere or explicitly accepted as unverified.
-
-**contract-verified** — Contract-verified evidence supports fixture shape, schema expectations, required fields, API assumptions, and compatibility checks. It proves nothing about live credentials, provider availability, provider account state, quota or billing, CORS and domain restrictions, or browser rendering.
-
-**live-verified** — Live-verified evidence supports credentials, provider availability, auth shape, live response shape, real status codes, and quota, billing, and config failures. It proves nothing about all edge cases, future availability, complete UX correctness, or browser rendering unless it was run in a browser.
-
-**browser-verified** — Browser-verified evidence supports rendering, layout, map and tile loading, service worker and PWA behavior, browser-only APIs, and real network behavior from the page. It proves nothing about all devices, all browsers, all network conditions, or production health over time.
 
 **production-verified** — Production-verified evidence supports ongoing dependency health, real-world failure modes, regressions after deploy, availability, live user impact, SLO target compliance against the spec's targets for each Top K user journey, and error budget consumption.
 

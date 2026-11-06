@@ -1,0 +1,776 @@
+{
+  "before": {
+    "claude-code/CLAUDE.md": {
+      "lines": 47,
+      "words": 574,
+      "bytes": 4055
+    },
+    "claude-code/.claude/skills/adopt/SKILL.md": {
+      "lines": 433,
+      "words": 2642,
+      "bytes": 23545
+    },
+    "claude-code/.claude/skills/build/SKILL.md": {
+      "lines": 35,
+      "words": 238,
+      "bytes": 1748
+    },
+    "claude-code/.claude/skills/change-flow/SKILL.md": {
+      "lines": 104,
+      "words": 1095,
+      "bytes": 6640
+    },
+    "claude-code/.claude/skills/command-blocks/SKILL.md": {
+      "lines": 44,
+      "words": 622,
+      "bytes": 3766
+    },
+    "claude-code/.claude/skills/decision-log/SKILL.md": {
+      "lines": 48,
+      "words": 353,
+      "bytes": 2202
+    },
+    "claude-code/.claude/skills/gate/SKILL.md": {
+      "lines": 47,
+      "words": 326,
+      "bytes": 2087
+    },
+    "claude-code/.claude/skills/intake/SKILL.md": {
+      "lines": 47,
+      "words": 410,
+      "bytes": 2752
+    },
+    "claude-code/.claude/skills/outline/SKILL.md": {
+      "lines": 38,
+      "words": 392,
+      "bytes": 2367
+    },
+    "claude-code/.claude/skills/project-status/SKILL.md": {
+      "lines": 46,
+      "words": 329,
+      "bytes": 2163
+    },
+    "claude-code/.claude/skills/release/SKILL.md": {
+      "lines": 82,
+      "words": 473,
+      "bytes": 3463
+    },
+    "claude-code/.claude/skills/retro/SKILL.md": {
+      "lines": 84,
+      "words": 601,
+      "bytes": 3871
+    },
+    "claude-code/.claude/skills/review-artifact/SKILL.md": {
+      "lines": 114,
+      "words": 933,
+      "bytes": 6013
+    },
+    "claude-code/.claude/skills/spec-template/SKILL.md": {
+      "lines": 82,
+      "words": 593,
+      "bytes": 3854
+    },
+    "claude-code/.claude/skills/verification-checklists/SKILL.md": {
+      "lines": 78,
+      "words": 930,
+      "bytes": 6621
+    },
+    "claude-code/.claude/skills/voice/SKILL.md": {
+      "lines": 85,
+      "words": 594,
+      "bytes": 3749
+    },
+    "claude-code/.claude/hooks/_hooklib.py": {
+      "lines": 118,
+      "words": 443,
+      "bytes": 3604
+    },
+    "claude-code/.claude/hooks/decision-log-append-only": {
+      "lines": 62,
+      "words": 265,
+      "bytes": 2261
+    },
+    "claude-code/.claude/hooks/intake-branch-guard": {
+      "lines": 30,
+      "words": 110,
+      "bytes": 915
+    },
+    "claude-code/.claude/hooks/lane-guard": {
+      "lines": 42,
+      "words": 147,
+      "bytes": 1391
+    },
+    "claude-code/.claude/hooks/push-readback": {
+      "lines": 123,
+      "words": 490,
+      "bytes": 4484
+    },
+    "claude-code/.claude/hooks/review-artifact-immutable": {
+      "lines": 28,
+      "words": 114,
+      "bytes": 912
+    },
+    "claude-code/.claude/hooks/store-lint": {
+      "lines": 216,
+      "words": 961,
+      "bytes": 8379
+    },
+    "claude-code/.claude/agents/architect-agent.md": {
+      "lines": 62,
+      "words": 665,
+      "bytes": 4238
+    },
+    "claude-code/.claude/agents/coder-agent.md": {
+      "lines": 88,
+      "words": 891,
+      "bytes": 5966
+    },
+    "claude-code/.claude/agents/context-quality-reviewer.md": {
+      "lines": 68,
+      "words": 784,
+      "bytes": 4505
+    },
+    "claude-code/.claude/agents/release-manager-agent.md": {
+      "lines": 61,
+      "words": 827,
+      "bytes": 5221
+    },
+    "claude-code/.claude/agents/reviewer-agent.md": {
+      "lines": 146,
+      "words": 1646,
+      "bytes": 10656
+    },
+    "claude-code/.claude/agents/skeptic-risk-agent.md": {
+      "lines": 128,
+      "words": 1637,
+      "bytes": 10804
+    },
+    "claude-code/.claude/agents/spec-reviewer-agent.md": {
+      "lines": 82,
+      "words": 909,
+      "bytes": 5532
+    },
+    "claude-code/.claude/agents/test-designer-agent.md": {
+      "lines": 113,
+      "words": 1201,
+      "bytes": 7796
+    },
+    "claude-code/.claude/settings.json": {
+      "lines": 88,
+      "words": 160,
+      "bytes": 2346
+    },
+    "codex/AGENTS.md": {
+      "lines": 47,
+      "words": 574,
+      "bytes": 4055
+    },
+    "codex/.agents/skills/spec-template/SKILL.md": {
+      "lines": 82,
+      "words": 593,
+      "bytes": 3856
+    },
+    "codex/.agents/skills/change-flow/SKILL.md": {
+      "lines": 104,
+      "words": 1095,
+      "bytes": 6644
+    },
+    "codex/.agents/skills/review-artifact/SKILL.md": {
+      "lines": 114,
+      "words": 933,
+      "bytes": 6015
+    },
+    "codex/.agents/skills/gate/SKILL.md": {
+      "lines": 47,
+      "words": 326,
+      "bytes": 2091
+    },
+    "codex/.agents/skills/release/SKILL.md": {
+      "lines": 82,
+      "words": 473,
+      "bytes": 3467
+    },
+    "codex/.agents/skills/intake/SKILL.md": {
+      "lines": 47,
+      "words": 410,
+      "bytes": 2756
+    },
+    "codex/.agents/skills/build/SKILL.md": {
+      "lines": 35,
+      "words": 238,
+      "bytes": 1752
+    },
+    "codex/.agents/skills/command-blocks/SKILL.md": {
+      "lines": 44,
+      "words": 622,
+      "bytes": 3770
+    },
+    "codex/.agents/skills/verification-checklists/SKILL.md": {
+      "lines": 78,
+      "words": 930,
+      "bytes": 6625
+    },
+    "codex/.agents/skills/voice/SKILL.md": {
+      "lines": 85,
+      "words": 594,
+      "bytes": 3753
+    },
+    "codex/.agents/skills/outline/SKILL.md": {
+      "lines": 38,
+      "words": 392,
+      "bytes": 2369
+    },
+    "codex/.agents/skills/retro/SKILL.md": {
+      "lines": 84,
+      "words": 601,
+      "bytes": 3875
+    },
+    "codex/.agents/skills/decision-log/SKILL.md": {
+      "lines": 48,
+      "words": 353,
+      "bytes": 2204
+    },
+    "codex/.agents/skills/adopt/SKILL.md": {
+      "lines": 433,
+      "words": 2642,
+      "bytes": 23549
+    },
+    "codex/.agents/skills/project-status/SKILL.md": {
+      "lines": 46,
+      "words": 329,
+      "bytes": 2167
+    },
+    "codex/.codex/hooks.json": {
+      "lines": 80,
+      "words": 278,
+      "bytes": 3715
+    },
+    "codex/.codex/hooks/_hooklib.py": {
+      "lines": 118,
+      "words": 443,
+      "bytes": 3604
+    },
+    "codex/.codex/hooks/decision-log-append-only": {
+      "lines": 62,
+      "words": 265,
+      "bytes": 2261
+    },
+    "codex/.codex/hooks/intake-branch-guard": {
+      "lines": 30,
+      "words": 110,
+      "bytes": 915
+    },
+    "codex/.codex/hooks/lane-guard": {
+      "lines": 42,
+      "words": 147,
+      "bytes": 1391
+    },
+    "codex/.codex/hooks/push-readback": {
+      "lines": 123,
+      "words": 490,
+      "bytes": 4484
+    },
+    "codex/.codex/hooks/review-artifact-immutable": {
+      "lines": 28,
+      "words": 114,
+      "bytes": 912
+    },
+    "codex/.codex/hooks/store-lint": {
+      "lines": 216,
+      "words": 961,
+      "bytes": 8379
+    },
+    "codex/.codex/hooks/codex-hook": {
+      "lines": 179,
+      "words": 736,
+      "bytes": 7602
+    },
+    "codex/.codex/agents/architect-agent.toml": {
+      "lines": 4,
+      "words": 643,
+      "bytes": 4286
+    },
+    "codex/.codex/agents/coder-agent.toml": {
+      "lines": 4,
+      "words": 847,
+      "bytes": 6083
+    },
+    "codex/.codex/agents/context-quality-reviewer.toml": {
+      "lines": 4,
+      "words": 758,
+      "bytes": 4608
+    },
+    "codex/.codex/agents/release-manager-agent.toml": {
+      "lines": 4,
+      "words": 796,
+      "bytes": 5388
+    },
+    "codex/.codex/agents/reviewer-agent.toml": {
+      "lines": 4,
+      "words": 1577,
+      "bytes": 10881
+    },
+    "codex/.codex/agents/skeptic-risk-agent.toml": {
+      "lines": 4,
+      "words": 1582,
+      "bytes": 11011
+    },
+    "codex/.codex/agents/spec-reviewer-agent.toml": {
+      "lines": 4,
+      "words": 873,
+      "bytes": 5600
+    },
+    "codex/.codex/agents/test-designer-agent.toml": {
+      "lines": 4,
+      "words": 1154,
+      "bytes": 7941
+    },
+    "bundles/chief-of-staff": {
+      "lines": 1274,
+      "words": 9899,
+      "bytes": 71820
+    },
+    "bundles/architect-agent": {
+      "lines": 389,
+      "words": 3808,
+      "bytes": 25212
+    },
+    "bundles/spec-reviewer-agent": {
+      "lines": 409,
+      "words": 4072,
+      "bytes": 26665
+    },
+    "bundles/test-designer-agent": {
+      "lines": 392,
+      "words": 3976,
+      "bytes": 26510
+    },
+    "bundles/coder-agent": {
+      "lines": 414,
+      "words": 4066,
+      "bytes": 27420
+    },
+    "bundles/reviewer-agent": {
+      "lines": 499,
+      "words": 4883,
+      "bytes": 32653
+    },
+    "bundles/skeptic-risk-agent": {
+      "lines": 481,
+      "words": 4894,
+      "bytes": 32929
+    },
+    "bundles/release-manager-agent": {
+      "lines": 555,
+      "words": 5066,
+      "bytes": 34268
+    },
+    "bundles/context-quality-reviewer": {
+      "lines": 355,
+      "words": 3683,
+      "bytes": 24015
+    },
+    "bundles/writer": {
+      "lines": 552,
+      "words": 5251,
+      "bytes": 33914
+    },
+    "bundles/copy-editor": {
+      "lines": 546,
+      "words": 5392,
+      "bytes": 34591
+    },
+    "bundles/critic": {
+      "lines": 514,
+      "words": 5159,
+      "bytes": 33105
+    }
+  },
+  "after": {
+    "claude-code/CLAUDE.md": {
+      "lines": 47,
+      "words": 577,
+      "bytes": 4068
+    },
+    "claude-code/.claude/skills/adopt/SKILL.md": {
+      "lines": 433,
+      "words": 2642,
+      "bytes": 23545
+    },
+    "claude-code/.claude/skills/build/SKILL.md": {
+      "lines": 48,
+      "words": 373,
+      "bytes": 2630
+    },
+    "claude-code/.claude/skills/change-flow/SKILL.md": {
+      "lines": 91,
+      "words": 955,
+      "bytes": 5711
+    },
+    "claude-code/.claude/skills/command-blocks/SKILL.md": {
+      "lines": 44,
+      "words": 622,
+      "bytes": 3766
+    },
+    "claude-code/.claude/skills/decision-log/SKILL.md": {
+      "lines": 48,
+      "words": 353,
+      "bytes": 2202
+    },
+    "claude-code/.claude/skills/gate/SKILL.md": {
+      "lines": 47,
+      "words": 325,
+      "bytes": 2080
+    },
+    "claude-code/.claude/skills/intake/SKILL.md": {
+      "lines": 47,
+      "words": 410,
+      "bytes": 2752
+    },
+    "claude-code/.claude/skills/outline/SKILL.md": {
+      "lines": 38,
+      "words": 392,
+      "bytes": 2367
+    },
+    "claude-code/.claude/skills/project-status/SKILL.md": {
+      "lines": 46,
+      "words": 329,
+      "bytes": 2163
+    },
+    "claude-code/.claude/skills/release/SKILL.md": {
+      "lines": 64,
+      "words": 390,
+      "bytes": 2906
+    },
+    "claude-code/.claude/skills/retro/SKILL.md": {
+      "lines": 84,
+      "words": 601,
+      "bytes": 3871
+    },
+    "claude-code/.claude/skills/review-artifact/SKILL.md": {
+      "lines": 117,
+      "words": 877,
+      "bytes": 5786
+    },
+    "claude-code/.claude/skills/spec-template/SKILL.md": {
+      "lines": 82,
+      "words": 593,
+      "bytes": 3854
+    },
+    "claude-code/.claude/skills/verification-checklists/SKILL.md": {
+      "lines": 78,
+      "words": 930,
+      "bytes": 6621
+    },
+    "claude-code/.claude/skills/voice/SKILL.md": {
+      "lines": 85,
+      "words": 594,
+      "bytes": 3749
+    },
+    "claude-code/.claude/hooks/_hooklib.py": {
+      "lines": 118,
+      "words": 443,
+      "bytes": 3604
+    },
+    "claude-code/.claude/hooks/decision-log-append-only": {
+      "lines": 62,
+      "words": 265,
+      "bytes": 2261
+    },
+    "claude-code/.claude/hooks/intake-branch-guard": {
+      "lines": 30,
+      "words": 110,
+      "bytes": 915
+    },
+    "claude-code/.claude/hooks/lane-guard": {
+      "lines": 42,
+      "words": 147,
+      "bytes": 1391
+    },
+    "claude-code/.claude/hooks/push-readback": {
+      "lines": 123,
+      "words": 490,
+      "bytes": 4484
+    },
+    "claude-code/.claude/hooks/review-artifact-immutable": {
+      "lines": 28,
+      "words": 114,
+      "bytes": 912
+    },
+    "claude-code/.claude/hooks/store-lint": {
+      "lines": 216,
+      "words": 961,
+      "bytes": 8379
+    },
+    "claude-code/.claude/agents/architect-agent.md": {
+      "lines": 60,
+      "words": 598,
+      "bytes": 3815
+    },
+    "claude-code/.claude/agents/coder-agent.md": {
+      "lines": 62,
+      "words": 590,
+      "bytes": 3901
+    },
+    "claude-code/.claude/agents/context-quality-reviewer.md": {
+      "lines": 64,
+      "words": 668,
+      "bytes": 3852
+    },
+    "claude-code/.claude/agents/release-manager-agent.md": {
+      "lines": 41,
+      "words": 492,
+      "bytes": 3284
+    },
+    "claude-code/.claude/agents/reviewer-agent.md": {
+      "lines": 80,
+      "words": 833,
+      "bytes": 5829
+    },
+    "claude-code/.claude/agents/skeptic-risk-agent.md": {
+      "lines": 82,
+      "words": 819,
+      "bytes": 5695
+    },
+    "claude-code/.claude/agents/spec-reviewer-agent.md": {
+      "lines": 78,
+      "words": 735,
+      "bytes": 4619
+    },
+    "claude-code/.claude/agents/test-designer-agent.md": {
+      "lines": 89,
+      "words": 924,
+      "bytes": 5872
+    },
+    "claude-code/.claude/settings.json": {
+      "lines": 88,
+      "words": 160,
+      "bytes": 2346
+    },
+    "codex/AGENTS.md": {
+      "lines": 47,
+      "words": 577,
+      "bytes": 4068
+    },
+    "codex/.agents/skills/spec-template/SKILL.md": {
+      "lines": 82,
+      "words": 593,
+      "bytes": 3856
+    },
+    "codex/.agents/skills/change-flow/SKILL.md": {
+      "lines": 91,
+      "words": 955,
+      "bytes": 5715
+    },
+    "codex/.agents/skills/review-artifact/SKILL.md": {
+      "lines": 117,
+      "words": 877,
+      "bytes": 5788
+    },
+    "codex/.agents/skills/gate/SKILL.md": {
+      "lines": 47,
+      "words": 325,
+      "bytes": 2084
+    },
+    "codex/.agents/skills/release/SKILL.md": {
+      "lines": 64,
+      "words": 390,
+      "bytes": 2910
+    },
+    "codex/.agents/skills/intake/SKILL.md": {
+      "lines": 47,
+      "words": 410,
+      "bytes": 2756
+    },
+    "codex/.agents/skills/build/SKILL.md": {
+      "lines": 48,
+      "words": 373,
+      "bytes": 2634
+    },
+    "codex/.agents/skills/command-blocks/SKILL.md": {
+      "lines": 44,
+      "words": 622,
+      "bytes": 3770
+    },
+    "codex/.agents/skills/verification-checklists/SKILL.md": {
+      "lines": 78,
+      "words": 930,
+      "bytes": 6625
+    },
+    "codex/.agents/skills/voice/SKILL.md": {
+      "lines": 85,
+      "words": 594,
+      "bytes": 3753
+    },
+    "codex/.agents/skills/outline/SKILL.md": {
+      "lines": 38,
+      "words": 392,
+      "bytes": 2369
+    },
+    "codex/.agents/skills/retro/SKILL.md": {
+      "lines": 84,
+      "words": 601,
+      "bytes": 3875
+    },
+    "codex/.agents/skills/decision-log/SKILL.md": {
+      "lines": 48,
+      "words": 353,
+      "bytes": 2204
+    },
+    "codex/.agents/skills/adopt/SKILL.md": {
+      "lines": 433,
+      "words": 2642,
+      "bytes": 23549
+    },
+    "codex/.agents/skills/project-status/SKILL.md": {
+      "lines": 46,
+      "words": 329,
+      "bytes": 2167
+    },
+    "codex/.codex/hooks.json": {
+      "lines": 80,
+      "words": 278,
+      "bytes": 3715
+    },
+    "codex/.codex/hooks/_hooklib.py": {
+      "lines": 118,
+      "words": 443,
+      "bytes": 3604
+    },
+    "codex/.codex/hooks/decision-log-append-only": {
+      "lines": 62,
+      "words": 265,
+      "bytes": 2261
+    },
+    "codex/.codex/hooks/intake-branch-guard": {
+      "lines": 30,
+      "words": 110,
+      "bytes": 915
+    },
+    "codex/.codex/hooks/lane-guard": {
+      "lines": 42,
+      "words": 147,
+      "bytes": 1391
+    },
+    "codex/.codex/hooks/push-readback": {
+      "lines": 123,
+      "words": 490,
+      "bytes": 4484
+    },
+    "codex/.codex/hooks/review-artifact-immutable": {
+      "lines": 28,
+      "words": 114,
+      "bytes": 912
+    },
+    "codex/.codex/hooks/store-lint": {
+      "lines": 216,
+      "words": 961,
+      "bytes": 8379
+    },
+    "codex/.codex/hooks/codex-hook": {
+      "lines": 179,
+      "words": 736,
+      "bytes": 7602
+    },
+    "codex/.codex/agents/architect-agent.toml": {
+      "lines": 4,
+      "words": 577,
+      "bytes": 3861
+    },
+    "codex/.codex/agents/coder-agent.toml": {
+      "lines": 4,
+      "words": 559,
+      "bytes": 3992
+    },
+    "codex/.codex/agents/context-quality-reviewer.toml": {
+      "lines": 4,
+      "words": 644,
+      "bytes": 3951
+    },
+    "codex/.codex/agents/release-manager-agent.toml": {
+      "lines": 4,
+      "words": 475,
+      "bytes": 3431
+    },
+    "codex/.codex/agents/reviewer-agent.toml": {
+      "lines": 4,
+      "words": 806,
+      "bytes": 5988
+    },
+    "codex/.codex/agents/skeptic-risk-agent.toml": {
+      "lines": 4,
+      "words": 791,
+      "bytes": 5856
+    },
+    "codex/.codex/agents/spec-reviewer-agent.toml": {
+      "lines": 4,
+      "words": 701,
+      "bytes": 4683
+    },
+    "codex/.codex/agents/test-designer-agent.toml": {
+      "lines": 4,
+      "words": 889,
+      "bytes": 5993
+    },
+    "bundles/chief-of-staff": {
+      "lines": 1255,
+      "words": 9668,
+      "bytes": 70457
+    },
+    "bundles/architect-agent": {
+      "lines": 421,
+      "words": 4043,
+      "bytes": 27049
+    },
+    "bundles/spec-reviewer-agent": {
+      "lines": 439,
+      "words": 4200,
+      "bytes": 28012
+    },
+    "bundles/test-designer-agent": {
+      "lines": 371,
+      "words": 3783,
+      "bytes": 25227
+    },
+    "bundles/coder-agent": {
+      "lines": 393,
+      "words": 3873,
+      "bytes": 26137
+    },
+    "bundles/reviewer-agent": {
+      "lines": 420,
+      "words": 4073,
+      "bytes": 27930
+    },
+    "bundles/skeptic-risk-agent": {
+      "lines": 420,
+      "words": 4066,
+      "bytes": 27834
+    },
+    "bundles/release-manager-agent": {
+      "lines": 549,
+      "words": 4822,
+      "bytes": 33144
+    },
+    "bundles/context-quality-reviewer": {
+      "lines": 385,
+      "words": 3869,
+      "bytes": 25622
+    },
+    "bundles/writer": {
+      "lines": 546,
+      "words": 5243,
+      "bytes": 33966
+    },
+    "bundles/copy-editor": {
+      "lines": 536,
+      "words": 5294,
+      "bytes": 34092
+    },
+    "bundles/critic": {
+      "lines": 504,
+      "words": 5061,
+      "bytes": 32606
+    }
+  }
+}

@@ -1,5 +1,5 @@
 <!-- fiducial:begin -->
-<!-- fiducial davepierceops/fiducial @ 6b473f90c9e7446de1f96207e25a56516378ee0f -->
+<!-- fiducial davepierceops/fiducial @ f2380a78cecc407fd4f69e1251f9573ebfe72d1e -->
 
 Never let a secret value enter context. Reference that a secret exists and where it lives instead.
 
@@ -33,7 +33,7 @@ Before proposing a policy decision, check `decisions/log.md` for relevant prior 
 
 Work from a human-approved `SPEC.md`, with approval recorded in the decision log against the reviewed commit.
 
-Obtain explicit human approval before releasing a consequential change. Approval applies to exposing the change to users, not merging code that remains unexposed. If its classification is uncertain, ask the human before release.
+Obtain explicit human approval before releasing a change in the consequential class. Approval applies to exposing the change to users, not merging code that remains unexposed. If its classification is uncertain, ask the human before release.
 
 Keep verification aligned with approved requirements, and justify changes to checks against those requirements. Support verification claims with the checks performed. Identify relevant simulations and untested assumptions, state what remains unverified, and claim only what the evidence establishes. Claims about state, results, or completeness require checking the underlying source or result.
 

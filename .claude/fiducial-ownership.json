@@ -7,16 +7,16 @@
       "section": "d38b8d84a14933220b1e2833387524095cf5ada44388e0b1c1d459cf235c33ab"
     },
     ".agents/skills/build/SKILL.md": {
-      "header": "---\nname: \"build\"\ndescription: \"Take a unit of work from the spec read through implementation, review, and release preparation.\"\n---\n",
+      "header": "---\nname: \"build\"\ndescription: \"Take a unit of work from the spec read through implementation, review, and release.\"\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "9955069aa7dcbae9cf8dc16679011b5add1c6938f7996d247fbe0c0ace93d176"
+      "section": "918d3a65c48f2cd585e8fcb59c5358ab09909902a67a6d07281c96a2baf248cb"
     },
     ".agents/skills/change-flow/SKILL.md": {
       "header": "---\nname: \"change-flow\"\ndescription: \"A delta is the whole of what one piece of work changes.\"\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "f6def2539a6915b76753f2edf58bbe66cff19563eff842167faec0b57a479214"
+      "section": "b5874a3527c5bee12907617587edcb5be07bb587b1847fc798a7a37a98c30da4"
     },
     ".agents/skills/command-blocks/SKILL.md": {
       "header": "---\nname: \"command-blocks\"\ndescription: \"Use before composing human-run shell commands or instructions for another agent session; ordinary internal tool calls do not trigger this skill.\"\n---\n",
@@ -34,7 +34,7 @@
       "header": "---\nname: \"gate\"\ndescription: \"Prepare the human's gate request from an assembled change package.\"\ndisable-model-invocation: true\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "f8b41ff0eee7e14ab305848d353454552daff66859a10a06e4b1e0767647e7ed"
+      "section": "2b984a9ffe23f18cb52b4f6fa1e816431b32ef3e37b1c6b7e99856ef5ece1280"
     },
     ".agents/skills/intake/SKILL.md": {
       "header": "---\nname: \"intake\"\ndescription: \"Carry a proposed change to governed context from proposal through review and landing.\"\n---\n",
@@ -55,10 +55,10 @@
       "section": "9ac76c912d4017d18fdc6c4b573859361fd813feee6a00e7a4cc17cc7398b368"
     },
     ".agents/skills/release/SKILL.md": {
-      "header": "---\nname: \"release\"\ndescription: \"Assemble the change package, release readiness review, and report from the work's evidence.\"\n---\n",
+      "header": "---\nname: \"release\"\ndescription: \"Assemble one change package containing the evidence and release-readiness assessment, and report its outcome.\"\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "6daef8121715358b0c1ccff3e097394383a510a1184923bf5d2a689eb57011bb"
+      "section": "2c8b3e18c6fba4d28df0be46da6beab4efecfaad79754a515cfb5e40fd3c4358"
     },
     ".agents/skills/retro/SKILL.md": {
       "header": "---\nname: \"retro\"\ndescription: \"Run a retro when the human asks for one.\"\n---\n",
@@ -70,7 +70,7 @@
       "header": "---\nname: \"review-artifact\"\ndescription: \"The form a review emits: one read over one delta, one artifact [R1396, R1408].\"\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "ab8b4bbbf4407f5e9ca8d471f02e048d6a9a3fb2d049b8c705ff5b23b2983e9d"
+      "section": "57793ec3fdfc939baa6476b69a253cff385e3a3c6563f668f72b85414cabfe53"
     },
     ".agents/skills/spec-template/SKILL.md": {
       "header": "---\nname: \"spec-template\"\ndescription: \"The form of `SPEC.md`, one per project: what is being built, why, how, and when it is done.\"\n---\n",
@@ -94,49 +94,49 @@
       "header": "---\nname: architect-agent\ndescription: Design the system's technical structure and boundaries in the spec and per-change architecture summary, rather than implementing code or deciding release readiness.\nmodel: opus\ntools: [Read, Grep, Glob, Edit, Write, Bash]\nhooks:\n  PreToolUse:\n    - matcher: \"Edit|Write\"\n      hooks:\n        - type: command\n          command: \"\\\"$CLAUDE_PROJECT_DIR\\\"/.claude/hooks/lane-guard --lane specs\"\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "85350137c0cf79dad58e8183478a2724c6ef7ec9491f3d879bbb19c15749c5a3"
+      "section": "cbd2172e97c7e1ce3c575e09f5409308858b9c81d7984ba673f020365fa0dafb"
     },
     ".claude/agents/coder-agent.md": {
       "header": "---\nname: coder-agent\ndescription: Implement changes according to the spec and the test plan.\nmodel: sonnet\ntools: [Read, Grep, Glob, Edit, Write, Bash]\nskills: [build]\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "773ca692e5a49ce648b85a7c3298e818b791abf3881b3677ed9d8ffe5bceb097"
+      "section": "e2de0f63aa7bd6575c38ae0eb2eacca5365a882f67ced9e451d1006aa8b21120"
     },
     ".claude/agents/context-quality-reviewer.md": {
       "header": "---\nname: context-quality-reviewer\ndescription: Review governed instruction text for coherence and safety as LLM context, rather than deciding whether its methodology is correct engineering judgment.\nmodel: opus\ntools: [Read, Grep, Glob, Edit, Write, Bash]\nskills: [intake]\nhooks:\n  PreToolUse:\n    - matcher: \"Edit|Write\"\n      hooks:\n        - type: command\n          command: \"\\\"$CLAUDE_PROJECT_DIR\\\"/.claude/hooks/lane-guard --lane reviews\"\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "87e0f4373c14f0645874ddee82503e87bbcbbe08f962958b01474bf4f7479941"
+      "section": "ad736fcf631499b76f88f36d79463debeb62991b66e90512fd85867aad9eb823"
     },
     ".claude/agents/release-manager-agent.md": {
       "header": "---\nname: release-manager-agent\ndescription: From the assembled release evidence, produce a ship/no-ship release recommendation. The recommendation is what you produce; the release decision is the human's.\nmodel: sonnet\ntools: [Read, Grep, Glob, Edit, Write, Bash]\nskills: [release, gate, review-artifact]\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "d8d0eb44ed2c1925d0c65d7a30b92eaeec0eab0eb7e0fb18b7178084abaa0d64"
+      "section": "12bd224db4457e13a911ef9c625723004a5ca822cc6101b45cabf3cd7fdb16e6"
     },
     ".claude/agents/reviewer-agent.md": {
       "header": "---\nname: reviewer-agent\ndescription: Do not review spec documents; they are the Spec Reviewer's. Your review covers implementation quality and consistency. In force until an adopted, published code-review standard replaces it; the intake commit that lands that standard retires this row.\nmodel: opus\ntools: [Read, Grep, Glob, Edit, Write, Bash]\nskills: [release, review-artifact]\nhooks:\n  PreToolUse:\n    - matcher: \"Edit|Write\"\n      hooks:\n        - type: command\n          command: \"\\\"$CLAUDE_PROJECT_DIR\\\"/.claude/hooks/lane-guard --lane reviews\"\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "82ec74c36a32bff3bf9704c2820772b79ce09afd1b70bf729a3d5a393d788b87"
+      "section": "4e266a0111ec1c8a19411a73758a56c64e17a67febd4a12f891851cb6e36dc03"
     },
     ".claude/agents/skeptic-risk-agent.md": {
       "header": "---\nname: skeptic-risk-agent\ndescription: Review the evidence chain for false confidence and material risk, rather than implementing fixes or making the release recommendation.\nmodel: opus\ntools: [Read, Grep, Glob, Edit, Write, Bash]\nskills: [release, review-artifact]\nhooks:\n  PreToolUse:\n    - matcher: \"Edit|Write\"\n      hooks:\n        - type: command\n          command: \"\\\"$CLAUDE_PROJECT_DIR\\\"/.claude/hooks/lane-guard --lane reviews\"\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "482b7f408859e80deec8c4ba2ff2be4a50970812edf705f096772b01a4625774"
+      "section": "fbe66fd07a358fad642c8ee382f48f68fab494f5f59c0e26c9dd2b71c6e4772f"
     },
     ".claude/agents/spec-reviewer-agent.md": {
       "header": "---\nname: spec-reviewer-agent\ndescription: Review the spec for completeness, consistency, traceability, and continuity, rather than reviewing implementation quality or judging governed text as LLM context.\nmodel: opus\ntools: [Read, Grep, Glob, Edit, Write, Bash]\nhooks:\n  PreToolUse:\n    - matcher: \"Edit|Write\"\n      hooks:\n        - type: command\n          command: \"\\\"$CLAUDE_PROJECT_DIR\\\"/.claude/hooks/lane-guard --lane reviews\"\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "9c6f988b98745137d91720a753835774c89c29bc7eeed1ab7cab0c41e969c75a"
+      "section": "53be92e400976f312e17813073fc33e3f939ede750861853fc3cebfb7dc70c3c"
     },
     ".claude/agents/test-designer-agent.md": {
       "header": "---\nname: test-designer-agent\ndescription: Define how correctness will be evaluated, and what evidence it requires, before implementation begins.\nmodel: sonnet\ntools: [Read, Grep, Glob, Edit, Write, Bash]\nskills: [build]\nhooks:\n  PreToolUse:\n    - matcher: \"Edit|Write\"\n      hooks:\n        - type: command\n          command: \"\\\"$CLAUDE_PROJECT_DIR\\\"/.claude/hooks/lane-guard --lane tests\"\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "543990f10ca5d8556127ba97ac5c2893bb2f78079ac49e117601a3acf85f8c58"
+      "section": "9c7a679cabf24e38e29fd46612cf7b53fa7dccb8a47c62b1187d84bf416ada5a"
     },
     ".claude/hooks/_hooklib.py": {
       "kind": "file",
@@ -481,16 +481,16 @@
       "section": "d38b8d84a14933220b1e2833387524095cf5ada44388e0b1c1d459cf235c33ab"
     },
     ".claude/skills/build/SKILL.md": {
-      "header": "---\nname: build\ndescription: Take a unit of work from the spec read through implementation, review, and release preparation.\n---\n",
+      "header": "---\nname: build\ndescription: Take a unit of work from the spec read through implementation, review, and release.\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "9955069aa7dcbae9cf8dc16679011b5add1c6938f7996d247fbe0c0ace93d176"
+      "section": "918d3a65c48f2cd585e8fcb59c5358ab09909902a67a6d07281c96a2baf248cb"
     },
     ".claude/skills/change-flow/SKILL.md": {
       "header": "---\nname: change-flow\ndescription: A delta is the whole of what one piece of work changes.\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "f6def2539a6915b76753f2edf58bbe66cff19563eff842167faec0b57a479214"
+      "section": "b5874a3527c5bee12907617587edcb5be07bb587b1847fc798a7a37a98c30da4"
     },
     ".claude/skills/command-blocks/SKILL.md": {
       "header": "---\nname: command-blocks\ndescription: Use before composing human-run shell commands or instructions for another agent session; ordinary internal tool calls do not trigger this skill.\n---\n",
@@ -508,7 +508,7 @@
       "header": "---\nname: gate\ndescription: Prepare the human's gate request from an assembled change package.\ndisable-model-invocation: true\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "f8b41ff0eee7e14ab305848d353454552daff66859a10a06e4b1e0767647e7ed"
+      "section": "2b984a9ffe23f18cb52b4f6fa1e816431b32ef3e37b1c6b7e99856ef5ece1280"
     },
     ".claude/skills/intake/SKILL.md": {
       "header": "---\nname: intake\ndescription: Carry a proposed change to governed context from proposal through review and landing.\n---\n",
@@ -529,10 +529,10 @@
       "section": "9ac76c912d4017d18fdc6c4b573859361fd813feee6a00e7a4cc17cc7398b368"
     },
     ".claude/skills/release/SKILL.md": {
-      "header": "---\nname: release\ndescription: Assemble the change package, release readiness review, and report from the work's evidence.\n---\n",
+      "header": "---\nname: release\ndescription: Assemble one change package containing the evidence and release-readiness assessment, and report its outcome.\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "6daef8121715358b0c1ccff3e097394383a510a1184923bf5d2a689eb57011bb"
+      "section": "2c8b3e18c6fba4d28df0be46da6beab4efecfaad79754a515cfb5e40fd3c4358"
     },
     ".claude/skills/retro/SKILL.md": {
       "header": "---\nname: retro\ndescription: Run a retro when the human asks for one.\n---\n",
@@ -544,7 +544,7 @@
       "header": "---\nname: review-artifact\ndescription: \"The form a review emits: one read over one delta, one artifact [R1396, R1408].\"\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "ab8b4bbbf4407f5e9ca8d471f02e048d6a9a3fb2d049b8c705ff5b23b2983e9d"
+      "section": "57793ec3fdfc939baa6476b69a253cff385e3a3c6563f668f72b85414cabfe53"
     },
     ".claude/skills/spec-template/SKILL.md": {
       "header": "---\nname: spec-template\ndescription: \"The form of `SPEC.md`, one per project: what is being built, why, how, and when it is done.\"\n---\n",
@@ -567,42 +567,42 @@
     ".codex/agents/architect-agent.toml": {
       "kind": "file",
       "mode": 420,
-      "sha256": "400dd85f19836c94b758ad3b9b4daec6f193bc476c1ea2ac137d778b55c5d39d"
+      "sha256": "4d6e94a3ba50842c201ed7813b00db5d558e06d925779b685cb0e218d4f5451c"
     },
     ".codex/agents/coder-agent.toml": {
       "kind": "file",
       "mode": 420,
-      "sha256": "11a9aa8d0756b46dc0b4d8774017be2ecd61f112c78e3936143442bdead7d7a1"
+      "sha256": "fe1a95472b0166d53bd0e2a6793ee9ea07f002eb9922c6f4be2993d2bcc67af1"
     },
     ".codex/agents/context-quality-reviewer.toml": {
       "kind": "file",
       "mode": 420,
-      "sha256": "221cf8d01f55d5483bf8f61f5b3d3ff270e0985ddba766efec4c4d9ad188395b"
+      "sha256": "f7f4d0f5dec7dac35c644e5c43506bb512edfbf3a83e10454fe54c691f6d460b"
     },
     ".codex/agents/release-manager-agent.toml": {
       "kind": "file",
       "mode": 420,
-      "sha256": "9c4b18d488273b08f76db25e80af6b68fc6f7536a8fc292872ea8e5ffd8d1c76"
+      "sha256": "1d9f904726ac31e2307215ef2dd7441ee2d059cf2a7efc98cc4a29b653b9d22e"
     },
     ".codex/agents/reviewer-agent.toml": {
       "kind": "file",
       "mode": 420,
-      "sha256": "93100efb9ffcfde6d7d95e50642c1fb5f4f54f0e9931abf0cc375b7162fa37db"
+      "sha256": "eb592d043d5d53706ea05669b9836d82f516a0c9d847e71c6f7bd6b68efdbbdc"
     },
     ".codex/agents/skeptic-risk-agent.toml": {
       "kind": "file",
       "mode": 420,
-      "sha256": "7cc1e92c37b7927a8eda0b1ff1f6dd64c7a8ad7b8a81ff2891af59eac944554a"
+      "sha256": "ffa79e7c29ec2d94113e97ef058f0d9da641c4fad615ea820ca707de78f3789f"
     },
     ".codex/agents/spec-reviewer-agent.toml": {
       "kind": "file",
       "mode": 420,
-      "sha256": "c421abbefbd755a7efdd46fc7b038d5aca34beb191664972d0f6199d18aac354"
+      "sha256": "3ebcbba3226958b90383143a48c2abb112a7eae9edb4897dcce2719331762e20"
     },
     ".codex/agents/test-designer-agent.toml": {
       "kind": "file",
       "mode": 420,
-      "sha256": "434d116b1dcc721facf6a24211ed92c464f4a35ad97426940573664ec9c445bd"
+      "sha256": "3be28a9062c7038b8c60ca21248a892d1b15437ced91d7fc90ff5127520f549e"
     },
     ".codex/hooks.json": {
       "contributions": [
@@ -753,13 +753,13 @@
       "header": "",
       "kind": "markdown",
       "owns_header": true,
-      "section": "fd0e6d995703864f3e8a9a66610c84294c7953e082aa8488b02dfc60ba23a64b"
+      "section": "db9cc881f9bfd85b3ab9f88075e1ff8170d032fc684c33f2667c12d9c72ffe99"
     },
     "CLAUDE.md": {
       "header": "",
       "kind": "markdown",
       "owns_header": true,
-      "section": "fd0e6d995703864f3e8a9a66610c84294c7953e082aa8488b02dfc60ba23a64b"
+      "section": "db9cc881f9bfd85b3ab9f88075e1ff8170d032fc684c33f2667c12d9c72ffe99"
     }
   },
   "version": 1

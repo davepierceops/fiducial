@@ -40,7 +40,7 @@ Blocked until a go: <the release or other gated action>
 Keep evidence in the issue body. When opening the issue failed, substitute
 the full derived body for `<issue pointer>`.
 
-Provenance: DEC-001280; R0551, R0552, R0553, R0558, R0560, R1039, R0505; retained judgment cited above.
+Provenance: DEC-001280; R0551, R0552, R0553, R0558, R0560, R1039; retained judgment cited above.
 
 ## Definitions
 
