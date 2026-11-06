@@ -10,7 +10,7 @@ corpus: [software]
 
 Use when planning, performing or reporting verification, declaring or updating verification boundaries, or assessing deployment and release evidence, including error-budget conditions.
 
-Applies in decision and execution sessions for software. The sections preserve the original role scopes; apply their conditions when the relevant work occurs.
+Applies in decision and execution sessions. Sections apply to software unless they explicitly include writing. Apply each section’s role scope and conditions when the relevant work occurs.
 
 ## Verification planning, failure analysis and production assessment
 
@@ -47,3 +47,9 @@ Choose when a boundary's verification runs — manually before release, in a ded
 Verify a boundary material to user-visible behavior or release risk before release.
 
 Verify a boundary that can drift after deployment by production monitoring.
+
+## Release-impact labels
+
+Applies to all roles in software and writing when a known boundary gap remains unresolved at the release decision.
+
+Mark every known, unresolved boundary gap with one of the four release-impact labels — `blocking`, `deferred`, `accepted-risk`, `not-material`. `not-material` is a label, not an exemption from labelling.

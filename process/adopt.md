@@ -53,7 +53,8 @@ classification and authority are [R0534, R0535].
 4. **Create/append.** After those rulings, run `python3 adopt.py apply STAGE
    REVIEW_JSON APPROVAL_JSON`. It rechecks the inventory, writes missing files,
    and replaces only owned material. Use `python3 adopt.py labels OWNER/REPO`
-   to create missing `human-gate` and the four release-impact labels [R0030];
+   to create missing `human-gate` and the four release-impact labels defined in
+   `process/verification-checklists.md`;
    existing label metadata is preserved. Read the labels back. The labels command
    touches GitHub, and is run only within the same authorization as installation.
    No command here commits, pushes, merges, applies infrastructure or destroys it.
