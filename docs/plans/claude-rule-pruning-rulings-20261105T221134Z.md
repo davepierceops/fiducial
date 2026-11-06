@@ -105,4 +105,6 @@ Approved R0110 wording:
 
 - R1612: Dave answered “y” to retiring the PR-URL paste-block rule without replacement or a move to a skill. A normal clickable PR link provides access without the rigid paste-block presentation requirement. No active process citations were found. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge, and ensure its body does not reappear in generated roots or agents.
 
+- R0100: Dave answered “Sure” to retiring the general tracker-maintenance/checkpoint rule without replacement or a move to a skill. He then requested consideration of consolidating R0170, R0193, R1614, R1450 and R0552. That consolidation is pending proposed wording and disposition of their non-recordkeeping obligations; this approval does not yet change those five rows. No active process citations of R0100 were found. Archive the original R0100 at batch finalization with the actual retirement decision ID allocated at merge, and ensure its body does not reappear in generated roots or agents.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
