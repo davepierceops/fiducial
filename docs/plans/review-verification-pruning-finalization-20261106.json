@@ -71,5 +71,12 @@
     "release",
     "gate"
   ],
-  "note": "No emitter implementation change. Preserve archive originals except retirement reference; preserve all other metadata except approved R0126 condition union and R1137 trigger. No unapproved gate, review, SLO or tracker-policy redesign."
+  "note": "No emitter implementation change. Preserve archive originals except retirement reference; preserve all other metadata except approved R0126 condition union and R1137 trigger. No unapproved gate, review, SLO or tracker-policy redesign.",
+  "finalization_coherence": {
+    "R0534": {
+      "before": "before releasing a consequential change",
+      "after": "before releasing a change in the consequential class",
+      "reason": "Preserve the root definitions retained in DEC-001700 by naming the consequential-class term in its governing standing approval rule. Shortening skill-backed R0553 removed its incidental term pull; no policy, selector or emitter change."
+    }
+  }
 }
