@@ -16,6 +16,8 @@ Baseline: cb0194aee512f48f3046e5ba9be445d85f97fbd3, after PR #424. Dave requeste
 
 - R0027 (unverified): Dave answered “yes” to retiring the definition without replacement. Its ordinary meaning is sufficient, and “known” could misleadingly imply that an unchecked claim is established. R0110’s requirement to state what remains unverified stays unchanged. No active process or other live-rule ID citations were found. At batch finalization, archive the original with the actual retirement decision ID allocated at merge, and verify removal from roots, agents, skills and standalone bundles.
 
-No further definition retirement or generator-selection change is approved yet. The observed generator behavior—term matching in non-emitted enforced rows and transitive definition pulling—is review evidence, not authorization to change it. R0028 is next for discussion.
+- R0028 (deferred verification): Dave answered “yes” to retiring the definition without replacement. The verification-checklists skill already covers identifying the deferred verification path and applying release-impact labels. No active process or other live-rule ID citations were found. At batch finalization, archive the original with the actual retirement decision ID allocated at merge, and verify removal from roots, agents, skills and standalone bundles; retain the existing specialized verification procedures.
+
+No further definition retirement or generator-selection change is approved yet. The observed generator behavior—term matching in non-emitted enforced rows and transitive definition pulling—is review evidence, not authorization to change it. R0208 is next for discussion.
 
 These are human wording/scope rulings, not an independent intake review or a claim of landing. Formal decision-log entries are allocated at merge under the decision-log procedure.
