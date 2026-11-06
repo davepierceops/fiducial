@@ -79,4 +79,6 @@ Approved R0110 wording:
 
 - R0225: Dave answered “yes” to replacing the question-format rule with: “Ask the most important question first, one at a time. Give enough context to answer, recommend an option consistent with prior decisions, and use yes/no when suitable.” All selectors remain unchanged. This preserves the interaction preference while removing the prescribed explanation format, mandatory question repetition after reports or blocks, and automatic preference for the reversible option.
 
+- R0228: Dave answered “yes” to: “Lead with the point. Be concise, preserve important detail, and prefer bullets to paragraphs.” All selectors remain unchanged. Dave explicitly retained the bullet preference and chose concise over terse to value brevity without losing important detail. Earlier proposals dropping the bullet preference or retaining terse are superseded.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
