@@ -50,6 +50,10 @@ Verify a boundary that can drift after deployment by production monitoring.
 
 ## Release-impact labels
 
-Applies to all roles in software and writing when a known boundary gap remains unresolved at the release decision.
+Applies to all roles in software and writing.
+
+At the release decision:
 
 Mark every known, unresolved boundary gap with one of the four release-impact labels — `blocking`, `deferred`, `accepted-risk`, `not-material`. `not-material` is a label, not an exemption from labelling.
+
+Resolve a gap labelled `blocking` before release.
