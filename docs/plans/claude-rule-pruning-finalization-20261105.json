@@ -1,7 +1,7 @@
 {
   "baseline": "fb310dd9c1ea56e4fa2e1b9b671a50c128fdec0f",
   "rulings": "docs/plans/claude-rule-pruning-rulings-20261105T221134Z.md",
-  "retirement_decision": null,
+  "retirement_decision": "DEC-001690",
   "pending_retirements": [
     "R0002",
     "R0007",
@@ -63,5 +63,5 @@
     "R0196",
     "R0564"
   ],
-  "note": "Before merge, contract previews omit pending_retirements from live selection. Their actual archive metadata and decision ID are allocated only at merge. A projected tree using pending-merge-decision is a review fixture, not a valid final rule store."
+  "note": "Finalized under DEC-001690. The pending_retirements list is retained as the reviewed set; every listed row is now archived with the real decision ID. No pending archive markers are valid in the final store."
 }
