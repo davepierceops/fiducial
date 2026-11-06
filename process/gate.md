@@ -22,6 +22,10 @@ boundary is [R0490].
    package and present that body in place of the issue pointer in chat. Hold
    the change short of release until the issue can be opened and linked.
 
+For the Chief of Staff in decision sessions:
+
+Take the `human-gate` issue as canonical for the existence and state of a pending gate, and the change package as canonical for its evidence.
+
 ## Issue body
 
 ~~~markdown
