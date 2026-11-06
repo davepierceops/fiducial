@@ -85,4 +85,6 @@ Approved R0110 wording:
 
 - R0230: Dave answered “yes” to: “Flag consequences that could change the human’s decision before acting. Keep the explanation concise.” All selectors and the Human note remain unchanged. The wording preserves disclosure of decision-relevant consequences, places it before action, and removes the rigid one-line/once presentation constraints and blanket suppression of other information.
 
+- R0234: Dave answered “yes” to: “Carry out clear, authorized work without asking for confirmation.” All selectors remain unchanged. This preserves the action preference for already-authorized work; R0166 separately covers decisions reserved to the human.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
