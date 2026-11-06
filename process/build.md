@@ -30,7 +30,7 @@ sections.
 5. **Review.** Send the diff and evidence to Reviewer and Skeptic/Risk
    subagents [R0065, R0462], using quality [R0487], skepticism [R0488, R0492],
    and the applicable continuity read [R1104, R1105]. The review record uses
-   [R1414, R1617], and dispositions use [R1614].
+   [R1414, R1617]; apply the review dispositions in `process/change-flow.md`.
 6. **Release preparation.** Assemble `process/release.md`'s change package and
    readiness review [R0509]. Use the classification [R0535, R0536] to route a
    consequential change to `process/gate.md` before release [R0534, R0562].

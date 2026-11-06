@@ -26,7 +26,8 @@ A durable rule lives in the store, never only in vendor tooling. An adapter is d
    [R1270]. The reviewer writes the artifact in
    `process/review-artifact.md`'s form.
 4. **Disposition.** Bring the proposal and artifact to the human for any
-   outstanding ruling [R0166, R1614]. Record each intake in its review
+   outstanding ruling [R0166]. Apply the review dispositions in
+   `process/change-flow.md`. Record each intake in its review
    artifact: the changes it lands, or the candidates refused and
    the rows against which they were refused.
 5. **Landing.** Commit the approved change and its intake artifact on the
