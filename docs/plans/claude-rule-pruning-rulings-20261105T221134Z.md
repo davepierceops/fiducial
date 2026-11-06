@@ -125,4 +125,6 @@ Approved R0110 wording:
 
 - R0490: Dave answered “yes” to retiring the universal-release-approval rule into R0534, resolving the conflict with the consequential-change policy. R0490 is archived unchanged except for retired: R0534; active references in gate and change-flow now use R0534. Explicit human approval remains required for consequential releases; this consolidation does not add a human gate for every routine release. No additional wording is added to R0534.
 
+- R0564: Dave answered “yes” to removing the standing push prose while retaining its force-push deny configuration. R0234 already covers proceeding with clear, authorized work without another confirmation. During batch finalization, remove the prose from generated roots and agent bodies while preserving all existing deny patterns, registration, and project-setup enforcement references. Do not simply archive the row and thereby lose enforcement. The source row remains intact until that enforcement-preserving emission change is implemented and checked; no new standing replacement or skill instruction is authorized.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
