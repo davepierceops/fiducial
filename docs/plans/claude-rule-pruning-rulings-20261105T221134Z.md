@@ -75,4 +75,6 @@ Approved R0110 wording:
 
 - R1029: Dave answered “yes” to retiring the Critic frontier-tier instruction without replacement or a move to a skill. Model selection belongs at agent configuration or launch rather than in standing context. This ruling does not change agent configuration or select a replacement model. No active process citations were found. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge, and ensure its body does not reappear in generated roots or agents.
 
+- R1176: Dave answered “y” to retiring the Writer frontier-tier instruction without replacement or a move to a skill. Model selection belongs at agent configuration or launch rather than in standing context. This ruling does not change agent configuration or select a replacement model. No active process citations were found. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge, and ensure its body does not reappear in generated roots or agents.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
