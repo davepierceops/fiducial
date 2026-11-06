@@ -103,4 +103,6 @@ Approved R0110 wording:
 
 - R0262: Dave answered “yes” to retiring the filesystem-path paste-block rule without replacement or a move to a skill. Deliverables should remain easy to find, but routine file writes do not need a separate path block or the prescribed home-directory abbreviation. No active process citations were found. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge, and ensure its body does not reappear in generated roots or agents.
 
+- R1612: Dave answered “y” to retiring the PR-URL paste-block rule without replacement or a move to a skill. A normal clickable PR link provides access without the rigid paste-block presentation requirement. No active process citations were found. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge, and ensure its body does not reappear in generated roots or agents.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
