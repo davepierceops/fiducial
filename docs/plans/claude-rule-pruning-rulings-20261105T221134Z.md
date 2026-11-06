@@ -129,4 +129,6 @@ Approved R0110 wording:
 
 - R0065: Dave answered “y” to retiring the blanket Reviewer-and-Skeptic requirement for every review without replacement or a new move to a skill. R0462 retains independence for required reviews; existing build/change-flow review procedures remain. Active process citations are removed or replaced with R0462 where they concern reviewer independence; the historical build provenance citation remains. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge, and ensure its body does not reappear in generated roots or agents.
 
+- R0112: Dave answered “yes” to retiring the passing-before-implementation prohibition without replacement or a move to a skill. Passing before new implementation does not alone establish a broken test, because existing behavior may satisfy it; R0110 already limits verification claims to what checks establish. No active process or other live-rule citations were found. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge, and ensure its body does not reappear in generated roots or agents.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
