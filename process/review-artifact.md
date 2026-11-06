@@ -61,6 +61,9 @@ The header's `Verdict:` is the overall call and each pass section — quality,
 skepticism, continuity — opens with its own `Verdict (<pass>):` line [R1414].
 A pass that was planned and did not run has its section too: its line reads
 `Verdict (<pass>): not-run`, followed by one line saying why [R1617].
+
+The overall verdict is the most severe pass verdict: `ready`, `ready-with-findings`, `not-run`, then `changes-required`. `ready` means ready for human approval, not already approved.
+
 `Cross-checked` and `The human should inspect` are omit-if-none; `Baseline` is
 required where the artifact reviews a range — a delta's whole diff — and names
 the revision the diff starts from, and a review of one revision omits it; the
