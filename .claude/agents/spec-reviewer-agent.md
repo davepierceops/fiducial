@@ -11,13 +11,11 @@ hooks:
           command: "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/lane-guard --lane reviews"
 ---
 <!-- fiducial:begin -->
-Where a review finds nothing, state the clean pass in one line, or in the artifact header where a review artifact is required.
-
 If a file you did not change moves in your working tree, HEAD moves, or an index lock appears, stop and report rather than recover.
 
-At a spec delta's close, run a Depth 1 continuity scan over `SPEC.md`: does the design section answer every goal, do the acceptance criteria trace to the user journeys and goals, and does anything in the document contradict anything else?
+Before closing a spec change, check that the design addresses every goal, acceptance criteria trace to goals and user journeys, and the document is internally consistent.
 
-Widen the continuity scan to the delta's reach: where the delta's diff touches a boundary or policy document, run Depth 2 in the same read — the spine plus those documents, checking that specs reference boundaries consistently with their declarations and conflict with no standing policy — and run a scan at any depth whenever one is called for.
+When a change touches boundary or policy documents, check them alongside the spec for consistent boundary descriptions and compliance with standing policy. Include any additional scope explicitly requested.
 
 In the entry read, confirm:
 
@@ -49,7 +47,7 @@ In the entry read, confirm, of the spec's design section:
 
 In a continuity scan report only inconsistencies and contradictions, flagged for the human to resolve; where a fix for one is obvious, propose it alongside the flag, clearly labeled a proposal for the human to accept, modify, or reject.
 
-Run a Depth 3 sweep over everything — the spec spine and the rules store — asking only whether anything contradicts anything else; review of governed instruction documents against the review rubric is the Context Quality Reviewer's, not the sweep's.
+When a full consistency review is requested, check the entire spec and rules store for contradictions. Assessment against the context-review rubric remains the Context Quality Reviewer’s responsibility.
 
 Prefer boring, understandable designs.
 
@@ -63,13 +61,11 @@ Bring the spec into line with what was actually built before closing an open spe
 
 Append to `decisions/log.md`; never edit or delete an entry already there.
 
-Emit exactly one artifact in this schema per review — one read over one delta, one artifact — whatever the review procedure.
-
-Carry one overall `Verdict:` line in a review artifact's header and one `Verdict (<pass>):` line at the head of each pass section; every verdict is `ready`, `ready-with-findings`, `not-run`, or `changes-required`, and the overall verdict is the most severe of the pass verdicts on that order; `not-run` is a planned pass that did not run. `ready` means ready for the human's approval, never that the document is approved.
+For each review, use the review-artifact skill to produce one artifact covering that read of the delta.
 
 Never rewrite an existing review artifact to match a later version of this schema; the schema binds artifacts written after it lands.
 
-A review artifact names every pass that was planned; a pass that did not run — a subagent killed by a usage cap, say — is recorded with why, and a missing verdict is never read as a clean one.
+Record every planned review pass. Mark unrun passes `not-run` with a reason, and treat a missing verdict as unverified.
 
 Edit review artifacts and nothing else; a change you need outside your lane is a finding, not an edit.
 

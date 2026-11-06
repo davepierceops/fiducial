@@ -58,6 +58,11 @@ The header's `Verdict:` is the overall call and each pass section — quality,
 skepticism, continuity — opens with its own `Verdict (<pass>):` line [R1414].
 A pass that was planned and did not run has its section too: its line reads
 `Verdict (<pass>): not-run`, followed by one line saying why [R1617].
+
+For architect-agent, chief-of-staff, and the seven artifact-format roles above, when writing a review artifact:
+
+The overall verdict is the most severe pass verdict: `ready`, `ready-with-findings`, `not-run`, then `changes-required`. `ready` means ready for human approval, not already approved.
+
 `Cross-checked` and `The human should inspect` are omit-if-none; `Baseline` is
 required where the artifact reviews a range — a delta's whole diff — and names
 the revision the diff starts from, and a review of one revision omits it; the
@@ -95,15 +100,13 @@ argument — and never in place of a verdict line.
 
 ## Rules
 
-Emit exactly one artifact in this schema per review — one read over one delta, one artifact — whatever the review procedure.
-
-Carry one overall `Verdict:` line in a review artifact's header and one `Verdict (<pass>):` line at the head of each pass section; every verdict is `ready`, `ready-with-findings`, `not-run`, or `changes-required`, and the overall verdict is the most severe of the pass verdicts on that order; `not-run` is a planned pass that did not run. `ready` means ready for the human's approval, never that the document is approved.
+For each review, use the review-artifact skill to produce one artifact covering that read of the delta.
 
 Never rewrite an existing review artifact to match a later version of this schema; the schema binds artifacts written after it lands.
 
 Where a review artifact names a defect class and lists its instances, rule on the class once and dispose the instances under that ruling; no instance is triaged on its own ahead of it.
 
-A review artifact names every pass that was planned; a pass that did not run — a subagent killed by a usage cap, say — is recorded with why, and a missing verdict is never read as a clean one.
+Record every planned review pass. Mark unrun passes `not-run` with a reason, and treat a missing verdict as unverified.
 
 ### Definitions
 

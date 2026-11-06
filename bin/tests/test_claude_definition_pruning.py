@@ -22,6 +22,7 @@ from tests.helpers import REPO_ROOT
 from tests.test_skill_context_extraction import inputs
 
 BASELINE = "cb0194aee512f48f3046e5ba9be445d85f97fbd3"
+LANDED = "1df9a4ec813e5cec756665123d8a5298c7597cef"
 RETIRED = set("R0108 R1200 R0497 R0173 R0027 R0028 R0208 R0043 R0055 R0611 R0760 R0761 R1601 R1625".split())
 REVISED = {"R0535", "R0780", "R0045", "R0166"}
 ROOT_DEFINITIONS = {"R0535", "R0780", "R0045", "R0064"}
@@ -38,6 +39,13 @@ class TestClaudeDefinitionPruning(unittest.TestCase):
         with tarfile.open(fileobj=io.BytesIO(archive)) as stream:
             stream.extractall(cls.baseline, filter="data")
         cls.old = inputs(cls.baseline)
+        landed = cls.baseline / "landed"
+        landed.mkdir()
+        archive = subprocess.run(["git", "archive", LANDED, "rules", "process", "bin/hooks"],
+                                 cwd=REPO_ROOT, check=True, capture_output=True).stdout
+        with tarfile.open(fileobj=io.BytesIO(archive)) as stream:
+            stream.extractall(landed, filter="data")
+        cls.landed_rows = {r.id: r for r in inputs(landed).rows if r.kind == "rule"}
         cls.current = inputs(REPO_ROOT)
         cls.old_rows = {r.id: r for r in cls.old.rows if r.kind == "rule"}
         cls.rows = {r.id: r for r in cls.current.rows if r.kind == "rule"}
@@ -57,12 +65,14 @@ class TestClaudeDefinitionPruning(unittest.TestCase):
         self.assertEqual(manifest["moved_to_skill"], {"R0208": "command-blocks"})
         self.assertEqual(set(manifest["shortened"] + manifest["revised"]), REVISED)
         self.assertEqual(manifest["pending"], ["R0064"])
-        self.assertEqual(set(self.old_rows) - set(self.rows), RETIRED)
-        self.assertEqual(set(self.rows) - set(self.old_rows), set())
-        changed = {r for r in self.rows if self.rows[r].body != self.old_rows[r].body}
+        # Preserve PR #426's exact approved delta without prohibiting later
+        # approved changes. Archive and output guards below remain live.
+        self.assertEqual(set(self.old_rows) - set(self.landed_rows), RETIRED)
+        self.assertEqual(set(self.landed_rows) - set(self.old_rows), set())
+        changed = {r for r in self.landed_rows if self.landed_rows[r].body != self.old_rows[r].body}
         self.assertEqual(changed, REVISED)
-        for row_id in self.rows:
-            self.assertEqual(self.rows[row_id].keys, self.old_rows[row_id].keys, row_id)
+        for row_id in self.landed_rows:
+            self.assertEqual(self.landed_rows[row_id].keys, self.old_rows[row_id].keys, row_id)
         decision = manifest["retirement_decision"]
         self.assertRegex(decision, r"^DEC-\d{6}$")
         self.assertIn("## " + decision + " —", (REPO_ROOT / "decisions/log.md").read_text())

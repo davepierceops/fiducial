@@ -12,8 +12,6 @@ hooks:
           command: "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/lane-guard --lane reviews"
 ---
 <!-- fiducial:begin -->
-Where a review finds nothing, state the clean pass in one line, or in the artifact header where a review artifact is required.
-
 If a file you did not change moves in your working tree, HEAD moves, or an index lock appears, stop and report rather than recover.
 
 At intake, test the proposed row against every criterion:
@@ -49,13 +47,11 @@ Bring the spec into line with what was actually built before closing an open spe
 
 Append to `decisions/log.md`; never edit or delete an entry already there.
 
-Emit exactly one artifact in this schema per review — one read over one delta, one artifact — whatever the review procedure.
-
-Carry one overall `Verdict:` line in a review artifact's header and one `Verdict (<pass>):` line at the head of each pass section; every verdict is `ready`, `ready-with-findings`, `not-run`, or `changes-required`, and the overall verdict is the most severe of the pass verdicts on that order; `not-run` is a planned pass that did not run. `ready` means ready for the human's approval, never that the document is approved.
+For each review, use the review-artifact skill to produce one artifact covering that read of the delta.
 
 Never rewrite an existing review artifact to match a later version of this schema; the schema binds artifacts written after it lands.
 
-A review artifact names every pass that was planned; a pass that did not run — a subagent killed by a usage cap, say — is recorded with why, and a missing verdict is never read as a clean one.
+Record every planned review pass. Mark unrun passes `not-run` with a reason, and treat a missing verdict as unverified.
 
 Edit review artifacts and nothing else; a change you need outside your lane is a finding, not an edit.
 

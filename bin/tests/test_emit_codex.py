@@ -193,14 +193,26 @@ class TestCodexTree(unittest.TestCase):
     def test_fixture_has_all_real_enforced_blocks_and_every_emitted_object(self):
         real = read_enforced(store_inputs(BIN_DIR.parent).rows)
         fixture = read_enforced(self.inputs.rows)
-        self.assertTrue(set(fixture).issubset(real))
+        # The historical 34-row fixture still exercises the same adapters.
+        # R0505 was subsequently consolidated into R1039; verify its preserved
+        # archive and live successor rather than dropping fixture coverage.
+        retired = FileRowSource(BIN_DIR.parent)._row(
+            BIN_DIR.parent / "rules/retired/R0505.md", "rule")
+        self.assertEqual(retired.keys["retired"], ["r1039"])
+        self.assertNotIn("R0505", real)
+        archived = read_enforced([retired])["R0505"]
+        self.assertEqual(archived.fields, real["R1039"].fields)
+        for axis in ("role", "session", "corpus"):
+            self.assertTrue(set(retired.keys[axis]) <= set(real["R1039"].row.keys[axis]))
+        comparison = {**real, "R0505": archived}
+        self.assertTrue(set(fixture).issubset(comparison))
         self.assertEqual(len(fixture), 34)
         for row_id, item in fixture.items():
             # Package 4 deliberately renames R0506's missing review procedure.
             # Hook/deny/agent blocks remain independently snapshotted verbatim;
             # every live row, including added procedure rows, is checked below.
             if row_id != "R0506":
-                self.assertEqual(item.fields, real[row_id].fields, row_id)
+                self.assertEqual(item.fields, comparison[row_id].fields, row_id)
             else:
                 self.assertIn(real[row_id].skills, (["release", "review"], ["release", "review-artifact"]))
             if item.kind == "hook":
