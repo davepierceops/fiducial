@@ -63,4 +63,6 @@ Approved R0110 wording:
 
 - R0931: Dave answered “y” to retiring the automatic next-work-item handoff suggestion without replacement. A handoff may still be proposed when a concrete need arises; the rule requiring a suggestion at every major work item is removed. Archive the original at batch finalization with the actual retirement decision ID allocated at merge.
 
+- R0937: Dave answered “yes” to retiring the expensive-context session-ending recommendation without replacement. Concrete context or performance issues may still be raised when they occur; no automatic session-ending nudge remains. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
