@@ -143,3 +143,5 @@ Finalization check from ruling 43: bin/tests/emit_codex_fixtures.py intentionall
 ## Finalization authorization
 
 After ruling 43, Dave instructed: “Yes, finalize it and merge. Please do it as unattended as the rules allow, I'm stepping away for a long time”. Proceed with routine validation fixes, independent intake/frontier and adoption review, self-adoption and merge; substantive changes beyond these rulings still require a human ruling. origin/main was checked at 1df9a4ec813e5cec756665123d8a5298c7597cef before allocating DEC-001710. The finalization manifest records the twelve no-successor retirements, five successor retirements, approved rewrites and explicit deferrals.
+
+Finalization correction: the independent Context Quality Reviewer identified that R1414’s moved explanation sat under the seven-role artifact-format scope, obscuring its original nine-role audience. Added an explicit applicability sentence for architect-agent, chief-of-staff and those seven roles when writing a review artifact. This implements ruling 11’s preserve-coverage requirement without broadening the whole artifact format or changing the hook.
