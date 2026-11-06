@@ -133,4 +133,6 @@ Approved R0110 wording:
 
 - R0781: Dave answered “y” to retiring the standing list of verification-boundary cases without replacement or a new move to a skill. R0110 retains the general evidence/simulation/untested-assumption obligation; verification-checklists already specifies boundary-declaration triggers and contents. No active process or other live-rule citations were found. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge, and ensure its body does not reappear in generated roots or agents.
 
+- R0002: Dave answered “yes” to retiring mandatory whole-file lexicon conformance during other edits, without replacement or a move to a skill. Definitions remain available; editing a file no longer automatically requires unrelated terminology cleanup or historical wording changes. No active process or other live-rule citations were found. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge, and ensure its body does not reappear in generated roots or agents.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
