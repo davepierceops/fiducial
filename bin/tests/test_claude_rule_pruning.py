@@ -32,6 +32,7 @@ from tests.test_skill_context_extraction import inputs
 
 
 BASELINE = "fb310dd9c1ea56e4fa2e1b9b671a50c128fdec0f"
+LANDED = "cb0194aee512f48f3046e5ba9be445d85f97fbd3"
 MOVED = {
     "review-artifact": ["R0186"],
     "intake": ["R0763"],
@@ -63,6 +64,13 @@ class TestClaudeRulePruning(unittest.TestCase):
         with tarfile.open(fileobj=io.BytesIO(archive)) as stream:
             stream.extractall(baseline, filter="data")
         cls.old = inputs(baseline)
+        landed = baseline / "landed"
+        landed.mkdir()
+        archive = subprocess.run(["git", "archive", LANDED, "rules", "process", "bin/hooks"],
+                                 cwd=REPO_ROOT, check=True, capture_output=True).stdout
+        with tarfile.open(fileobj=io.BytesIO(archive)) as stream:
+            stream.extractall(landed, filter="data")
+        cls.landed_rows = {r.id: r for r in inputs(landed).rows if r.kind == "rule"}
         cls.root = pathlib.Path(os.environ.get("FIDUCIAL_PRUNING_ROOT", str(REPO_ROOT)))
         cls.manifest = json.loads((cls.root / "docs/plans/claude-rule-pruning-finalization-20261105.json").read_text())
         cls.source = inputs(cls.root)
@@ -82,8 +90,10 @@ class TestClaudeRulePruning(unittest.TestCase):
         self.assertEqual(self.manifest["baseline"], BASELINE)
         self.assertEqual(set(self.manifest["pending_retirements"]), REMOVED | moved)
         self.assertEqual(self.manifest["moved_to_skill"], {r: skill for skill, ids in MOVED.items() for r in ids})
-        self.assertEqual(set(self.old_rows) - set(self.rows), REMOVED | moved | set(SUCCESSORS))
-        self.assertEqual(set(self.rows) - set(self.old_rows), set())
+        # This is PR #424's exact historical scope, not a ban on later
+        # human-approved retirements. All checks below still use current source.
+        self.assertEqual(set(self.old_rows) - set(self.landed_rows), REMOVED | moved | set(SUCCESSORS))
+        self.assertEqual(set(self.landed_rows) - set(self.old_rows), set())
         source = FileRowSource(self.root)
         if self.retirement_decision is not None:
             self.assertRegex(self.retirement_decision, r"^DEC-\d{6}$")
