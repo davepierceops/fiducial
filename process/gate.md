@@ -9,8 +9,7 @@ corpus: [software, writing]
 # Process: Gate
 
 Prepare the human's gate request from an assembled change package.
-Classification and authority are [R0534, R0535]; the release
-boundary is [R0490].
+Classification, authority and release approval are [R0534, R0535].
 
 1. Open one tracker issue for the pending change and label it `human-gate`.
    Derive its body from the change package using the template below; re-derive
