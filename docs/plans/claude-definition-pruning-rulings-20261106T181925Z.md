@@ -45,3 +45,7 @@ Baseline: cb0194aee512f48f3046e5ba9be445d85f97fbd3, after PR #424. Dave requeste
 No further definition retirement or generator-selection change is approved yet. The observed generator behavior—term matching in non-emitted enforced rows and transitive definition pulling—is review evidence, not authorization to change it. The original 18-definition sequence is complete: 13 approved retirements without replacement, one retirement with approved text moved into command-blocks, three shortened definitions retained, and R0064 unchanged pending adoption issue #425. R0166 is also revised as explicitly approved. Batch finalization, output review and landing remain outstanding.
 
 These are human wording/scope rulings, not an independent intake review or a claim of landing. Formal decision-log entries are allocated at merge under the decision-log procedure.
+
+## Batch finalization authorization
+
+Dave answered “go” after requesting finalization and accepting the recommendation to leave R0064 unchanged pending #425. DEC-001700 records the approved scope during merge finalization. The finalization manifest names all fourteen archived definitions; historical per-row pending language above records the state when each ruling was made. Required independent review, generated-context verification and landing evidence follow separately.
