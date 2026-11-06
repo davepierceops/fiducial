@@ -89,4 +89,6 @@ Approved R0110 wording:
 
 - R0241: Dave answered “yes” to retiring the standing status rule while preserving only the tracker definition needed by remaining rules. The earlier shortened-rule proposal is not adopted. R0064 now defines the loose-end tracker as the project’s issue tracker (GitHub Issues and Milestones), with explicit singular/plural term aliases. The status skill already gathers evidence from repository and tracker sources; the gate skill already requires the human-gate label. No ban on derived status files or script suggestion is moved elsewhere. Archive the original R0241 at batch finalization with the actual retirement decision ID allocated at merge; verify that only the approved definition survives in generated roots and agents.
 
+- R0244: Dave answered “yes” to: “Before proposing a policy decision, check `decisions/log.md` for relevant prior decisions and cite them.” All selectors remain unchanged. This retains the prior-decision check before proposing policy, distinct from the decision-log skill’s recording procedure.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
