@@ -113,4 +113,6 @@ Approved R0110 wording:
 
 - R0534: Dave answered “y” to keeping the consequential-release approval rule as written. It establishes when explicit human approval is required; the gate skill provides the procedure. No source change.
 
+- R0534/R0536: Dave answered “yes” to combining consequential-release approval and uncertain classification in R0534: “Obtain explicit human approval before releasing a consequential change. If its classification is uncertain, ask the human before release.” This supersedes the earlier R0534 keep-as-written ruling. R0534 retains its role/session/corpus scope and Human note; its condition now includes uncertain classification before release. R0536 is archived unchanged except for retired: R0534. Active process citations now refer to R0534 for uncertainty handling. Check consequential-class definition availability during final generation because the approved body uses consequential change rather than consequential class.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.

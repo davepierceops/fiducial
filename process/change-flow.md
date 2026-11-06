@@ -34,7 +34,7 @@ Each meaningful change [R0465] runs these in order, by subagents but the human.
 5. **Merge.** Every pull request merges [R0570], with an agent review on each
    [R0065].
 6. **Release.** A routine change flows to release on its evidence under standing
-   authorization [R0535]. A consequential change [R0535, R0536] goes through the
+   authorization [R0535]. A consequential change [R0534, R0535] goes through the
    gate skill — its `human-gate` issue, the human's explicit go [R0534, R0562,
    R0490] — before release. Done is the definition of done [R0509].
 
