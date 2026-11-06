@@ -33,7 +33,7 @@ required approvals.
    to turn the tests green [R0485]. Collect its implementation summary and
    mechanical results for the review.
 5. **Review.** Send the diff and evidence to Reviewer and Skeptic/Risk
-   subagents [R0462], using quality [R0487], skepticism [R0488, R0492],
+   subagents [R0462], using quality [R1048], skepticism [R0488, R0492],
    and the applicable continuity read [R1104, R1105]. Record each pass’s
    verdict under one overall verdict [R1414]; record a planned pass that did
    not run and why [R1617]. Apply `process/change-flow.md`'s review dispositions.
