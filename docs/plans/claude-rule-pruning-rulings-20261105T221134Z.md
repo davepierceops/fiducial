@@ -131,4 +131,6 @@ Approved R0110 wording:
 
 - R0112: Dave answered “yes” to retiring the passing-before-implementation prohibition without replacement or a move to a skill. Passing before new implementation does not alone establish a broken test, because existing behavior may satisfy it; R0110 already limits verification claims to what checks establish. No active process or other live-rule citations were found. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge, and ensure its body does not reappear in generated roots or agents.
 
+- R0781: Dave answered “y” to retiring the standing list of verification-boundary cases without replacement or a new move to a skill. R0110 retains the general evidence/simulation/untested-assumption obligation; verification-checklists already specifies boundary-declaration triggers and contents. No active process or other live-rule citations were found. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge, and ensure its body does not reappear in generated roots or agents.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
