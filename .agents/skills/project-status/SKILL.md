@@ -1,9 +1,12 @@
 ---
 name: "project-status"
-description: "Use the project's available evidence to give the user a current picture and a proposed next step."
+description: "Use when the human requests project status or orientation."
 ---
 <!-- fiducial:begin -->
 # Project Status
+
+Use when the human requests project status or orientation. Starting a Chief of
+Staff session alone does not trigger this skill.
 
 Use the project's available evidence to give the user a current picture and a
 proposed next step. Keep the assessment within the project and scope requested.

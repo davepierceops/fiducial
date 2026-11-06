@@ -7,6 +7,8 @@ description: "The form a review emits: one read over one delta, one artifact [R1
 
 The form a review emits: one read over one delta, one artifact [R1396, R1408].
 
+The artifact format applies to spec-reviewer-agent, context-quality-reviewer, reviewer-agent, skeptic-risk-agent, release-manager-agent, copy-editor and critic in software and writing decision and execution sessions. The finding-classification instruction below applies to all roles in those sessions and corpora.
+
 Where a role or a policy names a required output, this is where it goes:
 
 | Required by the role or policy | Field here |
@@ -25,7 +27,7 @@ A per-entry log of dispositions is not an artifact in this sense; its shape
 is set by the policy that mandates it.
 
 A review artifact goes in `reviews/`, named `<stem>-<descriptor>-<timestamp>.md`
-in the repo-wide generated-filename convention [R0196]. Over one document, the
+using generation time in UTC as `<YYYYMMDD>T<HHMMSS>Z`. Over one document, the
 stem is the document's: for a file in a subdirectory of `engagements/` or
 `roles/`, `<parent-dir>-<basename>`; for every other file, its basename without
 the extension, and where it already ends in a digit the rule applies unchanged.
@@ -66,9 +68,15 @@ confirms a prior read's findings were fixed, is this header and nothing else.
 
 One entry per finding, after the header.
 
+Flag only what you can demonstrate, cite the location, and label each finding defect, suggestion, or accepted risk.
+A finding labeled accepted risk cites the recorded authorization to accept it.
+Classification describes the kind of finding; the entry heading continues to
+state its severity. Observations are not findings and omit Classification.
+
 ~~~markdown
 ## <finding id> — <blocking | non-blocking | observation>
-Claim: <one sentence — what is wrong>
+Claim: <one sentence stating the finding or observation>
+Classification: <defect | suggestion | accepted risk>
 Location: <path:line, or section name>
 Evidence: <what was checked; verified by running vs. inferred by reading>
 Consequence: <what goes wrong, concretely>
@@ -76,7 +84,9 @@ Fix: <what would resolve it>
 Related: <other finding ids that are the same defect elsewhere, if any>
 ~~~
 
-`Related` is omit-if-none; the other four fields are required. An entry whose
+`Related` is omit-if-none. `Classification` is required for findings and omitted
+for observations. `Claim`, `Location`, `Evidence`, `Consequence` and `Fix` are
+required. An entry whose
 `Evidence` cannot be filled in, or whose `Consequence` cannot state concretely
 what goes wrong, is an observation rather than a finding. Order `blocking`
 entries by weight, heaviest first. Write prose only where judgment does not
@@ -93,9 +103,13 @@ Never rewrite an existing review artifact to match a later version of this schem
 
 Where a review artifact names a defect class and lists its instances, rule on the class once and dispose the instances under that ruling; no instance is triaged on its own ahead of it.
 
-Route a finding below the reviewed document's stage — a spec read raising an implementation question — to the loose-end tracker, where the next stage takes it up; it is not a blocking finding against the reviewed document and does not block the close.
-
-A non-blocking finding's disposition at triage is file-and-land by default: it goes to the loose-end tracker and the delta lands. The human may raise a finding to blocking at triage, before the pull request merges; one raise buys one read over the diff since the reviewed revision. Nothing else reopens a delta.
-
 A review artifact names every pass that was planned; a pass that did not run — a subagent killed by a usage cap, say — is recorded with why, and a missing verdict is never read as a clean one.
+
+### Definitions
+
+**accepted risk** — Accepted risk is an explicit decision — the human's, or the release process's — to proceed despite a known gap.
+
+**blocking** — A `blocking` gap is one the governing policies prohibit releasing with.
+
+**version** — A document's version, at the moment it is referenced, is the SHA of the last commit that touched the file.
 <!-- fiducial:end -->

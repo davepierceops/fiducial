@@ -76,4 +76,8 @@ audience: [human]
 ## 8. Risk tolerance
 ## 9. Open questions
 ~~~
+
+## Definitions
+
+**mock** — A mock is a claim about our side of the contract, with the other side verified elsewhere or explicitly accepted as unverified.
 <!-- fiducial:end -->

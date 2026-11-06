@@ -57,3 +57,9 @@ Unverified: live model behavior, native skill invocation, current forge enforcem
 - `/private/tmp/fiducial-pruning-amendment-tests.txt` — SHA256 `4e626f155286ae60f6ea5f1c272a88afda12565638e5a76a226b2a63ee8ea461`
 - `/private/tmp/fiducial-pruning-skill-validation.txt` — SHA256 `07e7425c410373dedc9915b4e49d3c33eb5aa107f3e208c064b2599d805da0a3`
 - `/private/tmp/fiducial-pruning-adoption-preview-v2/plan.json` — SHA256 `3583156bc1f31446cfe186929d1ce59df2e3075f87ff3516aeac4d265536f5c8`
+
+## Finalized after human signoff
+
+The earlier pending-finalization status is superseded by Dave’s explicit “Yes, finalize it and merge” and DEC-001690. All 43 pending rows now have valid real-ID archives; final source pin 780114ba6adf9086174734f641547db9eca81f3d matches the reviewed projection modulo provenance. The final independent read is reviews/claude-rule-pruning-finalization-read-20261106T073713Z.md. The final suite passes 318 tests, and the actual-source retirement assertions are checked separately. All 47 installed changes match their reviewed candidate bytes/modes, with a zero-write, zero-conflict repeat prepare. The installed roots are 77 lines/1,075 words each, including ownership markers.
+
+Full installation evidence: docs/fiducial-adoption-20261106T073549Z.md. Native behavior remains unverified as above.

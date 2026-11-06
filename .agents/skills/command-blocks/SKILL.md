@@ -36,4 +36,8 @@ Before handing over a block: every command in it is valid and non-harmful, and r
 Write an execution block so the executor needs only the block and the repository, with no dependency on the conversation that produced it.
 
 When handing off an execution block, put the block first, with no preceding prose.
+
+## Definitions
+
+**decision session** — A decision session triages, decides, and produces the artifacts that direct and record work — plans, subagent prompts, session records, tracker updates. It reads freely and writes those artifacts; the changes a plan specifies happen elsewhere, in the session that runs it. The boundary is role in the flow, not capability: a decision session may hold a clone and may commit.
 <!-- fiducial:end -->

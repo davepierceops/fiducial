@@ -69,7 +69,19 @@ Append to `decisions/log.md`; never edit or delete an entry already there.
 
 ## Definitions
 
+**mock** — A mock is a claim about our side of the contract, with the other side verified elsewhere or explicitly accepted as unverified.
+
+**contract-verified** — Contract-verified evidence supports fixture shape, schema expectations, required fields, API assumptions, and compatibility checks. It proves nothing about live credentials, provider availability, provider account state, quota or billing, CORS and domain restrictions, or browser rendering.
+
+**live-verified** — Live-verified evidence supports credentials, provider availability, auth shape, live response shape, real status codes, and quota, billing, and config failures. It proves nothing about all edge cases, future availability, complete UX correctness, or browser rendering unless it was run in a browser.
+
+**browser-verified** — Browser-verified evidence supports rendering, layout, map and tile loading, service worker and PWA behavior, browser-only APIs, and real network behavior from the page. It proves nothing about all devices, all browsers, all network conditions, or production health over time.
+
+**production-verified** — Production-verified evidence supports ongoing dependency health, real-world failure modes, regressions after deploy, availability, live user impact, SLO target compliance against the spec's targets for each Top K user journey, and error budget consumption.
+
 **mechanical check** — Mechanical checks are lint, type, and static-analysis checks; they pass as part of green.
+
+**accepted risk** — Accepted risk is an explicit decision — the human's, or the release process's — to proceed despite a known gap.
 
 **production-grade** — Production-grade software is intentionally specified, verified to declared boundaries, operationally supportable, observable, recoverable, and honest about remaining uncertainty.
 

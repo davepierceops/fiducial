@@ -8,6 +8,8 @@ Pending retirements are projected out of selection using the reviewed
 manifest, without inventing archive decision IDs. FIDUCIAL_PRUNING_ROOT may
 instead name a prepared finalization preview. Neither projection proves
 merge-time decision allocation, valid final archives, or installed state.
+Once the manifest names a retirement decision, actual source selection and
+archive references to that decision-log entry are checked without projection.
 """
 from __future__ import annotations
 
@@ -16,6 +18,7 @@ import io
 import json
 import os
 import pathlib
+import re
 import subprocess
 import tarfile
 import tempfile
@@ -63,15 +66,18 @@ class TestClaudeRulePruning(unittest.TestCase):
         cls.root = pathlib.Path(os.environ.get("FIDUCIAL_PRUNING_ROOT", str(REPO_ROOT)))
         cls.manifest = json.loads((cls.root / "docs/plans/claude-rule-pruning-finalization-20261105.json").read_text())
         cls.source = inputs(cls.root)
-        cls.current = dataclasses.replace(cls.source, head=BASELINE,
-            rows=[r for r in cls.source.rows if r.id not in cls.manifest["pending_retirements"]])
+        cls.retirement_decision = cls.manifest["retirement_decision"]
+        selected = cls.source.rows
+        if cls.retirement_decision is None:
+            selected = [r for r in selected if r.id not in cls.manifest["pending_retirements"]]
+        cls.current = dataclasses.replace(cls.source, head=BASELINE, rows=selected)
         cls.old_rows = {r.id: r for r in cls.old.rows if r.kind == "rule"}
         cls.old_processes = {r.id: r for r in cls.old.rows if r.kind == "process"}
         cls.rows = {r.id: r for r in cls.current.rows if r.kind == "rule"}
         cls.processes = {r.id: r for r in cls.current.rows if r.kind == "process"}
         cls.emitted = {name: targets()[name].emit(cls.current) for name in ("claude-code", "codex")}
 
-    def test_projection_contains_exactly_approved_retirements_and_preserves_sources(self):
+    def test_selection_contains_exactly_approved_retirements_and_preserves_sources(self):
         moved = {r for ids in MOVED.values() for r in ids}
         self.assertEqual(self.manifest["baseline"], BASELINE)
         self.assertEqual(set(self.manifest["pending_retirements"]), REMOVED | moved)
@@ -79,11 +85,23 @@ class TestClaudeRulePruning(unittest.TestCase):
         self.assertEqual(set(self.old_rows) - set(self.rows), REMOVED | moved | set(SUCCESSORS))
         self.assertEqual(set(self.rows) - set(self.old_rows), set())
         source = FileRowSource(self.root)
+        if self.retirement_decision is not None:
+            self.assertRegex(self.retirement_decision, r"^DEC-\d{6}$")
+            log = (self.root / "decisions/log.md").read_text()
+            self.assertRegex(log, r"(?m)^## " + re.escape(self.retirement_decision) + r" — .+$")
+            self.assertTrue(set(self.manifest["pending_retirements"]).isdisjoint(
+                r.id for r in self.source.rows if r.kind == "rule"))
         for row_id in REMOVED | moved:
             path = self.root / "rules" / (row_id + ".md")
-            if not path.exists():
+            if self.retirement_decision is not None:
+                self.assertFalse(path.exists(), row_id + " must not remain live after finalization")
                 path = self.root / "rules/retired" / (row_id + ".md")
+            elif not path.exists():
+                path = self.root / "rules/retired" / (row_id + ".md")
+            self.assertTrue(path.is_file(), row_id)
             original = source._row(path, "rule")
+            if self.retirement_decision is not None:
+                self.assertEqual(original.keys.get("retired"), [self.retirement_decision.lower()], row_id)
             self.assertEqual(original.body, self.old_rows[row_id].body, row_id)
             for key in ("role", "session", "corpus", "condition"):
                 self.assertEqual(original.keys.get(key), self.old_rows[row_id].keys.get(key), (row_id, key))

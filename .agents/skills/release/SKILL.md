@@ -11,7 +11,7 @@ The completion standard is [R0509]; verification is governed by the
 verification and verification-boundaries rows and the verification-checklists
 skill (apply its role-specific sections and explicitly invoke it for relevant
 subagents), and the gate by
-`process/gate.md` [R0534, R0535, R0536, R0562].
+`process/gate.md` [R0534, R0535].
 
 Assemble each readiness field from the change package wherever it already
 states that item; supply user-visible behavior and the rollback or mitigation
@@ -76,4 +76,8 @@ Human decision points: <what needs a ruling; none if none>
 ~~~
 
 Provenance: DEC-001290; R0502, R0503, R1032, R1041, R1042, R1044, R1045, R0506; retained judgment cited above.
+
+## Definitions
+
+**meaningful change** — A meaningful change is any change that warrants a change package — any change affecting behavior, interfaces, tests, dependencies, boundaries, or documentation of substance. A typo fix, a comment edit, or mechanical formatting is not meaningful in this sense.
 <!-- fiducial:end -->

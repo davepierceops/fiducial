@@ -103,13 +103,27 @@ Carry one overall `Verdict:` line in a review artifact's header and one `Verdict
 
 Never rewrite an existing review artifact to match a later version of this schema; the schema binds artifacts written after it lands.
 
-A non-blocking finding's disposition at triage is file-and-land by default: it goes to the loose-end tracker and the delta lands. The human may raise a finding to blocking at triage, before the pull request merges; one raise buys one read over the diff since the reviewed revision. Nothing else reopens a delta.
-
 A review artifact names every pass that was planned; a pass that did not run — a subagent killed by a usage cap, say — is recorded with why, and a missing verdict is never read as a clean one.
 
 Edit review artifacts and nothing else; a change you need outside your lane is a finding, not an edit.
 
 ## Definitions
+
+**mock** — A mock is a claim about our side of the contract, with the other side verified elsewhere or explicitly accepted as unverified.
+
+**contract-verified** — Contract-verified evidence supports fixture shape, schema expectations, required fields, API assumptions, and compatibility checks. It proves nothing about live credentials, provider availability, provider account state, quota or billing, CORS and domain restrictions, or browser rendering.
+
+**live-verified** — Live-verified evidence supports credentials, provider availability, auth shape, live response shape, real status codes, and quota, billing, and config failures. It proves nothing about all edge cases, future availability, complete UX correctness, or browser rendering unless it was run in a browser.
+
+**browser-verified** — Browser-verified evidence supports rendering, layout, map and tile loading, service worker and PWA behavior, browser-only APIs, and real network behavior from the page. It proves nothing about all devices, all browsers, all network conditions, or production health over time.
+
+**production-verified** — Production-verified evidence supports ongoing dependency health, real-world failure modes, regressions after deploy, availability, live user impact, SLO target compliance against the spec's targets for each Top K user journey, and error budget consumption.
+
+**accepted risk** — Accepted risk is an explicit decision — the human's, or the release process's — to proceed despite a known gap.
+
+**blocking** — A `blocking` gap is one the governing policies prohibit releasing with.
+
+**version** — A document's version, at the moment it is referenced, is the SHA of the last commit that touched the file.
 
 **production-grade** — Production-grade software is intentionally specified, verified to declared boundaries, operationally supportable, observable, recoverable, and honest about remaining uncertainty.
 <!-- fiducial:end -->

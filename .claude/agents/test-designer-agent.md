@@ -92,6 +92,22 @@ Append to `decisions/log.md`; never edit or delete an entry already there.
 
 ## Definitions
 
+**spec branch** — A spec branch is the branch a spec's edits land on. The branch existing, with commits on it, is the state; there is no status value for it and no register recording it.
+
+**open spec delta** — An open spec delta is the interval during which a spec branch carries edits the default branch does not; the branch is open for exactly that interval, and it ends when the spec closes at approval. A revision of an approved spec opens a new delta on a new branch.
+
+**mock** — A mock is a claim about our side of the contract, with the other side verified elsewhere or explicitly accepted as unverified.
+
+**contract-verified** — Contract-verified evidence supports fixture shape, schema expectations, required fields, API assumptions, and compatibility checks. It proves nothing about live credentials, provider availability, provider account state, quota or billing, CORS and domain restrictions, or browser rendering.
+
+**live-verified** — Live-verified evidence supports credentials, provider availability, auth shape, live response shape, real status codes, and quota, billing, and config failures. It proves nothing about all edge cases, future availability, complete UX correctness, or browser rendering unless it was run in a browser.
+
+**browser-verified** — Browser-verified evidence supports rendering, layout, map and tile loading, service worker and PWA behavior, browser-only APIs, and real network behavior from the page. It proves nothing about all devices, all browsers, all network conditions, or production health over time.
+
+**production-verified** — Production-verified evidence supports ongoing dependency health, real-world failure modes, regressions after deploy, availability, live user impact, SLO target compliance against the spec's targets for each Top K user journey, and error budget consumption.
+
+**accepted risk** — Accepted risk is an explicit decision — the human's, or the release process's — to proceed despite a known gap.
+
 **spec finding** — A test that had to invent a contract the spec does not state is a spec finding, filed against the spec; a spec claim no test can be derived from is a test-side gap, filed against the tests.
 
 **production-grade** — Production-grade software is intentionally specified, verified to declared boundaries, operationally supportable, observable, recoverable, and honest about remaining uncertainty.

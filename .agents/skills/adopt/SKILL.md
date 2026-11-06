@@ -9,7 +9,7 @@ Reconcile the store's current harness context into a repository, including a
 repository already using fiducial; use the same procedure for upgrades.
 The source of truth and reconciliation ruling are DEC-001630; project
 preconditions are in `project-setup`, review separation is [R0462], and gate
-classification and authority are [R0534, R0535, R0536, R0562].
+classification and authority are [R0534, R0535].
 
 1. **Prepare without changing the target.** Read the target's spec, decisions,
    and `project-setup` preconditions. Record the store SHA and dirty diff, target
@@ -50,7 +50,8 @@ classification and authority are [R0534, R0535, R0536, R0562].
 4. **Create/append.** After those rulings, run `python3 adopt.py apply STAGE
    REVIEW_JSON APPROVAL_JSON`. It rechecks the inventory, writes missing files,
    and replaces only owned material. Use `python3 adopt.py labels OWNER/REPO`
-   to create missing `human-gate` and the four release-impact labels [R0030];
+   to create missing `human-gate` and the four release-impact labels defined in
+   `process/verification-checklists.md`;
    existing label metadata is preserved. Read the labels back. The labels command
    touches GitHub, and is run only within the same authorization as installation.
    No command here commits, pushes, merges, applies infrastructure or destroys it.
@@ -410,4 +411,24 @@ if __name__ == "__main__":
 
 Provenance: DEC-001100 (supersedes DEC-000910), DEC-001280; SPEC.md §§3.1, 6, 7;
 subtraction plan §5; retained judgment cited above and R0030, R0196, R0462, R1617.
+
+## Definitions
+
+**spec branch** — A spec branch is the branch a spec's edits land on. The branch existing, with commits on it, is the state; there is no status value for it and no register recording it.
+
+**open spec delta** — An open spec delta is the interval during which a spec branch carries edits the default branch does not; the branch is open for exactly that interval, and it ends when the spec closes at approval. A revision of an approved spec opens a new delta on a new branch.
+
+**reconciliation** — Reconciliation is the close of an open spec delta: the spec is brought into line with what was actually built.
+
+**contract-verified** — Contract-verified evidence supports fixture shape, schema expectations, required fields, API assumptions, and compatibility checks. It proves nothing about live credentials, provider availability, provider account state, quota or billing, CORS and domain restrictions, or browser rendering.
+
+**live-verified** — Live-verified evidence supports credentials, provider availability, auth shape, live response shape, real status codes, and quota, billing, and config failures. It proves nothing about all edge cases, future availability, complete UX correctness, or browser rendering unless it was run in a browser.
+
+**accepted risk** — Accepted risk is an explicit decision — the human's, or the release process's — to proceed despite a known gap.
+
+**blocking** — A `blocking` gap is one the governing policies prohibit releasing with.
+
+**not-material** — A `not-material` gap is known but not relevant to the release decision.
+
+**version** — A document's version, at the moment it is referenced, is the SHA of the last commit that touched the file.
 <!-- fiducial:end -->
