@@ -20,31 +20,18 @@ it [R0462, R1396].
 | **Rules** — rows in `rules/` | intake, by its skill [R0944] | Context Quality Reviewer |
 | **Process** — prose in `process/` | one read, then the human's approval, recorded in the decision log naming the SHA [R1270] | a session that did not draft it, then the human |
 | **Spec** — `SPEC.md` | the spec branch's close: one read of its whole diff with the tests, one ruling [R0481] | Spec Reviewer, then the human |
-| **Code** — the implementation | one pull request per unit of work, through the stages below | Reviewer and Skeptic/Risk, then the human at the gate |
+| **Code** — the implementation | one pull request per unit of work, following the build skill | Reviewer and Skeptic/Risk, then the human at the gate |
 
 For spec reconciliation in software and writing, across roles and in decision
 and execution sessions:
 
 Attach approval at reconciliation, to the version of record on the default branch; never to a revision the spec branch held before it.
 
-For those same software roles and sessions, each meaningful change [R0465] runs these in order, by subagents but the human.
+For those same software roles and sessions, use the build skill for each
+meaningful change [R0465], from the spec through release.
 
-1. **Spec.** `SPEC.md` is approved [R1513] and the unit's acceptance criteria
-   are written from it [R0472].
-2. **Plan.** Plan mode, from the spec; a reviewer that
-   did not write the plan reads it before anything dispatches [R0462].
-3. **Build.** A test designer writes the unit's tests and confirms them red
-   [R0478]; a different subagent implements to green [R0486, R0485].
-4. **Review.** Quality, skepticism and continuity passes, each its own verdict
-   [R0492] under one overall verdict [R1414]; a planned pass that did not run
-   is recorded with why [R1617]. Apply the review dispositions below;
-   `changes-required` means the delta has not closed; one more read over the
-   diff since then closes it.
-5. **Merge.** Each pull request receives an agent review before merge.
-6. **Release.** A routine change flows to release on its evidence under standing
-   authorization [R0535]. A consequential change [R0534, R0535] goes through the
-   gate skill — its `human-gate` issue, the human's explicit go [R0534] —
-   before release. Done is the definition of done [R0509].
+A `changes-required` review leaves the delta open; a further read over the
+diff since that review closes it when the required changes are resolved.
 
 ## Review dispositions
 

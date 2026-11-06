@@ -185,8 +185,8 @@ class TestClaudeRulePruning(unittest.TestCase):
         label_position = release_section.index(self.old_rows["R0030"].body)
         self.assertIn("At the release decision", release_section[:label_position])
         change = self.processes["change-flow"].body
-        build = change.index("1. **Spec.**")
-        # The build/release sequence needs its own software scope after the
+        build = change.index("use the build skill")
+        # The build/release routing needs its own software scope after the
         # reconciliation paragraph that explicitly applies to both corpora.
         reconciliation = change.index(self.old_rows["R0011"].body) + len(self.old_rows["R0011"].body)
         self.assertIn("software", change[reconciliation:build].lower())
