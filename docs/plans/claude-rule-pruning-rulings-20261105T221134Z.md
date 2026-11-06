@@ -117,4 +117,6 @@ Approved R0110 wording:
 
 - R0555: Dave answered “yes” to moving the gate-record authority instruction into the gate skill and retiring the standalone row. Its exact body is now in process/gate.md with its Chief of Staff/decision-session scope stated explicitly. No active process citations were found. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge, and ensure its body appears only in the skill rather than standing roots or agents.
 
+- R0562: Dave answered “yes” to retiring the explicit-go/silence rule into R0534. The approved consolidated R0534 already requires explicit human approval before a consequential release; no additional wording is added. R0562 is archived unchanged except for retired: R0534, and its active process citations are removed where R0534 already supplies the obligation.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.

@@ -12,7 +12,7 @@ Reconcile the store's current harness context into a repository, including a
 repository already using fiducial; use the same procedure for upgrades.
 The source of truth and reconciliation ruling are DEC-001630; project
 preconditions are in `project-setup`, review separation is [R0462], and gate
-classification and authority are [R0534, R0535, R0562].
+classification and authority are [R0534, R0535].
 
 1. **Prepare without changing the target.** Read the target's spec, decisions,
    and `project-setup` preconditions. Record the store SHA and dirty diff, target
