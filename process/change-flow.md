@@ -8,10 +8,12 @@ corpus: [software, writing]
 
 # Process: Change Flow
 
-A delta is the whole of what one piece of work changes. Review is charged once
-per delta, at its close, by a reader that did not produce it [R0462, R1396].
+A delta is the whole of what one piece of work changes.
 
-The following closure table applies to architect-agent, chief-of-staff, coder-agent, context-quality-reviewer, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent and test-designer-agent in software decision and execution sessions.
+The following review requirement and closure table apply to architect-agent, chief-of-staff, coder-agent, context-quality-reviewer, release-manager-agent, reviewer-agent, skeptic-risk-agent, spec-reviewer-agent and test-designer-agent in software decision and execution sessions.
+
+Review is charged once per delta, at its close, by a reader that did not produce
+it [R0462, R1396].
 
 | What changes | Closed by | Who reads |
 |---|---|---|
