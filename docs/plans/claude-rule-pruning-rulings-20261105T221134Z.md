@@ -111,4 +111,6 @@ Approved R0110 wording:
 
 - R1513: Dave answered “yes” to: “Work from a human-approved `SPEC.md`, with approval recorded in the decision log against the reviewed commit.” The verb metadata changes from forbid to require to match the positive obligation; role/session/corpus scopes and condition remain unchanged. This retains the approved-spec and reviewed-commit recording requirement.
 
+- R0534: Dave answered “y” to keeping the consequential-release approval rule as written. It establishes when explicit human approval is required; the gate skill provides the procedure. No source change.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
