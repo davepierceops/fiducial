@@ -26,7 +26,7 @@ Attach approval at reconciliation, to the version of record on the default branc
 Each meaningful change [R0465] runs these in order, by subagents but the human.
 
 1. **Spec.** `SPEC.md` is approved [R1513] and the unit's acceptance criteria
-   are written from it [R0472]; nothing is built against an open spec [R0017].
+   are written from it [R0472].
 2. **Plan.** Plan mode, from the spec; a reviewer that
    did not write the plan reads it before anything dispatches [R0462].
 3. **Build.** A test designer writes the unit's tests and confirms them red
