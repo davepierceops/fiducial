@@ -38,8 +38,8 @@ required approvals.
    verdict under one overall verdict [R1414]; record a planned pass that did
    not run and why [R1617]. Apply `process/change-flow.md`'s review dispositions.
 6. **Merge.** Each pull request receives an agent review before merge.
-7. **Release.** Assemble `process/release.md`'s change package and readiness
-   review. A routine change may release on its evidence under standing
+7. **Release.** Assemble `process/release.md`'s change package, including its
+   release-readiness section. A routine change may release on its evidence under standing
    authorization [R0535]. For a consequential change, use the gate skill for
    its `human-gate` issue and the human’s explicit go before release [R0534,
    R0535]. Completion is governed by the definition of done [R0509].

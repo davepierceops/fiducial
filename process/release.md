@@ -8,17 +8,17 @@ corpus: [software, writing]
 
 # Process: Release
 
-Assemble the change package, release readiness review, and report from the
-work's evidence.
+Assemble one change package containing the evidence and release-readiness
+assessment, and report its outcome.
 The completion standard is [R0509]; verification is governed by the
 verification and verification-boundaries rows and the verification-checklists
 skill (apply its role-specific sections and explicitly invoke it for relevant
 subagents), and the gate by
 `process/gate.md` [R0534, R0535].
 
-Assemble each readiness field from the change package wherever it already
-states that item; supply user-visible behavior and the rollback or mitigation
-path for the readiness review. Where a required field has no source, mark it
+Assess release readiness in the package's readiness section, referencing its
+existing evidence instead of copying it. Supply the user-visible behavior and
+rollback or mitigation path. Where a required field has no source, mark it
 missing and carry it as a known gap.
 
 ## Change package
@@ -34,29 +34,20 @@ Acceptance criteria: <from the spec>
 Test plan: <selected tests; spec-close review artifact>
 Implementation summary: <what changed>
 Test results: <commands run; skipped tests; evidence-sufficiency recommendation>
-Verification boundary updates: <changes and evidence>
+Verification boundary status and updates: <status, changes and evidence>
 SLO status and error budget consumption: <affected Top K user journeys>
 Review findings: <artifacts and dispositions>
 Known gaps: <explicit gaps>
 Operational notes: <operating implications>
 Human gate: <issue reference where consequential; otherwise N/A>
-Release recommendation: <one of the recommendations below>
-~~~
 
-## Release readiness review
+## Release readiness
 
-~~~markdown
-Change summary: <from the change package>
 User-visible behavior: <release-specific account>
-Test evidence: <from the change package>
-Review findings: <from the change package>
-Verification boundary status: <from the change package>
-SLO status and error budget consumption: <affected Top K user journeys>
 Live/browser verification status: <where relevant; otherwise N/A>
 Operational risks: <from the evidence>
 Rollback or mitigation path: <release-specific path>
-Known gaps: <including missing source fields>
-Recommendation and human decision points: <recommendation; points needing a ruling>
+Release recommendation and human decision points: <recommendation; points needing a ruling>
 ~~~
 
 The recommendation is exactly one of: `ship`; `ship with accepted risks`;
