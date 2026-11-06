@@ -22,7 +22,7 @@
       "header": "---\nname: \"command-blocks\"\ndescription: \"Use before composing human-run shell commands or instructions for another agent session; ordinary internal tool calls do not trigger this skill.\"\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "d689fc2e6592c1503a55a44f794b8c0d787cef629962cdca01d0aa8d717e68b4"
+      "section": "b66d40f8a9c64528531265aecd4a712c6735fd4bf667b42e0c8430e88445234f"
     },
     ".agents/skills/decision-log/SKILL.md": {
       "header": "---\nname: \"decision-log\"\ndescription: \"Each project keeps one log at `decisions/log.md`, and the methodology repo keeps its own for methodology decisions.\"\n---\n",
@@ -76,7 +76,7 @@
       "header": "---\nname: \"spec-template\"\ndescription: \"The form of `SPEC.md`, one per project: what is being built, why, how, and when it is done.\"\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "6e6e978a77520355f981f465b00c942dcf8358ae0dcf470471103a73924dd4f4"
+      "section": "f686f411f9835952947a4793ef7163641d95914bac063c1f4f645ae128613118"
     },
     ".agents/skills/verification-checklists/SKILL.md": {
       "header": "---\nname: \"verification-checklists\"\ndescription: \"Use when planning, performing or reporting verification, declaring or updating verification boundaries, or assessing deployment and release evidence, including error-budget conditions.\"\n---\n",
@@ -496,7 +496,7 @@
       "header": "---\nname: command-blocks\ndescription: Use before composing human-run shell commands or instructions for another agent session; ordinary internal tool calls do not trigger this skill.\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "d689fc2e6592c1503a55a44f794b8c0d787cef629962cdca01d0aa8d717e68b4"
+      "section": "b66d40f8a9c64528531265aecd4a712c6735fd4bf667b42e0c8430e88445234f"
     },
     ".claude/skills/decision-log/SKILL.md": {
       "header": "---\nname: decision-log\ndescription: \"Each project keeps one log at `decisions/log.md`, and the methodology repo keeps its own for methodology decisions.\"\n---\n",
@@ -550,7 +550,7 @@
       "header": "---\nname: spec-template\ndescription: \"The form of `SPEC.md`, one per project: what is being built, why, how, and when it is done.\"\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "6e6e978a77520355f981f465b00c942dcf8358ae0dcf470471103a73924dd4f4"
+      "section": "f686f411f9835952947a4793ef7163641d95914bac063c1f4f645ae128613118"
     },
     ".claude/skills/verification-checklists/SKILL.md": {
       "header": "---\nname: verification-checklists\ndescription: Use when planning, performing or reporting verification, declaring or updating verification boundaries, or assessing deployment and release evidence, including error-budget conditions.\n---\n",
@@ -753,13 +753,13 @@
       "header": "",
       "kind": "markdown",
       "owns_header": true,
-      "section": "24f5fbab20185b85fdbfcb1a58cb9812b07a53c55c3d88f6a450ef3df7f82188"
+      "section": "fd0e6d995703864f3e8a9a66610c84294c7953e082aa8488b02dfc60ba23a64b"
     },
     "CLAUDE.md": {
       "header": "",
       "kind": "markdown",
       "owns_header": true,
-      "section": "24f5fbab20185b85fdbfcb1a58cb9812b07a53c55c3d88f6a450ef3df7f82188"
+      "section": "fd0e6d995703864f3e8a9a66610c84294c7953e082aa8488b02dfc60ba23a64b"
     }
   },
   "version": 1

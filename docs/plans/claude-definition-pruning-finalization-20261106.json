@@ -1,0 +1,37 @@
+{
+  "baseline": "cb0194aee512f48f3046e5ba9be445d85f97fbd3",
+  "rulings": "docs/plans/claude-definition-pruning-rulings-20261106T181925Z.md",
+  "retirement_decision": "DEC-001700",
+  "retired": [
+    "R0108",
+    "R1200",
+    "R0497",
+    "R0173",
+    "R0027",
+    "R0028",
+    "R0208",
+    "R0043",
+    "R0055",
+    "R0611",
+    "R0760",
+    "R0761",
+    "R1601",
+    "R1625"
+  ],
+  "moved_to_skill": {
+    "R0208": "command-blocks"
+  },
+  "shortened": [
+    "R0535",
+    "R0780",
+    "R0045"
+  ],
+  "revised": [
+    "R0166"
+  ],
+  "pending": [
+    "R0064"
+  ],
+  "follow_up": "https://github.com/davepierceops/fiducial/issues/425",
+  "note": "No generator-selection change. Preserve R0064 unchanged. All retired records keep their original text and metadata except retirement reference."
+}

@@ -37,7 +37,7 @@ acceptance criteria derive from it [R0472]. Keep each section short.
    interfaces between them; its external dependencies; the failure modes it is
    likely to have; the NFR dimensions of section 4 as concrete technical
    targets, or `N/A`; and its deployment assumptions, including whether deploy
-   and release are separate events [R0497]. Two subsections are standing:
+   and release are separate events. Two subsections are standing:
    - **User journeys and SLOs** — for each Top K journey of section 3, the SLO,
      the measurement mechanism, and the alerting threshold; a journey with no
      SLO is named unverified and recorded as an open question.

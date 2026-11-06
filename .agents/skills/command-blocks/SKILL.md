@@ -11,6 +11,8 @@ Applies to chief-of-staff in decision and execution sessions, for software and w
 
 ## Compose and hand over the block
 
+A paste block is copied whole and pasted whole, without assembly. There are two kinds. A command block contains shell commands the human runs as given, not agent instructions; describe it as “run,” not “executed.” An execution block contains instructions an agent session carries out, not shell commands.
+
 A block runs verbatim as pasted, with no manual step inside the fence: a manual step goes in prose outside it.
 
 A command producing evidence captures its output to a named file with `tee` or equivalent, and the block or its surrounding instruction names the path; where a block's output is consumed in the moment and never cited, say so where the block is defined.
