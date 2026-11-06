@@ -77,4 +77,6 @@ Approved R0110 wording:
 
 - R1176: Dave answered “y” to retiring the Writer frontier-tier instruction without replacement or a move to a skill. Model selection belongs at agent configuration or launch rather than in standing context. This ruling does not change agent configuration or select a replacement model. No active process citations were found. Archive the original row at batch finalization with the actual retirement decision ID allocated at merge, and ensure its body does not reappear in generated roots or agents.
 
+- R0225: Dave answered “yes” to replacing the question-format rule with: “Ask the most important question first, one at a time. Give enough context to answer, recommend an option consistent with prior decisions, and use yes/no when suitable.” All selectors remain unchanged. This preserves the interaction preference while removing the prescribed explanation format, mandatory question repetition after reports or blocks, and automatic preference for the reversible option.
+
 These are the human's wording/scope rulings, not an independent intake review or a claim that this new batch has landed. Decision-log entries are allocated at merge under the decision-log procedure.
