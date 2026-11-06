@@ -10,6 +10,8 @@ Baseline: cb0194aee512f48f3046e5ba9be445d85f97fbd3, after PR #424. Dave requeste
 
 - R1200 (evidence): Dave answered “yes” to retiring the definition without replacement or a move to a skill. The definition conflates evidence with retained command output; evidence can support an immediate conclusion without leaving the session. Existing recordkeeping and claim-support rules remain unchanged. No active process or other live-rule ID citations were found. At batch finalization, archive the original with the actual retirement decision ID allocated at merge, and verify that its body disappears from roots, agents, skills and standalone bundles.
 
-No further definition retirement or generator-selection change is approved yet. The observed generator behavior—term matching in non-emitted enforced rows and transitive definition pulling—is review evidence, not authorization to change it. R0497 is next for discussion.
+- R0497 (deploy/release): Dave instructed “Yes, retire it. Next.” Retire without replacement. R0534 already states that consequential-release approval applies to exposing the change to users, not merging code that remains unexposed. At batch finalization, archive the original with the actual retirement decision ID allocated at merge, and verify removal from generated outputs. Remove the stale R0497 citation in process/spec-template.md while preserving its existing requirement to describe deployment assumptions, including whether deploy and release are separate events.
+
+No further definition retirement or generator-selection change is approved yet. The observed generator behavior—term matching in non-emitted enforced rows and transitive definition pulling—is review evidence, not authorization to change it. R0173 is next for discussion.
 
 These are human wording/scope rulings, not an independent intake review or a claim of landing. Formal decision-log entries are allocated at merge under the decision-log procedure.
