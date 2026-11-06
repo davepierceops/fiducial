@@ -68,7 +68,7 @@ the substitution. Where the two disagree, both are correct and both are stated.
 
 The retro lands itself, and a synthesis lands the same way (DEC-001260). The
 last step commits `retros/retro-<timestamp>.md` on a branch, pushes, opens the
-pull request, merges it as a routine change [R0570], and reads main back: the
+pull request, merges it as a routine change, and reads main back: the
 merge commit's SHA, fetched, is the evidence the retro landed [R0172].
 
 ## Rules

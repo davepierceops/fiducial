@@ -127,18 +127,20 @@ def text_of(row, enforced):
 
 
 def render_rows(rows, all_rows, enforced, *, skip_definitions=(),
-                definitions_heading="## Definitions"):
+                definitions_heading="## Definitions", definition_sources=None):
     """Rows as a bundle body: text per row, blank-line separated, definitions
     last under `definitions_heading` — `rulestore.render`'s form without its
     header line. A definition whose id is in `skip_definitions` is left out
-    (it is printed elsewhere the reader also loads)."""
+    (it is printed elsewhere the reader also loads). `definition_sources` lets
+    a skill include definitions used by its process body as well as its rules."""
     lines = []
     for row in rows:
         text = text_of(row, enforced)
         if text:
             lines.append(text)
             lines.append("")
-    definitions = [d for d in terms.pull_definitions(rows, all_rows)
+    sources = rows if definition_sources is None else definition_sources
+    definitions = [d for d in terms.pull_definitions(sources, all_rows)
                    if d.id not in skip_definitions]
     if definitions:
         lines.append(definitions_heading)

@@ -52,4 +52,12 @@ Bring the spec into line with what was actually built before closing an open spe
 Append to `decisions/log.md`; never edit or delete an entry already there.
 
 Carry one overall `Verdict:` line in a review artifact's header and one `Verdict (<pass>):` line at the head of each pass section; every verdict is `ready`, `ready-with-findings`, `not-run`, or `changes-required`, and the overall verdict is the most severe of the pass verdicts on that order; `not-run` is a planned pass that did not run. `ready` means ready for the human's approval, never that the document is approved.
+
+## Definitions
+
+**spec branch** — A spec branch is the branch a spec's edits land on. The branch existing, with commits on it, is the state; there is no status value for it and no register recording it.
+
+**open spec delta** — An open spec delta is the interval during which a spec branch carries edits the default branch does not; the branch is open for exactly that interval, and it ends when the spec closes at approval. A revision of an approved spec opens a new delta on a new branch.
+
+**meaningful change** — A meaningful change is any change that warrants a change package — any change affecting behavior, interfaces, tests, dependencies, boundaries, or documentation of substance. A typo fix, a comment edit, or mechanical formatting is not meaningful in this sense.
 <!-- fiducial:end -->

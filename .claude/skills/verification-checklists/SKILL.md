@@ -7,7 +7,7 @@ description: Use when planning, performing or reporting verification, declaring 
 
 Use when planning, performing or reporting verification, declaring or updating verification boundaries, or assessing deployment and release evidence, including error-budget conditions.
 
-Applies in decision and execution sessions for software. The sections preserve the original role scopes; apply their conditions when the relevant work occurs.
+Applies in decision and execution sessions. Sections apply to software unless they explicitly include writing. Apply each section’s role scope and conditions when the relevant work occurs.
 
 ## Verification planning, failure analysis and production assessment
 
@@ -44,4 +44,36 @@ Choose when a boundary's verification runs — manually before release, in a ded
 Verify a boundary material to user-visible behavior or release risk before release.
 
 Verify a boundary that can drift after deployment by production monitoring.
+
+## Release-impact labels
+
+Applies to all roles in software and writing.
+
+At the release decision, apply this labeling requirement:
+
+Mark every known, unresolved boundary gap with one of the four release-impact labels — `blocking`, `deferred`, `accepted-risk`, `not-material`. `not-material` is a label, not an exemption from labelling.
+
+For a gap labelled `blocking`:
+
+Resolve a gap labelled `blocking` before release.
+
+For a gap awaiting the human’s judgment:
+
+A gap awaiting the human's judgment is not blocking by that fact alone: label it by its release impact, and let it reach him through the release package. "Requires the human decision" is not a label.
+
+## Definitions
+
+**mock** — A mock is a claim about our side of the contract, with the other side verified elsewhere or explicitly accepted as unverified.
+
+**production-verified** — Production-verified evidence supports ongoing dependency health, real-world failure modes, regressions after deploy, availability, live user impact, SLO target compliance against the spec's targets for each Top K user journey, and error budget consumption.
+
+**accepted risk** — Accepted risk is an explicit decision — the human's, or the release process's — to proceed despite a known gap.
+
+**meaningful change** — A meaningful change is any change that warrants a change package — any change affecting behavior, interfaces, tests, dependencies, boundaries, or documentation of substance. A typo fix, a comment edit, or mechanical formatting is not meaningful in this sense.
+
+**blocking** — A `blocking` gap is one the governing policies prohibit releasing with.
+
+**boundary-sensitive** — Boundary-sensitive means do not overclaim here. It does not mean the area must be overtested.
+
+**not-material** — A `not-material` gap is known but not relevant to the release decision.
 <!-- fiducial:end -->

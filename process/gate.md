@@ -9,8 +9,7 @@ corpus: [software, writing]
 # Process: Gate
 
 Prepare the human's gate request from an assembled change package.
-Classification and authority are [R0534, R0535, R0536, R0562]; the release
-boundary is [R0490].
+Classification, authority and release approval are [R0534, R0535].
 
 1. Open one tracker issue for the pending change and label it `human-gate`.
    Derive its body from the change package using the template below; re-derive
@@ -21,6 +20,10 @@ boundary is [R0490].
 4. If the issue could not be opened, keep its derived body in the change
    package and present that body in place of the issue pointer in chat. Hold
    the change short of release until the issue can be opened and linked.
+
+For the Chief of Staff in decision sessions:
+
+Take the `human-gate` issue as canonical for the existence and state of a pending gate, and the change package as canonical for its evidence.
 
 ## Issue body
 

@@ -31,6 +31,41 @@ def store_inputs(root):
                                                 if p.is_file()}, repo="fixture/store", head="a" * 40)
 
 
+class TestSkillDefinitionClosure(unittest.TestCase):
+    """Contract-verified generated text for synthetic local store rows.
+
+    These fixtures exercise process-only and transitive term dependencies,
+    not native skill loading, model adherence, or any external service.
+    """
+
+    def test_process_definitions_follow_skill_without_repeating_root_or_spill(self):
+        doc = Row(id="sample", kind="process", path="process/sample.md",
+                  body="# Sample\n\nUse a quuxstage.\n", keys={"topic": ["sample"]})
+        first = Row(id="R9001", kind="rule", body="A quuxstage uses a quuxledger.",
+                    keys={"term": ["quuxstage"], "verb": ["define"]})
+        second = Row(id="R9002", kind="rule", body="A quuxledger records the result.",
+                     keys={"term": ["quuxledger"], "verb": ["define"]})
+        unused = Row(id="R9003", kind="rule", body="Unrelated glossary prose.",
+                     keys={"term": ["unusedterm"], "verb": ["define"]})
+        scope = {"role": ["chief-of-staff"], "session": ["decision"]}
+        for placement in ("process-only", "root", "spill"):
+            rows = [doc, first, second, unused]
+            if placement != "process-only":
+                rows.append(Row(id="R9004", kind="rule", body="Check the quuxstage.",
+                                keys={**scope, "topic": ["core" if placement == "root" else "sample"]}))
+            inputs = EmitInputs(rows=rows, sequences=([['core'], ['sample']], ['sample']),
+                                tiers=load_tiers(), hooks={}, repo="fixture/store", head="a" * 40)
+            for harness, root, prefix in (("claude-code", "CLAUDE.md", ".claude"),
+                                           ("codex", "AGENTS.md", ".agents")):
+                with self.subTest(placement=placement, harness=harness):
+                    files = targets()[harness].emit(inputs).files
+                    skill = files[prefix + "/skills/sample/SKILL.md"]
+                    for definition in (first, second):
+                        self.assertEqual((files[root] + skill).count(definition.body), 1)
+                        self.assertEqual(skill.count(definition.body), 0 if placement == "root" else 1)
+                    self.assertNotIn(unused.body, files[root] + skill)
+
+
 class TestCodexTree(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

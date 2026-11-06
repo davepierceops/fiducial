@@ -48,9 +48,15 @@ Carry one overall `Verdict:` line in a review artifact's header and one `Verdict
 
 Never rewrite an existing review artifact to match a later version of this schema; the schema binds artifacts written after it lands.
 
-A non-blocking finding's disposition at triage is file-and-land by default: it goes to the loose-end tracker and the delta lands. The human may raise a finding to blocking at triage, before the pull request merges; one raise buys one read over the diff since the reviewed revision. Nothing else reopens a delta.
-
 ## Definitions
 
+**mock** — A mock is a claim about our side of the contract, with the other side verified elsewhere or explicitly accepted as unverified.
+
 **mechanical check** — Mechanical checks are lint, type, and static-analysis checks; they pass as part of green.
+
+**meaningful change** — A meaningful change is any change that warrants a change package — any change affecting behavior, interfaces, tests, dependencies, boundaries, or documentation of substance. A typo fix, a comment edit, or mechanical formatting is not meaningful in this sense.
+
+**blocking** — A `blocking` gap is one the governing policies prohibit releasing with.
+
+**version** — A document's version, at the moment it is referenced, is the SHA of the last commit that touched the file.
 <!-- fiducial:end -->

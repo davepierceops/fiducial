@@ -55,9 +55,15 @@ Carry one overall `Verdict:` line in a review artifact's header and one `Verdict
 
 Never rewrite an existing review artifact to match a later version of this schema; the schema binds artifacts written after it lands.
 
-A non-blocking finding's disposition at triage is file-and-land by default: it goes to the loose-end tracker and the delta lands. The human may raise a finding to blocking at triage, before the pull request merges; one raise buys one read over the diff since the reviewed revision. Nothing else reopens a delta.
-
 A review artifact names every pass that was planned; a pass that did not run — a subagent killed by a usage cap, say — is recorded with why, and a missing verdict is never read as a clean one.
 
 Edit review artifacts and nothing else; a change you need outside your lane is a finding, not an edit.
+
+## Definitions
+
+**spec branch** — A spec branch is the branch a spec's edits land on. The branch existing, with commits on it, is the state; there is no status value for it and no register recording it.
+
+**open spec delta** — An open spec delta is the interval during which a spec branch carries edits the default branch does not; the branch is open for exactly that interval, and it ends when the spec closes at approval. A revision of an approved spec opens a new delta on a new branch.
+
+**version** — A document's version, at the moment it is referenced, is the SHA of the last commit that touched the file.
 <!-- fiducial:end -->

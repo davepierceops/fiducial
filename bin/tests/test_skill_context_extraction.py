@@ -26,6 +26,7 @@ from rulestore.store import FileRowSource
 from tests.helpers import REPO_ROOT
 
 BASELINE = "5ff8a5edc63111637b1bd9a5c1e605e76afbea69"
+EXTRACTED = "fb310dd9c1ea56e4fa2e1b9b671a50c128fdec0f"
 COMMAND = "R1196 R1199 R1202 R1205 R1206 R1208 R1212 R1213 R1215 R1218 R1609 R1623 R1624".split()
 VERIFY_SIX = "R0140 R0141 R0144 R0145 R0147 R0148 R0074".split()
 VERIFY_EIGHT = "R0784 R0789 R0798 R0799 R0802 R0803 R0804".split()
@@ -52,6 +53,13 @@ class TestSkillContextExtraction(unittest.TestCase):
         with tarfile.open(fileobj=io.BytesIO(archive)) as stream:
             stream.extractall(baseline, filter="data")
         cls.old = inputs(baseline)
+        extracted = baseline / "extracted"
+        extracted.mkdir()
+        archive = subprocess.run(["git", "archive", EXTRACTED, "rules", "process", "bin/hooks"],
+                                 cwd=REPO_ROOT, check=True, capture_output=True).stdout
+        with tarfile.open(fileobj=io.BytesIO(archive)) as stream:
+            stream.extractall(extracted, filter="data")
+        cls.extracted_rows = {r.id: r for r in inputs(extracted).rows if r.kind == "rule"}
         cls.current = inputs(REPO_ROOT)
         cls.old_rows = {r.id: r for r in cls.old.rows if r.kind == "rule"}
         cls.rows = {r.id: r for r in cls.current.rows if r.kind == "rule"}
@@ -72,7 +80,10 @@ class TestSkillContextExtraction(unittest.TestCase):
 
     def test_only_authorized_rows_leave_the_live_store_and_archive_keeps_original_bodies(self):
         moved = set(COMMAND + VERIFY_SIX + VERIFY_EIGHT)
-        self.assertEqual(set(self.old_rows) - set(self.rows), moved | {"R0456"})
+        # DEC-001680 authorized this exact extraction. Later approved pruning
+        # may retire additional rows; it must not rewrite that historical check.
+        self.assertEqual(set(self.old_rows) - set(self.extracted_rows), moved | {"R0456"})
+        self.assertTrue(moved.isdisjoint(self.rows))
         for skill, ids in GROUPS.items():
             targets_seen = set()
             for row_id in ids:
@@ -90,10 +101,14 @@ class TestSkillContextExtraction(unittest.TestCase):
             self.assertNotEqual(trigger.keys.get("topic", [None])[0], skill)
             for key in ("role", "session", "corpus"):
                 union = set().union(*(set(self.old_rows[r].keys.get(key) or []) for r in ids))
+                if skill == "verification-checklists":
+                    # Later approved release labels extend the trigger while
+                    # retaining every recipient of the original extraction.
+                    union |= set(self.extracted_rows["R0030"].keys.get(key) or [])
                 self.assertEqual(set(trigger.keys.get(key) or []), union, (skill, key))
         duplicate = self.record("R0456")
         self.assertEqual(duplicate.keys.get("retired"), ["r0021"])
-        self.assertEqual(self.rows["R0021"].body, self.old_rows["R0021"].body)
+        self.assertEqual(self.extracted_rows["R0021"].body, self.old_rows["R0021"].body)
 
     def test_exact_bodies_survive_in_both_skills_but_leave_every_root_and_agent(self):
         for harness, emission in self.emitted.items():
@@ -136,9 +151,14 @@ class TestSkillContextExtraction(unittest.TestCase):
                     for row_id in ids:
                         self.assertIn(self.record(row_id).body, text, (role, row_id))
                     self.assertIn(skill, text, role)
-                else:
+                elif skill != "verification-checklists":
                     for row_id in ids:
                         self.assertNotIn(self.old_rows[row_id].body, text, (role, row_id))
+                elif self.old_rows[ids[0]].body in text:
+                    # Later release-impact moves make this skill available to
+                    # all roles. Availability does not broaden the old sections:
+                    # their explicit role scopes remain checked below.
+                    self.assertIn("Sections apply to software unless they explicitly include writing", text)
                 self.assertNotIn(self.old_rows["R0456"].body, text, role)
 
     def test_verification_sections_explicitly_preserve_the_two_role_scopes(self):

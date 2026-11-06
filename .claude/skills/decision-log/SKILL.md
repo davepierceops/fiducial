@@ -42,4 +42,8 @@ Append to `decisions/log.md`; never edit or delete an entry already there.
 One decision per entry.
 
 Change or reverse a recorded decision by appending a new entry whose `Supersedes:` names the old ID, leaving the old entry in place as the historical record.
+
+### Definitions
+
+**decision session** — A decision session triages, decides, and produces the artifacts that direct and record work — plans, subagent prompts, session records, tracker updates. It reads freely and writes those artifacts; the changes a plan specifies happen elsewhere, in the session that runs it. The boundary is role in the flow, not capability: a decision session may hold a clone and may commit.
 <!-- fiducial:end -->

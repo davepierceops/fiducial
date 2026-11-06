@@ -77,4 +77,10 @@ Site-level, once: LLMs listed among the writing tools alongside the dictionary
 and the public school education, closing with the commitment that Dave
 personally reads and stands behind every published word, including those that
 started in an LLM.
+
+## Definitions
+
+**decision session** — A decision session triages, decides, and produces the artifacts that direct and record work — plans, subagent prompts, session records, tracker updates. It reads freely and writes those artifacts; the changes a plan specifies happen elsewhere, in the session that runs it. The boundary is role in the flow, not capability: a decision session may hold a clone and may commit.
+
+**handoff** — A handoff transfers unfinished responsibility between sessions, with whatever the receiver needs to continue. A baton is the handoff between decision sessions — state, open questions, decisions in flight, every decision already in a committed artifact.
 <!-- fiducial:end -->
