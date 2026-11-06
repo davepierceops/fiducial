@@ -18,6 +18,11 @@ per delta, at its close, by a reader that did not produce it [R0462, R1396].
 | **Spec** — `SPEC.md` | the spec branch's close: one read of its whole diff with the tests, one ruling [R0481] | Spec Reviewer, then the human |
 | **Code** — the implementation | one pull request per unit of work, through the stages below | Reviewer and Skeptic/Risk, then the human at the gate |
 
+For spec reconciliation in software and writing, across roles and in decision
+and execution sessions:
+
+Attach approval at reconciliation, to the version of record on the default branch; never to a revision the spec branch held before it.
+
 Each meaningful change [R0465] runs these in order, by subagents but the human.
 
 1. **Spec.** `SPEC.md` is approved [R1513] and the unit's acceptance criteria
