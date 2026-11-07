@@ -33,4 +33,4 @@ The human's R1485 ruling removes explicit whole-diff delivery: he inspects GitHu
 
 ## Continuation after the checkpoint
 
-Review resumed on 2026-11-07. Ruling 45 consolidates R0166/R1513/R0090 and shortens R0939’s description, as recorded in the inventory ruling log. The checkpoint, manifest, tests and independent artifacts remain the historical 44-ruling snapshot at 8fd292d; the new continuation requires its own validation at the next checkpoint. The next undecided row is R0472. No merge has been authorized.
+Review resumed on 2026-11-07. Ruling 45 consolidates R0166/R1513/R0090 and shortens R0939’s description, as recorded in the inventory ruling log. The checkpoint, manifest, tests and independent artifacts remain the historical 44-ruling snapshot at 8fd292d; the new continuation requires its own validation at the next checkpoint. Ruling 46 shortens R0472 while retaining its requirements. The next undecided row is R0486. No merge has been authorized.
