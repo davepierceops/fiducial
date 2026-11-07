@@ -30,3 +30,7 @@ Begin with R0090, the shared spec-edit ownership rule. No disposition for it has
 Keep risk-tier design (#430), Jev experimentation (#431), deeper review-policy redesign (#427), SLO/Top K policy (#428), and tracker portability (#425) separate. R0064 remains pending. Do not infer permission for universal CI policy, cross-repository adoption, or additional retirements. The user's preference is concise positive instructions, useful findings, and a human ruling for meaningful policy changes.
 
 The human's R1485 ruling removes explicit whole-diff delivery: he inspects GitHub diffs and asks about tests as needed. R0481's separately approved reviewed-diff/spec-close duty remains; do not revive a separate report requirement or claim that all review obligations disappeared.
+
+## Continuation after the checkpoint
+
+Review resumed on 2026-11-07. Ruling 45 consolidates R0166/R1513/R0090 and shortens R0939’s description, as recorded in the inventory ruling log. The checkpoint, manifest, tests and independent artifacts remain the historical 44-ruling snapshot at 8fd292d; the new continuation requires its own validation at the next checkpoint. The next undecided row is R0472. No merge has been authorized.
