@@ -94,8 +94,8 @@ Current: “Do not remove meaningful coverage without explaining why.”
 
 Recommend retirement into R0110, whose first sentence requires keeping verification aligned with approved requirements and justifying changes to checks against those requirements. R0110 covers all of R0943’s Coder/execution/software-and-writing scope. This removes the duplicate sentence without permitting unexplained coverage removal or changing test policy. DEC-001690 records the earlier shared-evidence consolidation. No active process/rule citation to R0943 was found beyond its own ID.
 
-Status: proposal only; awaiting the human ruling. No source retirement is approved yet.
+Status: approved and applied on the intake branch; see ruling 1. Installed context remains unchanged until batch finalization.
 
 ## Human rulings
 
-None for this batch yet.
+1. R0943: Dave answered “y” to retiring the Coder coverage-removal rule into unchanged R0110. Archive the original body and metadata unchanged except `retired: R0110`. R0110 covers the full Coder/execution/software-and-writing scope and requires justification of changes to checks against approved requirements. No active rule/process references need rewriting. This removes a duplicate sentence without changing testing policy. The inventory JSON remains the fixed baseline accounting, not a live count after rulings. R0940 is next for discussion; no change to it is approved yet.
