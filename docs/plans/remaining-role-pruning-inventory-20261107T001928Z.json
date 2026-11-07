@@ -1,0 +1,4670 @@
+{
+  "baseline": "2be5327e9704b0066eed7e8ef44302aa55179b18",
+  "created_utc": "20261107T001928Z",
+  "counts": {
+    "live_rows": 269,
+    "previously_ruled_or_deferred": 57,
+    "not_individually_ruled_single_role": 117,
+    "not_individually_ruled_shared": 58,
+    "not_individually_ruled_definitions": 37
+  },
+  "method": "Current active store only. Completed shared-rule pass: explicit leading-ID rulings plus live source paths modified between fb310dd9 and cb0194ae. Definition and review passes: finalization manifests, successor survivors, kept/deferred rows and coherence fix. Historical sorting is not counted as this pruning review. Retired rows excluded. Indirectly preserved workflow requirements are marked, not treated as free deletion candidates.",
+  "records": [
+    {
+      "id": "R0004",
+      "path": "rules/R0004.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "lexicon"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 33
+    },
+    {
+      "id": "R0006",
+      "path": "rules/R0006.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "lexicon"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 50
+    },
+    {
+      "id": "R0009",
+      "path": "rules/R0009.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "lexicon"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 20
+    },
+    {
+      "id": "R0029",
+      "path": "rules/R0029.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "lexicon"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 20
+    },
+    {
+      "id": "R0031",
+      "path": "rules/R0031.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "lexicon"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 11
+    },
+    {
+      "id": "R0037",
+      "path": "rules/R0037.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "lexicon"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 12
+    },
+    {
+      "id": "R0038",
+      "path": "rules/R0038.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "lexicon"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 39
+    },
+    {
+      "id": "R0040",
+      "path": "rules/R0040.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "lexicon"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 18
+    },
+    {
+      "id": "R0045",
+      "path": "rules/R0045.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "lexicon"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 11
+    },
+    {
+      "id": "R0057",
+      "path": "rules/R0057.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "lexicon"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 24
+    },
+    {
+      "id": "R0064",
+      "path": "rules/R0064.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "lexicon"
+      ],
+      "enforce": [],
+      "status": "deferred",
+      "follow_up": 425,
+      "coverage_note": null,
+      "body_words": 44
+    },
+    {
+      "id": "R0067",
+      "path": "rules/R0067.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "human-review-boundary"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 24
+    },
+    {
+      "id": "R0070",
+      "path": "rules/R0070.md",
+      "kind": "instruction",
+      "roles": [
+        "test-designer-agent",
+        "coder-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent"
+      ],
+      "topics": [
+        "verification"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 51
+    },
+    {
+      "id": "R0073",
+      "path": "rules/R0073.md",
+      "kind": "instruction",
+      "roles": [
+        "test-designer-agent",
+        "coder-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent"
+      ],
+      "topics": [
+        "verification"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 45
+    },
+    {
+      "id": "R0083",
+      "path": "rules/R0083.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "lexicon"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 28
+    },
+    {
+      "id": "R0090",
+      "path": "rules/R0090.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "chief-of-staff",
+        "coder-agent",
+        "context-quality-reviewer",
+        "copy-editor",
+        "critic",
+        "release-manager-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "spec-reviewer-agent",
+        "test-designer-agent",
+        "writer"
+      ],
+      "topics": [
+        "change-flow"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 29
+    },
+    {
+      "id": "R0091",
+      "path": "rules/R0091.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent"
+      ],
+      "topics": [
+        "change-flow"
+      ],
+      "enforce": [
+        "hook"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 30
+    },
+    {
+      "id": "R0106",
+      "path": "rules/R0106.md",
+      "kind": "instruction",
+      "roles": [
+        "coder-agent",
+        "test-designer-agent"
+      ],
+      "topics": [
+        "coder-agent"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 42
+    },
+    {
+      "id": "R0110",
+      "path": "rules/R0110.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "chief-of-staff",
+        "coder-agent",
+        "context-quality-reviewer",
+        "copy-editor",
+        "critic",
+        "release-manager-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "spec-reviewer-agent",
+        "test-designer-agent",
+        "writer"
+      ],
+      "topics": [
+        "verification"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 51
+    },
+    {
+      "id": "R0121",
+      "path": "rules/R0121.md",
+      "kind": "instruction",
+      "roles": [
+        "test-designer-agent",
+        "coder-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent"
+      ],
+      "topics": [
+        "verification"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 11
+    },
+    {
+      "id": "R0126",
+      "path": "rules/R0126.md",
+      "kind": "instruction",
+      "roles": [
+        "test-designer-agent",
+        "coder-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent"
+      ],
+      "topics": [
+        "verification"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 24
+    },
+    {
+      "id": "R0129",
+      "path": "rules/R0129.md",
+      "kind": "instruction",
+      "roles": [
+        "test-designer-agent",
+        "coder-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent"
+      ],
+      "topics": [
+        "verification"
+      ],
+      "enforce": [],
+      "status": "deferred",
+      "follow_up": 428,
+      "coverage_note": null,
+      "body_words": 34
+    },
+    {
+      "id": "R0130",
+      "path": "rules/R0130.md",
+      "kind": "instruction",
+      "roles": [
+        "test-designer-agent",
+        "coder-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent"
+      ],
+      "topics": [
+        "verification"
+      ],
+      "enforce": [],
+      "status": "deferred",
+      "follow_up": 428,
+      "coverage_note": null,
+      "body_words": 9
+    },
+    {
+      "id": "R0131",
+      "path": "rules/R0131.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "verification"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 42
+    },
+    {
+      "id": "R0133",
+      "path": "rules/R0133.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "verification"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 35
+    },
+    {
+      "id": "R0135",
+      "path": "rules/R0135.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "verification"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 42
+    },
+    {
+      "id": "R0137",
+      "path": "rules/R0137.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "verification"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 39
+    },
+    {
+      "id": "R0139",
+      "path": "rules/R0139.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "verification"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 33
+    },
+    {
+      "id": "R0150",
+      "path": "rules/R0150.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "verification"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 15
+    },
+    {
+      "id": "R0152",
+      "path": "rules/R0152.md",
+      "kind": "instruction",
+      "roles": [
+        "test-designer-agent",
+        "coder-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent"
+      ],
+      "topics": [
+        "verification"
+      ],
+      "enforce": [],
+      "status": "deferred",
+      "follow_up": 427,
+      "coverage_note": null,
+      "body_words": 50
+    },
+    {
+      "id": "R0158",
+      "path": "rules/R0158.md",
+      "kind": "instruction",
+      "roles": [
+        "test-designer-agent",
+        "coder-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent"
+      ],
+      "topics": [
+        "verification"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 11
+    },
+    {
+      "id": "R0159",
+      "path": "rules/R0159.md",
+      "kind": "instruction",
+      "roles": [
+        "test-designer-agent",
+        "coder-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent"
+      ],
+      "topics": [
+        "verification"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 12
+    },
+    {
+      "id": "R0164",
+      "path": "rules/R0164.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "chief-of-staff",
+        "coder-agent",
+        "context-quality-reviewer",
+        "copy-editor",
+        "critic",
+        "release-manager-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "spec-reviewer-agent",
+        "test-designer-agent",
+        "writer"
+      ],
+      "topics": [
+        "core"
+      ],
+      "enforce": [
+        "deny"
+      ],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 45
+    },
+    {
+      "id": "R0166",
+      "path": "rules/R0166.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "chief-of-staff",
+        "coder-agent",
+        "context-quality-reviewer",
+        "copy-editor",
+        "critic",
+        "release-manager-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "spec-reviewer-agent",
+        "test-designer-agent",
+        "writer"
+      ],
+      "topics": [
+        "core"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 28
+    },
+    {
+      "id": "R0170",
+      "path": "rules/R0170.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "chief-of-staff",
+        "coder-agent",
+        "context-quality-reviewer",
+        "copy-editor",
+        "critic",
+        "release-manager-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "spec-reviewer-agent",
+        "test-designer-agent",
+        "writer"
+      ],
+      "topics": [
+        "core"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 28
+    },
+    {
+      "id": "R0172",
+      "path": "rules/R0172.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "chief-of-staff",
+        "coder-agent",
+        "context-quality-reviewer",
+        "copy-editor",
+        "critic",
+        "release-manager-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "spec-reviewer-agent",
+        "test-designer-agent",
+        "writer"
+      ],
+      "topics": [
+        "core"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 26
+    },
+    {
+      "id": "R0175",
+      "path": "rules/R0175.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "core"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 10
+    },
+    {
+      "id": "R0176",
+      "path": "rules/R0176.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "core"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 9
+    },
+    {
+      "id": "R0183",
+      "path": "rules/R0183.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "chief-of-staff",
+        "coder-agent",
+        "context-quality-reviewer",
+        "copy-editor",
+        "critic",
+        "release-manager-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "spec-reviewer-agent",
+        "test-designer-agent",
+        "writer"
+      ],
+      "topics": [
+        "core"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 18
+    },
+    {
+      "id": "R0189",
+      "path": "rules/R0189.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "core"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 8
+    },
+    {
+      "id": "R0196",
+      "path": "rules/R0196.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "chief-of-staff",
+        "coder-agent",
+        "context-quality-reviewer",
+        "copy-editor",
+        "critic",
+        "release-manager-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "spec-reviewer-agent",
+        "test-designer-agent",
+        "writer"
+      ],
+      "topics": [
+        "core"
+      ],
+      "enforce": [
+        "hook"
+      ],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 10
+    },
+    {
+      "id": "R0199",
+      "path": "rules/R0199.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "coder-agent",
+        "context-quality-reviewer",
+        "release-manager-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "spec-reviewer-agent",
+        "test-designer-agent"
+      ],
+      "topics": [
+        "core"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 25
+    },
+    {
+      "id": "R0200",
+      "path": "rules/R0200.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "core"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 61
+    },
+    {
+      "id": "R0203",
+      "path": "rules/R0203.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "chief-of-staff",
+        "coder-agent",
+        "context-quality-reviewer",
+        "copy-editor",
+        "critic",
+        "release-manager-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "spec-reviewer-agent",
+        "test-designer-agent",
+        "writer"
+      ],
+      "topics": [
+        "core"
+      ],
+      "enforce": [
+        "deny"
+      ],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 68
+    },
+    {
+      "id": "R0220",
+      "path": "rules/R0220.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "core"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 36
+    },
+    {
+      "id": "R0225",
+      "path": "rules/R0225.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff",
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "decision-layer"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 27
+    },
+    {
+      "id": "R0228",
+      "path": "rules/R0228.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff",
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "decision-layer"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 14
+    },
+    {
+      "id": "R0230",
+      "path": "rules/R0230.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff",
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "decision-layer"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 14
+    },
+    {
+      "id": "R0234",
+      "path": "rules/R0234.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff",
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "decision-layer"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 9
+    },
+    {
+      "id": "R0244",
+      "path": "rules/R0244.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff",
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "decision-layer"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 14
+    },
+    {
+      "id": "R0247",
+      "path": "rules/R0247.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "decision-layer"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 25
+    },
+    {
+      "id": "R0259",
+      "path": "rules/R0259.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff",
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "decision-layer"
+      ],
+      "enforce": [
+        "agent"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 44
+    },
+    {
+      "id": "R0264",
+      "path": "rules/R0264.md",
+      "kind": "instruction",
+      "roles": [
+        "context-quality-reviewer"
+      ],
+      "topics": [
+        "intake"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 224
+    },
+    {
+      "id": "R0266",
+      "path": "rules/R0266.md",
+      "kind": "instruction",
+      "roles": [
+        "context-quality-reviewer"
+      ],
+      "topics": [
+        "intake"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 11
+    },
+    {
+      "id": "R0284",
+      "path": "rules/R0284.md",
+      "kind": "instruction",
+      "roles": [
+        "context-quality-reviewer"
+      ],
+      "topics": [
+        "intake"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 9
+    },
+    {
+      "id": "R0462",
+      "path": "rules/R0462.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "chief-of-staff",
+        "coder-agent",
+        "context-quality-reviewer",
+        "copy-editor",
+        "critic",
+        "release-manager-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "spec-reviewer-agent",
+        "test-designer-agent",
+        "writer"
+      ],
+      "topics": [
+        "core"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 14
+    },
+    {
+      "id": "R0464",
+      "path": "rules/R0464.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "change-flow"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 18
+    },
+    {
+      "id": "R0465",
+      "path": "rules/R0465.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "change-flow"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 39
+    },
+    {
+      "id": "R0472",
+      "path": "rules/R0472.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff",
+        "spec-reviewer-agent"
+      ],
+      "topics": [
+        "change-flow"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 28
+    },
+    {
+      "id": "R0478",
+      "path": "rules/R0478.md",
+      "kind": "instruction",
+      "roles": [
+        "test-designer-agent"
+      ],
+      "topics": [
+        "change-flow"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": "Build ruling 1 preserves meaningful red tests; no individual source wording ruling.",
+      "body_words": 27
+    },
+    {
+      "id": "R0481",
+      "path": "rules/R0481.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff"
+      ],
+      "topics": [
+        "change-flow"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 41
+    },
+    {
+      "id": "R0485",
+      "path": "rules/R0485.md",
+      "kind": "instruction",
+      "roles": [
+        "coder-agent"
+      ],
+      "topics": [
+        "change-flow"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": "Build ruling 1 preserves green/mechanical behavior; no individual source wording ruling.",
+      "body_words": 19
+    },
+    {
+      "id": "R0486",
+      "path": "rules/R0486.md",
+      "kind": "instruction",
+      "roles": [
+        "coder-agent",
+        "test-designer-agent"
+      ],
+      "topics": [
+        "change-flow"
+      ],
+      "enforce": [
+        "skill"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": "Build ruling 1 preserves test-author/implementer separation; policy redesign deferred.",
+      "body_words": 20
+    },
+    {
+      "id": "R0492",
+      "path": "rules/R0492.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff"
+      ],
+      "topics": [
+        "change-flow"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 12
+    },
+    {
+      "id": "R0493",
+      "path": "rules/R0493.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "change-flow"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 14
+    },
+    {
+      "id": "R0499",
+      "path": "rules/R0499.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent"
+      ],
+      "topics": [
+        "spec"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 14
+    },
+    {
+      "id": "R0500",
+      "path": "rules/R0500.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent"
+      ],
+      "topics": [
+        "spec"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 38
+    },
+    {
+      "id": "R0501b",
+      "path": "rules/R0501b.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent"
+      ],
+      "topics": [
+        "spec"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 10
+    },
+    {
+      "id": "R0502",
+      "path": "rules/R0502.md",
+      "kind": "instruction",
+      "roles": [
+        "release-manager-agent"
+      ],
+      "topics": [
+        "release-manager-agent"
+      ],
+      "enforce": [
+        "skill"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": "Release ruling 35 preserves required package fields; source unchanged.",
+      "body_words": 56
+    },
+    {
+      "id": "R0503",
+      "path": "rules/R0503.md",
+      "kind": "instruction",
+      "roles": [
+        "release-manager-agent"
+      ],
+      "topics": [
+        "release-manager-agent"
+      ],
+      "enforce": [
+        "skill"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": "Release ruling 35 preserves test-plan/results details; source unchanged.",
+      "body_words": 54
+    },
+    {
+      "id": "R0506",
+      "path": "rules/R0506.md",
+      "kind": "instruction",
+      "roles": [
+        "release-manager-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent"
+      ],
+      "topics": [
+        "release-manager-agent"
+      ],
+      "enforce": [
+        "skill"
+      ],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 28
+    },
+    {
+      "id": "R0509",
+      "path": "rules/R0509.md",
+      "kind": "instruction",
+      "roles": [
+        "release-manager-agent"
+      ],
+      "topics": [
+        "release-manager-agent"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 43
+    },
+    {
+      "id": "R0527",
+      "path": "rules/R0527.md",
+      "kind": "instruction",
+      "roles": [
+        "release-manager-agent",
+        "chief-of-staff"
+      ],
+      "topics": [
+        "release-manager-agent"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 40
+    },
+    {
+      "id": "R0531",
+      "path": "rules/R0531.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "verification"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 18
+    },
+    {
+      "id": "R0534",
+      "path": "rules/R0534.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "chief-of-staff",
+        "coder-agent",
+        "context-quality-reviewer",
+        "copy-editor",
+        "critic",
+        "release-manager-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "spec-reviewer-agent",
+        "test-designer-agent",
+        "writer"
+      ],
+      "topics": [
+        "change-control"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 36
+    },
+    {
+      "id": "R0535",
+      "path": "rules/R0535.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "change-control"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 89
+    },
+    {
+      "id": "R0551",
+      "path": "rules/R0551.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff"
+      ],
+      "topics": [
+        "change-control"
+      ],
+      "enforce": [
+        "skill"
+      ],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 35
+    },
+    {
+      "id": "R0552",
+      "path": "rules/R0552.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff"
+      ],
+      "topics": [
+        "change-control"
+      ],
+      "enforce": [
+        "skill"
+      ],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 23
+    },
+    {
+      "id": "R0553",
+      "path": "rules/R0553.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff"
+      ],
+      "topics": [
+        "change-control"
+      ],
+      "enforce": [
+        "skill"
+      ],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 30
+    },
+    {
+      "id": "R0558",
+      "path": "rules/R0558.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff"
+      ],
+      "topics": [
+        "change-control"
+      ],
+      "enforce": [
+        "skill"
+      ],
+      "status": "deferred",
+      "follow_up": 427,
+      "coverage_note": null,
+      "body_words": 41
+    },
+    {
+      "id": "R0560",
+      "path": "rules/R0560.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff"
+      ],
+      "topics": [
+        "change-control"
+      ],
+      "enforce": [
+        "skill"
+      ],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 27
+    },
+    {
+      "id": "R0564",
+      "path": "rules/R0564.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "chief-of-staff",
+        "coder-agent",
+        "context-quality-reviewer",
+        "copy-editor",
+        "critic",
+        "release-manager-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "spec-reviewer-agent",
+        "test-designer-agent",
+        "writer"
+      ],
+      "topics": [
+        "commit-control"
+      ],
+      "enforce": [
+        "deny"
+      ],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 40
+    },
+    {
+      "id": "R0580",
+      "path": "rules/R0580.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "lexicon"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 20
+    },
+    {
+      "id": "R0583",
+      "path": "rules/R0583.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "chief-of-staff",
+        "coder-agent",
+        "context-quality-reviewer",
+        "copy-editor",
+        "critic",
+        "release-manager-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "spec-reviewer-agent",
+        "test-designer-agent",
+        "writer"
+      ],
+      "topics": [
+        "decision-log-policy"
+      ],
+      "enforce": [
+        "hook"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 19
+    },
+    {
+      "id": "R0592",
+      "path": "rules/R0592.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff",
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "decision-log-policy"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 27
+    },
+    {
+      "id": "R0594",
+      "path": "rules/R0594.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "lexicon"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 13
+    },
+    {
+      "id": "R0604",
+      "path": "rules/R0604.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "lexicon"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 20
+    },
+    {
+      "id": "R0716",
+      "path": "rules/R0716.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "change-control"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 34
+    },
+    {
+      "id": "R0720",
+      "path": "rules/R0720.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "chief-of-staff",
+        "coder-agent",
+        "context-quality-reviewer",
+        "release-manager-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "spec-reviewer-agent",
+        "test-designer-agent"
+      ],
+      "topics": [
+        "remote-write-verification-policy"
+      ],
+      "enforce": [
+        "hook"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 8
+    },
+    {
+      "id": "R0780",
+      "path": "rules/R0780.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "verification-boundaries"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 12
+    },
+    {
+      "id": "R0782",
+      "path": "rules/R0782.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "verification-boundaries"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 22
+    },
+    {
+      "id": "R0785",
+      "path": "rules/R0785.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "verification-boundaries"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 55
+    },
+    {
+      "id": "R0800",
+      "path": "rules/R0800.md",
+      "kind": "instruction",
+      "roles": [
+        "coder-agent",
+        "test-designer-agent"
+      ],
+      "topics": [
+        "verification-boundaries"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 15
+    },
+    {
+      "id": "R0807",
+      "path": "rules/R0807.md",
+      "kind": "instruction",
+      "roles": [
+        "reviewer-agent"
+      ],
+      "topics": [
+        "verification-boundaries"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 13
+    },
+    {
+      "id": "R0809",
+      "path": "rules/R0809.md",
+      "kind": "instruction",
+      "roles": [
+        "release-manager-agent"
+      ],
+      "topics": [
+        "verification-boundaries"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 40
+    },
+    {
+      "id": "R0817",
+      "path": "rules/R0817.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "public-prose-criteria"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 9
+    },
+    {
+      "id": "R0818",
+      "path": "rules/R0818.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "public-prose-criteria"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 10
+    },
+    {
+      "id": "R0819",
+      "path": "rules/R0819.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "public-prose-criteria"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 17
+    },
+    {
+      "id": "R0820",
+      "path": "rules/R0820.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "public-prose-criteria"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 18
+    },
+    {
+      "id": "R0821",
+      "path": "rules/R0821.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "public-prose-criteria"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 12
+    },
+    {
+      "id": "R0829",
+      "path": "rules/R0829.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "public-prose-criteria"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 39
+    },
+    {
+      "id": "R0830",
+      "path": "rules/R0830.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "public-prose-criteria"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 25
+    },
+    {
+      "id": "R0831",
+      "path": "rules/R0831.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "public-prose-criteria"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 23
+    },
+    {
+      "id": "R0832",
+      "path": "rules/R0832.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "public-prose-criteria"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 20
+    },
+    {
+      "id": "R0833",
+      "path": "rules/R0833.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "public-prose-criteria"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 25
+    },
+    {
+      "id": "R0835",
+      "path": "rules/R0835.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "public-prose-criteria"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 15
+    },
+    {
+      "id": "R0844",
+      "path": "rules/R0844.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "public-prose-criteria"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 13
+    },
+    {
+      "id": "R0845",
+      "path": "rules/R0845.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "public-prose-criteria"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 20
+    },
+    {
+      "id": "R0846",
+      "path": "rules/R0846.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "public-prose-criteria"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 16
+    },
+    {
+      "id": "R0849",
+      "path": "rules/R0849.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "public-prose-criteria"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 8
+    },
+    {
+      "id": "R0853",
+      "path": "rules/R0853.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "public-prose-criteria"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 53
+    },
+    {
+      "id": "R0854",
+      "path": "rules/R0854.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "public-prose-criteria"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 16
+    },
+    {
+      "id": "R0862b",
+      "path": "rules/R0862b.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "chief-of-staff"
+      ],
+      "topics": [
+        "spec"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 21
+    },
+    {
+      "id": "R0863",
+      "path": "rules/R0863.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent"
+      ],
+      "topics": [
+        "spec"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 100
+    },
+    {
+      "id": "R0876",
+      "path": "rules/R0876.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent"
+      ],
+      "topics": [
+        "spec"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 19
+    },
+    {
+      "id": "R0893",
+      "path": "rules/R0893.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "chief-of-staff"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 22
+    },
+    {
+      "id": "R0934",
+      "path": "rules/R0934.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff"
+      ],
+      "topics": [
+        "chief-of-staff"
+      ],
+      "enforce": [
+        "hook"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": "Existing intake branch hook; metadata/mechanism is not removable prose.",
+      "body_words": 8
+    },
+    {
+      "id": "R0939",
+      "path": "rules/R0939.md",
+      "kind": "instruction",
+      "roles": [
+        "coder-agent"
+      ],
+      "topics": [
+        "coder-agent"
+      ],
+      "enforce": [
+        "agent"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 14
+    },
+    {
+      "id": "R0940",
+      "path": "rules/R0940.md",
+      "kind": "instruction",
+      "roles": [
+        "coder-agent"
+      ],
+      "topics": [
+        "coder-agent"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 8
+    },
+    {
+      "id": "R0941",
+      "path": "rules/R0941.md",
+      "kind": "instruction",
+      "roles": [
+        "coder-agent"
+      ],
+      "topics": [
+        "coder-agent"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 10
+    },
+    {
+      "id": "R0942",
+      "path": "rules/R0942.md",
+      "kind": "instruction",
+      "roles": [
+        "coder-agent"
+      ],
+      "topics": [
+        "coder-agent"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 23
+    },
+    {
+      "id": "R0943",
+      "path": "rules/R0943.md",
+      "kind": "instruction",
+      "roles": [
+        "coder-agent"
+      ],
+      "topics": [
+        "coder-agent"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 8
+    },
+    {
+      "id": "R0944",
+      "path": "rules/R0944.md",
+      "kind": "instruction",
+      "roles": [
+        "context-quality-reviewer"
+      ],
+      "topics": [
+        "intake"
+      ],
+      "enforce": [
+        "skill"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": "Intake procedure retained; artifact behavior remains governed.",
+      "body_words": 21
+    },
+    {
+      "id": "R0950",
+      "path": "rules/R0950.md",
+      "kind": "instruction",
+      "roles": [
+        "context-quality-reviewer"
+      ],
+      "topics": [
+        "intake"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 28
+    },
+    {
+      "id": "R0954",
+      "path": "rules/R0954.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 31
+    },
+    {
+      "id": "R0955",
+      "path": "rules/R0955.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 23
+    },
+    {
+      "id": "R0956",
+      "path": "rules/R0956.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 22
+    },
+    {
+      "id": "R0957",
+      "path": "rules/R0957.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 14
+    },
+    {
+      "id": "R0958",
+      "path": "rules/R0958.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 15
+    },
+    {
+      "id": "R0959",
+      "path": "rules/R0959.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 16
+    },
+    {
+      "id": "R0960",
+      "path": "rules/R0960.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 23
+    },
+    {
+      "id": "R0961",
+      "path": "rules/R0961.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 8
+    },
+    {
+      "id": "R0962",
+      "path": "rules/R0962.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 6
+    },
+    {
+      "id": "R0963",
+      "path": "rules/R0963.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 8
+    },
+    {
+      "id": "R0964",
+      "path": "rules/R0964.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 11
+    },
+    {
+      "id": "R0965",
+      "path": "rules/R0965.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 24
+    },
+    {
+      "id": "R0966",
+      "path": "rules/R0966.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 10
+    },
+    {
+      "id": "R0967",
+      "path": "rules/R0967.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 19
+    },
+    {
+      "id": "R0968",
+      "path": "rules/R0968.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 19
+    },
+    {
+      "id": "R0969",
+      "path": "rules/R0969.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 18
+    },
+    {
+      "id": "R0970",
+      "path": "rules/R0970.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 3
+    },
+    {
+      "id": "R0971",
+      "path": "rules/R0971.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 14
+    },
+    {
+      "id": "R0972",
+      "path": "rules/R0972.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 20
+    },
+    {
+      "id": "R0973",
+      "path": "rules/R0973.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 23
+    },
+    {
+      "id": "R0975",
+      "path": "rules/R0975.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 32
+    },
+    {
+      "id": "R0976",
+      "path": "rules/R0976.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 40
+    },
+    {
+      "id": "R0977",
+      "path": "rules/R0977.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 23
+    },
+    {
+      "id": "R0979",
+      "path": "rules/R0979.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 16
+    },
+    {
+      "id": "R0980",
+      "path": "rules/R0980.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 7
+    },
+    {
+      "id": "R0981",
+      "path": "rules/R0981.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 12
+    },
+    {
+      "id": "R0982",
+      "path": "rules/R0982.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 26
+    },
+    {
+      "id": "R0983",
+      "path": "rules/R0983.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 22
+    },
+    {
+      "id": "R0984",
+      "path": "rules/R0984.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 34
+    },
+    {
+      "id": "R0985",
+      "path": "rules/R0985.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 29
+    },
+    {
+      "id": "R0987",
+      "path": "rules/R0987.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 15
+    },
+    {
+      "id": "R0988",
+      "path": "rules/R0988.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 18
+    },
+    {
+      "id": "R0990",
+      "path": "rules/R0990.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 29
+    },
+    {
+      "id": "R0991",
+      "path": "rules/R0991.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 9
+    },
+    {
+      "id": "R0992",
+      "path": "rules/R0992.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 33
+    },
+    {
+      "id": "R0993",
+      "path": "rules/R0993.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 21
+    },
+    {
+      "id": "R0994",
+      "path": "rules/R0994.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 16
+    },
+    {
+      "id": "R0997",
+      "path": "rules/R0997.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 10
+    },
+    {
+      "id": "R0998",
+      "path": "rules/R0998.md",
+      "kind": "instruction",
+      "roles": [
+        "copy-editor"
+      ],
+      "topics": [
+        "copy-editor"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 27
+    },
+    {
+      "id": "R1002",
+      "path": "rules/R1002.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 31
+    },
+    {
+      "id": "R1004",
+      "path": "rules/R1004.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 24
+    },
+    {
+      "id": "R1005",
+      "path": "rules/R1005.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 23
+    },
+    {
+      "id": "R1006",
+      "path": "rules/R1006.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 14
+    },
+    {
+      "id": "R1007",
+      "path": "rules/R1007.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 25
+    },
+    {
+      "id": "R1008",
+      "path": "rules/R1008.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 26
+    },
+    {
+      "id": "R1009",
+      "path": "rules/R1009.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 37
+    },
+    {
+      "id": "R1010",
+      "path": "rules/R1010.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 15
+    },
+    {
+      "id": "R1011",
+      "path": "rules/R1011.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 26
+    },
+    {
+      "id": "R1012",
+      "path": "rules/R1012.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 17
+    },
+    {
+      "id": "R1013",
+      "path": "rules/R1013.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 24
+    },
+    {
+      "id": "R1015",
+      "path": "rules/R1015.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 20
+    },
+    {
+      "id": "R1016",
+      "path": "rules/R1016.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 14
+    },
+    {
+      "id": "R1017",
+      "path": "rules/R1017.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 32
+    },
+    {
+      "id": "R1018",
+      "path": "rules/R1018.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 9
+    },
+    {
+      "id": "R1019",
+      "path": "rules/R1019.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 30
+    },
+    {
+      "id": "R1020",
+      "path": "rules/R1020.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 19
+    },
+    {
+      "id": "R1021",
+      "path": "rules/R1021.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 45
+    },
+    {
+      "id": "R1022",
+      "path": "rules/R1022.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 14
+    },
+    {
+      "id": "R1023",
+      "path": "rules/R1023.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 14
+    },
+    {
+      "id": "R1024",
+      "path": "rules/R1024.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 23
+    },
+    {
+      "id": "R1026",
+      "path": "rules/R1026.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 20
+    },
+    {
+      "id": "R1027",
+      "path": "rules/R1027.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 13
+    },
+    {
+      "id": "R1028",
+      "path": "rules/R1028.md",
+      "kind": "instruction",
+      "roles": [
+        "critic"
+      ],
+      "topics": [
+        "critic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 13
+    },
+    {
+      "id": "R1031",
+      "path": "rules/R1031.md",
+      "kind": "instruction",
+      "roles": [
+        "release-manager-agent"
+      ],
+      "topics": [
+        "release-manager-agent"
+      ],
+      "enforce": [
+        "agent"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 26
+    },
+    {
+      "id": "R1032",
+      "path": "rules/R1032.md",
+      "kind": "instruction",
+      "roles": [
+        "release-manager-agent"
+      ],
+      "topics": [
+        "release-manager-agent"
+      ],
+      "enforce": [
+        "skill"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": "Release ruling 35 preserves evidence/readiness requirements; source unchanged.",
+      "body_words": 51
+    },
+    {
+      "id": "R1039",
+      "path": "rules/R1039.md",
+      "kind": "instruction",
+      "roles": [
+        "release-manager-agent"
+      ],
+      "topics": [
+        "release-manager-agent"
+      ],
+      "enforce": [
+        "skill"
+      ],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 25
+    },
+    {
+      "id": "R1041",
+      "path": "rules/R1041.md",
+      "kind": "instruction",
+      "roles": [
+        "release-manager-agent"
+      ],
+      "topics": [
+        "release-manager-agent"
+      ],
+      "enforce": [
+        "skill"
+      ],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 56
+    },
+    {
+      "id": "R1042",
+      "path": "rules/R1042.md",
+      "kind": "instruction",
+      "roles": [
+        "release-manager-agent"
+      ],
+      "topics": [
+        "release-manager-agent"
+      ],
+      "enforce": [
+        "skill"
+      ],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 24
+    },
+    {
+      "id": "R1044",
+      "path": "rules/R1044.md",
+      "kind": "instruction",
+      "roles": [
+        "release-manager-agent"
+      ],
+      "topics": [
+        "release-manager-agent"
+      ],
+      "enforce": [
+        "skill"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": "Release ruling 35 preserves missing-source-as-gap requirement; source unchanged.",
+      "body_words": 34
+    },
+    {
+      "id": "R1045",
+      "path": "rules/R1045.md",
+      "kind": "instruction",
+      "roles": [
+        "release-manager-agent"
+      ],
+      "topics": [
+        "release-manager-agent"
+      ],
+      "enforce": [
+        "skill"
+      ],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 24
+    },
+    {
+      "id": "R1047",
+      "path": "rules/R1047.md",
+      "kind": "instruction",
+      "roles": [
+        "reviewer-agent"
+      ],
+      "topics": [
+        "reviewer"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 16
+    },
+    {
+      "id": "R1048",
+      "path": "rules/R1048.md",
+      "kind": "instruction",
+      "roles": [
+        "reviewer-agent"
+      ],
+      "topics": [
+        "reviewer"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 40
+    },
+    {
+      "id": "R1056",
+      "path": "rules/R1056.md",
+      "kind": "instruction",
+      "roles": [
+        "reviewer-agent"
+      ],
+      "topics": [
+        "reviewer"
+      ],
+      "enforce": [
+        "agent"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 21
+    },
+    {
+      "id": "R1058",
+      "path": "rules/R1058.md",
+      "kind": "instruction",
+      "roles": [
+        "skeptic-risk-agent"
+      ],
+      "topics": [
+        "skeptic"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 39
+    },
+    {
+      "id": "R1068",
+      "path": "rules/R1068.md",
+      "kind": "instruction",
+      "roles": [
+        "skeptic-risk-agent"
+      ],
+      "topics": [
+        "skeptic"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 23
+    },
+    {
+      "id": "R1073",
+      "path": "rules/R1073.md",
+      "kind": "instruction",
+      "roles": [
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "release-manager-agent"
+      ],
+      "topics": [
+        "skeptic"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 36
+    },
+    {
+      "id": "R1088",
+      "path": "rules/R1088.md",
+      "kind": "instruction",
+      "roles": [
+        "skeptic-risk-agent"
+      ],
+      "topics": [
+        "skeptic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 16
+    },
+    {
+      "id": "R1090",
+      "path": "rules/R1090.md",
+      "kind": "instruction",
+      "roles": [
+        "skeptic-risk-agent"
+      ],
+      "topics": [
+        "skeptic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 25
+    },
+    {
+      "id": "R1091",
+      "path": "rules/R1091.md",
+      "kind": "instruction",
+      "roles": [
+        "skeptic-risk-agent"
+      ],
+      "topics": [
+        "skeptic"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 21
+    },
+    {
+      "id": "R1104",
+      "path": "rules/R1104.md",
+      "kind": "instruction",
+      "roles": [
+        "spec-reviewer-agent"
+      ],
+      "topics": [
+        "spec-reviewer-agent"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 26
+    },
+    {
+      "id": "R1105",
+      "path": "rules/R1105.md",
+      "kind": "instruction",
+      "roles": [
+        "spec-reviewer-agent"
+      ],
+      "topics": [
+        "spec-reviewer-agent"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 28
+    },
+    {
+      "id": "R1107",
+      "path": "rules/R1107.md",
+      "kind": "instruction",
+      "roles": [
+        "spec-reviewer-agent"
+      ],
+      "topics": [
+        "spec-reviewer-agent"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 108
+    },
+    {
+      "id": "R1116",
+      "path": "rules/R1116.md",
+      "kind": "instruction",
+      "roles": [
+        "spec-reviewer-agent"
+      ],
+      "topics": [
+        "spec-reviewer-agent"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 73
+    },
+    {
+      "id": "R1122",
+      "path": "rules/R1122.md",
+      "kind": "instruction",
+      "roles": [
+        "spec-reviewer-agent"
+      ],
+      "topics": [
+        "spec-reviewer-agent"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 51
+    },
+    {
+      "id": "R1133",
+      "path": "rules/R1133.md",
+      "kind": "instruction",
+      "roles": [
+        "spec-reviewer-agent"
+      ],
+      "topics": [
+        "spec-reviewer-agent"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 39
+    },
+    {
+      "id": "R1137",
+      "path": "rules/R1137.md",
+      "kind": "instruction",
+      "roles": [
+        "spec-reviewer-agent"
+      ],
+      "topics": [
+        "spec-reviewer-agent"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 27
+    },
+    {
+      "id": "R1141",
+      "path": "rules/R1141.md",
+      "kind": "instruction",
+      "roles": [
+        "test-designer-agent"
+      ],
+      "topics": [
+        "test-designer"
+      ],
+      "enforce": [
+        "agent"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 18
+    },
+    {
+      "id": "R1143",
+      "path": "rules/R1143.md",
+      "kind": "instruction",
+      "roles": [
+        "test-designer-agent"
+      ],
+      "topics": [
+        "test-designer"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 70
+    },
+    {
+      "id": "R1151",
+      "path": "rules/R1151.md",
+      "kind": "instruction",
+      "roles": [
+        "test-designer-agent"
+      ],
+      "topics": [
+        "test-designer"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 12
+    },
+    {
+      "id": "R1155",
+      "path": "rules/R1155.md",
+      "kind": "instruction",
+      "roles": [
+        "test-designer-agent"
+      ],
+      "topics": [
+        "test-designer"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 24
+    },
+    {
+      "id": "R1156",
+      "path": "rules/R1156.md",
+      "kind": "instruction",
+      "roles": [
+        "test-designer-agent"
+      ],
+      "topics": [
+        "test-designer"
+      ],
+      "enforce": [
+        "hook"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 30
+    },
+    {
+      "id": "R1162",
+      "path": "rules/R1162.md",
+      "kind": "instruction",
+      "roles": [
+        "writer"
+      ],
+      "topics": [
+        "writer"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 31
+    },
+    {
+      "id": "R1163",
+      "path": "rules/R1163.md",
+      "kind": "instruction",
+      "roles": [
+        "writer"
+      ],
+      "topics": [
+        "writer"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 40
+    },
+    {
+      "id": "R1164",
+      "path": "rules/R1164.md",
+      "kind": "instruction",
+      "roles": [
+        "writer"
+      ],
+      "topics": [
+        "writer"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 17
+    },
+    {
+      "id": "R1165",
+      "path": "rules/R1165.md",
+      "kind": "instruction",
+      "roles": [
+        "writer"
+      ],
+      "topics": [
+        "writer"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 13
+    },
+    {
+      "id": "R1167",
+      "path": "rules/R1167.md",
+      "kind": "instruction",
+      "roles": [
+        "writer"
+      ],
+      "topics": [
+        "writer"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 11
+    },
+    {
+      "id": "R1168",
+      "path": "rules/R1168.md",
+      "kind": "instruction",
+      "roles": [
+        "writer"
+      ],
+      "topics": [
+        "writer"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 24
+    },
+    {
+      "id": "R1169",
+      "path": "rules/R1169.md",
+      "kind": "instruction",
+      "roles": [
+        "writer"
+      ],
+      "topics": [
+        "writer"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 31
+    },
+    {
+      "id": "R1171",
+      "path": "rules/R1171.md",
+      "kind": "instruction",
+      "roles": [
+        "writer"
+      ],
+      "topics": [
+        "writer"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 50
+    },
+    {
+      "id": "R1173",
+      "path": "rules/R1173.md",
+      "kind": "instruction",
+      "roles": [
+        "writer"
+      ],
+      "topics": [
+        "writer"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 34
+    },
+    {
+      "id": "R1174",
+      "path": "rules/R1174.md",
+      "kind": "instruction",
+      "roles": [
+        "writer"
+      ],
+      "topics": [
+        "writer"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 20
+    },
+    {
+      "id": "R1178",
+      "path": "rules/R1178.md",
+      "kind": "instruction",
+      "roles": [
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "release-manager-agent"
+      ],
+      "topics": [
+        "verification-boundaries"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 28
+    },
+    {
+      "id": "R1179",
+      "path": "rules/R1179.md",
+      "kind": "instruction",
+      "roles": [
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "release-manager-agent"
+      ],
+      "topics": [
+        "verification-boundaries"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 22
+    },
+    {
+      "id": "R1183",
+      "path": "rules/R1183.md",
+      "kind": "instruction",
+      "roles": [
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "release-manager-agent"
+      ],
+      "topics": [
+        "verification-boundaries"
+      ],
+      "enforce": [],
+      "status": "deferred",
+      "follow_up": 428,
+      "coverage_note": null,
+      "body_words": 32
+    },
+    {
+      "id": "R1237",
+      "path": "rules/R1237.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff",
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "retro"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 11
+    },
+    {
+      "id": "R1241",
+      "path": "rules/R1241.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff",
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "retro"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 54
+    },
+    {
+      "id": "R1244",
+      "path": "rules/R1244.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff",
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "retro"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 17
+    },
+    {
+      "id": "R1249",
+      "path": "rules/R1249.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff",
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "retro"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 39
+    },
+    {
+      "id": "R1270",
+      "path": "rules/R1270.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff",
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "retro"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 40
+    },
+    {
+      "id": "R1396",
+      "path": "rules/R1396.md",
+      "kind": "instruction",
+      "roles": [
+        "spec-reviewer-agent",
+        "context-quality-reviewer",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "release-manager-agent",
+        "chief-of-staff"
+      ],
+      "topics": [
+        "review-artifact-schema"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 17
+    },
+    {
+      "id": "R1408",
+      "path": "rules/R1408.md",
+      "kind": "instruction",
+      "roles": [
+        "spec-reviewer-agent",
+        "context-quality-reviewer",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "release-manager-agent",
+        "chief-of-staff"
+      ],
+      "topics": [
+        "review-artifact-schema"
+      ],
+      "enforce": [
+        "hook"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 55
+    },
+    {
+      "id": "R1414",
+      "path": "rules/R1414.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "chief-of-staff",
+        "context-quality-reviewer",
+        "copy-editor",
+        "critic",
+        "release-manager-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "spec-reviewer-agent"
+      ],
+      "topics": [
+        "review-artifact-schema"
+      ],
+      "enforce": [
+        "hook"
+      ],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 24
+    },
+    {
+      "id": "R1448",
+      "path": "rules/R1448.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff",
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "review-artifact-schema"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 34
+    },
+    {
+      "id": "R1473",
+      "path": "rules/R1473.md",
+      "kind": "instruction",
+      "roles": [
+        "spec-reviewer-agent",
+        "context-quality-reviewer",
+        "architect-agent",
+        "test-designer-agent",
+        "chief-of-staff"
+      ],
+      "topics": [
+        "change-flow"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 31
+    },
+    {
+      "id": "R1474",
+      "path": "rules/R1474.md",
+      "kind": "definition",
+      "roles": [],
+      "topics": [
+        "change-flow"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 38
+    },
+    {
+      "id": "R1478",
+      "path": "rules/R1478.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "test-designer-agent"
+      ],
+      "topics": [
+        "change-flow"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 30
+    },
+    {
+      "id": "R1479",
+      "path": "rules/R1479.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "test-designer-agent"
+      ],
+      "topics": [
+        "change-flow"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 32
+    },
+    {
+      "id": "R1480",
+      "path": "rules/R1480.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "test-designer-agent"
+      ],
+      "topics": [
+        "change-flow"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 17
+    },
+    {
+      "id": "R1485",
+      "path": "rules/R1485.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff"
+      ],
+      "topics": [
+        "change-flow"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 17
+    },
+    {
+      "id": "R1489",
+      "path": "rules/R1489.md",
+      "kind": "instruction",
+      "roles": [
+        "spec-reviewer-agent",
+        "context-quality-reviewer",
+        "architect-agent",
+        "test-designer-agent",
+        "chief-of-staff"
+      ],
+      "topics": [
+        "change-flow"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 16
+    },
+    {
+      "id": "R1496",
+      "path": "rules/R1496.md",
+      "kind": "instruction",
+      "roles": [
+        "reviewer-agent"
+      ],
+      "topics": [
+        "reviewer"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 47
+    },
+    {
+      "id": "R1497",
+      "path": "rules/R1497.md",
+      "kind": "instruction",
+      "roles": [
+        "reviewer-agent"
+      ],
+      "topics": [
+        "reviewer"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 17
+    },
+    {
+      "id": "R1513",
+      "path": "rules/R1513.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "chief-of-staff",
+        "coder-agent",
+        "spec-reviewer-agent"
+      ],
+      "topics": [
+        "spec"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 16
+    },
+    {
+      "id": "R1573",
+      "path": "rules/R1573.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "spec-reviewer-agent"
+      ],
+      "topics": [
+        "spec"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 4
+    },
+    {
+      "id": "R1577",
+      "path": "rules/R1577.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "voice"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 24
+    },
+    {
+      "id": "R1579",
+      "path": "rules/R1579.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "voice"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 21
+    },
+    {
+      "id": "R1585",
+      "path": "rules/R1585.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "voice"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 27
+    },
+    {
+      "id": "R1587",
+      "path": "rules/R1587.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "voice"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 17
+    },
+    {
+      "id": "R1588",
+      "path": "rules/R1588.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "voice"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 12
+    },
+    {
+      "id": "R1591",
+      "path": "rules/R1591.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "voice"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 19
+    },
+    {
+      "id": "R1594",
+      "path": "rules/R1594.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "voice"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 13
+    },
+    {
+      "id": "R1598",
+      "path": "rules/R1598.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "voice"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 20
+    },
+    {
+      "id": "R1600",
+      "path": "rules/R1600.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "voice"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 42
+    },
+    {
+      "id": "R1603",
+      "path": "rules/R1603.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff",
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "decision-log-policy"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 4
+    },
+    {
+      "id": "R1604",
+      "path": "rules/R1604.md",
+      "kind": "instruction",
+      "roles": [
+        "writer",
+        "copy-editor",
+        "critic"
+      ],
+      "topics": [
+        "voice"
+      ],
+      "enforce": [],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 14
+    },
+    {
+      "id": "R1605",
+      "path": "rules/R1605.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff",
+        "writer",
+        "copy-editor",
+        "critic",
+        "context-quality-reviewer"
+      ],
+      "topics": [
+        "intake"
+      ],
+      "enforce": [
+        "hook"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 95
+    },
+    {
+      "id": "R1616",
+      "path": "rules/R1616.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "chief-of-staff",
+        "coder-agent",
+        "context-quality-reviewer",
+        "release-manager-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "spec-reviewer-agent",
+        "test-designer-agent"
+      ],
+      "topics": [
+        "core"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 26
+    },
+    {
+      "id": "R1617",
+      "path": "rules/R1617.md",
+      "kind": "instruction",
+      "roles": [
+        "spec-reviewer-agent",
+        "context-quality-reviewer",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "chief-of-staff"
+      ],
+      "topics": [
+        "review-artifact-schema"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 19
+    },
+    {
+      "id": "R1618",
+      "path": "rules/R1618.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent"
+      ],
+      "topics": [
+        "spec"
+      ],
+      "enforce": [
+        "agent"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 26
+    },
+    {
+      "id": "R1619",
+      "path": "rules/R1619.md",
+      "kind": "instruction",
+      "roles": [
+        "spec-reviewer-agent"
+      ],
+      "topics": [
+        "spec-reviewer-agent"
+      ],
+      "enforce": [
+        "agent"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 25
+    },
+    {
+      "id": "R1620",
+      "path": "rules/R1620.md",
+      "kind": "instruction",
+      "roles": [
+        "skeptic-risk-agent"
+      ],
+      "topics": [
+        "skeptic"
+      ],
+      "enforce": [
+        "agent"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 23
+    },
+    {
+      "id": "R1621",
+      "path": "rules/R1621.md",
+      "kind": "instruction",
+      "roles": [
+        "context-quality-reviewer"
+      ],
+      "topics": [
+        "intake"
+      ],
+      "enforce": [
+        "agent"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 25
+    },
+    {
+      "id": "R1622",
+      "path": "rules/R1622.md",
+      "kind": "instruction",
+      "roles": [
+        "spec-reviewer-agent",
+        "context-quality-reviewer",
+        "reviewer-agent",
+        "skeptic-risk-agent"
+      ],
+      "topics": [
+        "review-artifact-schema"
+      ],
+      "enforce": [
+        "hook"
+      ],
+      "status": "not individually ruled in these pruning passes",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 31
+    },
+    {
+      "id": "R1626",
+      "path": "rules/R1626.md",
+      "kind": "instruction",
+      "roles": [
+        "chief-of-staff"
+      ],
+      "topics": [
+        "core"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 29
+    },
+    {
+      "id": "R1627",
+      "path": "rules/R1627.md",
+      "kind": "instruction",
+      "roles": [
+        "architect-agent",
+        "chief-of-staff",
+        "coder-agent",
+        "context-quality-reviewer",
+        "copy-editor",
+        "critic",
+        "release-manager-agent",
+        "reviewer-agent",
+        "skeptic-risk-agent",
+        "spec-reviewer-agent",
+        "test-designer-agent",
+        "writer"
+      ],
+      "topics": [
+        "core"
+      ],
+      "enforce": [],
+      "status": "previously ruled",
+      "follow_up": null,
+      "coverage_note": null,
+      "body_words": 15
+    }
+  ]
+}
