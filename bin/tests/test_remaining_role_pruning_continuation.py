@@ -23,7 +23,7 @@ from tests.helpers import REPO_ROOT
 from tests.test_skill_context_extraction import inputs
 
 BASELINE = "2be5327e9704b0066eed7e8ef44302aa55179b18"
-CHECKPOINT = "8fd292d81bb215a63897380a33e2bc6037eb132b"
+CHECKPOINT = "4157ddd3e1b50ff3b28c31f387e5e9e96793a3a9"
 SUCCESSORS = {"R0943": "R0110", "R0950": "R1621", "R1513": "R0166", "R0090": "R0166",
               "R1480": "R1479", "R0954": "R1162", "R1002": "R1162"}
 PENDING = set("R0940 R0499 R0284 R1091 R1485 R1249 R0159 R0800".split())
@@ -68,7 +68,15 @@ class TestRemainingRolePruningContinuation(unittest.TestCase):
         with tarfile.open(fileobj=io.BytesIO(archive)) as stream:
             stream.extractall(cls.baseline, filter="data")
         cls.old = inputs(cls.baseline)
-        cls.current = inputs(REPO_ROOT)
+        # The approved81-ruling checkpoint remains an immutable oracle.
+        # Finalization is checked against its removal preview below.
+        cls.checkpoint_root = cls.baseline / "checkpoint"
+        cls.checkpoint_root.mkdir()
+        archive = subprocess.run(["git", "archive", CHECKPOINT, "rules", "process", "bin/hooks"],
+                                 cwd=REPO_ROOT, check=True, capture_output=True).stdout
+        with tarfile.open(fileobj=io.BytesIO(archive)) as stream:
+            stream.extractall(cls.checkpoint_root, filter="data")
+        cls.current = inputs(cls.checkpoint_root)
         cls.preview = checkpoint_preview(cls.current)
         cls.old_rows = {r.id: r for r in cls.old.rows if r.kind == "rule"}
         cls.rows = {r.id: r for r in cls.current.rows if r.kind == "rule"}
@@ -140,12 +148,12 @@ class TestRemainingRolePruningContinuation(unittest.TestCase):
             for axis in ("role", "session", "corpus"):
                 self.assertTrue(set(self.old_rows[row_id].keys[axis]) <= set(self.rows[successor].keys[axis]))
         for row_id in PENDING:
-            self.assertFalse((REPO_ROOT / "rules/retired" / (row_id + ".md")).exists(), row_id)
+            self.assertFalse((self.checkpoint_root / "rules/retired" / (row_id + ".md")).exists(), row_id)
             original = (self.baseline / "rules" / (row_id + ".md")).read_text()
             if row_id == "R1249":
                 original = original.replace("role: [chief-of-staff, writer, copy-editor, critic]",
                                             "role: [chief-of-staff, writer]")
-            self.assertEqual((REPO_ROOT / "rules" / (row_id + ".md")).read_text(), original, row_id)
+            self.assertEqual((self.checkpoint_root / "rules" / (row_id + ".md")).read_text(), original, row_id)
 
     def test_preview_removes_approved_prose_and_resolves_active_citations(self):
         actual_ids = {r.id for r in self.current.rows if r.kind == "rule"}
@@ -200,6 +208,49 @@ class TestRemainingRolePruningContinuation(unittest.TestCase):
             self.assertIn("## Questions for follow-up", retro)
             self.assertNotIn("## Candidate methodology changes", retro)
             self.assertNotIn(self.old_rows["R1249"].body, retro)
+
+
+class TestRemainingRolePruningFinalization(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # Reuse the historical source and independently emit the live tree.
+        TestRemainingRolePruningContinuation.setUpClass.__func__(cls)
+        cls.live = inputs(REPO_ROOT)
+
+    def test_final_archives_and_sources_match_the_approved_preview(self):
+        decision = "DEC-001720"
+        self.assertIn("## " + decision + " —", (REPO_ROOT / "decisions/log.md").read_text())
+        for row_id in PENDING:
+            self.assertFalse((REPO_ROOT / "rules" / (row_id + ".md")).exists(), row_id)
+            original = (self.checkpoint_root / "rules" / (row_id + ".md")).read_text()
+            archived = (REPO_ROOT / "rules/retired" / (row_id + ".md")).read_text()
+            self.assertEqual(archived, original.replace("---\n", "---\nretired: " + decision + "\n", 1), row_id)
+        def records(source):
+            return {(r.kind, r.id): (r.body, r.keys, r.human, r.order) for r in source.rows}
+        # This also guards every deferred Writer/Copy Editor/Critic row:
+        # finalization may remove approved rows, not continue policy choices.
+        self.assertEqual(records(self.live), records(self.preview))
+        self.assertEqual({r.id for r in self.live.rows if r.kind == "rule"},
+                         set(self.old_rows) - PENDING - set(SUCCESSORS))
+
+    def test_live_native_and_all_bundles_equal_preview_with_hooks_unchanged(self):
+        for harness in ("claude-code", "codex"):
+            actual = targets()[harness].emit(self.live)
+            expected = self.native["preview"][harness]
+            self.assertEqual(actual.files, expected.files, harness)
+            self.assertEqual(actual.executable, expected.executable, harness)
+            baseline = self.native["before"][harness]
+            self.assertEqual(actual.executable, baseline.executable, harness)
+            for path, body in baseline.files.items():
+                if "/hooks/" in path or path.endswith(("settings.json", "hooks.json")):
+                    self.assertEqual(actual.files[path], body, (harness, path))
+        names = named_queries.bundles(FileRowSource(REPO_ROOT).named_queries_text())
+        self.assertEqual(len(names), 12)
+        for name, tokens in names:
+            where = dict(token.split("=", 1) for token in tokens)
+            actual = next(iter(targets()["bundle"].emit(dataclasses.replace(
+                self.live, where=where, name=name)).files.values()))
+            self.assertEqual(actual, self.bundles[name], name)
 
 
 if __name__ == "__main__":

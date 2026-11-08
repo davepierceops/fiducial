@@ -62,6 +62,7 @@ class TestRemainingRolePruning(unittest.TestCase):
                                  cwd=REPO_ROOT, check=True, capture_output=True).stdout
         with tarfile.open(fileobj=io.BytesIO(archive)) as stream:
             stream.extractall(checkpoint, filter="data")
+        cls.checkpoint_root = checkpoint
         cls.current = inputs(checkpoint)
         cls.preview = checkpoint_preview(cls.current)
         cls.old_rows = {r.id: r for r in cls.old.rows if r.kind == "rule"}
@@ -122,8 +123,8 @@ class TestRemainingRolePruning(unittest.TestCase):
             for axis in ("role", "session", "corpus"):
                 self.assertTrue(set(self.old_rows[row_id].keys[axis]) <= set(self.rows[successor].keys[axis]))
         for row_id in PENDING:
-            self.assertFalse((REPO_ROOT / "rules/retired" / (row_id + ".md")).exists(), row_id)
-            self.assertEqual((REPO_ROOT / "rules" / (row_id + ".md")).read_bytes(),
+            self.assertFalse((self.checkpoint_root / "rules/retired" / (row_id + ".md")).exists(), row_id)
+            self.assertEqual((self.checkpoint_root / "rules" / (row_id + ".md")).read_bytes(),
                              (self.baseline / "rules" / (row_id + ".md")).read_bytes(), row_id)
 
     def test_preview_removes_approved_prose_and_resolves_active_citations(self):

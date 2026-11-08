@@ -44,18 +44,17 @@ human made inside the session belongs here>
 <what the evidence suggests; each item references the evidence numbers
 it rests on>
 
-## Standing preferences
-<preferences the human stated this session that he has stated in earlier
-sessions too, each as a candidate standing rule and each naming where it
-was stated before; empty-with-a-statement if none>
+## Recurring preferences
+<preferences the human stated in this and earlier sessions, with evidence
+of where they were expressed; empty-with-a-statement if none>
 
 ## Durable insights
 <techniques, workflow changes, belief changes that transfer beyond this
 session; empty-with-a-statement if none>
 
-## Candidate methodology changes
-<specific proposed edits to methodology documents, if any, phrased as
-findings for the delta that would carry them — not as decisions>
+## Questions for follow-up
+<problems worth investigating, with supporting evidence and unresolved
+questions; empty-with-a-statement if none>
 ~~~
 
 `date:` is the session's last interaction, taken from the last dated artifact the
@@ -75,11 +74,9 @@ merge commit's SHA, fetched, is the evidence the retro landed [R0172].
 
 Ground every retro in concrete evidence from the conversation it covers.
 
-Carry into a retro what is durable and new: the techniques, workflows, belief changes, and engineering practices that transfer beyond the session, and what is new or materially changed in it. Leave out the implementation details that do not transfer and the restatements of standing methodology; where there are none to carry, say so.
+Capture new or materially changed techniques, workflows, beliefs, and engineering practices that transfer beyond the session. Omit nontransferable implementation details and repeated methodology. State when there are no qualifying insights.
 
-Take a retro's inputs from the conversation it covers and the local tree, and from no remote.
+Base a retro on the conversation it covers and relevant project evidence.
 
-Answer in every retro, explicitly, which preferences the human stated this session that he has also stated in earlier sessions; name each as a candidate standing rule and stop there. Encoding one into governed text is the human's decision.
-
-Phrase a methodology change a retro or synthesis proposes as a finding for the delta it feeds — intake for a rules delta, one frontier read and the human's sign-off for a process delta — never as a decision taken.
+Submit methodology changes proposed by a retro or synthesis as findings: rule changes go through intake; process changes require a frontier review and human sign-off.
 <!-- fiducial:end -->

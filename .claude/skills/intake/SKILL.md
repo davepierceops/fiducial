@@ -8,7 +8,7 @@ description: Carry a proposed change to governed context from proposal through r
 Carry a proposed change to governed context from proposal through review and
 landing.
 The judgment governing the proposal and its ruling is [R0166, R0462]; the
-intake rubric is [R0264, R0266, R0284, R0950].
+intake rubric is [R0264, R0266, R1621].
 
 For chief-of-staff and coder-agent in software and writing decision and execution sessions, when creating or changing a vendor-specific artifact:
 
@@ -40,7 +40,7 @@ Provenance: DEC-001300, DEC-001320; R0944, R0934; retained judgment cited above.
 
 ## Rules
 
-A row cites another row only by its ID in square brackets, and only where every value the citing row carries on role, session, and corpus the cited row carries too, so the cited row renders in every bundle the citing one does.
+Cite a row by its ID in square brackets only if it covers every role, session, and corpus of the citing row.
 
 ### Definitions
 

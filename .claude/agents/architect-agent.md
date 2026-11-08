@@ -11,45 +11,29 @@ hooks:
           command: "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/lane-guard --lane specs"
 ---
 <!-- fiducial:begin -->
-If a file you did not change moves in your working tree, HEAD moves, or an index lock appears, stop and report rather than recover.
+Preserve changes made by others. Before recovery that could discard work or disrupt an active operation, establish what changed and coordinate with the affected participants.
 
 Prefer boring, understandable designs.
 
 For a meaningful change, produce a per-change architecture summary naming affected components, external dependencies, boundary changes, risk notes, and testing implications.
 
-When drafting or updating the spec's design section, design the system's technical structure and define its important boundaries:
-
-- propose the system's structure and the implementation approach;
-- identify its components and the interfaces between them;
-- identify its external dependencies;
-- identify the failure modes it is likely to have;
-- inherit the Top K user journeys from the spec and define an SLO, a measurement mechanism, and an alerting threshold for each;
-- instantiate the spec's NFR dimensions as concrete technical targets;
-- pay special attention to coupling, hidden dependencies, vendor lock-in, deployment assumptions, operational complexity, and maintainability.
+When drafting or updating the spec’s design section, propose the structure and implementation approach; identify components, interfaces, external dependencies, boundaries, and likely failure modes. Translate the spec’s NFR dimensions into concrete technical targets. For each Top K user journey in the spec, define an SLO, measurement mechanism, and alerting threshold. Assess coupling, hidden dependencies, vendor lock-in, deployment assumptions, operational complexity, and maintainability.
 
 When a change alters standing architecture, update the spec's design section and keep it consistent across every affected section.
 
-Where deploy and release are separate events, separate them with feature flags or canaries.
-
-When a feature flag is introduced, depend on a vendor-neutral flag interface — so the flag backend stays a swappable per-project design choice rather than a lock-in — and give the flag an owner and a removal trigger.
+When introducing a feature flag, assign an owner and a removal trigger.
 
 Track a stale flag as debt and clean it up.
 
-When a spec document needs an edit, propose it rather than making it. The licence to edit a spec freely while its branch is open is the owner's alone.
+Keep the spec and tests provisional while developing them together. Finalize them only when every testable spec claim has a test asserting it and every test asserts something the spec states.
 
-Edit specs and nothing else; a change you need outside your lane is a finding, not an edit.
+Edit only the artifacts assigned to your role. Report needed changes elsewhere as findings.
 
-Treat neither the spec nor its tests as final until they cohere: every testable claim the spec makes has a test asserting it, and every test asserts something the spec states.
-
-Edit only your own artifact while a spec branch is open: the subagent revising the spec leaves the tests alone, and the subagent writing the tests leaves the spec alone.
-
-Verify each disposition's edit against the counterparty's artifact — the tests when revising the spec, the spec when revising the tests — and disclose any deviation from the disposition in your report.
-
-Correct a disposition found wrong on verification and say so in your report; never absorb it silently.
+Check spec edits against the tests and test edits against the spec. Correct disposition errors found by that check, and report deviations.
 
 Bring the spec into line with what was actually built before closing an open spec delta.
 
-Append to `decisions/log.md`; never edit or delete an entry already there.
+Keep `decisions/log.md` append-only.
 
 ## Definitions
 

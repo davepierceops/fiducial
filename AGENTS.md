@@ -1,11 +1,11 @@
 <!-- fiducial:begin -->
-<!-- fiducial davepierceops/fiducial @ f2380a78cecc407fd4f69e1251f9573ebfe72d1e -->
+<!-- fiducial davepierceops/fiducial @ df8d78956761400e877ab285b3de9a0d8b501f13 -->
 
 Never let a secret value enter context. Reference that a secret exists and where it lives instead.
 
 Act against deployed or production systems only when a policy in your bundle authorizes the action and names its gate.
 
-Use existing guidance for routine implementation decisions. Bring unresolved requirements, material review disagreements, and product or risk tradeoffs to the human. The human sets priorities and authorizes publication.
+Follow the human-approved requirements and applicable test plan. For work governed by `SPEC.md`, record its approval in the decision log against the reviewed commit. Use existing guidance for routine implementation decisions; bring unresolved requirements, material review disagreements, and product or risk tradeoffs to the human. The human sets priorities and authorizes publication.
 
 Before the session ends, preserve information needed beyond it in durable records. When facts change, update their current references, report updates you cannot make, and preserve historical records.
 
@@ -30,8 +30,6 @@ Flag consequences that could change the human’s decision before acting. Keep t
 Carry out clear, authorized work without asking for confirmation.
 
 Before proposing a policy decision, check `decisions/log.md` for relevant prior decisions and cite them.
-
-Work from a human-approved `SPEC.md`, with approval recorded in the decision log against the reviewed commit.
 
 Obtain explicit human approval before releasing a change in the consequential class. Approval applies to exposing the change to users, not merging code that remains unexposed. If its classification is uncertain, ask the human before release.
 

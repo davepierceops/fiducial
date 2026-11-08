@@ -102,9 +102,9 @@ argument — and never in place of a verdict line.
 
 For each review, use the review-artifact skill to produce one artifact covering that read of the delta.
 
-Never rewrite an existing review artifact to match a later version of this schema; the schema binds artifacts written after it lands.
+Apply a new review schema only to artifacts written after it lands.
 
-Where a review artifact names a defect class and lists its instances, rule on the class once and dispose the instances under that ruling; no instance is triaged on its own ahead of it.
+When a review lists instances of a defect class, rule once on the class first, then apply that ruling to each instance.
 
 Record every planned review pass. Mark unrun passes `not-run` with a reason, and treat a missing verdict as unverified.
 
@@ -113,6 +113,4 @@ Record every planned review pass. Mark unrun passes `not-run` with a reason, and
 **accepted risk** — Accepted risk is an explicit decision — the human's, or the release process's — to proceed despite a known gap.
 
 **blocking** — A `blocking` gap is one the governing policies prohibit releasing with.
-
-**version** — A document's version, at the moment it is referenced, is the SHA of the last commit that touched the file.
 <!-- fiducial:end -->
