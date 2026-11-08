@@ -1,5 +1,19 @@
 # Remaining role-pruning checkpoint and resumption
 
+## Current stopping point — 81 rulings
+
+The human requested wrapping up the approved changes and deferring further Writer, Copy Editor and Critic review. Include approved writing edits through R1167 (ruling 81); R1168 remains undecided. Do not resume writing-role choices automatically or undo the already approved writing changes. All 32 non-prose/voice shared workflow rows in the original inventory have now received rulings.
+
+The source checkpoint is `111594c574aeca9fb92f0009848aa41cc886fa07`. Fresh validation, output measurements and independent review accompany this wrap-up in `docs/remaining-role-pruning-wrapup-evidence-20261108T053045Z.md`; the 44-ruling artifacts below remain historical. No merge or installed-context update is authorized by this checkpoint request.
+
+Current pending no-successor retirements: R0940, R0499, R0284, R1091, R1485, R1249, R0159 and R0800. At merge, allocate the real decision reference and archive these rows; R1249 retains its already-approved narrower role scope. Remove R0284 from the intake citation. Until then, use the explicit eight-removal preview when assessing the final policy: the actual live R1249 still contains the superseded candidate-rule instruction. Do not install this intermediate source as finalized policy.
+
+Completed successor consolidations: R0943→R0110, R0950→R1621, R1513/R0090→R0166, R1480→R1479 and R0954/R1002→R1162. Preserve archived text and historical retirement chains. R0166 intentionally changes root instructions; selectors and Human notes have the specific approved changes recorded in rulings 45–81. Hook implementations and enforcement bindings remain preserved.
+
+Remaining writing work is deferred under #362, beginning with undecided R1168 if the human chooses to resume it. The untouched prose/voice group and remaining definition audit are still outstanding; this checkpoint does not declare the corpus audit complete. R0073 stays unchanged, with reconsideration tracked in risk-tier project #430 alongside review-policy work #427. Keep Jev #431, SLO/Top K #428 and tracker portability #425 separate.
+
+## Historical 44-ruling checkpoint
+
 Checkpoint baseline: `2be5327e9704b0066eed7e8ef44302aa55179b18` (merged PR #429).
 Branch/worktree: `intake/remaining-role-pruning`, `/private/tmp/fiducial-remaining-role-pruning`.
 
@@ -23,7 +37,7 @@ Independent review caught a shortening error in R0264: requiring each row to add
 
 Installed harness files and the main checkout remain unchanged. Before any adoption, follow the adopt skill against the finalized source pin, obtain its required independent inventory review, apply only authorized changes, and read back exact results. Local generation tests do not establish live harness loading, adherence or hook execution.
 
-## Next work
+## Historical next work at ruling 44
 
 Begin with R0090, the shared spec-edit ownership rule. No disposition for it has been proposed or approved in this pass. Continue shared software/workflow rows from the inventory before the writing roles. Remaining inventory groups are 58 shared rows, 72 writing-role-only rows and 37 definitions; these counts describe coverage, not recommended deletions.
 

@@ -23,6 +23,7 @@ from tests.helpers import REPO_ROOT
 from tests.test_skill_context_extraction import inputs
 
 BASELINE = "2be5327e9704b0066eed7e8ef44302aa55179b18"
+CHECKPOINT = "8fd292d81bb215a63897380a33e2bc6037eb132b"
 SUCCESSORS = {"R0943": "R0110", "R0950": "R1621"}
 PENDING = set("R0940 R0499 R0284 R1091 R1485".split())
 REVISED = set("""R0091 R0264 R0481 R0485 R0500 R0809 R0863 R1031 R1044 R1056
@@ -53,7 +54,15 @@ class TestRemainingRolePruning(unittest.TestCase):
         with tarfile.open(fileobj=io.BytesIO(archive)) as stream:
             stream.extractall(cls.baseline, filter="data")
         cls.old = inputs(cls.baseline)
-        cls.current = inputs(REPO_ROOT)
+        # Preserve the exact 44-ruling checkpoint; later approved changes
+        # are covered by the continuation contracts, not prohibited here.
+        checkpoint = cls.baseline / "checkpoint"
+        checkpoint.mkdir()
+        archive = subprocess.run(["git", "archive", CHECKPOINT, "rules", "process", "bin/hooks"],
+                                 cwd=REPO_ROOT, check=True, capture_output=True).stdout
+        with tarfile.open(fileobj=io.BytesIO(archive)) as stream:
+            stream.extractall(checkpoint, filter="data")
+        cls.current = inputs(checkpoint)
         cls.preview = checkpoint_preview(cls.current)
         cls.old_rows = {r.id: r for r in cls.old.rows if r.kind == "rule"}
         cls.rows = {r.id: r for r in cls.current.rows if r.kind == "rule"}

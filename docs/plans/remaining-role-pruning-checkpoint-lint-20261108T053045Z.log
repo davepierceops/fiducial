@@ -1,0 +1,11 @@
+baseline: checked 269 live rules; 4 findings
+rules/R0067.md: topic: 'human-review-boundary' is a value no other row holds
+rules/R0527.md: verb: 'escalate' is a value no other row holds
+rules/R0564.md: topic: 'commit-control' is a value no other row holds
+rules/R0720.md: topic: 'remote-write-verification-policy' is a value no other row holds
+current: checked 262 live rules; 4 findings
+rules/R0067.md: topic: 'human-review-boundary' is a value no other row holds
+rules/R0527.md: verb: 'escalate' is a value no other row holds
+rules/R0564.md: topic: 'commit-control' is a value no other row holds
+rules/R0720.md: topic: 'remote-write-verification-policy' is a value no other row holds
+No new source-lint findings; all four reproduce on baseline2be5327.

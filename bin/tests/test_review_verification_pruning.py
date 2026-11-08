@@ -135,8 +135,12 @@ class TestReviewVerificationPruning(unittest.TestCase):
                 self.assertNotIn(self.old_rows[row_id].body, text, (path, row_id))
         for h, emission in self.native.items():
             root = "CLAUDE.md" if h == "claude-code" else "AGENTS.md"
-            self.assertEqual(emission.files[root], self.old_native[h].files[root].replace(
-                ROOT_ANCHOR_OLD, ROOT_ANCHOR_NEW, 1), h)
+            expected = self.old_native[h].files[root].replace(ROOT_ANCHOR_OLD, ROOT_ANCHOR_NEW, 1)
+            # Ruling45 of the later role pass consolidates R1513 into R0166;
+            # all other root text and retained definitions must stay exact.
+            expected = expected.replace(self.old_rows["R0166"].body, self.rows["R0166"].body)
+            expected = expected.replace(self.old_rows["R1513"].body + "\n\n", "")
+            self.assertEqual(emission.files[root], expected, h)
             for row_id in ("R1626", "R1627"):
                 self.assertIn(self.rows[row_id].body, emission.files[root])
 
