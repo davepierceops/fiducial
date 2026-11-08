@@ -24,7 +24,7 @@ Independent finalization/adoption review: `reviews/remaining-role-pruning-finali
 
 The final output retains the measured 23.1%/22.9% native-agent word reduction and all 12 standalone-bundle reductions. Final source contains 254 live rows versus 269 at baseline. All four source-lint findings reproduce identically on baseline; retained log: `docs/plans/remaining-role-pruning-final-lint-20261108T054145Z.log`.
 
-Same-source repeat preparation reports zero writes/conflicts. Independent repeat/readback review `reviews/remaining-role-pruning-repeat-readback-read-20261108T054843Z.md` is ready; no-change repeat apply returned `[]`, preserved report hashes and created no report. Final evidence amendment receives its independent read before merge.
+Same-source repeat preparation reports zero writes/conflicts. Independent repeat/readback review `reviews/remaining-role-pruning-repeat-readback-read-20261108T054843Z.md` is ready; no-change repeat apply returned `[]`, preserved report hashes and created no report. Final evidence amendment `reviews/remaining-role-pruning-final-evidence-read-20261108T055033Z.md` is ready in all three passes at reviewed commit `826b7e856fd1803db0bc5f56ac9c4555bd0580bf`; its appendix retains the exact adoption report. No unresolved findings remain.
 
 ## Verification boundary status and updates
 
