@@ -47,7 +47,7 @@ The initial 331-test run exposed five obsolete historical assumptions: old check
 
 Source lint checked all 262 current live rows against the 269-row baseline. Four existing findings reproduce identically in both: singleton topic values in R0067, R0564 and R0720, and singleton `escalate` verb in R0527. There are **no new lint findings**, not a clean lint result. The baseline comparison is retained in `docs/plans/remaining-role-pruning-checkpoint-lint-20261108T053045Z.log` and independently reproduced. `git diff --check` passed.
 
-The independent source and test amendment reads found no new issues, reproduced every generated-output metric/hash/mode, and verified standalone audiences and preserved hooks. The final independent review artifact is recorded alongside this evidence.
+The independent source and test amendment reads found no new issues, reproduced every generated-output metric/hash/mode, and verified standalone audiences and preserved hooks. Independent review: `reviews/remaining-role-pruning-wrapup-read-20261108T053718Z.md`, reviewed commit `f424b8a7b33a11a25f28fa930f444e0d18a61718`; overall and all three passes are ready, with no new findings.
 
 ## Limits and next work
 
