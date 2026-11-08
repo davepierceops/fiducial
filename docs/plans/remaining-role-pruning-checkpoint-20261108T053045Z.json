@@ -1,0 +1,422 @@
+{
+  "baseline": "2be5327e9704b0066eed7e8ef44302aa55179b18",
+  "source_head": "111594c574aeca9fb92f0009848aa41cc886fa07",
+  "previous_checkpoint": "8fd292d81bb215a63897380a33e2bc6037eb132b",
+  "rulings": "docs/plans/remaining-role-pruning-inventory-20261107T001928Z.md",
+  "ruling_count": 81,
+  "reviewed_rows": [
+    "R0070",
+    "R0073",
+    "R0090",
+    "R0091",
+    "R0106",
+    "R0158",
+    "R0159",
+    "R0166",
+    "R0199",
+    "R0259",
+    "R0264",
+    "R0266",
+    "R0284",
+    "R0472",
+    "R0478",
+    "R0481",
+    "R0485",
+    "R0486",
+    "R0499",
+    "R0500",
+    "R0501b",
+    "R0502",
+    "R0503",
+    "R0527",
+    "R0583",
+    "R0592",
+    "R0720",
+    "R0800",
+    "R0807",
+    "R0809",
+    "R0862b",
+    "R0863",
+    "R0876",
+    "R0934",
+    "R0939",
+    "R0940",
+    "R0941",
+    "R0942",
+    "R0943",
+    "R0944",
+    "R0950",
+    "R0954",
+    "R1002",
+    "R1031",
+    "R1032",
+    "R1044",
+    "R1056",
+    "R1088",
+    "R1090",
+    "R1091",
+    "R1107",
+    "R1116",
+    "R1122",
+    "R1133",
+    "R1141",
+    "R1143",
+    "R1151",
+    "R1155",
+    "R1156",
+    "R1162",
+    "R1163",
+    "R1164",
+    "R1165",
+    "R1167",
+    "R1237",
+    "R1241",
+    "R1244",
+    "R1249",
+    "R1270",
+    "R1408",
+    "R1448",
+    "R1473",
+    "R1478",
+    "R1479",
+    "R1480",
+    "R1485",
+    "R1489",
+    "R1513",
+    "R1573",
+    "R1603",
+    "R1605",
+    "R1618",
+    "R1619",
+    "R1620",
+    "R1621",
+    "R1622"
+  ],
+  "rewritten": [
+    "R0070",
+    "R0091",
+    "R0106",
+    "R0166",
+    "R0199",
+    "R0259",
+    "R0264",
+    "R0472",
+    "R0481",
+    "R0485",
+    "R0500",
+    "R0527",
+    "R0583",
+    "R0592",
+    "R0809",
+    "R0863",
+    "R0939",
+    "R1031",
+    "R1044",
+    "R1056",
+    "R1088",
+    "R1090",
+    "R1107",
+    "R1116",
+    "R1122",
+    "R1133",
+    "R1143",
+    "R1155",
+    "R1156",
+    "R1162",
+    "R1163",
+    "R1164",
+    "R1165",
+    "R1241",
+    "R1244",
+    "R1270",
+    "R1408",
+    "R1448",
+    "R1473",
+    "R1478",
+    "R1479",
+    "R1605",
+    "R1620",
+    "R1621",
+    "R1622"
+  ],
+  "successors": {
+    "R0943": "R0110",
+    "R0950": "R1621",
+    "R1513": "R0166",
+    "R0090": "R0166",
+    "R1480": "R1479",
+    "R0954": "R1162",
+    "R1002": "R1162"
+  },
+  "pending_retirement_without_replacement": [
+    "R0940",
+    "R0499",
+    "R0284",
+    "R1091",
+    "R1485",
+    "R1249",
+    "R0159",
+    "R0800"
+  ],
+  "retirement_decision": null,
+  "kept": [
+    "R0073",
+    "R0158",
+    "R0266",
+    "R0478",
+    "R0486",
+    "R0501b",
+    "R0502",
+    "R0503",
+    "R0720",
+    "R0807",
+    "R0862b",
+    "R0876",
+    "R0934",
+    "R0941",
+    "R0942",
+    "R0944",
+    "R1032",
+    "R1141",
+    "R1151",
+    "R1167",
+    "R1489",
+    "R1573",
+    "R1603",
+    "R1618",
+    "R1619"
+  ],
+  "metadata_changed": {
+    "R0199": {
+      "condition": {
+        "before": [
+          "concurrent mutation of a subagent's working tree"
+        ],
+        "after": [
+          "recovery could discard work or disrupt an active operation"
+        ]
+      },
+      "verb": {
+        "before": [
+          "stop"
+        ],
+        "after": [
+          "require"
+        ]
+      }
+    },
+    "R1162": {
+      "role": {
+        "before": [
+          "writer"
+        ],
+        "after": [
+          "writer",
+          "copy-editor",
+          "critic"
+        ]
+      },
+      "topic": {
+        "before": [
+          "writer"
+        ],
+        "after": [
+          "core"
+        ]
+      }
+    },
+    "R1237": {
+      "role": {
+        "before": [
+          "chief-of-staff",
+          "writer",
+          "copy-editor",
+          "critic"
+        ],
+        "after": [
+          "chief-of-staff",
+          "writer"
+        ]
+      }
+    },
+    "R1241": {
+      "role": {
+        "before": [
+          "chief-of-staff",
+          "writer",
+          "copy-editor",
+          "critic"
+        ],
+        "after": [
+          "chief-of-staff",
+          "writer"
+        ]
+      }
+    },
+    "R1244": {
+      "role": {
+        "before": [
+          "chief-of-staff",
+          "writer",
+          "copy-editor",
+          "critic"
+        ],
+        "after": [
+          "chief-of-staff",
+          "writer"
+        ]
+      },
+      "verb": {
+        "before": [
+          "forbid"
+        ],
+        "after": [
+          "require"
+        ]
+      }
+    },
+    "R1249": {
+      "role": {
+        "before": [
+          "chief-of-staff",
+          "writer",
+          "copy-editor",
+          "critic"
+        ],
+        "after": [
+          "chief-of-staff",
+          "writer"
+        ]
+      }
+    },
+    "R1270": {
+      "role": {
+        "before": [
+          "chief-of-staff",
+          "writer",
+          "copy-editor",
+          "critic"
+        ],
+        "after": [
+          "chief-of-staff",
+          "writer"
+        ]
+      }
+    },
+    "R1478": {
+      "role": {
+        "before": [
+          "architect-agent",
+          "test-designer-agent"
+        ],
+        "after": [
+          "architect-agent",
+          "context-quality-reviewer",
+          "reviewer-agent",
+          "skeptic-risk-agent",
+          "spec-reviewer-agent",
+          "test-designer-agent"
+        ]
+      },
+      "condition": {
+        "before": [
+          "you are one of the two subagents working on an open spec branch"
+        ],
+        "after": [
+          "editing artifacts assigned to your role"
+        ]
+      },
+      "verb": {
+        "before": [
+          "forbid"
+        ],
+        "after": [
+          "require"
+        ]
+      }
+    }
+  },
+  "human_notes_changed": {
+    "R0091": {
+      "before": "The block is the hook in the architect agent's own frontmatter, scoped to that agent. The hook matches the tool call, not intent: it refuses a write outside `specs/` and `SPEC.md`, and nothing else; the finding is the generator's sentence in the agent definition (DEC-001240).",
+      "after": "The block is the hook in the architect agent's own frontmatter, scoped to that agent. The hook matches the tool call, not intent: it refuses a write outside `specs/` and `SPEC.md`, and nothing else. R1478 supplies the shared editing and finding instruction; the hook originates in DEC-001240."
+    },
+    "R1156": {
+      "before": "The block is the hook in the test-designer agent's own frontmatter, scoped to that agent. The hook matches the tool call, not intent: it refuses a write outside the test tree, and nothing else; the finding is the generator's sentence in the agent definition (DEC-001240).",
+      "after": "The block is the hook in the test-designer agent's own frontmatter, scoped to that agent. The hook matches the tool call, not intent: it refuses a write outside the test tree, and nothing else. R1478 supplies the shared editing and finding instruction; the hook originates in DEC-001240."
+    },
+    "R1622": {
+      "before": "Ruled 2026-11-04 for package 4 (DEC-001530). The block is the hook in each reviewer's own agent frontmatter, scoped to that agent. The hook matches the tool call, not intent: it refuses a write outside `reviews/`, and nothing else; the finding sentence is emitted into the agent definition, as in DEC-001240.",
+      "after": "Ruled 2026-11-04 for package 4 (DEC-001530). The block is the hook in each reviewer's own agent frontmatter, scoped to that agent. The hook matches the tool call, not intent: it refuses a write outside `reviews/`, and nothing else. R1478 supplies the shared editing and finding instruction; the hook follows DEC-001240."
+    }
+  },
+  "process_changed": [
+    "build",
+    "intake",
+    "retro",
+    "spec-template"
+  ],
+  "expected_process_bodies": {
+    "build": "# Process: Build\n\nTake a unit of work from the spec read through implementation, review, and\nrelease.\nUse `process/change-flow.md` for the delta's close and\n`process/review-artifact.md` for its review record.\n\nInvoke the verification-checklists skill for applicable verification work, and\npass that invocation explicitly to the relevant subagents; apply its role-specific\nsections.\n\nFollow this sequence for each meaningful change [R0465] in software decision\nand execution sessions, using subagents for the work and the human for\nrequired approvals.\n\n1. **Spec read.** Start from an approved `SPEC.md` [R0166]; select the unit\n   and derive its acceptance criteria from the spec [R0472].\n2. **Plan.** Enter plan mode from that read, then take the plan through review\n   [R0462] before dispatching its work.\n3. **Tests.** A test-designer subagent writes the unit\u2019s tests and confirms\n   they fail on bad logic [R0478]. Pass its tests\n   and evidence to a different coder subagent for implementation; the agent\n   that wrote the tests does not implement the unit.\n4. **Implementation.** The coder works from the spec, plan, and test evidence\n   to turn the tests green [R0485]. Collect its implementation summary and\n   mechanical results for the review.\n5. **Review.** Send the diff and evidence to Reviewer and Skeptic/Risk\n   subagents [R0462], using quality [R1048], skepticism [R1058, R0492],\n   and the applicable continuity read [R1104, R1105]. Record each pass\u2019s\n   verdict under one overall verdict [R1414]; record a planned pass that did\n   not run and why [R1617]. Apply `process/change-flow.md`'s review dispositions.\n6. **Merge.** Each pull request receives an agent review before merge.\n7. **Release.** Assemble `process/release.md`'s change package, including its\n   release-readiness section. A routine change may release on its evidence under standing\n   authorization [R0535]. For a consequential change, use the gate skill for\n   its `human-gate` issue and the human\u2019s explicit go before release [R0534,\n   R0535]. Completion is governed by the definition of done [R0509].\n\nProvenance: DEC-001300, DEC-001390; R0486; R1611, R0065, R0492, R1617 and the retained judgment cited above.",
+    "intake": "# Process: Intake\n\nCarry a proposed change to governed context from proposal through review and\nlanding.\nThe judgment governing the proposal and its ruling is [R0166, R0462]; the\nintake rubric is [R0264, R0266, R0284, R1621].\n\nFor chief-of-staff and coder-agent in software and writing decision and execution sessions, when creating or changing a vendor-specific artifact:\n\nA durable rule lives in the store, never only in vendor tooling. An adapter is derived from it: update the store first, keep the adapter short, note every deliberate deviation.\n\nThe intake steps below apply to chief-of-staff and context-quality-reviewer in software and writing decision and execution sessions.\n\n1. **Proposal.** Collect the proposed wording or diff, its reason and evidence,\n   and the affected rows or process documents.\n2. **Candidate.** Create an `intake/<proposal-slug>` branch and apply the\n   candidate change there. This is the branch observable used by R0934's\n   governed-path hook.\n3. **Review.** Give the candidate diff and proposal to a Context Quality\n   Reviewer subagent, using the rubric cited above and the separation in\n   [R0462]. For a process delta, use the process read and sign-off path\n   [R1270]. The reviewer writes the artifact in\n   `process/review-artifact.md`'s form.\n4. **Disposition.** Bring the proposal and artifact to the human for any\n   outstanding ruling [R0166]. Apply the review dispositions in\n   `process/change-flow.md`. Record each intake in its review\n   artifact: the changes it lands, or the candidates refused and\n   the rows against which they were refused.\n5. **Landing.** Commit the approved change and its intake artifact on the\n   intake branch, push plainly, and open the pull request. At merge, the\n   decision session appends the ruling by `process/decision-log.md`; report\n   the landed changes or refusal with the read-back evidence [R0172].\n\nProvenance: DEC-001300, DEC-001320; R0944, R0934; retained judgment cited above.",
+    "retro": "# Process: Retro\n\nRun a retro when the human asks for one.\n\nA retro is `retro-<timestamp>.md`, a synthesis `retro-synthesis-<timestamp>.md`,\nthe timestamp taken at generation time as `<YYYYMMDD>T<HHMMSS>Z`. Match a filename\nagainst those two forms only to tell one from the other; the frontmatter is a\nretro's canonical identity. Retros live in the project's own repo at `retros/`.\nIts inputs are R1244's; its outputs land by the last step below.\n\nA project synthesis runs over one project's `retros/` directory and writes into\nit under the synthesis filename form, overwriting no source retro; its header\ncarries a `covers:` list naming every retro it read. The next synthesis computes\nits input set by comparing earlier syntheses' `covers:` lists against that\ndirectory's files matching the retro filename form, and states the count it read.\nA cross-project synthesis concatenates the relevant `retros/` directories.\n\n## The schema\n\n~~~markdown\n---\nproject: <project slug>\ndate: <YYYY-MM-DD; the session's last interaction>\ngenerated: <YYYYMMDDTHHMMSSZ; when this retro was written>\nsource: <conversation pointer: title, URL, or export filename; null if none>\n---\n\n# Retro \u2014 <project> \u2014 <date>\n\n## Context\n<one paragraph: what the conversation was about, what was attempted>\n\n## Evidence\n<numbered, concrete observations of what happened; quotes or close\nparaphrases of pivotal moments; no interpretation here; a correction the\nhuman made inside the session belongs here>\n\n## Interpretation\n<what the evidence suggests; each item references the evidence numbers\nit rests on>\n\n## Recurring preferences\n<preferences the human stated in this and earlier sessions, with evidence\nof where they were expressed; empty-with-a-statement if none>\n\n## Durable insights\n<techniques, workflow changes, belief changes that transfer beyond this\nsession; empty-with-a-statement if none>\n\n## Questions for follow-up\n<problems worth investigating, with supporting evidence and unresolved\nquestions; empty-with-a-statement if none>\n~~~\n\n`date:` is the session's last interaction, taken from the last dated artifact the\nsession touched as recorded in the local tree \u2014 a merge commit, a commit, a\nreview artifact. Where the session touched none, take it from the `source:`\npointer; where `source:` is null too, `generated:` stands in and the retro states\nthe substitution. Where the two disagree, both are correct and both are stated.\n\n## Landing\n\nThe retro lands itself, and a synthesis lands the same way (DEC-001260). The\nlast step commits `retros/retro-<timestamp>.md` on a branch, pushes, opens the\npull request, merges it as a routine change, and reads main back: the\nmerge commit's SHA, fetched, is the evidence the retro landed [R0172].",
+    "spec-template": "# Process: Spec Template\n\nThe form of `SPEC.md`, one per project: what is being built, why, how, and\nwhen it is done. The Chief of Staff drafts it with the human by interview; the\nArchitect drafts its design section; a Spec Reviewer reads it before the human\napproves it, and it is in force only from that approval [R0166]. A unit's\nacceptance criteria derive from it [R0472]. Keep each section short.\n\n1. **Problem and intent** \u2014 the problem, who has it, and why it is worth building\n   now.\n2. **Users and use cases** \u2014 who uses this and the concrete situations in which\n   they do.\n3. **User journeys** \u2014 the Top K journeys, each with its actor, its trigger, the\n   sequence of actions and system responses, and the expected outcome.\n4. **Goals and non-goals** \u2014 functional goals as concrete outcomes rather than\n   feature lists; non-functional goals for each dimension \u2014 performance,\n   reliability, scalability, security, maintainability, usability,\n   observability, portability and compatibility, compliance \u2014 or `N/A` where the\n   dimension is not a constraint; then the non-goals. An exclusion specific to\n   one non-functional dimension is a note inside that dimension, not a non-goal.\n5. **User outcomes and measurement** \u2014 the signals, quantitative or qualitative,\n   confirming the change produced real user value: the metric or signal, the\n   baseline where known, and the mechanism observing it \u2014 telemetry, user\n   feedback, manual review. The definition of done gates correctness; this does\n   not.\n6. **Definition of done** \u2014 the acceptance criteria: the written conditions the\n   work must meet to be accepted, concrete enough to derive test cases from.\n   They may live here or in the unit's own artifact, and derive from this\n   document either way.\n7. **Design** \u2014 what the Architect's design obligations require [R0863]: the\n   system's structure and the implementation approach; its components and the\n   interfaces between them; its external dependencies; the failure modes it is\n   likely to have; the NFR dimensions of section 4 as concrete technical\n   targets, or `N/A`; and its deployment assumptions, including whether deploy\n   and release are separate events. Two subsections are standing:\n   - **User journeys and SLOs** \u2014 for each Top K journey of section 3, the SLO,\n     the measurement mechanism, and the alerting threshold; a journey with no\n     SLO is named unverified and recorded as an open question.\n   - **Verification boundaries** \u2014 for each material standing boundary where\n     the system meets what it does not control, and for each per-change\n     boundary movement made permanent: the production surface; how it is\n     represented \u2014 live, contract, mock, or assumed; its evidence class; the\n     deferred-verification path, if any.\n   Per-change technical design lives in the per-change architecture summary\n   [R0862b], not here.\n8. **Risk tolerance** \u2014 what risk is acceptable for this product and what is not;\n   it feeds the release gate and the consequential-change classification.\n9. **Open questions** \u2014 product and technical, each naming what would resolve it.\n\n## Skeleton\n\n~~~markdown\n---\naudience: [human]\n---\n\n# SPEC: <project name>\n\n## 1. Problem and intent\n## 2. Users and use cases\n## 3. User journeys\n## 4. Goals and non-goals\n### Functional goals\n### Non-functional goals\n### Non-goals\n## 5. User outcomes and measurement\n## 6. Definition of done\n## 7. Design\n### User journeys and SLOs\n### Verification boundaries\n## 8. Risk tolerance\n## 9. Open questions\n~~~"
+  },
+  "preview_process_replacements": {
+    "intake": {
+      "before": "[R0264, R0266, R0284, R1621]",
+      "after": "[R0264, R0266, R1621]"
+    }
+  },
+  "expected_bodies": {
+    "R0070": "For a production-grade change, explicitly select and assess relevant attributes: correctness, usability, performance, accessibility, security, privacy, reliability, SLO compliance and error budget health, operability, observability, recoverability, maintainability, cost and quota exposure, dependency risk, and failure modes.",
+    "R0091": "```yaml\nscope: agent\nevent: PreToolUse\nmatcher: Edit|Write\ncommand: bin/hooks/lane-guard --lane specs\n```",
+    "R0106": "When writing an entity\u2019s primary fields, maintain its computed fields consistently with other write paths. List and check each computed field before declaring the change complete.",
+    "R0166": "Follow the human-approved requirements and applicable test plan. For work governed by `SPEC.md`, record its approval in the decision log against the reviewed commit. Use existing guidance for routine implementation decisions; bring unresolved requirements, material review disagreements, and product or risk tradeoffs to the human. The human sets priorities and authorizes publication.",
+    "R0199": "Preserve changes made by others. Before recovery that could discard work or disrupt an active operation, establish what changed and coordinate with the affected participants.",
+    "R0259": "Use frontier for canonical text, review gates, and costly errors that are hard to detect; solid for spec-based implementation and routine review; cheap for mechanical, verifiable work.\n\n```yaml\nfield: model\n```",
+    "R0264": "At intake, require every proposed row to:\n\n- Stand alone within its bundle for an agent unfamiliar with the repository.\n- Add something absent from its existing bundles.\n- Agree with existing rules; flag conflicts for human resolution.\n- State an obligation or define a needed term, rather than describe.\n- State one trigger in its body.\n- Add something beyond positive rules when phrased negatively.\n- Ground any ban in an incident.\n- Leave document forms to process documents.\n- Express merged rules concisely rather than concatenate them.\n- Leave term definitions to the Lexicon.\n- Leave mechanically enforced requirements to tools.\n- Combine checks triggered together; separate independently triggered checks.\n\nApply every criterion to every proposal. Pass qualifying rows; recommend retirement of others for human decision.",
+    "R0472": "Before work starts, document human-owned acceptance criteria derived from the spec. The Spec Reviewer\u2019s gate applies only to specs.",
+    "R0481": "To close a spec branch, present the reviewed diff for one human ruling approving the spec and accepting its tests as red-gate evidence. Record that ruling and the reviewed SHA in the decision log.",
+    "R0485": "Write the minimum code needed to pass the tests and mechanical checks.",
+    "R0500": "When introducing a feature flag, assign an owner and a removal trigger.",
+    "R0527": "Request human code inspection for security-sensitive changes, systems handling private data, high release risk, agent disagreement, weak evidence, surprising behavior, core architecture changes, or hard-to-reverse production impact.",
+    "R0583": "Keep `decisions/log.md` append-only.\n\n```yaml\nevent: PreToolUse\nmatcher: Edit|Write\ncommand: bin/hooks/decision-log-append-only\n```",
+    "R0592": "To change or reverse a recorded decision, append an entry whose `Supersedes:` names the old decision\u2019s ID.",
+    "R0809": "Before release, record each material verification boundary as verified by an appropriate mechanism, deferred with a named path, accepted as a known risk by the human, or not material to release.",
+    "R0863": "When drafting or updating the spec\u2019s design section, propose the structure and implementation approach; identify components, interfaces, external dependencies, boundaries, and likely failure modes. Translate the spec\u2019s NFR dimensions into concrete technical targets. For each Top K user journey in the spec, define an SLO, measurement mechanism, and alerting threshold. Assess coupling, hidden dependencies, vendor lock-in, deployment assumptions, operational complexity, and maintainability.",
+    "R0939": "Implement changes.\n\n```yaml\nfield: description\n```",
+    "R1031": "Produce a ship/no-ship recommendation from the assembled release evidence. The human makes the release decision.\n\n```yaml\nfield: description\n```",
+    "R1044": "Where a required release-readiness field has no source, mark it missing and carry it as a known gap.\n\n```yaml\nskill: release\n```",
+    "R1056": "Review implementation quality and consistency; leave spec-document review to the Spec Reviewer.\n\n```yaml\nfield: description\n```",
+    "R1088": "Judge a gap\u2019s severity against the change\u2019s declared verification boundary.",
+    "R1090": "Flag manual checks substituted for automation specified in the spec or test plan, and monitoring that falls short of verification-boundary requirements.",
+    "R1107": "During the entry read, check that required sections are substantively complete and internally consistent; claims trace to parent artifacts or are marked as open questions; and the design addresses the goals\u2019 NFR dimensions and traces its journeys to Top K journeys. Confirm SLOs are defined per journey or marked unverified, confidence is supported, assumed behavior is labeled, and open questions specify how to resolve them. Flag matters requiring human judgment before approval.",
+    "R1116": "During the spec\u2019s entry read, confirm concrete functional outcomes, testable acceptance criteria, and explicit risk tolerance. Check that every NFR dimension is addressed or marked N/A, and user outcomes identify their measurement signal, observation mechanism, and baseline where known.",
+    "R1122": "In the design-section entry read, confirm responsibilities and interfaces for every component, boundaries and evidence classes for every external dependency, system-level failure modes and recovery, and explicit technical non-goals.",
+    "R1133": "In a continuity scan, report only inconsistencies and contradictions for human resolution. Include obvious fixes as clearly labeled proposals.",
+    "R1143": "Design tests from the acceptance criteria and spec\u2019s testable claims. Choose appropriate test levels; identify mocked dependencies, required live/browser checks, and SLO verification for each affected Top K user journey; specify failure cases.",
+    "R1155": "Report a spec finding when an unstated contract or untestable claim prevents deriving a test.",
+    "R1156": "```yaml\nscope: agent\nevent: PreToolUse\nmatcher: Edit|Write\ncommand: bin/hooks/lane-guard --lane tests\n```",
+    "R1162": "Read each named governing document before applying it; ask the author for any missing from context.",
+    "R1163": "Draft what the author requests from an approved outline where one exists, or from the conversation otherwise.",
+    "R1164": "Use the outline skill when the author requests an outline.",
+    "R1165": "Keep drafts in the working document and discussion in chat.",
+    "R1241": "Capture new or materially changed techniques, workflows, beliefs, and engineering practices that transfer beyond the session. Omit nontransferable implementation details and repeated methodology. State when there are no qualifying insights.",
+    "R1244": "Base a retro on the conversation it covers and relevant project evidence.",
+    "R1270": "Submit methodology changes proposed by a retro or synthesis as findings: rule changes go through intake; process changes require a frontier review and human sign-off.",
+    "R1408": "Apply a new review schema only to artifacts written after it lands.\n\n```yaml\nevent: PreToolUse\nmatcher: Edit|Write\ncommand: bin/hooks/review-artifact-immutable\n# refuses writes to reviews/ files on origin/main or main; unlanded branch drafts pass\n# with neither default-branch ref present, falls back to tracked-at-HEAD protection\n```",
+    "R1448": "When a review lists instances of a defect class, rule once on the class first, then apply that ruling to each instance.",
+    "R1473": "Keep the spec and tests provisional while developing them together. Finalize them only when every testable spec claim has a test asserting it and every test asserts something the spec states.",
+    "R1478": "Edit only the artifacts assigned to your role. Report needed changes elsewhere as findings.",
+    "R1479": "Check spec edits against the tests and test edits against the spec. Correct disposition errors found by that check, and report deviations.",
+    "R1605": "Cite a row by its ID in square brackets only if it covers every role, session, and corpus of the citing row.\n\n```yaml\nevent: PostToolUse\nmatcher: Edit|Write\ncommand: bin/hooks/store-lint --check citations\n# store-lint also carries R0264's four criteria (DEC-001380): a row refers to no\n# file by path; every key value is one the key already holds; the row names the\n# session kind it binds; it speaks in tiers, never model names.\n```",
+    "R1620": "Review the evidence chain for false confidence and material risk.\n\n```yaml\nfield: description\n```",
+    "R1621": "Review governed instructions for clarity, consistency, completeness, and safety as LLM context.\n\n```yaml\nfield: description\n```",
+    "R1622": "```yaml\nscope: agent\nevent: PreToolUse\nmatcher: Edit|Write\ncommand: bin/hooks/lane-guard --lane reviews\n```"
+  },
+  "pending_archive_originals": {
+    "R1249": "Use the current source with the audience narrowing approved in ruling62; its body remains original."
+  },
+  "note": "Checkpoint through ruling81 only; no merge, installed context update, or retirement DEC allocated. Preview filters eight pending retirements and removes the R0284 citation. Root R0166 intentionally changes under ruling45. Baseline and all emissions use identical provenance metadata for content-only comparison."
+}

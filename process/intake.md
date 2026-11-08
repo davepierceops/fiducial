@@ -11,7 +11,7 @@ corpus: [software, writing]
 Carry a proposed change to governed context from proposal through review and
 landing.
 The judgment governing the proposal and its ruling is [R0166, R0462]; the
-intake rubric is [R0264, R0266, R0284, R0950].
+intake rubric is [R0264, R0266, R1621].
 
 For chief-of-staff and coder-agent in software and writing decision and execution sessions, when creating or changing a vendor-specific artifact:
 

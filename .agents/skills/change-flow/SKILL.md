@@ -58,17 +58,13 @@ Propose a deep read at milestone moments — a major version cut, a significant 
 
 ## Rules
 
-Before a unit's work starts, its acceptance criteria are written, derived from the spec and owned by the human; the Spec Reviewer's gate reaches specs and nothing else.
+Before work starts, document human-owned acceptance criteria derived from the spec. The Spec Reviewer’s gate applies only to specs.
 
-At a spec branch's close, put the reviewed diff to the human: one ruling by the human approves the spec and accepts the tests as its red-gate evidence, recorded in the decision log naming the reviewed SHA; nothing else closes it.
+To close a spec branch, present the reviewed diff for one human ruling approving the spec and accepting its tests as red-gate evidence. Record that ruling and the reviewed SHA in the decision log.
 
 Run quality and skepticism as separate passes, each with its own verdict.
 
-When a spec document needs an edit, propose it rather than making it. The licence to edit a spec freely while its branch is open is the owner's alone.
-
-Treat neither the spec nor its tests as final until they cohere: every testable claim the spec makes has a test asserting it, and every test asserts something the spec states.
-
-Give the human the pull request's whole diff, tests included, to read before she rules on it.
+Keep the spec and tests provisional while developing them together. Finalize them only when every testable spec claim has a test asserting it and every test asserts something the spec states.
 
 Bring the spec into line with what was actually built before closing an open spec delta.
 

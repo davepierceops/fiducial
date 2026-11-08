@@ -1,0 +1,26 @@
+{
+  "baseline": "2be5327e9704b0066eed7e8ef44302aa55179b18",
+  "checkpoint": "4157ddd3e1b50ff3b28c31f387e5e9e96793a3a9",
+  "decision": "DEC-001720",
+  "retired_without_replacement": [
+    "R0940",
+    "R0499",
+    "R0284",
+    "R1091",
+    "R1485",
+    "R1249",
+    "R0159",
+    "R0800"
+  ],
+  "successors": {
+    "R0943": "R0110",
+    "R0950": "R1621",
+    "R1513": "R0166",
+    "R0090": "R0166",
+    "R1480": "R1479",
+    "R0954": "R1162",
+    "R1002": "R1162"
+  },
+  "expected_output": "Equivalent to the reviewed 81-ruling eight-removal preview under identical provenance.",
+  "deferred": "R1168 and further writing-role/prose/voice work; remaining definition audit."
+}

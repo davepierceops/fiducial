@@ -21,7 +21,7 @@ Follow this sequence for each meaningful change [R0465] in software decision
 and execution sessions, using subagents for the work and the human for
 required approvals.
 
-1. **Spec read.** Start from an approved `SPEC.md` [R1513]; select the unit
+1. **Spec read.** Start from an approved `SPEC.md` [R0166]; select the unit
    and derive its acceptance criteria from the spec [R0472].
 2. **Plan.** Enter plan mode from that read, then take the plan through review
    [R0462] before dispatching its work.

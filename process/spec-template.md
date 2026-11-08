@@ -11,7 +11,7 @@ corpus: [software]
 The form of `SPEC.md`, one per project: what is being built, why, how, and
 when it is done. The Chief of Staff drafts it with the human by interview; the
 Architect drafts its design section; a Spec Reviewer reads it before the human
-approves it, and it is in force only from that approval [R1513]. A unit's
+approves it, and it is in force only from that approval [R0166]. A unit's
 acceptance criteria derive from it [R0472]. Keep each section short.
 
 1. **Problem and intent** — the problem, who has it, and why it is worth building

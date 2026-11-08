@@ -152,12 +152,17 @@ class TestClaudeRulePruning(unittest.TestCase):
                 for key in ("role", "session", "corpus", "condition"):
                     self.assertEqual(archived.keys.get(key), self.old_rows[row_id].keys.get(key))
         for successor in ("R0172", "R0110", "R0166", "R1513", "R0534"):
+            # R1513 later retires into R0166; preserve this historical union
+            # against its exact archive, with the live successor coverage
+            # checked by the continuation retirement contracts.
+            record = self.rows.get(successor) or source._row(
+                self.root / "rules/retired" / (successor + ".md"), "rule")
             originals = [successor] + [r for r, target in SUCCESSORS.items() if target == successor]
             for key in ("role", "session", "corpus"):
                 expected = set().union(*(set(self.old_rows[r].keys.get(key) or []) for r in originals))
-                self.assertEqual(set(self.rows[successor].keys.get(key) or []), expected, (successor, key))
+                self.assertEqual(set(record.keys.get(key) or []), expected, (successor, key))
         self.assertFalse(self.rows["R0534"].keys.get("condition"))
-        self.assertEqual(self.rows["R1513"].keys["verb"], ["require"])
+        self.assertEqual(source._row(self.root / "rules/retired/R1513.md", "rule").keys["verb"], ["require"])
 
     def test_moved_instructions_reach_every_original_role_corpus_session(self):
         for skill in MOVED:

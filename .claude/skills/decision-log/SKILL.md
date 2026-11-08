@@ -37,11 +37,11 @@ a number, never a decision.
 
 ## Rules
 
-Append to `decisions/log.md`; never edit or delete an entry already there.
+Keep `decisions/log.md` append-only.
 
 One decision per entry.
 
-Change or reverse a recorded decision by appending a new entry whose `Supersedes:` names the old ID, leaving the old entry in place as the historical record.
+To change or reverse a recorded decision, append an entry whose `Supersedes:` names the old decision’s ID.
 
 ### Definitions
 

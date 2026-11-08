@@ -47,18 +47,17 @@ human made inside the session belongs here>
 <what the evidence suggests; each item references the evidence numbers
 it rests on>
 
-## Standing preferences
-<preferences the human stated this session that he has stated in earlier
-sessions too, each as a candidate standing rule and each naming where it
-was stated before; empty-with-a-statement if none>
+## Recurring preferences
+<preferences the human stated in this and earlier sessions, with evidence
+of where they were expressed; empty-with-a-statement if none>
 
 ## Durable insights
 <techniques, workflow changes, belief changes that transfer beyond this
 session; empty-with-a-statement if none>
 
-## Candidate methodology changes
-<specific proposed edits to methodology documents, if any, phrased as
-findings for the delta that would carry them — not as decisions>
+## Questions for follow-up
+<problems worth investigating, with supporting evidence and unresolved
+questions; empty-with-a-statement if none>
 ~~~
 
 `date:` is the session's last interaction, taken from the last dated artifact the

@@ -23,6 +23,7 @@ from tests.helpers import REPO_ROOT
 from tests.test_skill_context_extraction import inputs
 
 BASELINE = "1df9a4ec813e5cec756665123d8a5298c7597cef"
+LANDED = "2be5327e9704b0066eed7e8ef44302aa55179b18"
 REMOVED = set("R1077 R1094 R1054 R1055 R0187 R0114 R0151 R0123 R0124 R0125 R0156 R0157".split())
 SUCCESSORS = {"R0487": "R1048", "R0488": "R1058", "R0127": "R0126", "R0128": "R0126", "R0505": "R1039"}
 REVISED = set("""R1073 R1058 R1068 R1396 R1617 R1047 R1048 R1104 R1105 R1137
@@ -53,6 +54,14 @@ class TestReviewVerificationPruning(unittest.TestCase):
         with tarfile.open(fileobj=io.BytesIO(archive)) as stream:
             stream.extractall(cls.baseline, filter="data")
         cls.old = inputs(cls.baseline)
+        landed = cls.baseline / "landed"
+        landed.mkdir()
+        archive = subprocess.run(["git", "archive", LANDED, "rules", "process", "bin/hooks"],
+                                 cwd=REPO_ROOT, check=True, capture_output=True).stdout
+        with tarfile.open(fileobj=io.BytesIO(archive)) as stream:
+            stream.extractall(landed, filter="data")
+        cls.landed_rows = {r.id: r for r in inputs(landed).rows if r.kind == "rule"}
+        cls.landed_processes = {r.id: r for r in inputs(landed).rows if r.kind == "process"}
         cls.current = inputs(REPO_ROOT)
         cls.old_rows = {r.id: r for r in cls.old.rows if r.kind == "rule"}
         cls.rows = {r.id: r for r in cls.current.rows if r.kind == "rule"}
@@ -73,13 +82,16 @@ class TestReviewVerificationPruning(unittest.TestCase):
         self.assertEqual(manifest["successors"], SUCCESSORS)
         self.assertEqual(set(manifest["rewritten"]), REVISED)
         self.assertEqual(manifest["hook_only"], ["R1414"])
-        self.assertEqual(set(self.old_rows) - set(self.rows), REMOVED | set(SUCCESSORS))
-        self.assertEqual(set(self.rows) - set(self.old_rows), set())
-        changed = {r for r in self.rows if self.rows[r].body != self.old_rows[r].body}
+        # Assert PR #429's exact approved source delta against its landed
+        # snapshot, allowing later approved pruning. The archive, output,
+        # scope, hook, and procedure guards below still inspect live sources.
+        self.assertEqual(set(self.old_rows) - set(self.landed_rows), REMOVED | set(SUCCESSORS))
+        self.assertEqual(set(self.landed_rows) - set(self.old_rows), set())
+        changed = {r for r in self.landed_rows if self.landed_rows[r].body != self.old_rows[r].body}
         self.assertEqual(changed, REVISED | {"R1414", "R0534"})
         self.assertEqual(self.rows["R0534"].body,
                          self.old_rows["R0534"].body.replace(ROOT_ANCHOR_OLD, ROOT_ANCHOR_NEW, 1))
-        for row_id, row in self.rows.items():
+        for row_id, row in self.landed_rows.items():
             old_keys = self.old_rows[row_id].keys.copy()
             if row_id == "R0126":
                 old_keys["condition"] = ["the behavior under test rests on an external assumption, involves a real external service, or is browser-only"]
@@ -104,10 +116,10 @@ class TestReviewVerificationPruning(unittest.TestCase):
         # into a writing-capable reviewer must not extend their applicability.
         self.assertIn("For software changes, review the diff", self.rows["R1048"].body)
         self.assertIn("For software changes, assess the whole evidence chain", self.rows["R1058"].body)
-        changed_processes = {r for r in self.processes
-                             if self.processes[r].body != self.old_processes[r].body}
+        changed_processes = {r for r in self.landed_processes
+                             if self.landed_processes[r].body != self.old_processes[r].body}
         self.assertEqual(changed_processes, {"build", "change-flow", "release", "review-artifact", "gate"})
-        for name, process in self.processes.items():
+        for name, process in self.landed_processes.items():
             keys = self.old_processes[name].keys.copy()
             if name == "build":
                 keys["role"] = sorted(BUILD_ROLES)
@@ -123,8 +135,12 @@ class TestReviewVerificationPruning(unittest.TestCase):
                 self.assertNotIn(self.old_rows[row_id].body, text, (path, row_id))
         for h, emission in self.native.items():
             root = "CLAUDE.md" if h == "claude-code" else "AGENTS.md"
-            self.assertEqual(emission.files[root], self.old_native[h].files[root].replace(
-                ROOT_ANCHOR_OLD, ROOT_ANCHOR_NEW, 1), h)
+            expected = self.old_native[h].files[root].replace(ROOT_ANCHOR_OLD, ROOT_ANCHOR_NEW, 1)
+            # Ruling45 of the later role pass consolidates R1513 into R0166;
+            # all other root text and retained definitions must stay exact.
+            expected = expected.replace(self.old_rows["R0166"].body, self.rows["R0166"].body)
+            expected = expected.replace(self.old_rows["R1513"].body + "\n\n", "")
+            self.assertEqual(emission.files[root], expected, h)
             for row_id in ("R1626", "R1627"):
                 self.assertIn(self.rows[row_id].body, emission.files[root])
 
