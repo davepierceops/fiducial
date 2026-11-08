@@ -1,6 +1,13 @@
 # Remaining role-pruning checkpoint and resumption
 
-## Current stopping point — 81 rulings
+## Finalization authorized; further writing work deferred
+
+Dave authorized finalization and merge of PR #432 after the 81-ruling checkpoint. DEC-001720 records that ruling. The eight no-successor retirements are now archived with valid references and R0284 is removed from the intake citation. The finalization manifest is `docs/plans/remaining-role-pruning-finalization.json`; final evidence is `docs/remaining-role-pruning-final-evidence-20261108T054145Z.md`.
+
+All approved writing edits through R1167 are included. R1168 remains undecided. Leave remaining Writer, Copy Editor, Critic and shared prose/voice work for another time; the remaining definition audit is also unfinished. #362 tracks this remaining corpus work, and #430 records R0073 reconsideration. The historical checkpoint sections below explain earlier states; their pending-retirement and merge-authorization statements no longer describe the finalized source.
+
+
+## Historical pre-merge stopping point — 81 rulings
 
 The human requested wrapping up the approved changes and deferring further Writer, Copy Editor and Critic review. Include approved writing edits through R1167 (ruling 81); R1168 remains undecided. Do not resume writing-role choices automatically or undo the already approved writing changes. All 32 non-prose/voice shared workflow rows in the original inventory have now received rulings.
 
