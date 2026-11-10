@@ -24,6 +24,9 @@ from tests.test_skill_context_extraction import inputs
 
 BASELINE = "2be5327e9704b0066eed7e8ef44302aa55179b18"
 CHECKPOINT = "4157ddd3e1b50ff3b28c31f387e5e9e96793a3a9"
+# PR #432 merge commit: the batch as it landed. Finalization compares this
+# snapshot, not the working tree, so later approved rules/process changes pass.
+LANDED = "5b2a62f3b17aca1d859a43032b9ca2295c185391"
 SUCCESSORS = {"R0943": "R0110", "R0950": "R1621", "R1513": "R0166", "R0090": "R0166",
               "R1480": "R1479", "R0954": "R1162", "R1002": "R1162"}
 PENDING = set("R0940 R0499 R0284 R1091 R1485 R1249 R0159 R0800".split())
@@ -215,7 +218,13 @@ class TestRemainingRolePruningFinalization(unittest.TestCase):
     def setUpClass(cls):
         # Reuse the historical source and independently emit the live tree.
         TestRemainingRolePruningContinuation.setUpClass.__func__(cls)
-        cls.live = inputs(REPO_ROOT)
+        cls.landed_root = cls.baseline / "landed"
+        cls.landed_root.mkdir()
+        archive = subprocess.run(["git", "archive", LANDED, "rules", "process", "bin/hooks"],
+                                 cwd=REPO_ROOT, check=True, capture_output=True).stdout
+        with tarfile.open(fileobj=io.BytesIO(archive)) as stream:
+            stream.extractall(cls.landed_root, filter="data")
+        cls.live = inputs(cls.landed_root)
 
     def test_final_archives_and_sources_match_the_approved_preview(self):
         decision = "DEC-001720"
@@ -244,7 +253,7 @@ class TestRemainingRolePruningFinalization(unittest.TestCase):
             for path, body in baseline.files.items():
                 if "/hooks/" in path or path.endswith(("settings.json", "hooks.json")):
                     self.assertEqual(actual.files[path], body, (harness, path))
-        names = named_queries.bundles(FileRowSource(REPO_ROOT).named_queries_text())
+        names = named_queries.bundles(FileRowSource(self.landed_root).named_queries_text())
         self.assertEqual(len(names), 12)
         for name, tokens in names:
             where = dict(token.split("=", 1) for token in tokens)
