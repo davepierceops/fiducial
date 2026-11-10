@@ -46,7 +46,8 @@ class AdopterProcedure(unittest.TestCase):
 
     def plan(self, edits=()):
         plan = ADOPT.build_plan(self.target, self.trees, edits)
-        plan["timestamp"] = "20261105T010203Z"
+        self.plans = getattr(self, "plans", 0) + 1  # each install writes its own report
+        plan["timestamp"] = "20261105T0102%02dZ" % self.plans
         self.stage.mkdir(exist_ok=True)
         dump(self.stage / "plan.json", plan)
         return plan
@@ -282,6 +283,104 @@ class AdopterProcedure(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "exactly once"):
             self.plan([{"path": "CLAUDE.md", "before": "duplicate", "after": "new"}])
         self.assertEqual(tree_bytes(self.target), before)
+
+    def mode(self, name):
+        return (self.target / name).stat().st_mode & 0o777
+
+    def adopt_upgrade_repeat(self, name, staged_v1, staged_v2):
+        """Existing 0600 `name` keeps 0600 through first adoption, upgrade and repeat."""
+        path = self.target / name
+        path.chmod(0o600)
+        write(self.trees[0], name, staged_v1)
+        self.plan()
+        self.install()
+        self.assertEqual(self.mode(name), 0o600, "first adoption")
+        self.assertEqual(self.plan()["writes"], {}, "repeat after first adoption")
+        write(self.trees[0], name, staged_v2)
+        plan = self.plan()
+        self.assertIn(name, plan["writes"])
+        self.install()
+        self.assertEqual(self.mode(name), 0o600, "upgrade")
+        self.assertIn("v2", path.read_text())
+        self.assertEqual(self.plan()["writes"], {}, "repeat after upgrade")
+
+    def test_existing_0600_json_keeps_mode_through_adoption_upgrade_and_repeat(self):
+        write(self.target, ".claude/settings.json", '{"permissions":{"allow":["custom"]}}\n')
+        self.adopt_upgrade_repeat(".claude/settings.json",
+                                  '{"permissions":{"deny":["v1"]}}', '{"permissions":{"deny":["v2"]}}')
+
+    def test_existing_0600_markdown_keeps_mode_through_adoption_upgrade_and_repeat(self):
+        write(self.target, "CLAUDE.md", "# Project\nLocal text.\n")
+        self.adopt_upgrade_repeat("CLAUDE.md", "# Store v1\n", "# Store v2\n")
+
+    def test_mode_only_drift_between_plan_and_apply_is_refused_before_any_write(self):
+        write(self.target, "CLAUDE.md", "# Project\n")
+        self.plan()
+        paths = self.authorize()
+        (self.target / "CLAUDE.md").chmod(0o600)
+        before = tree_bytes(self.target)
+        with self.assertRaisesRegex(ValueError, "changed since review"):
+            ADOPT.apply(self.stage, *paths)
+        self.assertEqual(tree_bytes(self.target), before)
+
+    def test_existing_0600_markdown_edited_by_legacy_edit_keeps_mode(self):
+        write(self.target, "CLAUDE.md", "# Project\nobsolete\n").chmod(0o600)
+        self.plan([{"path": "CLAUDE.md", "before": "obsolete\n", "after": "current\n"}])
+        self.install()
+        self.assertIn("current", (self.target / "CLAUDE.md").read_text())
+        self.assertEqual(self.mode("CLAUDE.md"), 0o600)
+
+    def test_edit_only_unstaged_0600_file_keeps_mode(self):
+        write(self.target, "src/AGENTS.md", "# Nested\nobsolete\n").chmod(0o600)
+        self.plan([{"path": "src/AGENTS.md", "before": "obsolete\n", "after": "current\n"}])
+        self.install()
+        self.assertIn("current", (self.target / "src/AGENTS.md").read_text())
+        self.assertEqual(self.mode("src/AGENTS.md"), 0o600)
+
+    def test_retiring_owned_section_from_surviving_0600_file_keeps_mode(self):
+        write(self.target, "src/AGENTS.md", "# Local\n")
+        write(self.trees[0], "src/AGENTS.md", "# Store nested\n")
+        self.plan()
+        self.install()
+        (self.target / "src/AGENTS.md").chmod(0o600)
+        (self.trees[0] / "src/AGENTS.md").unlink()
+        plan = self.plan()
+        self.assertFalse(plan["conflicts"])
+        self.assertIn("src/AGENTS.md", plan["writes"])
+        self.install()
+        self.assertEqual((self.target / "src/AGENTS.md").read_text(), "# Local\n")
+        self.assertEqual(self.mode("src/AGENTS.md"), 0o600)
+
+    def test_created_files_chmodded_by_user_are_not_replanned_or_widened(self):
+        write(self.trees[0], ".claude/settings.json", '{"permissions":{"deny":["v1"]}}')
+        self.plan()
+        self.install()
+        for name in ("CLAUDE.md", ".claude/settings.json"):
+            self.assertEqual(self.mode(name), 0o644)
+            (self.target / name).chmod(0o600)
+        self.assertEqual(self.plan()["writes"], {})
+        self.assertEqual(self.install(), [])
+        for name in ("CLAUDE.md", ".claude/settings.json"):
+            self.assertEqual(self.mode(name), 0o600)
+
+    def test_new_staged_hook_lands_executable_with_staged_mode(self):
+        write(self.trees[0], ".claude/hooks/guard", "#!/bin/sh\nexit 0\n").chmod(0o755)
+        self.plan()
+        self.install()
+        self.assertEqual(self.mode(".claude/hooks/guard"), 0o755)
+
+    def test_locally_chmodded_owned_script_is_still_refused(self):
+        write(self.trees[0], ".claude/hooks/guard", "#!/bin/sh\nexit 0\n").chmod(0o755)
+        self.plan()
+        self.install()
+        (self.target / ".claude/hooks/guard").chmod(0o700)
+        plan = self.plan()
+        self.assertTrue(any(c["file"] == ".claude/hooks/guard" and
+                            "occupied or modified structured file" in c["reason"]
+                            for c in plan["conflicts"]))
+        with self.assertRaisesRegex(ValueError, "structural conflicts"):
+            self.install()
+        self.assertEqual(self.mode(".claude/hooks/guard"), 0o700)
 
     def test_labels_create_missing_only_and_read_back(self):
         metadata = {"human-gate": ("aabbcc", "existing description"), "accepted-risk": ("abcabc", "risk")}
