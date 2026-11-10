@@ -1,0 +1,217 @@
+{
+  "candidate": "5b2a62f3b17aca1d859a43032b9ca2295c185391",
+  "baseline": "0ca563ee53c309840be4ab94dda74f9b075149ba",
+  "assets": [
+    {
+      "name": "fiducial-bundle-chief-of-staff.md",
+      "sha256": "7533ab9b315e1b74ec0055454a958e80446f4fde9cc9054bc8b3897b21241f97",
+      "bytes": 69256,
+      "baseline_words": 10868,
+      "candidate_words": 9421
+    },
+    {
+      "name": "fiducial-bundle-architect-agent.md",
+      "sha256": "791c11866e28cbf74af3fd91f5bf714055aff59b63f4b4cdb9c5dbd9c50d8693",
+      "bytes": 26199,
+      "baseline_words": 3733,
+      "candidate_words": 3875
+    },
+    {
+      "name": "fiducial-bundle-spec-reviewer-agent.md",
+      "sha256": "12625092cc3ae711f04164becd79008bc0db3d4483e3b669f410acfae329cff8",
+      "bytes": 27304,
+      "baseline_words": 4611,
+      "candidate_words": 4035
+    },
+    {
+      "name": "fiducial-bundle-test-designer-agent.md",
+      "sha256": "861c39431ba058ebe883f08f488671a69657364d0cc7b6c69d063264391c8a6e",
+      "bytes": 24421,
+      "baseline_words": 4196,
+      "candidate_words": 3605
+    },
+    {
+      "name": "fiducial-bundle-coder-agent.md",
+      "sha256": "8c43176d0539119774538ea9cf544008bee4d96d4c967e57de21d45deb24fdf0",
+      "bytes": 25555,
+      "baseline_words": 4032,
+      "candidate_words": 3754
+    },
+    {
+      "name": "fiducial-bundle-reviewer-agent.md",
+      "sha256": "a91bdbac6d9e3956c618eba48caa309103217f0d88bc3ff649aebcdbb77ce379",
+      "bytes": 27711,
+      "baseline_words": 5704,
+      "candidate_words": 4013
+    },
+    {
+      "name": "fiducial-bundle-skeptic-risk-agent.md",
+      "sha256": "bdc584478d32124599605ebc38529199479c35551e9403476d0be8e2d074ada6",
+      "bytes": 27392,
+      "baseline_words": 5715,
+      "candidate_words": 3971
+    },
+    {
+      "name": "fiducial-bundle-release-manager-agent.md",
+      "sha256": "111281da42b80167baf76b225dde8ce318f01472588f876942288d03c5380f49",
+      "bytes": 32892,
+      "baseline_words": 5931,
+      "candidate_words": 4758
+    },
+    {
+      "name": "fiducial-bundle-context-quality-reviewer.md",
+      "sha256": "0ef0806f65fbf41e6e3c915816424a8b6d6c282a6553637e18f605f1d66bfe9e",
+      "bytes": 24829,
+      "baseline_words": 3892,
+      "candidate_words": 3677
+    },
+    {
+      "name": "fiducial-bundle-writer.md",
+      "sha256": "44b86d24061cbab5903baa4c4d166b237d4f7b4720de98d63725214b5abe5cd8",
+      "bytes": 32921,
+      "baseline_words": 4905,
+      "candidate_words": 5021
+    },
+    {
+      "name": "fiducial-bundle-copy-editor.md",
+      "sha256": "e7382716e587ded0749777d8827602505225395c71d9d5254cb13d5d417cfb2c",
+      "bytes": 32727,
+      "baseline_words": 5588,
+      "candidate_words": 5049
+    },
+    {
+      "name": "fiducial-bundle-critic.md",
+      "sha256": "f64dbef9ef3243cf033c3e007605718f95a4e58123d27eb9274237e2c72eaf93",
+      "bytes": 31241,
+      "baseline_words": 5355,
+      "candidate_words": 4816
+    },
+    {
+      "name": "README.md",
+      "sha256": "58b4be1670f0869be1da90bdb9b2877e9c0f2b5a1a1b4ba26eacec72398fcfaa",
+      "bytes": 6613
+    }
+  ],
+  "native": [
+    {
+      "revision": "baseline",
+      "target": "claude-code",
+      "files": 30
+    },
+    {
+      "revision": "baseline",
+      "target": "codex",
+      "files": 31
+    },
+    {
+      "revision": "candidate",
+      "target": "claude-code",
+      "files": 32
+    },
+    {
+      "revision": "candidate",
+      "target": "codex",
+      "files": 33
+    }
+  ],
+  "hooks_equal": [
+    {
+      "target": "claude-code",
+      "identical_files": 8
+    },
+    {
+      "target": "codex",
+      "identical_files": 9
+    }
+  ],
+  "source_body_coverage": [
+    {
+      "role": "chief-of-staff",
+      "checked_rows": 75,
+      "definition_count": 19,
+      "empty_selected": []
+    },
+    {
+      "role": "architect-agent",
+      "checked_rows": 45,
+      "definition_count": 16,
+      "empty_selected": []
+    },
+    {
+      "role": "spec-reviewer-agent",
+      "checked_rows": 50,
+      "definition_count": 16,
+      "empty_selected": []
+    },
+    {
+      "role": "test-designer-agent",
+      "checked_rows": 54,
+      "definition_count": 18,
+      "empty_selected": []
+    },
+    {
+      "role": "coder-agent",
+      "checked_rows": 51,
+      "definition_count": 19,
+      "empty_selected": []
+    },
+    {
+      "role": "reviewer-agent",
+      "checked_rows": 58,
+      "definition_count": 17,
+      "empty_selected": []
+    },
+    {
+      "role": "skeptic-risk-agent",
+      "checked_rows": 57,
+      "definition_count": 17,
+      "empty_selected": []
+    },
+    {
+      "role": "release-manager-agent",
+      "checked_rows": 56,
+      "definition_count": 17,
+      "empty_selected": []
+    },
+    {
+      "role": "context-quality-reviewer",
+      "checked_rows": 45,
+      "definition_count": 16,
+      "empty_selected": []
+    },
+    {
+      "role": "writer",
+      "checked_rows": 84,
+      "definition_count": 17,
+      "empty_selected": []
+    },
+    {
+      "role": "copy-editor",
+      "checked_rows": 108,
+      "definition_count": 17,
+      "empty_selected": []
+    },
+    {
+      "role": "critic",
+      "checked_rows": 92,
+      "definition_count": 17,
+      "empty_selected": []
+    }
+  ],
+  "roots": [
+    {
+      "target": "claude-code",
+      "baseline_lines": 293,
+      "candidate_lines": 45,
+      "baseline_words": 4171,
+      "candidate_words": 585
+    },
+    {
+      "target": "codex",
+      "baseline_lines": 293,
+      "candidate_lines": 45,
+      "baseline_words": 4171,
+      "candidate_words": 585
+    }
+  ]
+}
