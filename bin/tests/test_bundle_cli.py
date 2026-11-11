@@ -505,14 +505,54 @@ class TestBundleLocalProvenance(BundleCliTestCase):
         self.assertIsNotNone(edit_and_add)
         self.assertNotEqual(edit_only.group("hex"), edit_and_add.group("hex"))
 
-    def test_d3_emit_bundle_output_is_unchanged_by_a_dirty_tree(self):
-        self.dirty_the_store()
-        code, out, err = self.bundle("--emit", "bundle", "--where", "role=critic",
-                                     "--out", str(self.out))
+    STAMP_RE = r" \d{8}T\d{6}Z -->"
+
+    def emitted_bundle(self, out_name):
+        out = temp_dir(self, out_name)
+        code, stdout, err = self.bundle("--emit", "bundle", "--where", "role=critic", "--out", str(out))
         self.assertEqual(code, EXIT_OK, err)
-        path = pathlib.Path(out.strip().splitlines()[0])
-        first = path.read_text().splitlines()[0]
-        self.assertRegex(first, r"^<!-- fiducial \S+ @ %s \d{8}T\d{6}Z -->$" % self.head())
+        return pathlib.Path(stdout.strip().splitlines()[0]).read_text()
+
+    def where_bundle(self, out_name):
+        out = temp_dir(self, out_name)
+        code, stdout, err = self.bundle("--where", "role=critic", "--out", str(out))
+        self.assertEqual(code, EXIT_OK, err)
+        return pathlib.Path(stdout.strip()).read_text()
+
+    def test_d3_emit_bundle_equals_where_on_a_clean_tree(self):
+        emitted, where = self.emitted_bundle("emit-c-"), self.where_bundle("where-c-")
+        self.assertEqual(re.sub(self.STAMP_RE, " -->", emitted), re.sub(self.STAMP_RE, " -->", where))
+        self.assertNotIn("+local", emitted.splitlines()[0])
+
+    def test_d3_emit_bundle_carries_the_same_local_marker_as_where_on_a_dirty_tree(self):
+        """AC-RS-15: `--emit bundle` is byte-identical to `--where` for the
+        same query (apart from the generation timestamp), marker included."""
+        self.dirty_the_store()
+        emitted, where = self.emitted_bundle("emit-d-"), self.where_bundle("where-d-")
+        self.assertRegex(where.splitlines()[0], self.LOCAL_HEADER_RE)
+        self.assertRegex(emitted.splitlines()[0], self.LOCAL_HEADER_RE)
+        self.assertEqual(re.sub(self.STAMP_RE, " -->", emitted), re.sub(self.STAMP_RE, " -->", where))
+
+    def test_d3_harness_emissions_are_unchanged_by_a_dirty_tree(self):
+        """`--emit claude-code` / `codex` carry no marker. The dirty change is
+        an edit confined to R0001's `## Human` section, which no emitted file
+        carries, so the dirty and clean trees must emit identical bytes."""
+        clean = {target: self.emission(target) for target in ("claude-code", "codex")}
+        path = self.clone / "rules" / "R0001.md"
+        write(self.clone, "rules/R0001.md", path.read_text() + "\nAn uncommitted rationale line.\n")
+        for target in ("claude-code", "codex"):
+            with self.subTest(target=target):
+                files = self.emission(target)
+                self.assertTrue(files)
+                for name, text in files.items():
+                    self.assertNotIn("+local", text, name)
+                self.assertEqual(files, clean[target])
+
+    def emission(self, target):
+        out = temp_dir(self, "harness-")
+        code, _o, err = self.bundle("--emit", target, "--out", str(out))
+        self.assertEqual(code, EXIT_OK, err)
+        return {p.relative_to(out).as_posix(): p.read_text() for p in out.rglob("*") if p.is_file()}
 
     def test_d4_only_the_header_line_differs_from_a_clean_bundle(self):
         clean = self.header_of("role=critic")
