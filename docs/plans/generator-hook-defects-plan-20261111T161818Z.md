@@ -2,7 +2,7 @@
 
 Base: main at `76a6c149bdc4de37d9a839aa9d02540503cec345`. Branch: `intake/generator-hook-defects`.
 Told (Dave, 2026-11-11): this is the next package of the current batch. No release, adoption or live probe follows it; those run once at the end of the batch (#439).
-Class: routine. `process/adopt.md` prose changes (Unit E), so its delta takes one independent read and a decision-log entry.
+Class: routine, except D3: the bundle header is a public interface under `specs/rule-store.md` §8, so the `+local` marker is in the consequential class and goes on the gate at the release that first carries it (corrected after review; see Amendments). `process/adopt.md` prose changes (Unit E), so its delta takes one independent read and a decision-log entry.
 
 Left out, with reason: #358. Its missing-target refusal would fail today's bundles, because process documents cite rows their bundles do not carry, and resolving that is editorial work the issue's own dependency list ties to #362 and #363, both open. It needs Dave's ruling before any build.
 
@@ -71,3 +71,10 @@ Contract-verified only: local source tests, local bare origins, emission and rel
 ## Plan review
 
 Independent read at `2c92204`: changes-required, two blocking (C2 as first written failed all twelve real bundles; B3 assumed a script the suite does not run and that exits non-zero by design) and six non-blocking. All are applied in this revision. Re-read over the amendment at `1d63370`: all eight resolved; two further non-blocking notes (how C2 separates process text, how a decision is found) applied without another read.
+
+## Amendments during the build
+
+- Reviews at `b11df95`: both changes-required. `reviews/generator-hook-defects-read-20261111T170619Z.md` F1 (blocking): D3 changes the bundle header, which `specs/rule-store.md` G6, AC-RS-6, AC-RS-14, J4 and DEC-000630 fix as the full HEAD and §8 makes consequential; this plan had called the package routine. `reviews/generator-hook-defects-intake-read-20261111T165900Z.md` F1 (blocking): E2's sentence that apply "does not see read-only filesystems" is false; the preflight refuses on one.
+- Dave ruled yes on the marker (DEC-001790, superseding DEC-000630). The spec sentences that state the header and `bin/release`'s refusals are edited on this branch as a proposal; they are not agreed until Dave rules on them.
+- E2 corrected: step 4 states the refusals once, limited to what the code checks; the boundary sentence is restored to its base wording. The plan's own E2 and Unit A "does not see" wording was wrong for read-only filesystems and is superseded by this note.
+- Non-blocking findings from both reads are filed, not fixed here (DEC-001000).
