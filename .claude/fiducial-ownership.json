@@ -4,7 +4,7 @@
       "header": "---\nname: \"adopt\"\ndescription: \"Reconcile the store's current harness context into a repository, including a repository already using fiducial; use the same procedure for upgrades.\"\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "d38b8d84a14933220b1e2833387524095cf5ada44388e0b1c1d459cf235c33ab"
+      "section": "173eb8026b1eb8adaf1a62c45f299c27a52039a131b056863654d7a8b8ee18a6"
     },
     ".agents/skills/build/SKILL.md": {
       "header": "---\nname: \"build\"\ndescription: \"Take a unit of work from the spec read through implementation, review, and release.\"\n---\n",
@@ -478,7 +478,7 @@
       "header": "---\nname: adopt\ndescription: Reconcile the store's current harness context into a repository, including a repository already using fiducial; use the same procedure for upgrades.\n---\n",
       "kind": "markdown",
       "owns_header": true,
-      "section": "d38b8d84a14933220b1e2833387524095cf5ada44388e0b1c1d459cf235c33ab"
+      "section": "173eb8026b1eb8adaf1a62c45f299c27a52039a131b056863654d7a8b8ee18a6"
     },
     ".claude/skills/build/SKILL.md": {
       "header": "---\nname: build\ndescription: Take a unit of work from the spec read through implementation, review, and release.\n---\n",
@@ -753,13 +753,13 @@
       "header": "",
       "kind": "markdown",
       "owns_header": true,
-      "section": "a02355b2c0ac57261f717e3508fb608136722c7653c0b840121d17249efc404f"
+      "section": "099b9b27f2410e40418d61c543be990271a51ab55783e8ac36a279805fabdd56"
     },
     "CLAUDE.md": {
       "header": "",
       "kind": "markdown",
       "owns_header": true,
-      "section": "a02355b2c0ac57261f717e3508fb608136722c7653c0b840121d17249efc404f"
+      "section": "099b9b27f2410e40418d61c543be990271a51ab55783e8ac36a279805fabdd56"
     }
   },
   "version": 1

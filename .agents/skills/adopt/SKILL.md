@@ -83,8 +83,10 @@ stays first and is replaced only when owned and unchanged. JSON uses recorded
 key/list contributions, never HTML comments: unrelated values and pre-existing
 identical entries remain the repository's. Generated TOML agents and executable
 hooks use exact file hashes; a collision or later local edit is refused rather
-than concatenating invalid configuration or displacing a shebang. Upgrades
-remove obsolete owned contributions; ambiguous removals need a human resolution.
+than concatenating invalid configuration or displacing a shebang. An existing
+Markdown or JSON file keeps its permissions; a new file takes the generated
+ones. Upgrades remove obsolete owned contributions; ambiguous removals need a
+human resolution.
 Keep the manifest in the adoption PR. Work on an idle branch: checks protect
 against changes since review, but installation is not a transaction against a
 concurrent editor or a filesystem failure; inspect and revert the adoption diff
@@ -278,6 +280,8 @@ def build_plan(target, staged, edits=()):
             text = edited.get(name, current)
             old = prior["files"].get(name)
             wanted, new_mode = desired.get(name, (None, mode))
+            if path.exists() and name.endswith((".md", ".json")):
+                new_mode = mode
             if wanted is None and not old:
                 result, state = text, None
             elif name.endswith(".md"):
@@ -300,7 +304,8 @@ def build_plan(target, staged, edits=()):
             conflicts.append({"file": name, "reason": str(exc)})
     manifest = encoded({"version": 1, "files": owned}).decode()
     if not manifest_path.exists() or manifest_path.read_text() != manifest:
-        writes[MANIFEST] = {"text": manifest, "mode": 0o644}
+        writes[MANIFEST] = {"text": manifest,
+                          "mode": manifest_path.stat().st_mode & 0o777 if manifest_path.exists() else 0o644}
     return {"target": str(target.resolve()), "inventory": snapshot, "writes": writes,
             "conflicts": conflicts, "edits": list(edits)}
 
