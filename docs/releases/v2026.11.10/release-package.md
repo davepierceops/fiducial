@@ -58,9 +58,9 @@ Observed asset checks:
 - Both native layouts generated successfully. Eight Claude hook/config files and nine Codex hook/config files match baseline bytes and modes.
 - The two independent reviewers separately read all 13 hashes/headers/README and checked native enforcement equality.
 
-Observed first suite run: 339 tests, one failure, in 125.929 seconds; repeat adoption produced writes when none were expected (`tests-initial.log`). During that run the preparation session changed the source clone's origin from the local clone path to GitHub. Inferred hypothesis: differing provenance between successive emissions caused the failure; that root cause is not proven by a passing rerun. No implementation/test change was made.
+Observed first suite run: 339 tests, one failure, in 125.929 seconds; repeat adoption produced writes when none were expected (`tests-initial-5b2a62f.log`). During that run the preparation session changed the source clone's origin from the local clone path to GitHub. Inferred hypothesis: differing provenance between successive emissions caused the failure; that root cause is not proven by a passing rerun. No implementation/test change was made.
 
-Observed targeted recheck with stable origin: the affected real-emission/repeat-adoption test passed, 1 test in 5.523 seconds (`adoption-repeat-recheck.log`). Fresh full stable-source rerun: **339 tests passed in 124.128 seconds, exit 0, no skips reported** (`tests-stable.log`). `test-source-state.json` verifies identical before/after candidate SHA, GitHub origin and clean working state. This closes the current test-result gap without claiming the first-run cause is proven.
+Observed targeted recheck with stable origin: the affected real-emission/repeat-adoption test passed, 1 test in 5.523 seconds (`adoption-repeat-recheck-5b2a62f.log`). Fresh full stable-source rerun: **339 tests passed in 124.128 seconds, exit 0, no skips reported** (`tests-stable-5b2a62f.log`). `test-source-state-5b2a62f.json` verifies identical before/after candidate SHA, GitHub origin and clean working state. This closes the current test-result gap without claiming the first-run cause is proven.
 
 ## Measured user-visible changes
 
