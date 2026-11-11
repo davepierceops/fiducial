@@ -8,6 +8,7 @@ from __future__ import annotations
 import dataclasses
 import json
 import os
+import re
 import shlex
 import subprocess
 import tomllib
@@ -440,6 +441,103 @@ class TestCodexHookExecution(unittest.TestCase):
         self.assertIn("reads back", proc.stderr)
         self.assertEqual(self.run_command(self.script("push-readback"), tool="Bash", args={"command": "git status"}, event="PostToolUse").returncode, 0)
 
+    # ---- #415: Codex shell tools carry the command as `cmd` -----------------
+
+    SHELL_TOOLS = ("Bash", "exec_command", "shell", "shell_command")
+
+    def bare_origin(self):
+        origin = temp_dir(self, "codex-push-") / "origin.git"
+        git(self.repo, "init", "--bare", "-q", "-b", "main", str(origin), env=self.env, check=True)
+        git(self.repo, "remote", "add", "origin", str(origin), env=self.env, check=True)
+        return origin
+
+    def head(self):
+        return git(self.repo, "rev-parse", "HEAD", env=self.env, check=True)[1].strip()
+
+    def read_back(self, args, tool="Bash"):
+        return self.run_command(self.script("push-readback"), tool=tool, args=args, event="PostToolUse")
+
+    def readback_context(self, proc):
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertTrue(proc.stdout.strip(), "the push was not read back: no evidence printed")
+        return json.loads(proc.stdout)["hookSpecificOutput"]["additionalContext"]
+
+    def test_cmd_string_and_cmd_list_are_read_back_like_command(self):
+        self.bare_origin()
+        git(self.repo, "push", "-q", "origin", "main", env=self.env, check=True)
+        expected = "origin/main is at " + self.head()
+        forms = {"command": {"command": "git push origin main"},
+                 "cmd string": {"cmd": "git push origin main"},
+                 "cmd list": {"cmd": ["git", "push", "origin", "main"]}}
+        for tool in self.SHELL_TOOLS:
+            outputs = {}
+            for label, args in forms.items():
+                with self.subTest(tool=tool, form=label):
+                    proc = self.read_back(args, tool=tool)
+                    self.assertIn(expected, self.readback_context(proc))
+                    outputs[label] = (proc.returncode, proc.stdout)
+            self.assertEqual(len(set(outputs.values())), 1, outputs)
+
+    def test_cmd_form_push_the_remote_did_not_take_fails_loudly(self):
+        self.bare_origin()
+        git(self.repo, "push", "-q", "origin", "main", env=self.env, check=True)
+        write(self.repo, "README.md", "changed\n")
+        commit(self.repo, "unpublished", env=self.env)
+        for args in ({"cmd": "git push origin main"}, {"cmd": ["git", "push", "origin", "main"]}):
+            for tool in self.SHELL_TOOLS:
+                with self.subTest(tool=tool, args=args):
+                    proc = self.read_back(args, tool=tool)
+                    self.assertEqual(proc.returncode, 2, proc.stdout)
+                    self.assertIn("reads back", proc.stderr)
+
+    def test_command_form_push_the_remote_did_not_take_still_fails_loudly(self):
+        self.bare_origin()
+        git(self.repo, "push", "-q", "origin", "main", env=self.env, check=True)
+        write(self.repo, "README.md", "changed\n")
+        commit(self.repo, "unpublished", env=self.env)
+        proc = self.read_back({"command": "git push origin main"})
+        self.assertEqual(proc.returncode, 2, proc.stdout)
+        self.assertIn("reads back", proc.stderr)
+
+    def test_qualified_branch_under_cmd_is_read_back_whole_against_a_local_origin(self):
+        origin = self.bare_origin()
+        git(self.repo, "push", "-q", "origin", "HEAD:refs/heads/codex/probe", env=self.env, check=True)
+        sent = git(origin, "rev-parse", "refs/heads/codex/probe", env=self.env, check=True)[1].strip()
+        self.assertEqual(sent, self.head())
+        for args in ({"cmd": "git push origin HEAD:refs/heads/codex/probe"},
+                     {"cmd": ["git", "push", "origin", "HEAD:refs/heads/codex/probe"]},
+                     {"command": "git push origin HEAD:refs/heads/codex/probe"}):
+            with self.subTest(args=args):
+                self.assertIn("origin/codex/probe is at " + sent,
+                              self.readback_context(self.read_back(args)))
+
+    def test_cmd_that_is_not_a_push_passes_silently(self):
+        for args in ({"cmd": "git status"}, {"cmd": ["git", "status"]}, {"cmd": ""}):
+            with self.subTest(args=args):
+                proc = self.read_back(args)
+                self.assertEqual((proc.returncode, proc.stdout), (0, ""), proc.stderr)
+
+    def test_cmd_is_not_a_shell_command_for_tools_that_are_not_shells(self):
+        """Normalisation is for shell tools only: a Read call
+        that happens to carry a `cmd` string is not read back as a push."""
+        self.bare_origin()
+        git(self.repo, "push", "-q", "origin", "main", env=self.env, check=True)
+        write(self.repo, "README.md", "changed\n")
+        commit(self.repo, "unpublished", env=self.env)
+        for tool in ("Read", "read_file"):
+            with self.subTest(tool=tool):
+                proc = self.read_back({"cmd": "git push origin main"}, tool=tool)
+                self.assertEqual((proc.returncode, proc.stdout), (0, ""), proc.stderr)
+
+    def test_apply_patch_still_reads_its_patch_from_command(self):
+        patch = "*** Add File: src/safe.py\n+x = 1\n"
+        args = {"command": "*** Begin Patch\n" + patch + "*** End Patch"}
+        proc = self.run_command(self.script("intake-branch-guard"), args=args)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        git(self.repo, "checkout", "-q", "-b", "work", env=self.env, check=True)
+        bad = {"command": "*** Begin Patch\n*** Add File: rules/R9999.md\n+rule\n*** End Patch"}
+        self.assertEqual(self.run_command(self.script("intake-branch-guard"), args=bad).returncode, 2)
+
     def test_lane_scope_matches_only_the_runtime_agent_type(self):
         patch = "*** Add File: src/outside.py\n+x = 1\n"
         for role, lane in (("architect-agent", "specs"), ("test-designer-agent", "tests")):
@@ -478,6 +576,81 @@ class TestCodexHookExecution(unittest.TestCase):
                               text=True, capture_output=True, env=self.env)
         self.assertEqual(proc.returncode, 2)
         self.assertNotIn("Traceback", proc.stderr)
+
+
+# ---- #416: cross-procedure references resolve in the emitted layout --------
+
+REF_RE = re.compile(r"process/[\w-]+\.md")
+CODEX_REF_RE = re.compile(r"\$([\w-]+) \((\.agents/skills/[\w-]+/SKILL\.md)\)")
+
+
+class TestCodexCrossProcedureReferences(unittest.TestCase):
+    """Synthetic process documents: the rewrite form is fixed, backticks are consumed."""
+
+    def emit(self, body, extra=()):
+        rows = [Row(id="a", kind="process", path="process/a.md", body="# Process: A\n\n" + body,
+                    keys={"topic": ["a"]}),
+                Row(id="b", kind="process", path="process/b.md", body="# Process: B\n\nThe B form.\n",
+                    keys={"topic": ["b"]}), *extra]
+        inputs = EmitInputs(rows=rows, sequences=([["core"]], ["a", "b"]), tiers=load_tiers(),
+                            hooks={}, repo="fixture/store", head="a" * 40)
+        return CodexTarget().emit(inputs).files
+
+    def test_a_reference_to_an_emitted_skill_names_the_skill_in_the_codex_form(self):
+        ref = "$b (.agents/skills/b/SKILL.md)"
+        cases = (("Use `process/b.md` for the form.", "Use %s for the form." % ref),
+                 ("Apply `process/b.md`'s dispositions.", "Apply %s's dispositions." % ref),
+                 ("See process/b.md.", "See %s." % ref),
+                 ("Both `process/b.md` and process/b.md.", "Both %s and %s." % (ref, ref)))
+        for source, expected in cases:
+            with self.subTest(source=source):
+                skill = self.emit("Plain first sentence.\n\n" + source + "\n")[".agents/skills/a/SKILL.md"]
+                self.assertIn(expected, skill)
+                self.assertNotIn("process/b.md", skill)
+                self.assertNotIn("`$b", skill)
+                self.assertNotIn(")`", skill)
+
+    def test_a_reference_to_a_document_that_is_not_a_skill_fails_emission_naming_file_and_reference(self):
+        setup = Row(id="project-setup", kind="process", path="process/project-setup.md",
+                    body="# Process: Setup\n\nSet up.\n", keys={"topic": ["project-setup"]})
+        for reference in ("process/project-setup.md", "process/nope.md"):
+            with self.subTest(reference=reference):
+                with self.assertRaises(EmitError) as caught:
+                    self.emit("Plain first sentence.\n\nRead `%s` first.\n" % reference, extra=[setup])
+                self.assertIn("process/a.md", str(caught.exception))
+                self.assertIn(reference, str(caught.exception))
+
+    def test_a_skill_with_no_cross_references_emits_unchanged(self):
+        skill = self.emit("Nothing to cite.\n")[".agents/skills/a/SKILL.md"]
+        self.assertTrue(skill.rstrip().endswith("Nothing to cite."))
+
+
+class TestCodexRealStoreReferences(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.case = unittest.TestCase()
+        cls.out = temp_dir(cls.case, "codex-refs-")
+        code, _, err = run_bundle("--emit", "codex", "--out", str(cls.out),
+                                  cwd=BIN_DIR.parent, env=base_env())
+        assert code == 0, err
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.case.doCleanups()
+
+    def test_every_cross_procedure_reference_resolves_to_a_file_in_the_layout(self):
+        skills = {p: p.read_text() for p in sorted(self.out.glob(".agents/skills/*/SKILL.md"))}
+        emitted = {p.parent.name for p in skills}
+        found = 0
+        for path, text in skills.items():
+            with self.subTest(skill=path.parent.name):
+                self.assertEqual(REF_RE.findall(text), [], "a process/ path an adopted repository lacks")
+                for name, target in CODEX_REF_RE.findall(text):
+                    found += 1
+                    self.assertIn(name, emitted)
+                    self.assertEqual(target, ".agents/skills/%s/SKILL.md" % name)
+                    self.assertTrue((self.out / target).is_file(), target)
+        self.assertGreaterEqual(found, 9, "the nine references the sources carry must survive as skill names")
 
 
 if __name__ == "__main__":
