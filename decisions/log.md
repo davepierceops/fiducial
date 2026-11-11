@@ -1317,3 +1317,9 @@ Context: Five independent reads over a two-line change produced these; Dave aske
 Date: 2026-11-10
 Decision: Dave approves publication of the context-consolidation revision as release `v2026.11.10` at a8d87bc95afed9f5ac8b54fe2c8863013ce10265, with README.md and the twelve named role bundles as its assets and the deferred gaps listed on gate #433 carried as stated there. Published 2026-11-11T04:25:42Z by Dave from his clone.
 Context: Asked "Publish this candidate, yes or no?" after the candidate and evidence were regenerated with the #411 fix (DEC-001730), Dave answered "yes". The tag keeps the gate's proposed name; it was still 2026-11-10 in his timezone. Read back from GitHub after publication: the tag resolves to the candidate, the release is neither draft nor prerelease, and all 13 asset names, sizes and SHA256 digests equal `docs/releases/v2026.11.10/SHA256SUMS` on branch `release-candidate-20261111` at f0d5be8af4135bacffb1576dfa54cb5bbaf82bdf. Native skill loading, adherence and hook enforcement remain unverified, and #412 remains open.
+
+
+## DEC-001760 — Adopt v2026.11.10 into fiducial
+Date: 2026-11-10
+Decision: Dave approves adopting the released `v2026.11.10` (a8d87bc95afed9f5ac8b54fe2c8863013ce10265) into fiducial's own repository as a routine adoption. The installed context's pinned store commit becomes the released commit; nothing else in the installed context changes.
+Context: After publishing the release (DEC-001750), Dave instructed "I'd like you to adopt it into Fiducial." The plan wrote `CLAUDE.md`, `AGENTS.md` and `.claude/fiducial-ownership.json`; an independent contradiction read found none; the report is `docs/fiducial-adoption-20261111T042936Z.md`. Live Claude Code loading and Codex hook trust were not checked.
