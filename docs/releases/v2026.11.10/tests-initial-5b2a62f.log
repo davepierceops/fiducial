@@ -1,0 +1,80 @@
+........../var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/agents/architect-agent.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/agents/coder-agent.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/agents/context-quality-reviewer.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/agents/release-manager-agent.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/agents/reviewer-agent.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/agents/skeptic-risk-agent.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/agents/spec-reviewer-agent.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/agents/test-designer-agent.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/hooks/_hooklib.py
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/hooks/decision-log-append-only
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/hooks/intake-branch-guard
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/hooks/lane-guard
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/hooks/push-readback
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/hooks/review-artifact-immutable
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/hooks/store-lint
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/settings.json
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/skills/adopt/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/skills/build/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/skills/change-flow/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/skills/command-blocks/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/skills/decision-log/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/skills/gate/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/skills/intake/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/skills/outline/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/skills/project-status/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/skills/release/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/skills/retro/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/skills/review-artifact/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/skills/spec-template/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/skills/verification-checklists/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/.claude/skills/voice/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/claude-code/CLAUDE.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.agents/skills/adopt/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.agents/skills/build/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.agents/skills/change-flow/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.agents/skills/command-blocks/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.agents/skills/decision-log/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.agents/skills/gate/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.agents/skills/intake/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.agents/skills/outline/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.agents/skills/project-status/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.agents/skills/release/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.agents/skills/retro/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.agents/skills/review-artifact/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.agents/skills/spec-template/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.agents/skills/verification-checklists/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.agents/skills/voice/SKILL.md
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.codex/agents/architect-agent.toml
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.codex/agents/coder-agent.toml
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.codex/agents/context-quality-reviewer.toml
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.codex/agents/release-manager-agent.toml
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.codex/agents/reviewer-agent.toml
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.codex/agents/skeptic-risk-agent.toml
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.codex/agents/spec-reviewer-agent.toml
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.codex/agents/test-designer-agent.toml
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.codex/hooks.json
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.codex/hooks/_hooklib.py
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.codex/hooks/codex-hook
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.codex/hooks/decision-log-append-only
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.codex/hooks/intake-branch-guard
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.codex/hooks/lane-guard
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.codex/hooks/push-readback
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.codex/hooks/review-artifact-immutable
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/.codex/hooks/store-lint
+/var/folders/64/74pt21q15_jd6fjxb580g9ph0000gn/T/adopter-3kuibiid/stage-again/codex/AGENTS.md
+F........................................................................................................................................................................................................................................................................................................................................
+======================================================================
+FAIL: test_real_both_emissions_create_and_second_run_changes_nothing (tests.test_adopt.AdopterProcedure.test_real_both_emissions_create_and_second_run_changes_nothing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/fiducial-backlog-check-20261110/bin/tests/test_adopt.py", line 112, in test_real_both_emissions_create_and_second_run_changes_nothing
+    self.assertEqual(second["writes"], {})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'AGENTS.md': {'text': "<!-- fiducial:begi[40523 chars]420}} != {}
+Diff is 115514 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 339 tests in 125.929s
+
+FAILED (failures=1)

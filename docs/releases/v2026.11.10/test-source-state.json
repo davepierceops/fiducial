@@ -1,0 +1,15 @@
+{
+  "before": {
+    "sha": "a8d87bc95afed9f5ac8b54fe2c8863013ce10265",
+    "origin_main": "a8d87bc95afed9f5ac8b54fe2c8863013ce10265",
+    "origin": "https://github.com/davepierceops/fiducial",
+    "status": ""
+  },
+  "after": {
+    "sha": "a8d87bc95afed9f5ac8b54fe2c8863013ce10265",
+    "origin_main": "a8d87bc95afed9f5ac8b54fe2c8863013ce10265",
+    "origin": "https://github.com/davepierceops/fiducial",
+    "status": ""
+  },
+  "exit_code": 0
+}

@@ -1,0 +1,200 @@
+{
+  "candidate": "a8d87bc95afed9f5ac8b54fe2c8863013ce10265",
+  "previous_candidate": "5b2a62f3b17aca1d859a43032b9ca2295c185391",
+  "names_expected": 13,
+  "names": [
+    "README.md",
+    "fiducial-bundle-architect-agent.md",
+    "fiducial-bundle-chief-of-staff.md",
+    "fiducial-bundle-coder-agent.md",
+    "fiducial-bundle-context-quality-reviewer.md",
+    "fiducial-bundle-copy-editor.md",
+    "fiducial-bundle-critic.md",
+    "fiducial-bundle-release-manager-agent.md",
+    "fiducial-bundle-reviewer-agent.md",
+    "fiducial-bundle-skeptic-risk-agent.md",
+    "fiducial-bundle-spec-reviewer-agent.md",
+    "fiducial-bundle-test-designer-agent.md",
+    "fiducial-bundle-writer.md"
+  ],
+  "readme_equals_candidate_blob": true,
+  "assets": [
+    {
+      "name": "README.md",
+      "sha256": "58b4be1670f0869be1da90bdb9b2877e9c0f2b5a1a1b4ba26eacec72398fcfaa",
+      "bytes": 6613,
+      "words": 847,
+      "header_names_candidate": null,
+      "old_sha_mentions": 0,
+      "identical_to_5b2a62f_asset_after_sha_substitution": true,
+      "changed_lines": []
+    },
+    {
+      "name": "fiducial-bundle-architect-agent.md",
+      "sha256": "fed56510953ea0489b128a8be628fe9868806e450aeb00a0f7aa94a95a246cac",
+      "bytes": 26199,
+      "words": 3875,
+      "header_names_candidate": true,
+      "old_sha_mentions": 0,
+      "identical_to_5b2a62f_asset_after_sha_substitution": false,
+      "changed_lines": [
+        "-<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261110T230050Z -->",
+        "+<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261111T041154Z -->"
+      ]
+    },
+    {
+      "name": "fiducial-bundle-chief-of-staff.md",
+      "sha256": "3b9be36affef50fc2d5056eb577ef9650452bde5f98afc3607077579409a1b18",
+      "bytes": 69542,
+      "words": 9451,
+      "header_names_candidate": true,
+      "old_sha_mentions": 0,
+      "identical_to_5b2a62f_asset_after_sha_substitution": false,
+      "changed_lines": [
+        "-<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261110T230049Z -->",
+        "+<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261111T041154Z -->",
+        "-than concatenating invalid configuration or displacing a shebang. Upgrades",
+        "-remove obsolete owned contributions; ambiguous removals need a human resolution.",
+        "+than concatenating invalid configuration or displacing a shebang. An existing",
+        "+Markdown or JSON file keeps its permissions; a new file takes the generated",
+        "+ones. Upgrades remove obsolete owned contributions; ambiguous removals need a",
+        "+human resolution.",
+        "+            if path.exists() and name.endswith((\".md\", \".json\")):",
+        "+                new_mode = mode",
+        "-        writes[MANIFEST] = {\"text\": manifest, \"mode\": 0o644}",
+        "+        writes[MANIFEST] = {\"text\": manifest,",
+        "+                          \"mode\": manifest_path.stat().st_mode & 0o777 if manifest_path.exists() else 0o644}"
+      ]
+    },
+    {
+      "name": "fiducial-bundle-coder-agent.md",
+      "sha256": "028cfadf908f183422efdc3a577a3939d76b0a4a5754979fb9385b2aa5e18e1a",
+      "bytes": 25555,
+      "words": 3754,
+      "header_names_candidate": true,
+      "old_sha_mentions": 0,
+      "identical_to_5b2a62f_asset_after_sha_substitution": false,
+      "changed_lines": [
+        "-<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261110T230054Z -->",
+        "+<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261111T041156Z -->"
+      ]
+    },
+    {
+      "name": "fiducial-bundle-context-quality-reviewer.md",
+      "sha256": "44cbe4ce14a79112648ad5ccc6e3c5ab0acd1c41331d4d5326fb33c6e1bbcc61",
+      "bytes": 24829,
+      "words": 3677,
+      "header_names_candidate": true,
+      "old_sha_mentions": 0,
+      "identical_to_5b2a62f_asset_after_sha_substitution": false,
+      "changed_lines": [
+        "-<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261110T230100Z -->",
+        "+<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261111T041158Z -->"
+      ]
+    },
+    {
+      "name": "fiducial-bundle-copy-editor.md",
+      "sha256": "02f9611f8993b02a1b1d0cea0780513c4debd1a1ecd4403bf6e9ffc67a6c43b3",
+      "bytes": 32727,
+      "words": 5049,
+      "header_names_candidate": true,
+      "old_sha_mentions": 0,
+      "identical_to_5b2a62f_asset_after_sha_substitution": false,
+      "changed_lines": [
+        "-<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261110T230103Z -->",
+        "+<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261111T041200Z -->"
+      ]
+    },
+    {
+      "name": "fiducial-bundle-critic.md",
+      "sha256": "640faa97151cab7b0f530898d2a03fb0b85b4efd084d36325277aac505a132ef",
+      "bytes": 31241,
+      "words": 4816,
+      "header_names_candidate": true,
+      "old_sha_mentions": 0,
+      "identical_to_5b2a62f_asset_after_sha_substitution": false,
+      "changed_lines": [
+        "-<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261110T230104Z -->",
+        "+<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261111T041200Z -->"
+      ]
+    },
+    {
+      "name": "fiducial-bundle-release-manager-agent.md",
+      "sha256": "1119aa431348a3651b55695a70198892b53184cf7d717f5cf52410c1b5359874",
+      "bytes": 32892,
+      "words": 4758,
+      "header_names_candidate": true,
+      "old_sha_mentions": 0,
+      "identical_to_5b2a62f_asset_after_sha_substitution": false,
+      "changed_lines": [
+        "-<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261110T230059Z -->",
+        "+<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261111T041158Z -->"
+      ]
+    },
+    {
+      "name": "fiducial-bundle-reviewer-agent.md",
+      "sha256": "877aa0d08842cf9483978b651de29270d0eae352e1ed505a975a8773ddd65060",
+      "bytes": 27711,
+      "words": 4013,
+      "header_names_candidate": true,
+      "old_sha_mentions": 0,
+      "identical_to_5b2a62f_asset_after_sha_substitution": false,
+      "changed_lines": [
+        "-<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261110T230056Z -->",
+        "+<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261111T041157Z -->"
+      ]
+    },
+    {
+      "name": "fiducial-bundle-skeptic-risk-agent.md",
+      "sha256": "0fa1c3eb365bae615c98db92f4dbb55ac677a1fdeb43de2c8338beb8c448ba57",
+      "bytes": 27392,
+      "words": 3971,
+      "header_names_candidate": true,
+      "old_sha_mentions": 0,
+      "identical_to_5b2a62f_asset_after_sha_substitution": false,
+      "changed_lines": [
+        "-<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261110T230057Z -->",
+        "+<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261111T041157Z -->"
+      ]
+    },
+    {
+      "name": "fiducial-bundle-spec-reviewer-agent.md",
+      "sha256": "c29f912d7494fb1ae2bda866bc6e8414fad3fbac774fa1ac6172bf9f1988dcad",
+      "bytes": 27304,
+      "words": 4035,
+      "header_names_candidate": true,
+      "old_sha_mentions": 0,
+      "identical_to_5b2a62f_asset_after_sha_substitution": false,
+      "changed_lines": [
+        "-<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261110T230052Z -->",
+        "+<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261111T041155Z -->"
+      ]
+    },
+    {
+      "name": "fiducial-bundle-test-designer-agent.md",
+      "sha256": "80e2e4902a1d822f20e0189456b638f30da291d8d87c51f8fc241790a36495c9",
+      "bytes": 24421,
+      "words": 3605,
+      "header_names_candidate": true,
+      "old_sha_mentions": 0,
+      "identical_to_5b2a62f_asset_after_sha_substitution": false,
+      "changed_lines": [
+        "-<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261110T230053Z -->",
+        "+<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261111T041156Z -->"
+      ]
+    },
+    {
+      "name": "fiducial-bundle-writer.md",
+      "sha256": "36b830957d8e218aaee30551288327d2eb2a613ca88eca43cc26c9915793af93",
+      "bytes": 32921,
+      "words": 5021,
+      "header_names_candidate": true,
+      "old_sha_mentions": 0,
+      "identical_to_5b2a62f_asset_after_sha_substitution": false,
+      "changed_lines": [
+        "-<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261110T230101Z -->",
+        "+<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261111T041159Z -->"
+      ]
+    }
+  ]
+}
