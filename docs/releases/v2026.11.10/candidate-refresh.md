@@ -2,7 +2,9 @@
 
 Status: candidate regenerated with the #411 fix. Publication is not approved and not performed. Gate: #433.
 
-This file is the current reference for the candidate. `release-package.md`, `gate-request.md` and `session-handoff.md` describe the previous candidate `5b2a62f3b17aca1d859a43032b9ca2295c185391` and are kept as history; files suffixed `-5b2a62f` are that candidate's evidence.
+This file is the current reference for the candidate. `release-package.md`, `gate-request.md` and `session-handoff.md` describe the previous candidate `5b2a62f3b17aca1d859a43032b9ca2295c185391` and are kept as history; files suffixed `-5b2a62f` are that candidate's evidence, including its failing first test run and targeted recheck.
+
+Independent read of this refresh: `release-candidate-20261111-read-20261111T042500Z.md` (ready-with-findings; its blocking finding F1, a stale review claim in the release notes, and F2–F4 are corrected in the commit that added it).
 
 ## Candidate
 
@@ -25,6 +27,7 @@ This file is the current reference for the candidate. `release-package.md`, `gat
 - Observed (`asset-audit.json`): the asset-name set is the twelve named bundles plus README.md; every bundle header names the candidate SHA; no asset mentions the previous candidate SHA.
 - Observed: compared with the previous candidate's audited assets, README.md is byte-identical; eleven bundles differ only in the header line's commit and generation timestamp; `fiducial-bundle-chief-of-staff.md` additionally carries the `process/adopt.md` change and nothing else.
 - Inferred, not re-run: the previous candidate's per-row source-body coverage audit and the native hook/config equality check against v2026.11.04 carry forward, because selection, renderer, hooks and every selected body other than `process/adopt.md` are unchanged between the two candidates. The audit script itself was not available to re-run.
+- Observed: the two remaining-role-pruning finalization tests now compare the #432 merge commit `5b2a62f` to the approved preview instead of the working tree; they assert that batch as landed, not this candidate's `process/`.
 - Observed: the self-adoption refresh on main wrote five files byte-identical to its staged candidate, and a repeat prepare planned no changes (`reviews/fiducial-adopter-preserve-modes-adoption-report-20261111T040241Z.md` on main).
 
 ## Known gaps
