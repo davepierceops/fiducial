@@ -1,0 +1,62 @@
+# Plan: adopter and hook portability (#412, #415, #416)
+
+Base: main at `7288be896b7058cbf59b8db3db757318838123ae`. Branch: `intake/adopter-hook-portability`.
+Told (Dave, 2026-11-10): do this group before the live probe (#439).
+Class: routine. No change to authorization, data, public interface shape or a verification class; merged work stays unexposed until the next release decision.
+
+## Unit A — #412: adopter refuses before the first write
+
+Source: the Python fence in `process/adopt.md` (`apply`, lines 339–386 at base); `bin/tests/test_adopt.py` extracts it.
+
+Observed at base: `apply` calls `safe()` on each planned destination, which rejects symlinks and non-directory parents but not a final path that has become a directory, and does not check writability. Writes then run in one loop, so a late failure leaves earlier files written and the ownership manifest inconsistent.
+
+Acceptance criteria (from #412 and its 2026-11-11 comment):
+
+- A1. An absent planned destination replaced by a directory after `prepare` is refused before any target write; the target tree is byte- and mode-identical afterwards.
+- A2. An existing destination that needs a content write or delete and cannot be written (file mode 0400; parent directory not writable) is refused before any target write; target unchanged.
+- A3. The report destination is covered by the same preflight.
+- A4. Existing refusals still hold: symlink, mode drift after plan, inventory change since review.
+- A5. A clean apply and a repeat no-op apply behave as before, including #411's mode preservation.
+
+Not in scope: transactional apply or rollback after a mid-write I/O failure. The procedure's stated non-transactional boundary stays, narrowed by A1–A3.
+
+## Unit B — #415: push read-back under Codex and with qualified branches
+
+Source: `bin/hooks/push-readback` (line 101 at base strips to the last path segment); Codex adapter template in `bin/rulestore/emit/codex.py`.
+
+Acceptance criteria (from #415):
+
+- B1. `git push origin HEAD:refs/heads/codex/probe` reads back `codex/probe` and compares its SHA; only the literal `refs/heads/` prefix is stripped.
+- B2. A Codex shell payload carrying `tool_input.cmd` is read back exactly as one carrying `tool_input.command`; normalisation happens before dispatch, in the adapter.
+- B3. A push the remote did not take still fails loudly in both payload forms.
+- B4. Regression cases run against a local bare origin and compare actual SHAs.
+- B5. No claim of arbitrary shell equivalence: the recognised command patterns are unchanged.
+
+## Unit C — #416: cross-procedure references resolve in each emitted layout
+
+Source: `bin/rulestore/emit/claude_code.py`, `codex.py`, `common.py`. Observed at base: emitted skills carry nine references to six source paths (`process/change-flow.md`, `review-artifact.md`, `release.md`, `gate.md`, `decision-log.md`, `verification-checklists.md`) that an adopted repository does not have.
+
+Design: the emitters rewrite a reference to `process/<stem>.md` into the harness's name for that skill when `<stem>` is emitted as a skill in that layout, from the one list of skill documents (`common.skill_documents`). Source process documents are not edited; the role bundles are unchanged. Emission fails when an emitted skill refers to a `process/` document that is not a skill in that layout.
+
+Acceptance criteria (from #416):
+
+- C1. No emitted Claude Code or Codex skill contains a `process/<stem>.md` reference to a document emitted as a skill; each such reference names that skill in the form the harness resolves.
+- C2. A reference to a process document that is not emitted as a skill fails emission with the file and reference named.
+- C3. A focused test emits from the real store into an empty target, for each harness, and asserts every cross-procedure reference resolves to a file present in that layout.
+- C4. The twelve role bundles are byte-identical before and after.
+- C5. Fiducial's own installed context is refreshed by the adopt procedure after the change, as its own commit.
+
+## Sequence and dispatch
+
+All subagents run at the solid general-purpose tier (sonnet), model set explicitly on every dispatch. No frontier dispatch is planned.
+
+1. Plan review: one reviewer that did not draft this plan.
+2. Test designer: writes tests for A, B and C; shows each new test failing on base for the right reason; commits tests only.
+3. Coder (a different agent): implements A, B, C to green; full suite; commits.
+4. Self-adoption refresh (C5) by the adopt procedure, with its independent contradiction read.
+5. Review: Reviewer (quality), Skeptic/Risk (skepticism), and a Context Quality read over the `process/adopt.md` delta (governed text, intake), each by an agent that wrote none of it; one artifact per read in `process/review-artifact.md`'s form.
+6. Pull request to main for Dave to merge as a merge commit; decision entry appended at merge; #412, #415, #416 closed with evidence.
+
+## Verification boundary
+
+Contract-verified only: local source tests, a local bare origin, emission into empty targets. Live harness loading and hook delivery stay unverified and are #439's subject.
