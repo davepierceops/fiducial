@@ -62,6 +62,9 @@ class TestReviewVerificationPruning(unittest.TestCase):
             stream.extractall(landed, filter="data")
         cls.landed_rows = {r.id: r for r in inputs(landed).rows if r.kind == "rule"}
         cls.landed_processes = {r.id: r for r in inputs(landed).rows if r.kind == "process"}
+        # Enforcement output is compared at the batch's landed snapshot, so later
+        # approved hook changes do not fail this historical guarantee.
+        cls.landed_native = {h: targets()[h].emit(inputs(landed)) for h in ("claude-code", "codex")}
         cls.current = inputs(REPO_ROOT)
         cls.old_rows = {r.id: r for r in cls.old.rows if r.kind == "rule"}
         cls.rows = {r.id: r for r in cls.current.rows if r.kind == "rule"}
@@ -158,11 +161,12 @@ class TestReviewVerificationPruning(unittest.TestCase):
             prefix = ".claude" if h == "claude-code" else ".agents"
             self.assertIn(explanation, emission.files[prefix + "/skills/review-artifact/SKILL.md"])
             old = self.old_native[h]
+            landed = self.landed_native[h]
             paths = {p for p in old.files if "/hooks/" in p or p.endswith(("settings.json", "hooks.json"))}
             self.assertTrue(paths)
             for path in paths:
-                self.assertEqual(emission.files.get(path), old.files[path], (h, path))
-            self.assertEqual(emission.executable, old.executable)
+                self.assertEqual(landed.files.get(path), old.files[path], (h, path))
+            self.assertEqual(landed.executable, old.executable)
             for path, text in emission.files.items():
                 if path in ("CLAUDE.md", "AGENTS.md") or "/agents/" in path:
                     self.assertNotIn(old_prose, text, (h, path))
