@@ -4,7 +4,7 @@ Base: main at `76a6c149bdc4de37d9a839aa9d02540503cec345`. Branch: `intake/genera
 Told (Dave, 2026-11-11): this is the next package of the current batch. No release, adoption or live probe follows it; those run once at the end of the batch (#439).
 Class: routine. `process/adopt.md` prose changes (Unit E), so its delta takes one independent read and a decision-log entry.
 
-Left out, with reason: #358. Its missing-target refusal would fail today's bundles, because process documents cite rows their bundles do not carry, and resolving that is the editorial work #358 makes depend on #362 and #363, which DEC-001720 defers. It needs Dave's ruling before any build.
+Left out, with reason: #358. Its missing-target refusal would fail today's bundles, because process documents cite rows their bundles do not carry, and resolving that is editorial work the issue's own dependency list ties to #362 and #363, both open. It needs Dave's ruling before any build.
 
 ## Unit A — #365: reject rule rows with no instruction
 
@@ -13,44 +13,44 @@ Source: `bin/rulestore/store.py` (`_split_human`, row construction).
 - A1. A rule row whose agent-facing body is empty, whitespace-only, or consists only of a Human section is refused with a `RowShapeError` naming the file.
 - A2. A rule with a body and a Human section is accepted, unchanged.
 - A3. `bin/bundle` on a store holding such a row exits non-zero, names the row, and writes no bundle.
-- A4. The check applies to rule rows only; process documents are not newly constrained. State in the plan review what the store does for definition rows today and keep it.
+- A4. Definition rows are rule rows in the store and are covered. Process documents are not newly constrained. A row whose body is only an enforce block has a non-empty body and passes.
 - A5. The real store loads and all twelve bundles generate.
 
 ## Unit B — #398: retirement targets exist
 
-Source: `bin/tests/reconcile_sort.py`.
+Source: `bin/tests/reconcile_sort.py` holds the shape check (`RETIRED_VALUE_RE`). That script is not run by the suite and exits non-zero today by design, so the new check goes in a new suite test, `bin/tests/test_retired_targets.py`, which reuses that pattern.
 
 - B1. A `retired:` value that is a row id names a row present under `rules/` or `rules/retired/`; one that is a decision id names an entry present in `decisions/log.md`. A missing target fails with the retired row and the target named.
-- B2. A chain of retired rows ends at a live row or an existing decision; a cycle fails.
-- B3. The real store passes, including the existing R1283 → R1608 → decision chain.
+- B2 (plan-derived, beyond #398's text). A chain of retired rows ends at a live row or an existing decision; a cycle fails.
+- B3. The new test passes on the real store (not the script as a whole), including the existing R1283 → R1608 → decision chain.
 
 ## Unit C — #381 (remaining two items): release command and body check
 
 Source: `bin/release`. The directive and M2 items of #381 are superseded: those tools were removed.
 
-- C1. The printed `gh release create` line carries `-R <owner>/<repo>`, derived from the `origin` remote, and so runs from any directory. If origin is not a GitHub URL the tool refuses.
-- C2. Before printing, `bin/release` checks each generated bundle: every rule row its query selects has its body in the file, and no body of a row under `rules/retired/` appears unless a selected live row has that same body. A failure refuses (exit 2), names the bundle and the row, and leaves no output directory.
+- C1. The printed `gh release create` line carries `-R <owner>/<repo>`, read from `git config --get remote.origin.url` as `bin/bundle` reads it, and so runs from any directory. If that URL is not a GitHub URL the tool refuses; this refusal comes after the existing fetch refusal, so existing refusal order is unchanged.
+- C2. Before printing, `bin/release` checks each generated bundle: every rule row its query selects is present as the renderer renders it (`render.row_text`; a row that renders nothing is exempt), and no retired row's rendered text appears in the bundle's rule band or Definitions section unless a selected live row renders the same text. Process-document text is excluded, since process documents legitimately carry text that retired rows were extracted from. A failure refuses (exit 2), names the bundle and the row, and leaves no output directory.
 - C3. The real store passes C2 for all twelve bundles.
 
 ## Unit D — #366 (remaining two items): input-scoped release check and local provenance
 
 Source: `bin/release` (`_dirty_under`), `bin/rulestore/render.py`, the bundle CLI.
 
-Design choice, flagged: the release cleanliness check is scoped to the generation input roots — `rules/`, `process/`, `README.md`, `bin/bundle`, `bin/release`, `bin/rulestore/` — rather than to the per-bundle effective selection the issue proposes. It is the conservative superset: it can refuse on an uncommitted edit to a rule no bundle selects, and it cannot miss an added, deleted or re-keyed input or changed generator code. The issue marks its implementation plan as proposed.
+Design choice, flagged: the release cleanliness check is scoped to the generation input roots — `rules/`, `process/`, `README.md`, `bin/bundle`, `bin/release`, `bin/rulestore/` — held in one shared constant, rather than to the per-bundle effective selection the issue proposes. It is the conservative superset: it can refuse on an uncommitted edit to a rule no bundle selects, and it cannot miss an added, deleted or re-keyed input or changed generator code. The issue marks its implementation plan as proposed, but its step 4 says not to assume every file under `rules/` matters; the pull request states that this part of #366 is met conservatively, not as proposed.
 
 - D1. Uncommitted or untracked files outside the input roots do not block `bin/release`.
 - D2. A modified, added (untracked), deleted or renamed file under an input root blocks it, naming the path.
-- D3. A bundle generated by `bin/bundle` from a tree whose input roots differ from HEAD does not present itself as generated from HEAD alone: its header revision carries a local marker and a short content identity (`<head>+local.<12 hex>`, the hex taken from a SHA-256 over the uncommitted input state). Generated from a clean tree, the header is byte-identical to today's.
+- D3. A bundle generated by `bin/bundle` from a tree whose input roots differ from HEAD does not present itself as generated from HEAD alone: its header revision carries a local marker and a short content identity (`<head>+local.<12 hex>`). The hex is the first 12 characters of a SHA-256 over the sorted list of `(relative path, sha256 of the file's bytes, or "deleted")` for every path `git status --porcelain` reports under the input roots other than `README.md`, untracked files included. Generated from a clean tree, the header is byte-identical to today's. This applies to `--where` bundles; `--emit` output is unchanged.
 - D4. The header stays one line; no other bundle byte changes.
 - D5. `bin/release` assets always carry the plain revision, since D2 has already refused otherwise.
 
 ## Unit E — #440: follow-ups from the previous package's reads
 
-- E1 (adopter, `process/adopt.md` fence). When the runner can write an existing planned file but cannot set its mode because it does not own it, apply either completes or refuses before the first write; it never leaves a partly written target. Test: uid 65534 against a root-owned 0666 file.
+- E1 (adopter, `process/adopt.md` fence; ownership is read from file metadata, nothing is written during the check). When the runner can write an existing planned file but cannot set its mode because it does not own it, apply either completes or refuses before the first write; it never leaves a partly written target. Test: uid 65534 against a root-owned 0666 file.
 - E2 (adopter prose, governed). Step 4 and the non-transactional boundary sentence state that apply refuses before writing on destination type, permission bits and ownership, and that it does not see read-only filesystems, ACLs or immutable flags.
-- E3 (push read-back). `git push origin +main` reads back `main`.
+- E3 (push read-back). `git push origin +main` reads back `main`; the leading `+` is stripped from the destination as it already is from the source.
 - E4 (Codex adapter). A shell-tool payload whose `command` is a list is joined as `cmd` lists are, and read back; no traceback.
-- E5 (emitters). The reference rewrite applies only to a whole `process/<stem>.md` token: not when preceded by a path or word character (`docs/process/gate.md`, `subprocess/gate.md`, a URL) or followed by one (`process/gate.mdx`). Those are left untouched and do not fail emission.
+- E5 (emitters). The reference rewrite applies only to a whole `process/<stem>.md` token: not when preceded by a path or word character (`docs/process/gate.md`, `subprocess/gate.md`, a URL) or followed by one (`process/gate.mdx`). Those are left untouched and do not fail emission. Trailing sentence punctuation (`.` or `,`) is not a continuation.
 - E6 (tests). The duplicated write line at `bin/tests/test_hooks.py:483` is removed.
 - Not acted on, with reason: the emitted change-flow skill's "prose in `process/`" describes the store's own layout and is true there; the three pinned pruning tests no longer detecting later hook drift is left to #368 and #439, which are where drift is meant to be caught.
 
@@ -67,3 +67,7 @@ All subagents at the solid general-purpose tier (sonnet), model set explicitly. 
 ## Verification boundary
 
 Contract-verified only: local source tests, local bare origins, emission and release generation into scratch directories. Nothing live is run. The suite runs as uid 0 here; permission and ownership cases drop to an unprivileged uid.
+
+## Plan review
+
+Independent read at `2c92204`: changes-required, two blocking (C2 as first written failed all twelve real bundles; B3 assumed a script the suite does not run and that exits non-zero by design) and six non-blocking. All are applied in this revision.
