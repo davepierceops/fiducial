@@ -61,6 +61,7 @@ from .common import (
     first_sentence,
     read_enforced,
     render_rows,
+    rewrite_process_references,
     skill_documents,
     standing_selection,
     topic_stem,
@@ -200,7 +201,9 @@ class ClaudeCodeTarget(Target):
             fields = [("name", stem), ("description", first_sentence(doc.body) or stem)]
             if stem in NO_MODEL_INVOCATION:
                 fields.append(("disable-model-invocation", True))
-            text = frontmatter(fields) + "\n" + doc.body.strip() + "\n"
+            body = rewrite_process_references(
+                doc, dict(documents), "the %(stem)s skill (.claude/skills/%(stem)s/SKILL.md)")
+            text = frontmatter(fields) + "\n" + body.strip() + "\n"
             extra = spill.get(stem, [])
             if extra:
                 text += "\n## Rules\n\n"

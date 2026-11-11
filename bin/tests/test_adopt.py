@@ -395,6 +395,184 @@ class AdopterProcedure(unittest.TestCase):
             self.install()
         self.assertEqual(self.mode(".claude/hooks/guard"), 0o700)
 
+    # ---- #412: refuse before the first write ----------------------------
+    #
+    # Permission bits are not enforced for uid 0, so `run_apply` demotes the
+    # adopter to an unprivileged uid when the suite runs as root. The check
+    # reads bits and directory types only; it does not see read-only
+    # filesystems, ACLs or immutable flags, and these tests do not claim to.
+
+    UNPRIVILEGED = 65534
+
+    def state(self):
+        """Bytes and mode of every file plus the set of directories, outside .git."""
+        files, dirs = {}, set()
+        for base, names, leaves in os.walk(self.target):
+            names[:] = [n for n in names if n != ".git"]
+            rel = pathlib.Path(base).relative_to(self.target).as_posix()
+            if rel != ".":
+                dirs.add(rel)
+            for leaf in leaves:
+                path = pathlib.Path(base) / leaf
+                files[path.relative_to(self.target).as_posix()] = (path.read_bytes(),
+                                                                  path.lstat().st_mode & 0o777)
+        return files, dirs
+
+    @staticmethod
+    def restore_permissions(root):
+        """Make `root` removable again after a test narrowed directory modes."""
+        def fix(path):
+            if path.is_symlink():
+                return
+            if path.is_dir():
+                path.chmod(0o755)
+                for child in path.iterdir():
+                    fix(child)
+            else:
+                path.chmod(0o644)
+        fix(pathlib.Path(root))
+
+    def run_apply(self, review, approval):
+        """The documented `apply` CLI, as an unprivileged process when we are root."""
+        helper = write(self.work, "adopt-cli.py", FENCES[0])
+        extra = {}
+        if os.geteuid() == 0:
+            self.work.chmod(0o755)  # mkdtemp makes it 0700; the runner must traverse it
+            for base, names, leaves in os.walk(self.work):
+                for name in names + leaves:
+                    os.lchown(os.path.join(base, name), self.UNPRIVILEGED, self.UNPRIVILEGED)
+            os.chown(self.work, self.UNPRIVILEGED, self.UNPRIVILEGED)
+            extra = {"user": self.UNPRIVILEGED, "group": self.UNPRIVILEGED}
+            try:
+                probe = subprocess.run([sys.executable, "-I", "-c", "pass"], capture_output=True, **extra)
+            except (PermissionError, OSError) as exc:
+                self.skipTest("cannot run as an unprivileged uid; permission cases unverified: %s" % exc)
+            if probe.returncode:
+                self.skipTest("unprivileged uid cannot run the interpreter; permission cases unverified")
+        return subprocess.run([sys.executable, str(helper), "apply", str(self.stage), str(review), str(approval)],
+                              env=base_env(), text=True, capture_output=True, **extra)
+
+    def assert_apply_refused_untouched(self, expected_state):
+        review, approval = self.authorize()
+        self.addCleanup(self.restore_permissions, self.work)
+        proc = self.run_apply(review, approval)
+        self.assertEqual(self.state(), expected_state, "a refused apply must leave the target as it was")
+        self.assertNotEqual(proc.returncode, 0, proc.stdout)
+        self.assertIn("adopt:", proc.stderr)
+        self.assertNotIn("Traceback", proc.stderr)
+
+    def stage_one_skill(self):
+        write(self.trees[0], ".claude/skills/one/SKILL.md", "# One\n")
+
+    def test_absent_destination_replaced_by_a_directory_is_refused_before_any_write(self):
+        write(self.target, "CLAUDE.md", "# Project\n")
+        self.stage_one_skill()
+        self.plan()
+        paths = self.authorize()
+        (self.target / "AGENTS.md").mkdir()  # an empty directory is invisible to the inventory
+        before = self.state()
+        try:
+            ADOPT.apply(self.stage, *paths)
+            error = None
+        except Exception as exc:  # the type is judged after the target is
+            error = exc
+        self.assertEqual(self.state(), before, "files written before the late failure")
+        self.assertIsInstance(error, ValueError, repr(error))
+
+    def test_nested_destination_replaced_by_a_directory_is_refused_before_any_write(self):
+        self.stage_one_skill()
+        self.plan()
+        paths = self.authorize()
+        (self.target / ".claude/skills/one/SKILL.md").mkdir(parents=True)
+        before = self.state()
+        try:
+            ADOPT.apply(self.stage, *paths)
+            error = None
+        except Exception as exc:
+            error = exc
+        self.assertEqual(self.state(), before, "files written before the late failure")
+        self.assertIsInstance(error, ValueError, repr(error))
+
+    def test_content_write_to_a_file_without_write_permission_is_refused_before_any_write(self):
+        write(self.target, "CLAUDE.md", "# Project\nLocal text.\n").chmod(0o400)
+        self.stage_one_skill()
+        self.assertIn("CLAUDE.md", self.plan()["writes"])
+        self.assert_apply_refused_untouched(self.state())
+
+    def test_delete_without_parent_permission_is_refused_before_any_write(self):
+        for label, parent_mode in (("no write", 0o500), ("no search", 0o600)):
+            with self.subTest(parent=label):
+                self.setUp()
+                self.stage_one_skill()
+                self.plan()
+                self.install()
+                (self.trees[0] / ".claude/skills/one/SKILL.md").unlink()
+                self.assertEqual(self.plan()["writes"][".claude/skills/one/SKILL.md"]["text"], None)
+                self.addCleanup(self.restore_permissions, self.work)
+                (self.target / ".claude/skills/one").chmod(parent_mode)
+                self.assert_apply_refused_untouched(self.state())
+
+    def test_create_without_ancestor_permission_is_refused_before_any_write(self):
+        for label, ancestor_mode in (("no write", 0o500), ("no search", 0o600)):
+            for staged in ("src/AGENTS.md", "src/deep/er/AGENTS.md"):
+                with self.subTest(ancestor=label, create=staged):
+                    self.setUp()
+                    (self.target / "src").mkdir()
+                    write(self.trees[0], staged, "# Nested\n")
+                    self.assertIn(staged, self.plan()["writes"])
+                    self.addCleanup(self.restore_permissions, self.work)
+                    (self.target / "src").chmod(ancestor_mode)
+                    self.assert_apply_refused_untouched(self.state())
+
+    def test_report_destination_is_covered_by_the_same_preflight(self):
+        (self.target / "docs").mkdir()
+        self.stage_one_skill()
+        plan = self.plan()
+        self.assertTrue(plan["writes"])
+        self.addCleanup(self.restore_permissions, self.work)
+        (self.target / "docs").chmod(0o500)  # the report is the only write that needs it
+        self.assert_apply_refused_untouched(self.state())
+
+    def test_report_destination_replaced_by_a_directory_is_refused_before_any_write(self):
+        self.stage_one_skill()
+        plan = self.plan()
+        paths = self.authorize()
+        (self.target / ("docs/fiducial-adoption-" + plan["timestamp"] + ".md")).mkdir(parents=True)
+        before = self.state()
+        with self.assertRaises(ValueError):
+            ADOPT.apply(self.stage, *paths)
+        self.assertEqual(self.state(), before)
+
+    def test_symlink_replacing_a_planned_destination_after_prepare_is_refused_before_any_write(self):
+        self.stage_one_skill()
+        self.plan()
+        paths = self.authorize()
+        outside = write(self.work, "external", "untouched\n")
+        (self.target / "AGENTS.md").symlink_to(outside)
+        before = self.state()
+        with self.assertRaisesRegex(ValueError, "symlink"):
+            ADOPT.apply(self.stage, *paths)
+        self.assertEqual(self.state(), before)
+        self.assertEqual(outside.read_text(), "untouched\n")
+
+    def test_clean_apply_and_repeat_still_behave_for_an_unprivileged_runner(self):
+        write(self.target, "CLAUDE.md", "# Project\nLocal text.\n").chmod(0o600)
+        self.stage_one_skill()
+        self.plan()
+        review, approval = self.authorize()
+        self.addCleanup(self.restore_permissions, self.work)
+        proc = self.run_apply(review, approval)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        self.assertIn("CLAUDE.md", json.loads(proc.stdout))
+        self.assertEqual(self.mode("CLAUDE.md"), 0o600)
+        self.assertIn("Local text.", (self.target / "CLAUDE.md").read_text())
+        self.assertTrue((self.target / ".claude/skills/one/SKILL.md").is_file())
+        self.assertEqual(len(list((self.target / "docs").glob("fiducial-adoption-*.md"))), 1)
+        installed = self.state()
+        self.assertEqual(self.plan()["writes"], {}, "repeat is a no-op")
+        self.assertEqual(self.install(), [])
+        self.assertEqual(self.state(), installed)
+
     def test_labels_create_missing_only_and_read_back(self):
         metadata = {"human-gate": ("aabbcc", "existing description"), "accepted-risk": ("abcabc", "risk")}
         before = dict(metadata)

@@ -481,6 +481,7 @@ class TestPushReadback(HookTestCase):
     def test_git_dash_c_push_the_remote_did_not_take_fails_loudly(self):
         git(self.repo, "push", "-q", "origin", "main", env=self.env, check=True)
         write(self.repo, "README.md", "changed\n")
+        write(self.repo, "README.md", "never pushed\n")
         commit(self.repo, "never pushed", env=self.env)
         elsewhere = temp_dir(self, "elsewhere-")
         code, out, err = self.run_hook(
@@ -521,6 +522,73 @@ class TestPushReadback(HookTestCase):
         code, out, _ = self.bash("git push origin --delete gone")
         self.assertEqual(code, 0)
         self.assertEqual(out, "")
+
+    # ---- #415: qualified branch names and the literal refs/heads/ prefix ----
+
+    def push_to(self, ref, rev="HEAD"):
+        git(self.repo, "push", "-q", "origin", "%s:%s" % (rev, ref), env=self.env, check=True)
+
+    def remote_sha(self, ref):
+        return git(self.origin, "rev-parse", ref, env=self.env, check=True)[1].strip()
+
+    def test_a_qualified_branch_pushed_by_full_ref_is_read_back_whole(self):
+        self.push_to("refs/heads/codex/probe")
+        code, out, err = self.bash("git push origin HEAD:refs/heads/codex/probe")
+        self.assertEqual(code, 0, err)
+        self.assertIn("push-readback: origin/codex/probe is at %s" % self.head(), out)
+        self.assertEqual(self.remote_sha("refs/heads/codex/probe"), self.head())
+
+    def test_a_deeper_qualified_branch_keeps_every_segment(self):
+        self.push_to("refs/heads/intake/team/probe")
+        code, out, err = self.bash("git push origin HEAD:refs/heads/intake/team/probe")
+        self.assertEqual(code, 0, err)
+        self.assertIn("origin/intake/team/probe is at %s" % self.head(), out)
+
+    def test_a_qualified_branch_is_compared_to_itself_not_to_its_last_segment(self):
+        """The last segment names a different branch on the remote; reading it
+        back instead of `codex/probe` compares the wrong SHA."""
+        self.push_to("refs/heads/probe")
+        old = self.head()
+        write(self.repo, "README.md", "second\n")
+        commit(self.repo, "second", env=self.env)
+        self.push_to("refs/heads/codex/probe")
+        self.assertNotEqual(self.remote_sha("refs/heads/probe"), self.head())
+        code, out, err = self.bash("git push origin HEAD:refs/heads/codex/probe")
+        self.assertEqual(code, 0, err)
+        self.assertIn("origin/codex/probe is at %s" % self.head(), out)
+        self.assertNotIn(old, out)
+
+    def test_a_qualified_branch_the_remote_did_not_take_fails_loudly(self):
+        self.push_to("refs/heads/codex/probe")
+        write(self.repo, "README.md", "never pushed\n")
+        commit(self.repo, "never pushed", env=self.env)
+        code, _, err = self.bash("git push origin HEAD:refs/heads/codex/probe")
+        self.assertEqual(code, 2)
+        self.assertIn("origin/codex/probe reads back", err)
+
+    def test_a_qualified_local_branch_pushed_by_name_is_read_back_whole(self):
+        git(self.repo, "checkout", "-q", "-b", "codex/probe", env=self.env, check=True)
+        self.push_to("codex/probe")
+        code, out, err = self.bash("git push origin codex/probe")
+        self.assertEqual(code, 0, err)
+        self.assertIn("origin/codex/probe is at %s" % self.head(), out)
+
+    def test_only_the_literal_refs_heads_prefix_is_stripped(self):
+        """A tag ref is not a branch: it is read back under its own full name."""
+        self.push_to("refs/tags/probe-tag")
+        code, out, err = self.bash("git push origin HEAD:refs/tags/probe-tag")
+        self.assertEqual(code, 0, err)
+        self.assertIn("origin/refs/tags/probe-tag is at %s" % self.head(), out)
+
+    def test_pushes_the_recognised_patterns_skip_still_pass_silently(self):
+        """B5: the command patterns are unchanged; no claim of shell equivalence."""
+        write(self.repo, "README.md", "never pushed\n")
+        commit(self.repo, "never pushed", env=self.env)
+        for command in ("git push --dry-run origin main", "git push --tags", "git push origin --delete gone",
+                        "git push --mirror", "sh -c 'git push origin main'", "echo git-push origin main"):
+            with self.subTest(command=command):
+                code, out, err = self.bash(command)
+                self.assertEqual((code, out), (0, ""), err)
 
 
 if __name__ == "__main__":

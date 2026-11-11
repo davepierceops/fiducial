@@ -194,3 +194,20 @@ def topic_stem(topic, stems):
             if best is None or len(stem) > len(best):
                 best = stem
     return best
+
+
+_PROCESS_REF_RE = re.compile(r"(`?)process/([\w-]+)\.md(`?)")
+
+
+def rewrite_process_references(doc, stems, form):
+    """`doc.body` with each `process/<stem>.md` reference replaced by
+    `form % stem`, backticks around it consumed. A reference whose stem is not
+    in `stems` raises EmitError naming the document and the reference."""
+    def replace(match):
+        stem = match.group(2)
+        if stem not in stems:
+            raise EmitError("refused: %s refers to %s, which is not emitted as a skill"
+                            % (doc.path or doc.id, "process/%s.md" % stem))
+        quoted = match.group(1) and match.group(3)
+        return form % {"stem": stem} + ("" if quoted else match.group(1) + match.group(3))
+    return _PROCESS_REF_RE.sub(replace, doc.body)

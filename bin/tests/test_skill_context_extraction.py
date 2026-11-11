@@ -60,6 +60,9 @@ class TestSkillContextExtraction(unittest.TestCase):
         with tarfile.open(fileobj=io.BytesIO(archive)) as stream:
             stream.extractall(extracted, filter="data")
         cls.extracted_rows = {r.id: r for r in inputs(extracted).rows if r.kind == "rule"}
+        # Enforcement output is compared at the batch's landed snapshot, so later
+        # approved hook changes do not fail this historical guarantee.
+        cls.extracted_emitted = {name: targets()[name].emit(inputs(extracted)) for name in ("claude-code", "codex")}
         cls.current = inputs(REPO_ROOT)
         cls.old_rows = {r.id: r for r in cls.old.rows if r.kind == "rule"}
         cls.rows = {r.id: r for r in cls.current.rows if r.kind == "rule"}
@@ -193,7 +196,7 @@ class TestSkillContextExtraction(unittest.TestCase):
                     self.assertIn(definition.body, available, (harness, skill, definition.id))
 
     def test_security_outputs_and_executable_modes_do_not_change(self):
-        for harness, emission in self.emitted.items():
+        for harness, emission in self.extracted_emitted.items():
             old = self.old_emitted[harness]
             paths = {p for p in old.files if "/hooks/" in p or p.endswith(("settings.json", "hooks.json"))}
             self.assertTrue(paths)

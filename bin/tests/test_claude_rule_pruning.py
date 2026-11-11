@@ -71,6 +71,9 @@ class TestClaudeRulePruning(unittest.TestCase):
         with tarfile.open(fileobj=io.BytesIO(archive)) as stream:
             stream.extractall(landed, filter="data")
         cls.landed_rows = {r.id: r for r in inputs(landed).rows if r.kind == "rule"}
+        # Enforcement output is compared at the batch's landed snapshot, so later
+        # approved hook changes do not fail this historical guarantee.
+        cls.landed_emitted = {name: targets()[name].emit(inputs(landed)) for name in ("claude-code", "codex")}
         cls.root = pathlib.Path(os.environ.get("FIDUCIAL_PRUNING_ROOT", str(REPO_ROOT)))
         cls.manifest = json.loads((cls.root / "docs/plans/claude-rule-pruning-finalization-20261105.json").read_text())
         cls.source = inputs(cls.root)
@@ -213,7 +216,7 @@ class TestClaudeRulePruning(unittest.TestCase):
                         if path in ("CLAUDE.md", "AGENTS.md") or "/agents/" in path:
                             self.assertNotIn(old_prose, text, (harness, path))
         self.assertIn("R0564", self.processes["project-setup"].body)
-        for harness, emission in self.emitted.items():
+        for harness, emission in self.landed_emitted.items():
             old = targets()[harness].emit(self.old)
             paths = {p for p in old.files if "/hooks/" in p or p.endswith(("settings.json", "hooks.json"))}
             self.assertTrue(paths)

@@ -100,7 +100,8 @@ def main():
         src = src.lstrip("+")
         if dst == "HEAD":
             dst = branch
-        dst = dst.rsplit("/", 1)[-1] if dst.startswith("refs/heads/") else dst
+        if dst.startswith("refs/heads/"):
+            dst = dst[len("refs/heads/"):]
         code, _, err = lib.git(root, "fetch", "-q", remote, dst)
         if code != 0:
             failures.append("fetch %s %s failed: %s" % (remote, dst, err.strip()))

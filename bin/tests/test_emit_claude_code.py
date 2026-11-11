@@ -15,6 +15,8 @@ import re
 import shutil
 import unittest
 
+from rulestore.emit import EmitError, EmitInputs, load_tiers, targets
+from rulestore.store import Row
 from tests.emit_fixtures import (
     AGENT_IDS,
     DENY_IDS,
@@ -454,6 +456,118 @@ class TestClaudeCodeOverTheRealStore(unittest.TestCase):
         self.assertTrue((out / ".claude/settings.json").is_file())
         retro = (out / ".claude/skills/retro/SKILL.md").read_text()
         self.assertIn("\n## Rules\n", retro)
+
+
+# ---- #416: cross-procedure references resolve in the emitted layout --------
+
+REF_RE = re.compile(r"process/[\w-]+\.md")
+CLAUDE_REF_RE = re.compile(r"the ([\w-]+) skill \((\.claude/skills/[\w-]+/SKILL\.md)\)")
+
+
+def named_bundle_roles():
+    """Role slugs of the twelve standalone bundles, from the one list that names them."""
+    text = (BIN_DIR.parent / "process/named-queries.md").read_text()
+    return re.findall(r"^\S+\s+role=(\S+)$", text, re.M)
+
+
+class TestClaudeCodeCrossProcedureReferences(unittest.TestCase):
+    """Synthetic process documents: the rewrite form is fixed, backticks are consumed."""
+
+    def emit(self, body, extra=()):
+        rows = [Row(id="a", kind="process", path="process/a.md", body="# Process: A\n\n" + body,
+                    keys={"topic": ["a"]}),
+                Row(id="b", kind="process", path="process/b.md", body="# Process: B\n\nThe B form.\n",
+                    keys={"topic": ["b"]}), *extra]
+        inputs = EmitInputs(rows=rows, sequences=([["core"]], ["a", "b"]), tiers=load_tiers(),
+                            hooks={}, repo="fixture/store", head="a" * 40)
+        return targets()["claude-code"].emit(inputs).files
+
+    def test_a_reference_to_an_emitted_skill_names_the_skill_in_the_claude_code_form(self):
+        ref = "the b skill (.claude/skills/b/SKILL.md)"
+        cases = (("Use `process/b.md` for the form.", "Use %s for the form." % ref),
+                 ("Apply `process/b.md`'s dispositions.", "Apply %s's dispositions." % ref),
+                 ("See process/b.md.", "See %s." % ref),
+                 ("Both `process/b.md` and process/b.md.", "Both %s and %s." % (ref, ref)))
+        for source, expected in cases:
+            with self.subTest(source=source):
+                skill = self.emit("Plain first sentence.\n\n" + source + "\n")[".claude/skills/a/SKILL.md"]
+                self.assertIn(expected, skill)
+                self.assertNotIn("process/b.md", skill)
+                self.assertNotIn("`the b skill", skill)
+                self.assertNotIn(")`", skill)
+
+    def test_a_reference_to_a_document_that_is_not_a_skill_fails_emission_naming_file_and_reference(self):
+        setup = Row(id="project-setup", kind="process", path="process/project-setup.md",
+                    body="# Process: Setup\n\nSet up.\n", keys={"topic": ["project-setup"]})
+        for reference in ("process/project-setup.md", "process/nope.md"):
+            with self.subTest(reference=reference):
+                with self.assertRaises(EmitError) as caught:
+                    self.emit("Plain first sentence.\n\nRead `%s` first.\n" % reference, extra=[setup])
+                self.assertIn("process/a.md", str(caught.exception))
+                self.assertIn(reference, str(caught.exception))
+
+    def test_a_skill_with_no_cross_references_emits_unchanged(self):
+        skill = self.emit("Nothing to cite.\n")[".claude/skills/a/SKILL.md"]
+        self.assertTrue(skill.rstrip().endswith("Nothing to cite."))
+
+
+class TestClaudeCodeRealStoreReferences(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.case = unittest.TestCase()
+        cls.out = temp_dir(cls.case, "emit-refs-")
+        code, _, err = run_bundle("--emit", "claude-code", "--out", str(cls.out),
+                                  cwd=BIN_DIR.parent, env=base_env())
+        assert code == 0, err
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.case.doCleanups()
+
+    def skills(self):
+        return {p: p.read_text() for p in sorted(self.out.glob(".claude/skills/*/SKILL.md"))}
+
+    def test_every_cross_procedure_reference_resolves_to_a_file_in_the_layout(self):
+        emitted = {p.parent.name for p in self.skills()}
+        found = 0
+        for path, text in self.skills().items():
+            with self.subTest(skill=path.parent.name):
+                self.assertEqual(REF_RE.findall(text), [], "a process/ path an adopted repository lacks")
+                for name, target in CLAUDE_REF_RE.findall(text):
+                    found += 1
+                    self.assertIn(name, emitted)
+                    self.assertEqual(target, ".claude/skills/%s/SKILL.md" % name)
+                    self.assertTrue((self.out / target).is_file(), target)
+        self.assertGreaterEqual(found, 9, "the nine references the sources carry must survive as skill names")
+
+
+class TestRoleBundlesAreUnchangedByTheReferenceRewrite(unittest.TestCase):
+    """C4. The twelve standalone bundles are not emitted skills: they keep the
+    source `process/<stem>.md` paths, and `--emit bundle` still writes the
+    bytes `--where` writes. (A byte-for-byte comparison with the pre-change
+    bundles needs a pinned baseline the suite does not carry; this guards the
+    two ways a rewrite could leak into them.)"""
+
+    def test_each_bundle_keeps_source_references_and_both_paths_agree(self):
+        roles = named_bundle_roles()
+        self.assertEqual(len(roles), 12, roles)
+        env, kept = base_env(), {}
+        for role in roles:
+            with self.subTest(role=role):
+                where, emit = temp_dir(self, "bundle-where-"), temp_dir(self, "bundle-emit-")
+                self.assertEqual(run_bundle("--where", "role=" + role, "--out", str(where),
+                                            cwd=BIN_DIR.parent, env=env)[0], 0)
+                self.assertEqual(run_bundle("--emit", "bundle", "--where", "role=" + role, "--out", str(emit),
+                                            cwd=BIN_DIR.parent, env=env)[0], 0)
+                (a,), (b,) = sorted(where.iterdir()), sorted(emit.iterdir())
+                body = lambda path: "\n".join(path.read_text().splitlines()[1:])
+                self.assertEqual(body(a), body(b))
+                text = body(a)
+                self.assertNotRegex(text, r"the [\w-]+ skill \(\.claude/skills/")
+                self.assertNotIn(".agents/skills/", text)
+                kept[role] = len(REF_RE.findall(text))
+        self.assertGreater(kept["coder-agent"], 0, kept)
+        self.assertGreater(kept["chief-of-staff"], 0, kept)
 
 
 if __name__ == "__main__":
