@@ -1311,3 +1311,9 @@ Context: Dave pointed the decision session at `docs/releases/v2026.11.10/session
 Date: 2026-11-10
 Decision: Of the six non-blocking findings from the reads over `intake/adopter-preserve-modes`, the manifest mode is fixed in DEC-001730's change, the read-only-file partial write is recorded as one comment on #412, and the other four are not filed: the store cannot tighten an existing file's mode, a prose imprecision about the TOML and hook rule, missing 0400/0666 test cases, and a named-queries read in the finalization test's shared setup.
 Context: Five independent reads over a two-line change produced these; Dave asked why one fix had grown to six findings and a blocker, and answered "y" to this disposition. The four unfiled findings remain readable in the review artifacts.
+
+
+## DEC-001750 — Publish v2026.11.10 at a8d87bc
+Date: 2026-11-10
+Decision: Dave approves publication of the context-consolidation revision as release `v2026.11.10` at a8d87bc95afed9f5ac8b54fe2c8863013ce10265, with README.md and the twelve named role bundles as its assets and the deferred gaps listed on gate #433 carried as stated there. Published 2026-11-11T04:25:42Z by Dave from his clone.
+Context: Asked "Publish this candidate, yes or no?" after the candidate and evidence were regenerated with the #411 fix (DEC-001730), Dave answered "yes". The tag keeps the gate's proposed name; it was still 2026-11-10 in his timezone. Read back from GitHub after publication: the tag resolves to the candidate, the release is neither draft nor prerelease, and all 13 asset names, sizes and SHA256 digests equal `docs/releases/v2026.11.10/SHA256SUMS` on branch `release-candidate-20261111` at f0d5be8af4135bacffb1576dfa54cb5bbaf82bdf. Native skill loading, adherence and hook enforcement remain unverified, and #412 remains open.
