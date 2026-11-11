@@ -432,8 +432,12 @@ class AdopterProcedure(unittest.TestCase):
                 path.chmod(0o644)
         fix(pathlib.Path(root))
 
-    def run_apply(self, review, approval):
-        """The documented `apply` CLI, as an unprivileged process when we are root."""
+    def run_apply(self, review, approval, root_owned=()):
+        """The documented `apply` CLI, as an unprivileged process when we are root.
+
+        `root_owned` names target files left owned by root after the tree is
+        handed to the unprivileged runner: it can write them (by mode) but
+        cannot change their mode (not the owner)."""
         helper = write(self.work, "adopt-cli.py", FENCES[0])
         extra = {}
         if os.geteuid() == 0:
@@ -442,6 +446,8 @@ class AdopterProcedure(unittest.TestCase):
                 for name in names + leaves:
                     os.lchown(os.path.join(base, name), self.UNPRIVILEGED, self.UNPRIVILEGED)
             os.chown(self.work, self.UNPRIVILEGED, self.UNPRIVILEGED)
+            for relpath in root_owned:
+                os.lchown(self.target / relpath, 0, 0)
             extra = {"user": self.UNPRIVILEGED, "group": self.UNPRIVILEGED}
             try:
                 probe = subprocess.run([sys.executable, "-I", "-c", "pass"], capture_output=True, **extra)
@@ -542,6 +548,30 @@ class AdopterProcedure(unittest.TestCase):
         with self.assertRaises(ValueError):
             ADOPT.apply(self.stage, *paths)
         self.assertEqual(self.state(), before)
+
+    def test_e1_a_writable_file_the_runner_does_not_own_completes_or_refuses_whole(self):
+        """#440 E1: the runner can write an existing planned file (0666) but,
+        not owning it, cannot set its mode. Apply either completes or refuses
+        before the first write; it never leaves a partly written target."""
+        if os.geteuid() != 0:
+            self.skipTest("needs a root-owned file next to an unprivileged runner; ownership cases unverified")
+        write(self.target, "CLAUDE.md", "# Project\nLocal text.\n").chmod(0o666)
+        self.stage_one_skill()
+        self.assertIn("CLAUDE.md", self.plan()["writes"])
+        before = self.state()
+        review, approval = self.authorize()
+        self.addCleanup(self.restore_permissions, self.work)
+        proc = self.run_apply(review, approval, root_owned=["CLAUDE.md"])
+        after = self.state()
+        self.assertNotIn("Traceback", proc.stderr)
+        if proc.returncode != 0:
+            self.assertIn("adopt:", proc.stderr)
+            self.assertEqual(after, before, "a refused apply must leave the target as it was")
+        else:
+            self.assertIn("Local text.", (self.target / "CLAUDE.md").read_text())
+            self.assertNotEqual(after[0]["CLAUDE.md"][0], before[0]["CLAUDE.md"][0])
+            self.assertTrue((self.target / ".claude/skills/one/SKILL.md").is_file())
+            self.assertEqual(len(list((self.target / "docs").glob("fiducial-adoption-*.md"))), 1)
 
     def test_symlink_replacing_a_planned_destination_after_prepare_is_refused_before_any_write(self):
         self.stage_one_skill()

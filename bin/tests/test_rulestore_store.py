@@ -15,16 +15,22 @@ carries is a git object and cannot be mocked into existence.
 
 from __future__ import annotations
 
+import pathlib
+import subprocess
+import sys
 import unittest
 
+from rulestore import named_queries
 from rulestore.store import FileRowSource, RowShapeError
 from tests.helpers import (
+    REPO_ROOT,
     base_env,
     git,
     make_store_repo,
     rs_process,
     rs_row,
     rs_store_files,
+    temp_dir,
 )
 
 
@@ -207,6 +213,97 @@ class TestFileRowSourceDefects(unittest.TestCase):
         self.assertNotIn("R0901", by_id(rows))
         text = (clone / "rules" / "retired" / "R0901.md").read_text()
         self.assertIn("\nretired: R0002\n", text)
+
+
+class TestRowsWithNoInstruction(unittest.TestCase):
+    """#365 (A1-A5): a rules/ row must carry an agent-facing body."""
+
+    def load(self, relpath, text):
+        files = dict(rs_store_files())
+        files[relpath] = text
+        _origin, clone = make_store_repo(self, files=files)
+        return FileRowSource(clone).rows()
+
+    def assert_refused(self, relpath, text):
+        with self.assertRaises(RowShapeError) as caught:
+            self.load(relpath, text)
+        self.assertIn(relpath, str(caught.exception))
+
+    def test_a1_an_empty_body_is_refused_naming_the_file(self):
+        self.assert_refused("rules/R0002.md", rs_row(
+            "R0002", "", order=30, topic=["core"], role=["writer"], verb="require", term=None))
+
+    def test_a1_a_frontmatter_only_file_is_refused_naming_the_file(self):
+        self.assert_refused(
+            "rules/R0002.md",
+            "---\nid: R0002\norder: 30\ntopic: [core]\nrole: [writer]\nverb: require\nterm: null\n---\n")
+
+    def test_a1_a_whitespace_only_body_is_refused_naming_the_file(self):
+        self.assert_refused(
+            "rules/R0002.md",
+            "---\nid: R0002\norder: 30\ntopic: [core]\nrole: [writer]\nverb: require\nterm: null\n---\n"
+            "\n   \n\t\n\n")
+
+    def test_a1_a_body_that_is_only_a_human_section_is_refused_naming_the_file(self):
+        self.assert_refused("rules/R0002.md", rs_row(
+            "R0002", "", order=30, topic=["core"], role=["writer"], verb="require", term=None,
+            human="DEC-000170: why this row exists."))
+
+    def test_a1_a_human_heading_at_another_level_does_not_hide_an_empty_body(self):
+        text = rs_row("R0002", "", order=30, topic=["core"], role=["writer"],
+                      verb="require", term=None, human="Why.").replace("## Human", "### Human")
+        self.assert_refused("rules/R0002.md", text)
+
+    def test_a2_a_body_with_a_human_section_is_accepted_unchanged(self):
+        rows = {r.id: r for r in self.load("rules/R0002.md", rs_row(
+            "R0002", "State the obligation at its shortest.", order=30, topic=["core"],
+            role=["writer"], verb="require", term=None, human="DEC-000170: why."))}
+        self.assertEqual(rows["R0002"].body, "State the obligation at its shortest.")
+        self.assertEqual(rows["R0002"].human, "DEC-000170: why.")
+
+    def test_a4_a_definition_row_with_no_body_is_refused(self):
+        self.assert_refused("rules/R0100.md", rs_row(
+            "R0100", "", order=20, topic=["lexicon"], verb="define", term=["tranche"]))
+
+    def test_a4_a_definition_row_with_a_body_is_accepted(self):
+        rows = {r.id: r for r in self.load("rules/R0100.md", rs_row(
+            "R0100", "A tranche is one workstream.", order=20, topic=["lexicon"],
+            verb="define", term=["tranche"]))}
+        self.assertEqual(rows["R0100"].body, "A tranche is one workstream.")
+
+    def test_a4_a_row_whose_body_is_only_an_enforce_block_has_a_body_and_passes(self):
+        block = "```yaml\nhook: bin/hooks/lane-guard\n```"
+        rows = {r.id: r for r in self.load("rules/R0002.md", rs_row(
+            "R0002", block, order=30, enforce="hook", topic=["core"], role=["writer"],
+            verb="require", term=None))}
+        self.assertEqual(rows["R0002"].body, block)
+
+    def test_a4_process_documents_are_not_newly_constrained(self):
+        rows = self.load("process/empty-note.md", rs_process("", order=90, topic=["empty-note"]))
+        self.assertIn("process/empty-note.md", [r.path for r in rows])
+
+
+class TestTheRealStoreStillLoads(unittest.TestCase):
+    """A5: the guard against refusing a row the store already holds."""
+
+    def test_a5_the_real_store_loads(self):
+        rows = FileRowSource(REPO_ROOT).rows()
+        self.assertTrue(rows)
+        self.assertTrue(all(r.body for r in rows if r.kind == "rule"))
+
+    def test_a5_all_twelve_bundles_generate(self):
+        source = FileRowSource(REPO_ROOT)
+        entries = named_queries.bundles(source.named_queries_text())
+        self.assertEqual(len(entries), 12, [name for name, _ in entries])
+        out = temp_dir(self, "a5-bundles-")
+        for name, tokens in entries:
+            with self.subTest(bundle=name):
+                proc = subprocess.run(
+                    [sys.executable, str(REPO_ROOT / "bin" / "bundle"), "--where", *tokens,
+                     "--name", name, "--out", str(out)],
+                    cwd=str(REPO_ROOT), capture_output=True, text=True, env=base_env())
+                self.assertEqual(proc.returncode, 0, proc.stderr)
+                self.assertTrue(pathlib.Path(proc.stdout.strip()).is_file())
 
 
 if __name__ == "__main__":

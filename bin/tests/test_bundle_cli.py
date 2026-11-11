@@ -392,5 +392,140 @@ class TestBundleMalformedRow(unittest.TestCase):
         self.assertEqual(sorted(p.name for p in self.out.iterdir()), [])
 
 
+class TestBundleRefusesARowWithNoInstruction(unittest.TestCase):
+    """#365 A3: a store holding a row with no agent-facing body refuses whole."""
+
+    def setUp(self):
+        files = dict(rs_store_files())
+        files["rules/R0002.md"] = rs_row(
+            "R0002", "", order=30, topic=["core"], role=["writer"], verb="require",
+            term=None, human="DEC-000170: a rationale with no instruction above it.",
+        )
+        self.origin, self.clone = make_store_repo(self, files=files)
+        self.env = base_env()
+        self.out = temp_dir(self, "rulestore-out-")
+
+    def test_a3_where_exits_non_zero_names_the_row_and_writes_no_bundle(self):
+        # The query selects other rows: the store as a whole is refused.
+        code, out, err = run_bundle("--where", "role=coder-agent", "--out", str(self.out),
+                                    cwd=self.clone, env=self.env)
+        self.assertEqual(code, EXIT_REFUSED, "stdout=%r stderr=%r" % (out, err))
+        lines = err.strip().splitlines()
+        self.assertEqual(len(lines), 1, err)
+        self.assertIn("R0002", lines[0])
+        self.assertTrue(no_traceback(out, err), err)
+        self.assertEqual(sorted(p.name for p in self.out.iterdir()), [])
+
+
+class TestBundleLocalProvenance(BundleCliTestCase):
+    """#366 D3/D4: a bundle generated from a tree whose generation inputs
+    differ from HEAD says so in its one header line."""
+
+    LOCAL_HEADER_RE = (r"^<!-- fiducial \S+ @ (?P<head>[0-9a-f]{40})\+local\.(?P<hex>[0-9a-f]{12})"
+                       r" \d{8}T\d{6}Z -->$")
+
+    def head(self, clone=None):
+        return git(clone or self.clone, "rev-parse", "HEAD", env=self.env, check=True)[1].strip()
+
+    def header_of(self, *args, clone=None):
+        code, out, err = run_bundle("--where", *(args or ("role=critic",)), "--out", str(self.out),
+                                    cwd=clone or self.clone, env=self.env)
+        self.assertEqual(code, EXIT_OK, err)
+        return self.bundle_path(out).read_text().splitlines()
+
+    def test_d3_a_clean_tree_keeps_the_plain_revision_header(self):
+        lines = self.header_of()
+        self.assertRegex(lines[0], r"^<!-- fiducial \S+ @ %s \d{8}T\d{6}Z -->$" % self.head())
+        self.assertNotIn("+local", lines[0])
+
+    def test_d3_a_modified_tracked_file_under_rules_marks_the_header(self):
+        self.dirty_the_store()
+        lines = self.header_of()
+        match = re.match(self.LOCAL_HEADER_RE, lines[0])
+        self.assertIsNotNone(match, lines[0])
+        self.assertEqual(match.group("head"), self.head())
+
+    def test_d3_an_untracked_file_under_rules_marks_the_header(self):
+        write(self.clone, "rules/R0200.md", rs_row(
+            "R0200", "An uncommitted rule.", order=60, topic=["core"], role=["writer"],
+            verb="require", term=None))
+        self.assertRegex(self.header_of()[0], self.LOCAL_HEADER_RE)
+
+    def test_d3_an_untracked_file_under_process_marks_the_header(self):
+        write(self.clone, "process/new-note.md", "# New note\n\nText.\n")
+        self.assertRegex(self.header_of()[0], self.LOCAL_HEADER_RE)
+
+    def test_d3_a_deleted_file_marks_the_header(self):
+        (self.clone / "rules" / "R0003.md").unlink()
+        self.assertRegex(self.header_of("role=critic")[0], self.LOCAL_HEADER_RE)
+
+    def test_d3_a_renamed_file_marks_the_header(self):
+        git(self.clone, "mv", "rules/R0003.md", "rules/R0003b.md", env=self.env, check=True)
+        self.assertRegex(self.header_of()[0], self.LOCAL_HEADER_RE)
+
+    def test_d3_a_staged_but_uncommitted_edit_marks_the_header(self):
+        self.dirty_the_store()
+        git(self.clone, "add", "rules/R0001.md", env=self.env, check=True)
+        self.assertRegex(self.header_of()[0], self.LOCAL_HEADER_RE)
+
+    def test_d3_a_dirty_file_outside_the_input_roots_does_not_mark_the_header(self):
+        write(self.clone, "notes/scratch.txt", "not a generation input\n")
+        lines = self.header_of()
+        self.assertRegex(lines[0], r"^<!-- fiducial \S+ @ %s \d{8}T\d{6}Z -->$" % self.head())
+
+    def test_d3_the_same_dirty_content_gives_the_same_identity_in_another_clone(self):
+        self.dirty_the_store()
+        first = re.match(self.LOCAL_HEADER_RE, self.header_of()[0])
+        _origin, other = make_store_repo(self)
+        write(other, "rules/R0001.md",
+              (other / "rules/R0001.md").read_text() + "\nAn uncommitted line.\n")
+        second = re.match(self.LOCAL_HEADER_RE, self.header_of(clone=other)[0])
+        self.assertIsNotNone(first)
+        self.assertIsNotNone(second)
+        self.assertEqual(first.group("hex"), second.group("hex"))
+
+    def test_d3_the_identity_is_stable_across_runs_and_changes_with_the_content(self):
+        self.dirty_the_store()
+        once = re.match(self.LOCAL_HEADER_RE, self.header_of()[0])
+        twice = re.match(self.LOCAL_HEADER_RE, self.header_of()[0])
+        write(self.clone, "rules/R0001.md",
+              (self.clone / "rules/R0001.md").read_text() + "A second uncommitted line.\n")
+        changed = re.match(self.LOCAL_HEADER_RE, self.header_of()[0])
+        self.assertIsNotNone(once)
+        self.assertIsNotNone(changed)
+        self.assertEqual(once.group("hex"), twice.group("hex"))
+        self.assertNotEqual(once.group("hex"), changed.group("hex"))
+
+    def test_d3_the_identity_changes_with_the_set_of_dirty_paths(self):
+        self.dirty_the_store()
+        edit_only = re.match(self.LOCAL_HEADER_RE, self.header_of()[0])
+        write(self.clone, "process/new-note.md", "# New note\n\nText.\n")
+        edit_and_add = re.match(self.LOCAL_HEADER_RE, self.header_of()[0])
+        self.assertIsNotNone(edit_only)
+        self.assertIsNotNone(edit_and_add)
+        self.assertNotEqual(edit_only.group("hex"), edit_and_add.group("hex"))
+
+    def test_d3_emit_bundle_output_is_unchanged_by_a_dirty_tree(self):
+        self.dirty_the_store()
+        code, out, err = self.bundle("--emit", "bundle", "--where", "role=critic",
+                                     "--out", str(self.out))
+        self.assertEqual(code, EXIT_OK, err)
+        path = pathlib.Path(out.strip().splitlines()[0])
+        first = path.read_text().splitlines()[0]
+        self.assertRegex(first, r"^<!-- fiducial \S+ @ %s \d{8}T\d{6}Z -->$" % self.head())
+
+    def test_d4_only_the_header_line_differs_from_a_clean_bundle(self):
+        clean = self.header_of("role=critic")
+        # An unrelated dirty rule that the query does not select.
+        write(self.clone, "rules/R0200.md", rs_row(
+            "R0200", "An uncommitted rule nobody selects.", order=60, topic=["elsewhere"],
+            role=["nobody"], verb="require", term=None))
+        dirty = self.header_of("role=critic")
+        self.assertRegex(dirty[0], self.LOCAL_HEADER_RE)
+        self.assertEqual(len(dirty), len(clean))
+        self.assertEqual(dirty[1:], clean[1:])
+        self.assertEqual(sum(1 for line in dirty if line.startswith("<!-- fiducial")), 1)
+
+
 if __name__ == "__main__":
     unittest.main()
