@@ -20,7 +20,7 @@ Acceptance criteria (from #412 and its 2026-11-11 comment):
 
 Not in scope: transactional apply or rollback after a mid-write I/O failure. The procedure's stated non-transactional boundary stays, narrowed by A1–A3. The preflight reads permission bits and directory types without writing; it does not see read-only filesystems, ACLs or immutable flags.
 
-Test note: permission bits are not enforced for uid 0. The A2 tests run the adopter as an unprivileged uid in a subprocess when the suite runs as root, and directly otherwise; where neither is possible the case is skipped and reported unverified.
+Test note: permission bits are not enforced for uid 0. The A2 tests run the adopter as an unprivileged uid in a subprocess when the suite runs as root, and directly otherwise; where neither is possible the case is skipped and reported unverified. The test makes its temporary target traversable by that uid.
 
 ## Unit B — #415: push read-back under Codex and with qualified branches
 
@@ -38,7 +38,7 @@ Acceptance criteria (from #415):
 
 Source: `bin/rulestore/emit/claude_code.py`, `codex.py`, `common.py`. Observed at base: emitted skills carry nine references to six source paths (`process/change-flow.md`, `review-artifact.md`, `release.md`, `gate.md`, `decision-log.md`, `verification-checklists.md`) that an adopted repository does not have.
 
-Design: the emitters rewrite a reference to `process/<stem>.md` into the harness's name for that skill when `<stem>` is emitted as a skill in that layout, from the one list of skill documents (`common.skill_documents`). The rewritten form is fixed per harness: Claude Code, `the <stem> skill (.claude/skills/<stem>/SKILL.md)`; Codex, `$<stem> (.agents/skills/<stem>/SKILL.md)`, the form `codex.py` already uses. Source process documents are not edited; the role bundles are unchanged. Emission fails when an emitted skill refers to a `process/` document that is not a skill in that layout.
+Design: the emitters rewrite a reference to `process/<stem>.md` into the harness's name for that skill when `<stem>` is emitted as a skill in that layout, from the one list of skill documents (`common.skill_documents`). The rewritten form is fixed per harness: Claude Code, `the <stem> skill (.claude/skills/<stem>/SKILL.md)`; Codex, `$<stem> (.agents/skills/<stem>/SKILL.md)`, the form `codex.py` already uses. The replacement consumes the backticks around a quoted reference, so no stray backtick is left. Source process documents are not edited; the role bundles are unchanged. Emission fails when an emitted skill refers to a `process/` document that is not a skill in that layout.
 
 Acceptance criteria (from #416):
 
@@ -65,4 +65,4 @@ Contract-verified only: local source tests, a local bare origin, emission into e
 
 ## Plan review
 
-Independent read of this plan at `21df755` on 2026-11-11: ready-with-findings, one blocking (A2's parent-directory clause was wrong for a content write and absent from #412) and five non-blocking. All six are applied in this revision.
+Independent read of this plan at `21df755` on 2026-11-11: ready-with-findings, one blocking (A2's parent-directory clause was wrong for a content write and absent from #412) and five non-blocking. All six are applied in this revision. Re-read over the amendment at `54013b0`: all six resolved; two further non-blocking notes (traversable test target, backticks consumed) applied without another read.
