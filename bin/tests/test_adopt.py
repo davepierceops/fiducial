@@ -313,6 +313,19 @@ class AdopterProcedure(unittest.TestCase):
         write(self.target, "CLAUDE.md", "# Project\nLocal text.\n")
         self.adopt_upgrade_repeat("CLAUDE.md", "# Store v1\n", "# Store v2\n")
 
+    def test_ownership_manifest_keeps_0600_on_upgrade_and_is_created_0644_on_first_adoption(self):
+        manifest = ".claude/fiducial-ownership.json"
+        write(self.trees[0], ".claude/skills/one/SKILL.md", "# One\n")
+        self.plan()
+        self.install()
+        self.assertEqual(self.mode(manifest), 0o644, "first adoption creates the manifest 0644")
+        (self.target / manifest).chmod(0o600)
+        write(self.trees[0], ".claude/skills/two/SKILL.md", "# Two\n")
+        plan = self.plan()
+        self.assertIn(manifest, plan["writes"], "upgrade rewrites the manifest")
+        self.install()
+        self.assertEqual(self.mode(manifest), 0o600, "upgrade keeps the manifest mode")
+
     def test_mode_only_drift_between_plan_and_apply_is_refused_before_any_write(self):
         write(self.target, "CLAUDE.md", "# Project\n")
         self.plan()

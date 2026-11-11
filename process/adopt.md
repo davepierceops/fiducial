@@ -307,7 +307,8 @@ def build_plan(target, staged, edits=()):
             conflicts.append({"file": name, "reason": str(exc)})
     manifest = encoded({"version": 1, "files": owned}).decode()
     if not manifest_path.exists() or manifest_path.read_text() != manifest:
-        writes[MANIFEST] = {"text": manifest, "mode": 0o644}
+        writes[MANIFEST] = {"text": manifest,
+                          "mode": manifest_path.stat().st_mode & 0o777 if manifest_path.exists() else 0o644}
     return {"target": str(target.resolve()), "inventory": snapshot, "writes": writes,
             "conflicts": conflicts, "edits": list(edits)}
 
