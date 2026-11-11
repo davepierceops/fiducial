@@ -18,7 +18,7 @@ Source: `bin/rulestore/store.py` (`_split_human`, row construction).
 
 ## Unit B — #398: retirement targets exist
 
-Source: `bin/tests/reconcile_sort.py` holds the shape check (`RETIRED_VALUE_RE`). That script is not run by the suite and exits non-zero today by design, so the new check goes in a new suite test, `bin/tests/test_retired_targets.py`, which reuses that pattern.
+Source: `bin/tests/reconcile_sort.py` holds the shape check (`RETIRED_VALUE_RE`). That script is not run by the suite and exits non-zero today by design, so the new check goes in a new suite test, `bin/tests/test_retired_targets.py`, which reuses that pattern. A decision exists when `decisions/log.md` has a `## DEC-NNNNNN` heading for it.
 
 - B1. A `retired:` value that is a row id names a row present under `rules/` or `rules/retired/`; one that is a decision id names an entry present in `decisions/log.md`. A missing target fails with the retired row and the target named.
 - B2 (plan-derived, beyond #398's text). A chain of retired rows ends at a live row or an existing decision; a cycle fails.
@@ -29,7 +29,7 @@ Source: `bin/tests/reconcile_sort.py` holds the shape check (`RETIRED_VALUE_RE`)
 Source: `bin/release`. The directive and M2 items of #381 are superseded: those tools were removed.
 
 - C1. The printed `gh release create` line carries `-R <owner>/<repo>`, read from `git config --get remote.origin.url` as `bin/bundle` reads it, and so runs from any directory. If that URL is not a GitHub URL the tool refuses; this refusal comes after the existing fetch refusal, so existing refusal order is unchanged.
-- C2. Before printing, `bin/release` checks each generated bundle: every rule row its query selects is present as the renderer renders it (`render.row_text`; a row that renders nothing is exempt), and no retired row's rendered text appears in the bundle's rule band or Definitions section unless a selected live row renders the same text. Process-document text is excluded, since process documents legitimately carry text that retired rows were extracted from. A failure refuses (exit 2), names the bundle and the row, and leaves no output directory.
+- C2. Before printing, `bin/release` checks each generated bundle: every rule row its query selects is present as the renderer renders it (`render.row_text`; a row that renders nothing is exempt), and no retired row's rendered text appears in the generated file once the text of each process document the bundle includes has been removed from it, unless a selected live row renders the same text. Process-document text is excluded because process documents legitimately carry text that retired rows were extracted from. Both checks read the generated file, not only the selection. A failure refuses (exit 2), names the bundle and the row, and leaves no output directory.
 - C3. The real store passes C2 for all twelve bundles.
 
 ## Unit D — #366 (remaining two items): input-scoped release check and local provenance
@@ -70,4 +70,4 @@ Contract-verified only: local source tests, local bare origins, emission and rel
 
 ## Plan review
 
-Independent read at `2c92204`: changes-required, two blocking (C2 as first written failed all twelve real bundles; B3 assumed a script the suite does not run and that exits non-zero by design) and six non-blocking. All are applied in this revision.
+Independent read at `2c92204`: changes-required, two blocking (C2 as first written failed all twelve real bundles; B3 assumed a script the suite does not run and that exits non-zero by design) and six non-blocking. All are applied in this revision. Re-read over the amendment at `1d63370`: all eight resolved; two further non-blocking notes (how C2 separates process text, how a decision is found) applied without another read.
