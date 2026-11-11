@@ -66,3 +66,9 @@ Contract-verified only: local source tests, a local bare origin, emission into e
 ## Plan review
 
 Independent read of this plan at `21df755` on 2026-11-11: ready-with-findings, one blocking (A2's parent-directory clause was wrong for a content write and absent from #412) and five non-blocking. All six are applied in this revision. Re-read over the amendment at `54013b0`: all six resolved; two further non-blocking notes (traversable test target, backticks consumed) applied without another read.
+
+## Amendments during the build
+
+- C5 withdrawn (decision session, 2026-11-11, at `5bd4170`). DEC-001760 pins fiducial's installed context to the released commit `a8d87bc`; refreshing it from this unreleased branch would move the pin off a release. Fiducial's own installed context picks this change up when the next release is adopted, the same way any adopter does. Sequence step 4 does not run, and the class statement's clause about fiducial's own hooks changing at merge no longer applies. The suite passes without the refresh (381 tests, OK).
+- Three older tests compared hook bytes emitted from the working tree against a frozen baseline and so forbade #415's change to `bin/hooks/push-readback`. The test designer pinned each comparison to its batch's landed snapshot (`5bd4170`), following the DEC-001730 precedent, after confirming baseline and landed emissions are equal for all three.
+- Review runs as two reads, not three: one Reviewer session with separate quality, skepticism and continuity passes over the whole diff (routine class), and one Context Quality read over the `process/adopt.md` delta.
