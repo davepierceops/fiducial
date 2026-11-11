@@ -43,6 +43,38 @@ CASE_KEYS = ("paths",)
 HUMAN_MARKER_RE = re.compile(r"^#{1,6}\s+Human\s*$")
 
 
+#: The paths bundle generation reads (#366): a change under any of them can
+#: change a generated bundle. Directories end in `/`; the rest are files.
+INPUT_ROOTS = ("rules/", "process/", "README.md", "bin/bundle", "bin/release", "bin/rulestore/")
+
+
+def _is_input(relpath):
+    return any(relpath == root or (root.endswith("/") and relpath.startswith(root))
+               for root in INPUT_ROOTS)
+
+
+def dirty_input_paths(root):
+    """Sorted paths under `INPUT_ROOTS` that `git status` reports as changed
+    against HEAD (untracked, deleted and both sides of a rename included)."""
+    proc = subprocess.run(
+        ["git", "status", "--porcelain", "-z", "--untracked-files=all", "--", *INPUT_ROOTS],
+        cwd=str(root), capture_output=True, text=True,
+    )
+    entries = proc.stdout.split("\0")
+    found = set()
+    index = 0
+    while index < len(entries):
+        entry = entries[index]
+        index += 1
+        if len(entry) < 4:
+            continue
+        found.add(entry[3:])
+        if entry[0] in "RC" and index < len(entries):
+            found.add(entries[index])
+            index += 1
+    return sorted(path for path in found if _is_input(path))
+
+
 class RowShapeError(Exception):
     """A row whose frontmatter carries a value the dialect cannot type.
 
@@ -257,6 +289,8 @@ class FileRowSource:
         row_id = fields.get("id") or path.stem
         keys, order = normalize_fields(row_id, fields)
         agent, human = _split_human(body)
+        if kind == "rule" and not agent:
+            raise RowShapeError(relpath, "body", "no agent-facing body")
         return Row(
             id=row_id,
             body=agent,
@@ -267,6 +301,13 @@ class FileRowSource:
             path=relpath,
             blob=self._blob(relpath),
         )
+
+    def retired_rows(self):
+        """Every `rules/retired/*.md`, as kind "retired" rows."""
+        retired_dir = self.root / "rules" / "retired"
+        if not retired_dir.is_dir():
+            return []
+        return [self._row(path, "retired") for path in sorted(retired_dir.glob("*.md"))]
 
     def rows(self):
         """Every `rules/*.md` (kind "rule") and `process/*.md` (kind "process").

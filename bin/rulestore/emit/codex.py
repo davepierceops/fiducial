@@ -202,11 +202,12 @@ def main():
     else:
         payloads = [data]
         args = data.get("tool_input")
-        if (data.get("tool_name") in SHELL_TOOLS and isinstance(args, dict)
-                and "command" not in args and "cmd" in args):
-            cmd = args["cmd"]
-            payloads = [dict(data, tool_input=dict(
-                args, command=" ".join(cmd) if isinstance(cmd, list) else cmd))]
+        if data.get("tool_name") in SHELL_TOOLS and isinstance(args, dict):
+            cmd = args["cmd"] if "command" not in args and "cmd" in args else args.get("command")
+            if isinstance(cmd, list):
+                cmd = " ".join(cmd)
+            if cmd is not None:
+                payloads = [dict(data, tool_input=dict(args, command=cmd))]
     messages = []
     for payload in payloads:
         proc = subprocess.run([sys.executable, str(script), *sys.argv[4:]],

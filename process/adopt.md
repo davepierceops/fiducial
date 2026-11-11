@@ -51,7 +51,8 @@ classification and authority are [R0534, R0535].
    human's response; it cannot supply that response. The first real Illuminait
    run uses this gate, with the report brought to the human before append.
 4. **Create/append.** After those rulings, run `python3 adopt.py apply STAGE
-   REVIEW_JSON APPROVAL_JSON`. It rechecks the inventory, writes missing files,
+   REVIEW_JSON APPROVAL_JSON`. It rechecks the inventory, refuses before writing
+   on destination type, permission bits and ownership, writes missing files,
    and replaces only owned material. Use `python3 adopt.py labels OWNER/REPO`
    to create missing `human-gate` and the four release-impact labels defined in
    `process/verification-checklists.md`;
@@ -92,7 +93,9 @@ ones. Upgrades remove obsolete owned contributions; ambiguous removals need a
 human resolution.
 Keep the manifest in the adoption PR. Work on an idle branch: checks protect
 against changes since review, but installation is not a transaction against a
-concurrent editor or a filesystem failure; inspect and revert the adoption diff
+concurrent editor or a filesystem failure; apply refuses before writing on
+destination type, permission bits and ownership, and does not see read-only
+filesystems, ACLs or immutable flags. Inspect and revert the adoption diff
 if an I/O failure interrupts it.
 
 ```python
@@ -369,6 +372,7 @@ def apply(stage, review_path, approval_path):
         require(not path.is_dir(), name + " is a directory")
         if path.exists() and item["text"] is not None:
             require(os.access(path, os.W_OK), "no write permission on " + name)
+            require(os.geteuid() in (0, path.stat().st_uid), "not the owner of " + name)
             continue
         anchor = path.parent
         while not anchor.exists():
