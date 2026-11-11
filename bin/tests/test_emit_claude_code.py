@@ -510,6 +510,38 @@ class TestClaudeCodeCrossProcedureReferences(unittest.TestCase):
         skill = self.emit("Nothing to cite.\n")[".claude/skills/a/SKILL.md"]
         self.assertTrue(skill.rstrip().endswith("Nothing to cite."))
 
+    def test_e5_only_a_whole_process_token_is_rewritten(self):
+        """#440 E5: a path or word character before `process/`, or after `.md`,
+        means it is not a reference to a store document; it is left as written
+        and does not fail emission, even for a stem that is not a skill."""
+        ref = 'the b skill (.claude/skills/b/SKILL.md)'
+        cases = (("See docs/process/b.md for the layout.", "docs/process/b.md"),
+                 ("See subprocess/b.md for the layout.", "subprocess/b.md"),
+                 ("See https://example.com/process/b.md for the layout.", "https://example.com/process/b.md"),
+                 ("See process/b.mdx for the layout.", "process/b.mdx"),
+                 ("See process/b.md5 for the layout.", "process/b.md5"),
+                 ("See docs/process/nope.md for the layout.", "docs/process/nope.md"),
+                 ("See process/nope.mdx for the layout.", "process/nope.mdx"),
+                 ("See `docs/process/b.md` for the layout.", "`docs/process/b.md`"))
+        for source, kept in cases:
+            with self.subTest(source=source):
+                try:
+                    skill = self.emit("Plain first sentence.\n\n" + source + "\n")['.claude/skills/a/SKILL.md']
+                except EmitError as exc:
+                    self.fail("emission refused a token that is no process reference: %s" % exc)
+                self.assertIn(kept, skill)
+                self.assertNotIn(ref, skill)
+
+    def test_e5_trailing_sentence_punctuation_is_not_a_continuation(self):
+        ref = 'the b skill (.claude/skills/b/SKILL.md)'
+        for source, expected in (("See process/b.md.", "See %s." % ref),
+                                 ("Use process/b.md, then stop.", "Use %s, then stop." % ref),
+                                 ("(process/b.md)", "(%s)" % ref),
+                                 ("Use `process/b.md`, then stop.", "Use %s, then stop." % ref)):
+            with self.subTest(source=source):
+                skill = self.emit("Plain first sentence.\n\n" + source + "\n")['.claude/skills/a/SKILL.md']
+                self.assertIn(expected, skill)
+
 
 class TestClaudeCodeRealStoreReferences(unittest.TestCase):
     @classmethod

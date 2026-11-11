@@ -6,13 +6,14 @@
 
 Refuses (exit 2, one line on stderr, nothing written) outside a git
 repository, in a repository with neither `rules/` nor `process/`, on any
-uncommitted change anywhere under the root — README.md included, since it
-is the one asset generated from the working tree rather than from a
-selection — when the fetch of `origin main` fails, when HEAD is not
-`origin/main`, when `README.md` is absent at the root, when `--tag`
-already exists on origin, when `--out` exists, or when the bundle list is
-empty. On any per-entry `bin/bundle` failure it refuses whole and removes
-everything it wrote.
+uncommitted change under a generation input (`store.INPUT_ROOTS`; README.md
+included, since it is generated from the working tree), when the fetch of
+`origin main` fails, when `remote.origin.url` is no GitHub URL, when HEAD is
+not `origin/main`, when `README.md` is absent at the root, when `--tag`
+already exists on origin, when `--out` exists, when the bundle list is
+empty, or when a generated bundle lacks a selected rule row or carries a
+retired row's text. On any per-entry `bin/bundle` failure it refuses whole
+and removes everything it wrote.
 
 Contract: `docs/cycles/bundle-tool-followup-20260907T170000Z.md`, item 6.
 """
@@ -23,6 +24,7 @@ import argparse
 import datetime
 import os
 import pathlib
+import re
 import shlex
 import shutil
 import subprocess
@@ -32,6 +34,9 @@ import tempfile
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from rulestore import named_queries
+from rulestore import query
+from rulestore import render
+from rulestore import store as store_mod
 from rulestore.store import FileRowSource
 
 EXIT_OK = 0
@@ -58,9 +63,36 @@ def _head(root):
     return proc.stdout.strip() if proc.returncode == 0 else None
 
 
-def _dirty_under(root):
-    proc = _git(root, "status", "--porcelain")
-    return bool(proc.stdout.strip())
+GITHUB_URL_RE = re.compile(
+    r"^(?:https://(?:[^@/]+@)?|ssh://(?:[^@/]+@)?|git@)github\.com[:/]"
+    r"([^/\s]+)/([^/\s]+?)(?:\.git)?/?$")
+
+
+def _github_repo(root):
+    """`owner/repo` from `remote.origin.url`, or `None` if it is no GitHub URL."""
+    url = _git(root, "config", "--get", "remote.origin.url").stdout.strip()
+    match = GITHUB_URL_RE.match(url)
+    return "%s/%s" % match.groups() if match else None
+
+
+def _body_problem(name, tokens, text, rows, retired, sequences):
+    """A refusal line if the generated bundle `text` lacks a selected rule row
+    or carries a retired row's text, else `None` (#381 C2)."""
+    selected = query.select(rows, query.parse_where(tokens), sequences)
+    for row in selected:
+        rendered = render.row_text(row)
+        if row.kind == "rule" and rendered and rendered not in text:
+            return "refused: %s: selected row %s is missing from the generated bundle" % (name, row.id)
+    live = {render.row_text(row) for row in selected if row.kind == "rule"}
+    rest = text
+    for row in selected:
+        if row.kind == "process" and render.row_text(row):
+            rest = rest.replace(render.row_text(row), "")
+    for row in retired:
+        rendered = render.row_text(row)
+        if rendered and rendered in rest and rendered not in live:
+            return "refused: %s: retired row %s appears in the generated bundle" % (name, row.id)
+    return None
 
 
 def refuse(message):
@@ -91,11 +123,16 @@ def main(argv=None):
     if not (root / "rules").is_dir() and not (root / "process").is_dir():
         return refuse("refused: no rules/ or process/ under %s" % root)
 
-    if _dirty_under(root):
-        return refuse("refused: uncommitted changes under %s" % root)
+    dirty = store_mod.dirty_input_paths(root)
+    if dirty:
+        return refuse("refused: uncommitted changes to generation inputs: %s" % ", ".join(dirty))
 
     if _git(root, "fetch", "-q", "origin", "main").returncode != 0:
         return refuse("refused: could not fetch origin/main")
+
+    github = _github_repo(root)
+    if github is None:
+        return refuse("refused: remote.origin.url is not a GitHub URL")
 
     head = _head(root)
     upstream_proc = _git(root, "rev-parse", "origin/main")
@@ -129,6 +166,14 @@ def main(argv=None):
     if duplicate is not None:
         return refuse("refused: the bundle list repeats the name %r" % duplicate)
 
+    source = FileRowSource(root)
+    try:
+        rows = source.rows()
+        retired = source.retired_rows()
+    except store_mod.RowShapeError as exc:
+        return refuse("refused: %s" % exc)
+    sequences = named_queries.sequences(source.named_queries_text())
+
     scratch = pathlib.Path(tempfile.mkdtemp(prefix="fiducial-release-"))
     try:
         written = []
@@ -142,7 +187,12 @@ def main(argv=None):
                 print("refused: %s: bin/bundle exited %d" % (name, proc.returncode),
                       file=sys.stderr)
                 return EXIT_REFUSED
-            written.append((name, pathlib.Path(proc.stdout.strip())))
+            path = pathlib.Path(proc.stdout.strip())
+            problem = _body_problem(name, tokens, path.read_text(encoding="utf-8"),
+                                    rows, retired, sequences)
+            if problem:
+                return refuse(problem)
+            written.append((name, path))
 
         out_dir.mkdir(parents=True)
         assets = [readme]
@@ -155,8 +205,9 @@ def main(argv=None):
 
     print(str(out_dir))
     notes = "fiducial %s at %s" % (tag, head)
-    print("gh release create %s --target %s --title %s --notes %s %s" % (
-        shlex.quote(tag), shlex.quote(head), shlex.quote(tag), shlex.quote(notes),
+    print("gh release create -R %s %s --target %s --title %s --notes %s %s" % (
+        shlex.quote(github), shlex.quote(tag), shlex.quote(head), shlex.quote(tag),
+        shlex.quote(notes),
         " ".join(shlex.quote(str(asset)) for asset in assets),
     ))
     return EXIT_OK

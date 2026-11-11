@@ -511,6 +511,39 @@ class TestCodexHookExecution(unittest.TestCase):
                 self.assertIn("origin/codex/probe is at " + sent,
                               self.readback_context(self.read_back(args)))
 
+    def test_e4_a_command_list_is_joined_like_a_cmd_list_and_read_back(self):
+        """#440 E4: a shell-tool payload whose `command` is a list is read
+        back like the string form; no traceback."""
+        self.bare_origin()
+        git(self.repo, "push", "-q", "origin", "main", env=self.env, check=True)
+        expected = "origin/main is at " + self.head()
+        for tool in self.SHELL_TOOLS:
+            with self.subTest(tool=tool):
+                proc = self.read_back({"command": ["git", "push", "origin", "main"]}, tool=tool)
+                self.assertNotIn("Traceback", proc.stderr)
+                self.assertIn(expected, self.readback_context(proc))
+                same = self.read_back({"command": "git push origin main"}, tool=tool)
+                self.assertEqual((proc.returncode, proc.stdout), (same.returncode, same.stdout))
+
+    def test_e4_a_command_list_push_the_remote_did_not_take_fails_loudly(self):
+        self.bare_origin()
+        git(self.repo, "push", "-q", "origin", "main", env=self.env, check=True)
+        write(self.repo, "README.md", "changed\n")
+        commit(self.repo, "unpublished", env=self.env)
+        for tool in self.SHELL_TOOLS:
+            with self.subTest(tool=tool):
+                proc = self.read_back({"command": ["git", "push", "origin", "main"]}, tool=tool)
+                self.assertNotIn("Traceback", proc.stderr)
+                self.assertEqual(proc.returncode, 2, proc.stdout)
+                self.assertIn("reads back", proc.stderr)
+
+    def test_e4_a_command_list_that_is_not_a_push_passes_silently(self):
+        for args in ({"command": ["git", "status"]}, {"command": []}):
+            with self.subTest(args=args):
+                proc = self.read_back(args)
+                self.assertNotIn("Traceback", proc.stderr)
+                self.assertEqual((proc.returncode, proc.stdout), (0, ""), proc.stderr)
+
     def test_cmd_that_is_not_a_push_passes_silently(self):
         for args in ({"cmd": "git status"}, {"cmd": ["git", "status"]}, {"cmd": ""}):
             with self.subTest(args=args):
@@ -623,6 +656,38 @@ class TestCodexCrossProcedureReferences(unittest.TestCase):
     def test_a_skill_with_no_cross_references_emits_unchanged(self):
         skill = self.emit("Nothing to cite.\n")[".agents/skills/a/SKILL.md"]
         self.assertTrue(skill.rstrip().endswith("Nothing to cite."))
+
+    def test_e5_only_a_whole_process_token_is_rewritten(self):
+        """#440 E5: a path or word character before `process/`, or after `.md`,
+        means it is not a reference to a store document; it is left as written
+        and does not fail emission, even for a stem that is not a skill."""
+        ref = '$b (.agents/skills/b/SKILL.md)'
+        cases = (("See docs/process/b.md for the layout.", "docs/process/b.md"),
+                 ("See subprocess/b.md for the layout.", "subprocess/b.md"),
+                 ("See https://example.com/process/b.md for the layout.", "https://example.com/process/b.md"),
+                 ("See process/b.mdx for the layout.", "process/b.mdx"),
+                 ("See process/b.md5 for the layout.", "process/b.md5"),
+                 ("See docs/process/nope.md for the layout.", "docs/process/nope.md"),
+                 ("See process/nope.mdx for the layout.", "process/nope.mdx"),
+                 ("See `docs/process/b.md` for the layout.", "`docs/process/b.md`"))
+        for source, kept in cases:
+            with self.subTest(source=source):
+                try:
+                    skill = self.emit("Plain first sentence.\n\n" + source + "\n")['.agents/skills/a/SKILL.md']
+                except EmitError as exc:
+                    self.fail("emission refused a token that is no process reference: %s" % exc)
+                self.assertIn(kept, skill)
+                self.assertNotIn(ref, skill)
+
+    def test_e5_trailing_sentence_punctuation_is_not_a_continuation(self):
+        ref = '$b (.agents/skills/b/SKILL.md)'
+        for source, expected in (("See process/b.md.", "See %s." % ref),
+                                 ("Use process/b.md, then stop.", "Use %s, then stop." % ref),
+                                 ("(process/b.md)", "(%s)" % ref),
+                                 ("Use `process/b.md`, then stop.", "Use %s, then stop." % ref)):
+            with self.subTest(source=source):
+                skill = self.emit("Plain first sentence.\n\n" + source + "\n")['.agents/skills/a/SKILL.md']
+                self.assertIn(expected, skill)
 
 
 class TestCodexRealStoreReferences(unittest.TestCase):

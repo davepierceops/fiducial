@@ -480,7 +480,6 @@ class TestPushReadback(HookTestCase):
 
     def test_git_dash_c_push_the_remote_did_not_take_fails_loudly(self):
         git(self.repo, "push", "-q", "origin", "main", env=self.env, check=True)
-        write(self.repo, "README.md", "changed\n")
         write(self.repo, "README.md", "never pushed\n")
         commit(self.repo, "never pushed", env=self.env)
         elsewhere = temp_dir(self, "elsewhere-")
@@ -512,6 +511,28 @@ class TestPushReadback(HookTestCase):
             code, out, err = self.bash(command)
             self.assertEqual(code, 0, (command, err))
             self.assertIn("origin/main is at", out, command)
+
+    def test_e3_a_forced_push_reads_back_the_branch_without_the_plus(self):
+        """#440 E3: `git push origin +main` reads back `main`; the leading `+`
+        is stripped from the destination as it already is from the source."""
+        git(self.repo, "push", "-q", "origin", "main", env=self.env, check=True)
+        for command in ("git push origin +main", "git push origin +main:+main",
+                        "git push origin +HEAD:+main", "git push origin +main:main",
+                        "git push origin +refs/heads/main", "git push origin HEAD:+main"):
+            with self.subTest(command=command):
+                code, out, err = self.bash(command)
+                self.assertEqual(code, 0, (command, err))
+                self.assertNotIn("Traceback", err)
+                self.assertIn("origin/main is at %s" % self.head(), out)
+
+    def test_e3_a_forced_push_the_remote_did_not_take_still_fails_loudly(self):
+        git(self.repo, "push", "-q", "origin", "main", env=self.env, check=True)
+        write(self.repo, "README.md", "never pushed\n")
+        commit(self.repo, "never pushed", env=self.env)
+        code, out, err = self.bash("git push origin +main")
+        self.assertEqual(code, 2, out)
+        self.assertIn("reads back", err)
+        self.assertNotIn("fetch origin +main failed", err)
 
     def test_a_command_that_is_not_a_push_passes_silently(self):
         code, out, err = self.bash("git status && echo 'git pushover'")

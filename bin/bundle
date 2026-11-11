@@ -33,6 +33,7 @@ from __future__ import annotations
 
 import argparse
 import datetime
+import hashlib
 import os
 import pathlib
 import subprocess
@@ -82,6 +83,22 @@ def _repo_label(root):
 def _head(root):
     proc = _git(root, "rev-parse", "HEAD")
     return proc.stdout.strip() if proc.returncode == 0 else None
+
+
+def _local_head(root):
+    """HEAD, or `<HEAD>+local.<12 hex>` when a generation input differs from
+    it (#366): the hex is SHA-256 over the sorted `(path, file hash or
+    "deleted")` pairs of the changed inputs, README.md excluded."""
+    head = _head(root)
+    paths = [p for p in store_mod.dirty_input_paths(root) if p != "README.md"]
+    if head is None or not paths:
+        return head
+    pairs = []
+    for relpath in paths:
+        path = root / relpath
+        digest = hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else "deleted"
+        pairs.append("%s\0%s\n" % (relpath, digest))
+    return "%s+local.%s" % (head, hashlib.sha256("".join(pairs).encode()).hexdigest()[:12])
 
 
 def build_parser():
@@ -157,7 +174,7 @@ def cmd_where(root, tokens, name, out):
     generated = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     text = render.render(
         selected, definitions,
-        repo=_repo_label(root), head=_head(root), generated=generated,
+        repo=_repo_label(root), head=_local_head(root), generated=generated,
     )
 
     bundle_name = name or "-".join("%s-%s" % (k, v) for k, v in where.items())
@@ -211,8 +228,9 @@ def cmd_emit(root, target_name, tokens, name, out):
     generated = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     inputs = emit_mod.EmitInputs(
         rows=rows, sequences=sequences, where=where, name=name,
-        repo=_repo_label(root), head=_head(root), generated=generated,
-        tiers=tiers, hooks=_hook_scripts(root),
+        repo=_repo_label(root),
+        head=_local_head(root) if target_name == "bundle" else _head(root),
+        generated=generated, tiers=tiers, hooks=_hook_scripts(root),
     )
     try:
         emission = target.emit(inputs)

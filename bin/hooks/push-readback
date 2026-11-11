@@ -98,6 +98,7 @@ def main():
         else:
             src = dst = refspec
         src = src.lstrip("+")
+        dst = dst.lstrip("+")
         if dst == "HEAD":
             dst = branch
         if dst.startswith("refs/heads/"):
