@@ -228,8 +228,9 @@ def cmd_emit(root, target_name, tokens, name, out):
     generated = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     inputs = emit_mod.EmitInputs(
         rows=rows, sequences=sequences, where=where, name=name,
-        repo=_repo_label(root), head=_head(root), generated=generated,
-        tiers=tiers, hooks=_hook_scripts(root),
+        repo=_repo_label(root),
+        head=_local_head(root) if target_name == "bundle" else _head(root),
+        generated=generated, tiers=tiers, hooks=_hook_scripts(root),
     )
     try:
         emission = target.emit(inputs)
