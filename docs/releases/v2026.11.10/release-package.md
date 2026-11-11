@@ -1,6 +1,6 @@
 # Fiducial v2026.11.10 — context consolidation release package
 
-Status: HOLD for #411. The preparation and independent review below cover the previous candidate only; publication is not approved or performed. Date: 2026-11-10 (America/Los_Angeles).
+Status: superseded as the current reference by [candidate-refresh.md](candidate-refresh.md), which covers the candidate carrying the #411 fix. Historical status follows. HOLD for #411. The preparation and independent review below cover the previous candidate only; publication is not approved or performed. Date: 2026-11-10 (America/Los_Angeles).
 
 Current handoff: [session-handoff.md](session-handoff.md). The earlier publish recommendation is superseded by the requirement to fix #411 first. Retain the assets and reviews below as evidence for `5b2a62f`; regenerate and reassess them at the corrected candidate.
 

@@ -6,16 +6,17 @@ Observed from fresh generation: each native root changes from 293 to 45 lines an
 
 The source remains the rule/process store. Software adoption uses the tagged source and the reviewed adoption procedure. Downloads remain README.md and twelve standalone role bundles. Publishing a release does not update existing adopted repositories automatically.
 
+Adoption now preserves the permissions of existing Markdown and JSON files, including the ownership manifest ([#411](https://github.com/davepierceops/fiducial/issues/411)).
+
 ## Verification
 
-Candidate: `5b2a62f3b17aca1d859a43032b9ca2295c185391`.
+Candidate: `a8d87bc95afed9f5ac8b54fe2c8863013ce10265`.
 
-Observed: 339 tests pass in the clean candidate clone with stable source metadata, with no skips reported. All 13 staged assets match their SHA256 manifest; bundle headers identify the candidate; README matches its Git blob. Both native layouts generate successfully, and native hooks/configuration match v2026.11.04 byte-for-byte with unchanged modes. Independent quality, skepticism and continuity reviews are ready-with-findings; the inherited defects and verification gaps below remain explicit.
+Observed: 349 tests pass in the clean candidate clone with stable source metadata, with no skips reported. All 13 staged assets match their SHA256 manifest; bundle headers identify the candidate; README matches its Git blob. Both native layouts generate successfully, and native hooks/configuration matched v2026.11.04 byte-for-byte with unchanged modes at the previous candidate, and their sources are unchanged since. Independent quality, skepticism and continuity reviews are ready-with-findings; the inherited defects and verification gaps below remain explicit.
 
 ## Known limitations
 
 - Native skill loading, invocation/adherence and live hook enforcement remain unverified. Generated files and passing local tests do not establish future model behavior.
-- Adoption can widen permissions on existing shared files ([#411](https://github.com/davepierceops/fiducial/issues/411)). Defer adoption where those files have restrictive modes until preservation is fixed or separately reviewed.
 - A destination changing into a directory after preparation can cause partial adoption ([#412](https://github.com/davepierceops/fiducial/issues/412)). Keep the target idle between review and apply; inspect and recover partial changes after a failure.
 - Some installed skill references still name source `process/` paths ([#416](https://github.com/davepierceops/fiducial/issues/416)). Use the corresponding installed skill by name; automatic recovery is untested.
 - Push-readback has payload and qualified-ref limitations ([#415](https://github.com/davepierceops/fiducial/issues/415)). Verify the actual remote ref explicitly after pushing.

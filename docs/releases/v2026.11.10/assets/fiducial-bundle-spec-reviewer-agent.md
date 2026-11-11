@@ -1,4 +1,4 @@
-<!-- fiducial davepierceops/fiducial @ 5b2a62f3b17aca1d859a43032b9ca2295c185391 20261110T230052Z -->
+<!-- fiducial davepierceops/fiducial @ a8d87bc95afed9f5ac8b54fe2c8863013ce10265 20261111T041155Z -->
 
 Never let a secret value enter context. Reference that a secret exists and where it lives instead.
 
