@@ -362,10 +362,19 @@ def apply(stage, review_path, approval_path):
     report_name = "docs/fiducial-adoption-" + plan["timestamp"] + ".md"
     report_path = safe(target, report_name)
     require(not plan["writes"] or not report_path.exists(), "report timestamp already used")
-    for name in plan["writes"]:
-        safe(target, name)
     if not plan["writes"]:
         return []
+    for name, item in [*plan["writes"].items(), (report_name, {"text": ""})]:
+        path = safe(target, name)
+        require(not path.is_dir(), name + " is a directory")
+        if path.exists() and item["text"] is not None:
+            require(os.access(path, os.W_OK), "no write permission on " + name)
+            continue
+        anchor = path.parent
+        while not anchor.exists():
+            anchor = anchor.parent
+        require(anchor.is_dir() and os.access(anchor, os.W_OK | os.X_OK),
+                "no write and search permission on " + str(anchor.relative_to(target) or ".") + " for " + name)
     report = ("# Fiducial adoption\n\nEvidence class: contract-verified. Claude Code /context and Codex hook trust: "
               "not live-verified by this procedure.\n\nChanged paths:\n\n" +
               "\n".join("- `" + n + "`" for n in sorted(plan["writes"])) +

@@ -25,7 +25,7 @@ from rulestore import query
 from . import EmitError, Emission, Target
 from .common import (
     NO_MODEL_INVOCATION, definition_ids, first_sentence, read_enforced,
-    render_rows, skill_documents, standing_selection, topic_stem,
+    render_rows, rewrite_process_references, skill_documents, standing_selection, topic_stem,
 )
 
 HARNESS = "codex"
@@ -150,6 +150,9 @@ def path_match(name, pattern):
     return match(names, patterns)
 
 
+SHELL_TOOLS = ("Bash", "exec_command", "shell", "shell_command")
+
+
 def deny(data, patterns):
     tool = data.get("tool_name", "")
     args = data.get("tool_input") or {}
@@ -163,7 +166,7 @@ def deny(data, patterns):
         if not match:
             refuse("unsupported deny pattern " + repr(pattern))
         kind, glob = match.groups()
-        if kind == "Bash" and tool in ("Bash", "exec_command", "shell", "shell_command"):
+        if kind == "Bash" and tool in SHELL_TOOLS:
             if fnmatch.fnmatchcase(command, glob):
                 refuse("denied by " + pattern)
         elif kind == "Read" and tool in ("Read", "read_file"):
@@ -198,6 +201,12 @@ def main():
         payloads = list(patch_files(data))
     else:
         payloads = [data]
+        args = data.get("tool_input")
+        if (data.get("tool_name") in SHELL_TOOLS and isinstance(args, dict)
+                and "command" not in args and "cmd" in args):
+            cmd = args["cmd"]
+            payloads = [dict(data, tool_input=dict(
+                args, command=" ".join(cmd) if isinstance(cmd, list) else cmd))]
     messages = []
     for payload in payloads:
         proc = subprocess.run([sys.executable, str(script), *sys.argv[4:]],
@@ -225,12 +234,13 @@ def _scalar(value):
     return json.dumps(value, ensure_ascii=False)
 
 
-def _skill(stem, doc):
+def _skill(stem, doc, stems):
     lines = ["---", "name: " + _scalar(stem),
              "description: " + _scalar(first_sentence(doc.body) or stem)]
     if stem in NO_MODEL_INVOCATION:
         lines.append("disable-model-invocation: true")
-    return "\n".join(lines + ["---", "", doc.body.strip(), ""])
+    body = rewrite_process_references(doc, stems, "$%(stem)s (.agents/skills/%(stem)s/SKILL.md)")
+    return "\n".join(lines + ["---", "", body.strip(), ""])
 
 
 class CodexTarget(Target):
@@ -269,7 +279,7 @@ class CodexTarget(Target):
         definitions = definition_ids(standing, rows)
         skill_names = {stem for stem, _ in documents}
         for stem, doc in documents:
-            text = _skill(stem, doc)
+            text = _skill(stem, doc, skill_names)
             extra = spill.get(stem, [])
             if extra:
                 text += "\n## Rules\n\n"
