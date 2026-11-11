@@ -12,7 +12,7 @@ Adoption now preserves the permissions of existing Markdown and JSON files, incl
 
 Candidate: `a8d87bc95afed9f5ac8b54fe2c8863013ce10265`.
 
-Observed: 349 tests pass in the clean candidate clone with stable source metadata, with no skips reported. All 13 staged assets match their SHA256 manifest; bundle headers identify the candidate; README matches its Git blob. Both native layouts generate successfully, and native hooks/configuration matched v2026.11.04 byte-for-byte with unchanged modes at the previous candidate, and their sources are unchanged since. The #411 change and this refreshed candidate were each read independently (ready-with-findings; the one blocking finding in each was resolved before this text); the earlier combined review covers the previous candidate `5b2a62f` only. The inherited defects and verification gaps below remain explicit.
+Observed: 349 tests pass in the clean candidate clone with stable source metadata, with no skips reported. All 13 staged assets match their SHA256 manifest; bundle headers identify the candidate; README matches its Git blob. Both native layouts generate successfully, and native hooks/configuration matched v2026.11.04 byte-for-byte with unchanged modes at the previous candidate, and their sources are unchanged since. The #411 change and this refreshed candidate were read independently. Across the #411 reads one finding was blocking, and one in the read of this refresh; both were resolved and re-read. the earlier combined review covers the previous candidate `5b2a62f` only. The inherited defects and verification gaps below remain explicit.
 
 ## Known limitations
 
