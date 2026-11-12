@@ -1359,3 +1359,8 @@ Context: R0558 and the gate procedure's fourth step held a change short of relea
 Date: 2026-11-12
 Decision: R0152 (the verification kept on a small project or early-stage feature), R1497 (when a test plan is reviewed) and R1179 (when verification boundaries are audited) stay as they are. Whether verification should scale down for low-risk work and up for high-risk work is decided under #430, and is no longer a question on #427.
 Context: The consolidation kept these three rules unchanged and #427 flagged them for a proportionality check. Without R0152 an agent on a small project tends to stop at mocked tests and report the work verified; R1497 and R1179 already fire only on boundary-affecting changes. Loosening them before #430's risk tiers exist would be guessing at the tiers. Asked "Should these three rules stay as they are, with the proportionality question moved to #430: yes or no?" on 2026-11-12, Dave answered "y".
+
+## DEC-001840 — The verdict-line check keeps running after each write
+Date: 2026-11-12
+Decision: The check that a review artifact carries its verdict lines (R1414) stays on the after-write event. It is not moved to the end of the turn and gains no draft marker.
+Context: #399 recorded, from one review on 2026-11-04, that the check fails on the first write of an artifact drafted in pieces. The file is already written when the check runs, so the failure blocks nothing; it tells the reviewer, accurately, that the verdicts are still missing. Both alternatives add machinery for a problem seen once. Asked "Should the hook stay as it is, and #399 close: yes or no?" on 2026-11-12, Dave answered "yes".
