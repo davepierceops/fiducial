@@ -35,7 +35,7 @@ Test plan: <selected tests; spec-close review artifact>
 Implementation summary: <what changed>
 Test results: <commands run; skipped tests; evidence-sufficiency recommendation>
 Verification boundary status and updates: <status, changes and evidence>
-SLO status and error budget consumption: <affected Top K user journeys>
+SLO status and error budget consumption: <affected Top K journeys where the spec has Production SLOs; otherwise N/A>
 Review findings: <artifacts and dispositions>
 Known gaps: <explicit gaps>
 Operational notes: <operating implications>

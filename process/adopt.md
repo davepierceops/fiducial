@@ -70,7 +70,8 @@ classification and authority are [R0534, R0535].
    rerun. Append the adoption ruling to target `decisions/log.md` through
    `decision-log`; remove a superseded `.fiducial/` tree only when the human has
    explicitly approved its removal, recording the removed pin. Open the target's
-   own PR; retain a report copy in fiducial `reviews/`. Landing uses `release` and
+   own PR; retain a report copy in fiducial `adoptions/` (`reviews/` holds review
+   artifacts only). Landing uses `release` and
    the human's merge decision. Keep Claude Code loading **contract-verified**
    until the human opens a fresh session at that target and runs `/context`;
    give him a pasteable command block with the real target path and expected
