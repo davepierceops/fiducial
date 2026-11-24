@@ -717,6 +717,12 @@ class TestCodexRealStoreReferences(unittest.TestCase):
                     self.assertTrue((self.out / target).is_file(), target)
         self.assertGreaterEqual(found, 9, "the nine references the sources carry must survive as skill names")
 
+    def test_the_probe_skill_is_emitted_with_its_per_harness_sections(self):
+        text = (self.out / ".agents/skills/probe/SKILL.md").read_text()
+        self.assertIn("name: \"probe\"", text)
+        self.assertIn("## Codex", text)
+        self.assertIn(".codex/agents/<role>.toml", text)
+
 
 if __name__ == "__main__":
     unittest.main()

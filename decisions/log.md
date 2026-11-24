@@ -1410,3 +1410,23 @@ Context: The read `reviews/batch-rulings-20261123-read-20261124T055813Z.md` over
 Date: 2026-11-24
 Decision: Dave approves the change on `followups-442` at `5be1b5d`, which lands by PR #452 and closes #442. Five items are fixed with regression tests: gitignored files under `rules/` and `process/` block a release; a row whose body is only an HTML comment is refused; the reference rewrite skips `sub-process/` and `.md.<ext>`; the adopter ownership test asserts the refusal; and `process/adopt.md` step 4 says "access" and is split in two. Three items are closed with reasons: the 23-character retired-text margin, the historical `run_apply` signature change, and the re-adoption observation.
 Context: The read `reviews/followups-442-read-20261124T172909Z.md` returned ready-with-findings with 0 blocking. It confirmed that the new tests fail with the fixes reverted and that the three closures are sound. F1 (an ignored `.py` under `bin/rulestore/`) is filed to #450, and F2 needs no fix. `bin/tests/run`: 462 tests, OK. Asked "Sign off at `5be1b5d` and merge PR #452: yes or no?" on 2026-11-24, Dave answered "yes".
+
+## DEC-001940 — A probe of a forbidden action aims only at a throwaway
+Date: 2026-11-24
+Decision: Each probe that attempts an action a hook or deny rule should refuse aims at a throwaway, so that a broken hook does no damage. A force push goes only to a local bare remote the probe creates, never `origin`. A governed edit is attempted and then reverted in the working tree, and nothing is committed.
+Context: #439 requires the probe to leave the target repository unchanged, but a hook probe has to attempt the forbidden action, which succeeds if the hook is broken. Asked on 2026-11-24 "Should every probe of a forbidden action aim at a throwaway, so that a broken hook does no damage, yes or no?", Dave answered "yes".
+
+## DEC-001950 — Probe reports land in fiducial's `adoptions/`
+Date: 2026-11-24
+Decision: The probe prints its report as one block in the probe session's chat. The decision session commits it to fiducial's `adoptions/` as `probe-<repo>-<harness>-<UTC timestamp>.md`, and release and adoption records cite that file. The probe writes nothing into the adopted repository.
+Context: #439 requires the target repository to stay unchanged and requires release and adoption records to cite the latest probe report. DEC-001810 gave per-repository adoption reports their fiducial-side home in `adoptions/`. Asked on 2026-11-24 "Should the probe report land in fiducial's `adoptions/` folder, carried there by the decision session, yes or no?", Dave answered "yes".
+
+## DEC-001960 — One probe procedure, emitted to every harness
+Date: 2026-11-24
+Decision: The probe is one process document, `process/probe.md`, emitted as a `probe` skill to Claude Code and Codex. Its checks are stated once; a short section per harness names what differs: file locations, how agents are listed and dispatched, and where deny rules live.
+Context: #439 asks for one procedure per harness. The checks are the same in both harnesses; only locations and mechanics differ, and the emitter already renders one process document into each harness's skill form. Asked on 2026-11-24 "Build the probe as one `process/probe.md` with a short per-harness section, emitted to both harnesses, yes or no?", Dave answered "yes".
+
+## DEC-001970 — The probe skill change is approved at `f548f5c`
+Date: 2026-11-24
+Decision: Dave approves the change on `intake/probe-skill` at `f548f5c`, which lands by PR #455. It adds `process/probe.md`, emitted as the `probe` skill to Claude Code and Codex under DEC-001940 through DEC-001960, and it adds to `process/release.md` and `process/adopt.md` the requirement to cite the latest probe report for the repository and each harness, or state that none was run.
+Context: Read 1 (`reviews/probe-skill-read-20261124T190213Z.md`) returned changes-required; Dave raised its non-blocking F7–F12 to blocking with F1–F6. Read 2 (`reviews/probe-skill-read-2-20261124T215340Z.md`) returned changes-required with N1 blocking; Dave raised N3–N6 to blocking, N2 was filed as #454, and the Codex list-form deny gap as #453. Read 3 (`reviews/probe-skill-read-3-20261124T222600Z.md`) returned ready with no findings; its two observations are on #450. `bin/tests/run`: 464 tests, OK. No live harness behaviour is verified; #439 stays open until the first probe report lands. Asked "Sign off at `f548f5c` and merge PR #455: yes or no?" on 2026-11-24, Dave answered "yes".

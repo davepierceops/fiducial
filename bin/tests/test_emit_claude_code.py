@@ -457,6 +457,16 @@ class TestClaudeCodeOverTheRealStore(unittest.TestCase):
         retro = (out / ".claude/skills/retro/SKILL.md").read_text()
         self.assertIn("\n## Rules\n", retro)
 
+    def test_the_real_store_emits_the_probe_skill(self):
+        out = temp_dir(self, "emit-probe-")
+        code, stdout, stderr = run_bundle("--emit", "claude-code", "--out", str(out),
+                                          cwd=BIN_DIR.parent, env=base_env())
+        self.assertEqual(code, 0, stderr)
+        text = (out / ".claude/skills/probe/SKILL.md").read_text()
+        self.assertIn("name: probe", text)
+        self.assertIn("## Claude Code", text)
+        self.assertIn(".claude/agents/<role>.md", text)
+
 
 # ---- #416: cross-procedure references resolve in the emitted layout --------
 
