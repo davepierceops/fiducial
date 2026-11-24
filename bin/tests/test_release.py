@@ -579,6 +579,16 @@ class TestReleaseInputScope(ReleaseCliTestCase):
         write(self.clone, "process/new-note.md", "# New\n")
         self.assert_blocked_naming("process/new-note.md")
 
+    def test_442_a_gitignored_file_under_rules_blocks_naming_the_path(self):
+        self.commit_and_push({".gitignore": "rules/secret-*.md\n"})
+        write(self.clone, "rules/secret-draft.md", "---\nid: R0300\n---\n\nIgnored.\n")
+        self.assert_blocked_naming("rules/secret-draft.md")
+
+    def test_442_ignored_bytecode_under_bin_does_not_block(self):
+        self.commit_and_push({".gitignore": "__pycache__/\n"})
+        write(self.clone, "bin/rulestore/__pycache__/mod.pyc", "x\n")
+        self.assert_not_blocked()
+
     def test_d2_a_deleted_file_under_rules_blocks_naming_the_path(self):
         (self.clone / "rules" / "R0003.md").unlink()
         self.assert_blocked_naming("rules/R0003.md")

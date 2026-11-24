@@ -196,7 +196,7 @@ def topic_stem(topic, stems):
     return best
 
 
-_PROCESS_REF_RE = re.compile(r"(`?)(?<![\w/])process/([\w-]+)\.md(?![\w/])(`?)")
+_PROCESS_REF_RE = re.compile(r"(`?)(?<![\w/-])process/([\w-]+)\.md(?![\w/-]|\.\w)(`?)")
 
 
 def rewrite_process_references(doc, stems, form):

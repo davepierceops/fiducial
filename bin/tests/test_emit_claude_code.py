@@ -522,6 +522,9 @@ class TestClaudeCodeCrossProcedureReferences(unittest.TestCase):
                  ("See process/b.md5 for the layout.", "process/b.md5"),
                  ("See docs/process/nope.md for the layout.", "docs/process/nope.md"),
                  ("See process/nope.mdx for the layout.", "process/nope.mdx"),
+                 ("See sub-process/b.md for the layout.", "sub-process/b.md"),
+                 ("See process/b.md.bak for the layout.", "process/b.md.bak"),
+                 ("See sub-process/nope.md for the layout.", "sub-process/nope.md"),
                  ("See `docs/process/b.md` for the layout.", "`docs/process/b.md`"))
         for source, kept in cases:
             with self.subTest(source=source):

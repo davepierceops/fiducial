@@ -549,10 +549,10 @@ class AdopterProcedure(unittest.TestCase):
             ADOPT.apply(self.stage, *paths)
         self.assertEqual(self.state(), before)
 
-    def test_e1_a_writable_file_the_runner_does_not_own_completes_or_refuses_whole(self):
-        """#440 E1: the runner can write an existing planned file (0666) but,
-        not owning it, cannot set its mode. Apply either completes or refuses
-        before the first write; it never leaves a partly written target."""
+    def test_e1_a_writable_file_the_runner_does_not_own_is_refused_whole(self):
+        """#440 E1 (#442): the runner can write an existing planned file (0666)
+        but, not owning it, cannot set its mode. Apply refuses before the first
+        write and leaves the target as it was."""
         if os.geteuid() != 0:
             self.skipTest("needs a root-owned file next to an unprivileged runner; ownership cases unverified")
         write(self.target, "CLAUDE.md", "# Project\nLocal text.\n").chmod(0o666)
@@ -564,14 +564,9 @@ class AdopterProcedure(unittest.TestCase):
         proc = self.run_apply(review, approval, root_owned=["CLAUDE.md"])
         after = self.state()
         self.assertNotIn("Traceback", proc.stderr)
-        if proc.returncode != 0:
-            self.assertIn("adopt:", proc.stderr)
-            self.assertEqual(after, before, "a refused apply must leave the target as it was")
-        else:
-            self.assertIn("Local text.", (self.target / "CLAUDE.md").read_text())
-            self.assertNotEqual(after[0]["CLAUDE.md"][0], before[0]["CLAUDE.md"][0])
-            self.assertTrue((self.target / ".claude/skills/one/SKILL.md").is_file())
-            self.assertEqual(len(list((self.target / "docs").glob("fiducial-adoption-*.md"))), 1)
+        self.assertNotEqual(proc.returncode, 0, "apply must refuse, not complete")
+        self.assertIn("adopt:", proc.stderr)
+        self.assertEqual(after, before, "a refused apply must leave the target as it was")
 
     def test_symlink_replacing_a_planned_destination_after_prepare_is_refused_before_any_write(self):
         self.stage_one_skill()

@@ -43,6 +43,10 @@ CASE_KEYS = ("paths",)
 HUMAN_MARKER_RE = re.compile(r"^#{1,6}\s+Human\s*$")
 
 
+#: An HTML comment: a rule body made only of these carries no instruction.
+HTML_COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
+
+
 #: The paths bundle generation reads (#366): a change under any of them can
 #: change a generated bundle. Directories end in `/`; the rest are files.
 INPUT_ROOTS = ("rules/", "process/", "README.md", "bin/bundle", "bin/release", "bin/rulestore/")
@@ -62,6 +66,15 @@ def dirty_input_paths(root):
     )
     entries = proc.stdout.split("\0")
     found = set()
+    # A gitignored file the row source would read is invisible to `status`
+    # yet reaches a bundle; only the row directories, so ignored bytecode under
+    # bin/ does not refuse every release.
+    ignored = subprocess.run(
+        ["git", "ls-files", "-z", "--others", "--ignored", "--exclude-standard", "--",
+         "rules/", "process/"],
+        cwd=str(root), capture_output=True, text=True,
+    )
+    found.update(path for path in ignored.stdout.split("\0") if path)
     index = 0
     while index < len(entries):
         entry = entries[index]
@@ -289,7 +302,7 @@ class FileRowSource:
         row_id = fields.get("id") or path.stem
         keys, order = normalize_fields(row_id, fields)
         agent, human = _split_human(body)
-        if kind == "rule" and not agent:
+        if kind == "rule" and not HTML_COMMENT_RE.sub("", agent).strip():
             raise RowShapeError(relpath, "body", "no agent-facing body")
         return Row(
             id=row_id,
