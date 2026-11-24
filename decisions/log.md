@@ -1364,3 +1364,9 @@ Context: The consolidation kept these three rules unchanged and #427 flagged the
 Date: 2026-11-12
 Decision: The check that a review artifact carries its verdict lines (R1414) stays on the after-write event. It is not moved to the end of the turn and gains no draft marker.
 Context: #399 recorded, from one review on 2026-11-04, that the check fails on the first write of an artifact drafted in pieces. The file is already written when the check runs, so the failure blocks nothing; it tells the reviewer, accurately, that the verdicts are still missing. Both alternatives add machinery for a problem seen once. Asked "Should the hook stay as it is, and #399 close: yes or no?" on 2026-11-12, Dave answered "yes".
+
+## DEC-001850 — The archived trackers are history, not a backlog
+Date: 2026-11-23
+Decision: The loose-end tracker for fiducial is the repository's GitHub Issues and Milestones on davepierceops/fiducial; an open item is an issue, and a pending gate keeps its human-gate label there. `OPEN-ITEMS.md` and `BACKLOG-v2.md` are retired and preserved under `docs/history/` as history, not a backlog: their remaining entries are not mapped to issues, and an entry that still matters gets a new issue when it comes up again. #370 closes as not planned.
+Context: DEC-000880 required the open residue of `OPEN-ITEMS.md` to be filed under #370 before the file moved to `docs/history/`. The file was archived on 2026-11-04 under DEC-001460 with no index (`SPEC.md` states that archival did not finish #370). About 42 unstruck entries remain, mostly from before the 11-03 subtraction, which retired the mechanisms many of them concern. Asked "Close #370 as not planned, with one decision-log entry replacing DEC-000880's residue clause: yes or no?" on 2026-11-23, Dave answered "yes".
+Supersedes: DEC-000880
