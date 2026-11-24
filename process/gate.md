@@ -14,8 +14,8 @@ Classification, authority and release approval are [R0534, R0535].
 1. Open one tracker issue for the pending change and label it `human-gate`.
    Derive its body from the change package using the template below; re-derive
    any field that has drifted from its source.
-2. Link the issue from the change package. Before presenting the change,
-   confirm that the issue is open and linked.
+2. Link the issue from the change package. Where the issue can be
+   opened, confirm before presenting the change that it is open and linked.
 3. Announce the pending gate in chat with the notification template below.
 4. If the issue cannot be opened, present its derived body in chat in place of
    the issue pointer. The human's explicit go in chat then releases the change.

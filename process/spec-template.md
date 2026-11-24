@@ -46,7 +46,8 @@ acceptance criteria derive from it [R0472]. Keep each section short.
      monitored production system. For each Top K journey of section 3, the
      SLO, the measurement mechanism, and the alerting threshold; a journey
      with no SLO is named unverified. Its presence is the trigger for every
-     SLO and error-budget obligation.
+     SLO and error-budget obligation. A spec without the subsection has no
+     SLO obligations; an absent heading is the off state.
    - **Verification boundaries** — for each material standing boundary where
      the system meets what it does not control, and for each per-change
      boundary movement made permanent: the production surface; how it is
@@ -77,7 +78,6 @@ audience: [human]
 ## 5. User outcomes and measurement
 ## 6. Definition of done
 ## 7. Design
-### Production SLOs (optional)
 ### Verification boundaries
 ## 8. Risk tolerance
 ## 9. Open questions
