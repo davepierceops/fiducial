@@ -219,7 +219,7 @@ class TestReviewVerificationPruning(unittest.TestCase):
         self.assertIn("mark it\nmissing and carry it as a known gap", release)
         for value in ("ship", "ship with accepted risks", "do not ship", "needs the human decision"):
             self.assertIn("`" + value + "`", release)
-        for row_id in ("R0129", "R0130", "R1183", "R0152", "R0558", "R0492", "R0121", "R1045", "R0551", "R0560"):
+        for row_id in ("R0130", "R0152", "R0492", "R0121", "R1045", "R0551", "R0560"):
             self.assertEqual(self.rows[row_id].body, self.old_rows[row_id].body, row_id)
         for h, emission in self.native.items():
             prefix = ".claude" if h == "claude-code" else ".agents"

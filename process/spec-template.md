@@ -40,10 +40,13 @@ acceptance criteria derive from it [R0472]. Keep each section short.
    interfaces between them; its external dependencies; the failure modes it is
    likely to have; the NFR dimensions of section 4 as concrete technical
    targets, or `N/A`; and its deployment assumptions, including whether deploy
-   and release are separate events. Two subsections are standing:
-   - **User journeys and SLOs** — for each Top K journey of section 3, the SLO,
-     the measurement mechanism, and the alerting threshold; a journey with no
-     SLO is named unverified and recorded as an open question.
+   and release are separate events. One subsection is standing,
+   and one is optional:
+   - **Production SLOs** — optional; present only when the project runs a
+     monitored production system. For each Top K journey of section 3, the
+     SLO, the measurement mechanism, and the alerting threshold; a journey
+     with no SLO is named unverified. Its presence is the trigger for every
+     SLO and error-budget obligation.
    - **Verification boundaries** — for each material standing boundary where
      the system meets what it does not control, and for each per-change
      boundary movement made permanent: the production surface; how it is
@@ -74,7 +77,7 @@ audience: [human]
 ## 5. User outcomes and measurement
 ## 6. Definition of done
 ## 7. Design
-### User journeys and SLOs
+### Production SLOs (optional)
 ### Verification boundaries
 ## 8. Risk tolerance
 ## 9. Open questions

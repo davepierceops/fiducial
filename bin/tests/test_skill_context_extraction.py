@@ -30,6 +30,17 @@ EXTRACTED = "fb310dd9c1ea56e4fa2e1b9b671a50c128fdec0f"
 COMMAND = "R1196 R1199 R1202 R1205 R1206 R1208 R1212 R1213 R1215 R1218 R1609 R1623 R1624".split()
 VERIFY_SIX = "R0140 R0141 R0144 R0145 R0147 R0148 R0074".split()
 VERIFY_EIGHT = "R0784 R0789 R0798 R0799 R0802 R0803 R0804".split()
+# DEC-001890 later made one clause of the archived R0074 body conditional on
+# Production SLOs; the live checklist carries it, so compare against that form.
+SLO_CLAUSE_OLD = "including whether it hits a Top K journey SLO and burns error budget;"
+SLO_CLAUSE_NEW = ("including, where the spec has a Production SLOs subsection, "
+                  "whether it hits a Top K journey SLO and burns error budget;")
+
+
+def landed(body):
+    return body.replace(SLO_CLAUSE_OLD, SLO_CLAUSE_NEW)
+
+
 GROUPS = {"command-blocks": COMMAND, "verification-checklists": VERIFY_SIX + VERIFY_EIGHT}
 
 
@@ -126,7 +137,7 @@ class TestSkillContextExtraction(unittest.TestCase):
                 skill_path = prefix + "/skills/" + skill + "/SKILL.md"
                 self.assertIn(skill_path, list(emission.files))
                 for row_id in ids:
-                    body = self.record(row_id).body
+                    body = landed(self.record(row_id).body)
                     self.assertIn(body, self.procedures[skill].body, row_id)
                     self.assertIn(body, emission.files[skill_path], row_id)
                     for path, text in roots_and_agents.items():
@@ -152,7 +163,7 @@ class TestSkillContextExtraction(unittest.TestCase):
                 applicable = any(role in self.old_rows[r].keys["role"] for r in ids)
                 if applicable:
                     for row_id in ids:
-                        self.assertIn(self.record(row_id).body, text, (role, row_id))
+                        self.assertIn(landed(self.record(row_id).body), text, (role, row_id))
                     self.assertIn(skill, text, role)
                 elif skill != "verification-checklists":
                     for row_id in ids:
@@ -170,11 +181,11 @@ class TestSkillContextExtraction(unittest.TestCase):
         # Each section must state its scope before its first obligation. A
         # shared broad introduction cannot silently widen the first group.
         for ids in (VERIFY_SIX, VERIFY_EIGHT):
-            positions = [text.index(self.old_rows[r].body) for r in ids]
+            positions = [text.index(landed(self.old_rows[r].body)) for r in ids]
             first = min(positions)
-            previous = max([text.index(self.old_rows[r].body) + len(self.old_rows[r].body)
+            previous = max([text.index(landed(self.old_rows[r].body)) + len(landed(self.old_rows[r].body))
                             for r in VERIFY_SIX + VERIFY_EIGHT
-                            if text.index(self.old_rows[r].body) < first] or [0])
+                            if text.index(landed(self.old_rows[r].body)) < first] or [0])
             headings = list(re.finditer(r"(?m)^#{2,6} .+$", text[:first]))
             section = headings[-1].start() if headings else 0
             scope = text[max(previous, section):first]
