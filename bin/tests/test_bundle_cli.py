@@ -417,6 +417,20 @@ class TestBundleRefusesARowWithNoInstruction(unittest.TestCase):
         self.assertEqual(sorted(p.name for p in self.out.iterdir()), [])
 
 
+class TestBundleRefusesACommentOnlyRow(TestBundleRefusesARowWithNoInstruction):
+    """#442: a body that is only an HTML comment carries no instruction either."""
+
+    def setUp(self):
+        files = dict(rs_store_files())
+        files["rules/R0002.md"] = rs_row(
+            "R0002", "<!-- TODO: write this rule -->", order=30, topic=["core"], role=["writer"],
+            verb="require", term=None,
+        )
+        self.origin, self.clone = make_store_repo(self, files=files)
+        self.env = base_env()
+        self.out = temp_dir(self, "rulestore-out-")
+
+
 class TestBundleLocalProvenance(BundleCliTestCase):
     """#366 D3/D4: a bundle generated from a tree whose generation inputs
     differ from HEAD says so in its one header line."""
