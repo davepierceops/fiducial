@@ -78,6 +78,7 @@ classification and authority are [R0534, R0535].
    output: the repository's `CLAUDE.md` listed as a loaded instruction source.
    Record the observed line when supplied. Codex hook trust is also a live
    boundary; emitted files alone do not prove enforcement.
+   Cite the latest `probe` report under fiducial `adoptions/` in the adoption record, or state that none was run.
 
 ## Ownership and deterministic create/append
 
