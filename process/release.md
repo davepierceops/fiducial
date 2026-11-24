@@ -44,7 +44,7 @@ Human gate: <issue reference where consequential; otherwise N/A>
 ## Release readiness
 
 User-visible behavior: <release-specific account>
-Live/browser verification status: <where relevant; otherwise N/A; cite the latest probe report under fiducial `adoptions/` or state that none was run>
+Live/browser verification status: <where relevant; otherwise N/A>. Probe: <cite the latest probe report for this repository and each harness under fiducial `adoptions/`, with its emitted SHA, or state that none was run>
 Operational risks: <from the evidence>
 Rollback or mitigation path: <release-specific path>
 Release recommendation and human decision points: <recommendation; points needing a ruling>

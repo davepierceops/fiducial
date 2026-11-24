@@ -25,7 +25,10 @@ nothing into the adopted repository and commits nothing.
    `harness: <name> unknown - <quoted error>` and ask the human for the version
    the UI shows; never guess one), the repository, `git rev-parse HEAD`,
    `git status --porcelain` (it must be empty; if it is not, stop and report
-   why), `git for-each-ref`, and `git config --local --list | sha256sum`. Make
+   why; a `.claude/hooks/__pycache__/` or `.codex/hooks/__pycache__/` entry is
+   a known byproduct of the hooks, quoted in the report and not a reason to
+   stop), `git status --porcelain --ignored` (the ignored-path baseline for
+   step 7), `git for-each-ref`, and `git config --local --list | sha256sum`. Make
    a temporary directory with `mktemp -d` and record the absolute path it
    printed. Write that literal path in every later command, never a shell
    variable: a variable does not carry across tool calls, and the hooks read the
@@ -84,8 +87,14 @@ nothing into the adopted repository and commits nothing.
 7. **Clean tree.** Run `git status --porcelain`, `git status --porcelain --ignored`,
    `git stash list`, `git for-each-ref` and `git config --local --list | sha256sum`,
    compare with step 1, check `git rev-parse HEAD` is unchanged, and check with
-   `test -e` that `process/probe-throwaway.txt` is absent. Report any difference
-   as failed and say what to restore. Remove the temporary directory.
+   `test -e` that the path step 5 used for the governed-path probe
+   (`process/probe-throwaway.txt`, or the `rules` one) is absent. A new
+   `__pycache__/` under `.claude/hooks/` or `.codex/hooks/` is a known hook
+   byproduct: quote it in the evidence and do not count it as failed. Any other
+   new ignored path, and any other difference, is failed; say what to restore.
+   Do not remove the temporary directory with `rm -rf` (Claude Code denies it);
+   report its path and the bare remote in it as left over outside the
+   repository, which is acceptable.
 8. **Report.** Print one block, and only that block, for the human to paste back
    to the decision session, which lands it in fiducial's `adoptions/` as
    `probe-<repo>-<harness>-<UTC timestamp>.md` (DEC-001950):
@@ -128,7 +137,10 @@ the first run confirms it):
 - Root context: `CLAUDE.md`; rules scoped by path in `.claude/rules/`.
 - Skills: the skills folder of the `.claude` directory, one folder per stem; the harness lists them.
 - Agents: `.claude/agents/<role>.md`; dispatch each by role name through the
-  subagent (Task) tool. The `/agents` command is run by the human, not the
+  harness's subagent tool (inferred to be the Task tool; unverified until the
+  first run observes it). Count an agent as passed only when the quoted
+  dispatch output names the emitted agent type and the reply comes from that
+  dispatch. The `/agents` command is run by the human, not the
   model, and step 4 does not need it.
 - Hooks: `.claude/settings.json` `hooks`, scripts in `.claude/hooks/`. The
   per-agent lane guards are in each agent's frontmatter and fire only inside
