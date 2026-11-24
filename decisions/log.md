@@ -1370,3 +1370,28 @@ Date: 2026-11-23
 Decision: The loose-end tracker for fiducial is the repository's GitHub Issues and Milestones on davepierceops/fiducial; an open item is an issue, and a pending gate keeps its human-gate label there. `OPEN-ITEMS.md` and `BACKLOG-v2.md` are retired and preserved under `docs/history/` as history, not a backlog: their remaining entries are not mapped to issues, and an entry that still matters gets a new issue when it comes up again. #370 closes as not planned.
 Context: DEC-000880 required the open residue of `OPEN-ITEMS.md` to be filed under #370 before the file moved to `docs/history/`. The file was archived on 2026-11-04 under DEC-001460 with no index (`SPEC.md` states that archival did not finish #370). About 42 unstruck entries remain, mostly from before the 11-03 subtraction, which retired the mechanisms many of them concern. Asked "Close #370 as not planned, with one decision-log entry replacing DEC-000880's residue clause: yes or no?" on 2026-11-23, Dave answered "yes".
 Supersedes: DEC-000880
+
+## DEC-001860 — Top K journeys stay; SLO obligations fire only with declared production SLOs
+Date: 2026-11-23
+Decision: Top K user journeys stay in every project's default spec. Every SLO and error-budget obligation in the rules and process documents applies only when the project's spec declares production SLOs.
+Context: #428. The SLO and error-budget machinery was built for a future software factory that ships to production and uses production SLOs to judge its changes; no current project runs a monitored production system, so every spec, test plan and change package filled those fields with invented targets or "unverified". Top K journeys are product definition and are useful without production. Asked "Should Top K journeys stay in the default spec, with all SLO and error-budget obligations firing only when the project's spec declares production SLOs: yes or no?" on 2026-11-23, Dave answered "yes".
+
+## DEC-001870 — An optional Production SLOs subsection is the single trigger
+Date: 2026-11-23
+Decision: The spec template's standing design subsection "User journeys and SLOs" becomes an optional subsection, "Production SLOs", present only when the project runs a monitored production system; its presence is the single trigger for every SLO and error-budget obligation. A Top K journey with no SLO is no longer an open question by default. R0863's SLO sentence and R1107's SLO check apply only when the subsection exists; section 3 (user journeys) and R1107's Top K tracing stay as they are.
+Context: #428. fiducial's own `SPEC.md` has no SLO subsection and records no open question for it, which is what a non-production project does under the current wording. One trigger stops each row guessing whether a project is in production. Asked on 2026-11-23 whether to make "Production SLOs" an optional design subsection whose presence turns on every SLO obligation, with R0863 and R1107 conditional on it, Dave answered "yes".
+
+## DEC-001880 — Test and verification SLO clauses become conditional on Production SLOs
+Date: 2026-11-23
+Decision: The SLO clauses of R1143 (test plans), R0129 (ongoing health checks), line 31 of `process/verification-checklists.md` (every meaningful change's failure questions) and R1183's monitoring trigger apply only when the spec has a Production SLOs subsection. R1183's trigger for investigating a surprise production or manual failure stays unconditional. R0070, R0130, R0139 and checklist lines 19, 21 and 29 stay unchanged, being already gated by production evidence or lists of relevant attributes.
+Context: #428, which asked for R1183's failure investigation to be separated from the SLO machinery. Asked on 2026-11-23 whether to make these clauses conditional, keep R1183's failure-investigation trigger, and leave the rest of the group unchanged, Dave answered "yes".
+
+## DEC-001890 — Release SLO fields become conditional on Production SLOs
+Date: 2026-11-23
+Decision: The SLO clauses of R0502, R1032 and R1041 apply only when the spec has a Production SLOs subsection. The change-package template line reads `SLO status and error budget consumption: <affected Top K journeys where the spec has Production SLOs; otherwise N/A>`, following the template's own convention for conditional fields.
+Context: #428. Each of fiducial's filled-in change packages spent a sentence explaining why the SLO field did not apply. Asked on 2026-11-23 whether to make these clauses conditional and give the template line the "otherwise N/A" form, Dave answered "yes".
+
+## DEC-001900 — R0045, R0064 and R0535 stay unchanged under the SLO conditionality
+Date: 2026-11-23
+Decision: R0045 (Top K defined), R0064 (tracker carve-out) and R0535 (the consequential class) stay unchanged. R0535's clause on a Top K journey with 20% or less SLO error budget remaining can only fire where a budget is measured, which requires Production SLOs.
+Context: #428. Top K stays in the spec, R0064's SLO mentions are examples of the ordinary sense of "tracking", and no case has been observed of an unmeasured budget being treated as consequential; editing the closed consequential class has no incident behind it. Asked on 2026-11-23 whether to leave the definition rows unchanged, Dave answered "yes"; asked whether to leave R0535 unchanged, Dave answered "yes".
