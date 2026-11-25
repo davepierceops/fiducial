@@ -1,0 +1,88 @@
+{
+ "candidate": "35713889a46f4defda57b705ff43a8694aadff12",
+ "baseline": "a8d87bc95afed9f5ac8b54fe2c8863013ce10265",
+ "tag": "v2026.11.24",
+ "names_equal_named_queries_plus_README": true,
+ "readme_equals_candidate_blob": true,
+ "local_marker_present": false,
+ "assets": {
+  "README.md": {
+   "bytes": 6613,
+   "sha256": "58b4be1670f0869be1da90bdb9b2877e9c0f2b5a1a1b4ba26eacec72398fcfaa",
+   "header_names_candidate": true,
+   "words": 847
+  },
+  "fiducial-bundle-architect-agent.md": {
+   "bytes": 26492,
+   "sha256": "6de835e9f86dfe6484f31fa55fc281c77a0880931201dc39de59063393eed306",
+   "header_names_candidate": true,
+   "words": 3917
+  },
+  "fiducial-bundle-chief-of-staff.md": {
+   "bytes": 81377,
+   "sha256": "81275d24c6d440fbf2bce566dbf4a9b2e7a77e0671f2ddf71891a02c79715928",
+   "header_names_candidate": true,
+   "words": 11278
+  },
+  "fiducial-bundle-coder-agent.md": {
+   "bytes": 25620,
+   "sha256": "e679adbb08d58827077770e8f9b8d875e61c1ebbc7bdb25ab6064038633c953e",
+   "header_names_candidate": true,
+   "words": 3765
+  },
+  "fiducial-bundle-context-quality-reviewer.md": {
+   "bytes": 24879,
+   "sha256": "722bb86e23ced4c2880e0efc547d6011f88f1c64cc3a3974eab2609105993efe",
+   "header_names_candidate": true,
+   "words": 3685
+  },
+  "fiducial-bundle-copy-editor.md": {
+   "bytes": 32777,
+   "sha256": "dce390213955bb33ae44c2d6654274da9ac9438d49b4f3a386b8e8d9edf53ec6",
+   "header_names_candidate": true,
+   "words": 5057
+  },
+  "fiducial-bundle-critic.md": {
+   "bytes": 31291,
+   "sha256": "032d5a254ebd37444d919ef8f8351e0ffdcbfe1d7c9b54fbcc4d909903797dfb",
+   "header_names_candidate": true,
+   "words": 4824
+  },
+  "fiducial-bundle-release-manager-agent.md": {
+   "bytes": 33468,
+   "sha256": "cb8ba03552519ef38249ac812d2f4d04e3ec2e35161dd279c262e50cd3090cdf",
+   "header_names_candidate": true,
+   "words": 4850
+  },
+  "fiducial-bundle-reviewer-agent.md": {
+   "bytes": 28005,
+   "sha256": "1e2d894f132ce75b186fadec35b4883aafa3cdf623ad5b4794e10d91a0369229",
+   "header_names_candidate": true,
+   "words": 4060
+  },
+  "fiducial-bundle-skeptic-risk-agent.md": {
+   "bytes": 27686,
+   "sha256": "a7e62b3d8b8346a81fcba424e123165ba11434bec528abafb114432de2237571",
+   "header_names_candidate": true,
+   "words": 4018
+  },
+  "fiducial-bundle-spec-reviewer-agent.md": {
+   "bytes": 27618,
+   "sha256": "219015b2f18d96a89c6687dbb2bcbdbbdf6492f10f43f6ef644b937912d761f9",
+   "header_names_candidate": true,
+   "words": 4081
+  },
+  "fiducial-bundle-test-designer-agent.md": {
+   "bytes": 24538,
+   "sha256": "5a4f92f06293ff01cd6243b34d8ed6a9328549f72e8b4ed96642cea025f64cc2",
+   "header_names_candidate": true,
+   "words": 3625
+  },
+  "fiducial-bundle-writer.md": {
+   "bytes": 32971,
+   "sha256": "e96a9921a8f442dcf4575bff8c23ca83a2db47f1e81888441d862fc8c5e32a9a",
+   "header_names_candidate": true,
+   "words": 5029
+  }
+ }
+}
