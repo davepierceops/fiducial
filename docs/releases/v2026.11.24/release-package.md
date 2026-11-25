@@ -25,22 +25,22 @@ Verification boundary status and updates: this release adds a live-verified evid
 
 SLO status and error budget consumption: N/A (DEC-001900; fiducial's `SPEC.md` has no Production SLOs subsection).
 
-Review findings: per-change reads listed under the test plan, each with Dave's approval in the log. Dispositions are in those DEC entries and issues #440, #450, #453, #454. Not done: no combined independent read of the whole `a8d87bc..3571388` delta (v2026.11.10 had one). This package is authored by the release manager and is not an independent review. Whether the per-change reads suffice is a human decision point.
+Review findings: per-change reads listed under the test plan, each with Dave's approval in the log. Dispositions are in those DEC entries and issues #440, #450, #453, #454. Combined non-author read of the whole `a8d87bc..3571388` delta and this package: `reviews/release-candidate-20261124-read-20261125T221408Z.md`, changes-required on B1 only (the gate was not opened for a false reason). B1 is fixed by opening #456. N2 (the DEC-001850 reword) is carried in Known gaps and #364, and N3 and N6 are corrected here. N1 is added to the gate request. N4, N5 and N7 and observations O1 and O2 are filed to #450. O3 (tag date basis) is for Dave.
 
 Known gaps:
 - #453: Codex list-form deny rules gap (deferred; the Codex probe cannot show deny enforcement for that form).
 - #454: filed from probe read 2 (N2); open.
 - #450: non-blocking findings from batch-rulings, followups-442 and probe reads (F1, F3, F5, F6 and two observations); open.
 - Native loading, adherence and hook enforcement unverified (carried from v2026.11.10).
-- Still open from the v2026.11.10 list unless closed by this delta: #358 (selective citation labels). Unknown whether anything else from that list is closed; I did not audit issue state (the GitHub issue API was not usable here).
-- No probe report exists (`adoptions/` has no probe files).
-- Fiducial's own installed context is pinned to v2026.11.10 (DEC-001760) and does not yet carry this batch; #446 and #449 stay open until self-adoption after release.
+- From the v2026.11.10 list, selective citation labels moved into #362 (#358 closed as its duplicate on 2026-11-23). `process/named-queries.md` "A release is cut on the human's go" is not reworded per DEC-001850 (#364 open); it ships in the bundles and is accurate for this consequential release. Release impact: deferred.
+- No probe report exists; the `adoptions/` folder does not exist yet.
+- Fiducial's own installed context is pinned to v2026.11.10 (DEC-001760) and does not yet carry this batch; #446 (reopened 2026-11-25 after the PR #451 merge closed it) and #449 stay open until self-adoption after release.
 - Test suite needs full git history; ZIP or shallow-clone verification is insufficient.
 - Date-basis ambiguity for the tag (above).
 
 Operational notes: publishing attaches README plus twelve bundles; existing adopters are not updated automatically and may stay pinned to v2026.11.10. Adoption of the new tag is a separate reviewed step and the first probe follows it. Bundle sizes changed (chief-of-staff about 11,278 whitespace-delimited words against the 9,421 reported at v2026.11.10, mostly the new probe process); a size measurement, not an effectiveness claim.
 
-Human gate: not opened (the session was told not to open issues). Per `process/gate.md` step 4 and DEC-001820, the derived body is in `gate-request.md` for presentation in chat; the human's explicit go then releases the change, and the session records the go and body in `decisions/log.md` and this package, then opens the issue closed.
+Human gate: #456 (`human-gate`), opened 2026-11-25 by REST. The earlier "not opened" stated the session's instruction, not unreachability, so the DEC-001820 fallback did not apply (combined read B1).
 
 ## Release readiness
 

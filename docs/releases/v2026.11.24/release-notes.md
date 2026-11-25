@@ -22,7 +22,7 @@ Nothing live is verified. The first probe runs after adoption of this release.
 
 - Native skill loading, invocation, adherence and live hook enforcement remain unverified. Passing local tests do not establish model behavior.
 - Codex deny rules written in list form may not be enforced ([#453](https://github.com/davepierceops/fiducial/issues/453)); other probe-read items are on [#454](https://github.com/davepierceops/fiducial/issues/454) and [#450](https://github.com/davepierceops/fiducial/issues/450).
-- Selective citation validation remains unfinished ([#358](https://github.com/davepierceops/fiducial/issues/358)).
+- Selective citation validation remains unfinished ([#362](https://github.com/davepierceops/fiducial/issues/362)).
 - The test suite requires historical Git objects; keep history when cloning for verification.
 
 Publishing does not update existing adopted repositories. Existing users can stay pinned to v2026.11.10; upgrade through the adoption procedure, then run the probe.
